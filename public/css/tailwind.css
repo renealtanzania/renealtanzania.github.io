@@ -88239,6 +88239,12 @@ video {
     width: 100%;
   }
 
+  .md\:framefull{
+    width: 300%;
+    height: 320%;
+    padding-bottom: 5rem ;
+  }
+
   .md\:w-screen {
     width: 100vw;
   }
