@@ -31,3 +31,14 @@
 .mt-12 {
   margin-top: 3rem;
 }
+
+.bt-cen{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin-top: 1rem;
+}
+
+.tw-text-black{
+    color: rgb(0 0 0);  
+}
