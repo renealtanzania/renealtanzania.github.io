@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,10 +8,11 @@
 
          <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 
-        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <!-- Global site tag (gtag.js) - G A -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-8QMK40HJYW"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
@@ -27,170 +28,196 @@
         </style>
 
         <!-- css -->
-        <link href="public/css/tailwind.css" rel="stylesheet">
+        <link href="/public/css/custom.css" rel="stylesheet">
+
 
 
         <style>
             body {
-                font-family: 'Open Sans';
+                font-family: 'Roboto', sans-serif;
             }
         </style>
     </head>
     <body>
-        <div class="container px-8">
-            <header class="py-6">
-                <h1 class="text-center text-xl font-bold">Welcome to Reneal Tanzania </h1>
+        <div class="header-start">
+            <header class=" text-start">
+                <h1 class="text-center text-xl tw-font-bold text-sty">Reneal Labs Tanzania </h1>
+                <h5 class="text-center tw-mt-2">A Hands-On Experience to learn about IT and with IT.</h5>
+                    <div class="bt-cen">
+                        <div><a class="tw-btn tw-btn-white tw-px-6 tw-mr-3" href="/status">Status</a></div>
+                        <div><a class="tw-btn tw-btn-ghost tw-px-6" href="/areas-covered.html">Labs</a></div>
+
+                    </div>
+                    
             </header>
-
-            <p class="text-center text-sm">Last updated: 08/01/2022 - 08:00 EAT</p>
-            
-        
-
-
-    <div class="grid lg:flex"> 
-        <div class="lg:w-1/4"> 
-            <p class="mt-5 text-green-500">Reneal Documentations </p>
-            <div class = "mt-5 flex"><div class="mr-1"><a href="./guidance-docs.html"> 
-                <img src="/public/imgs/svg/guidance-docs_24dp.svg"></div>
-                <div>Guidance Docs</a></div></div>
-
-                <div class = "mt-5 flex"><div class="mr-1"><a href="/delivery-note/2022-delivery-note.html"> 
-                <img src="/public/imgs/svg/icons8-delivered-box-24.png"></div>
-                <div>Delivered to School </a></div></div> 
-
-                <div class = "mt-5 flex"><div class="mr-1"><a href="/areas-covered.html"> 
-                <img src="/public/imgs/svg/area-covered_24dp.svg"></div>
-                <div>Area Covered </a></div></div> 
-
-                <div class = "mt-5 flex"><div class="mr-1"><a href="/status/2021-status.html"> 
-                <img src="/public/imgs/svg/training_24dp.svg"></div>
-                <div>2021 Status </a></div></div>
-
-                <div class = "mt-5 flex"><div class="mr-1"><a href="/docs"> 
-                <img src="/public/imgs/svg/ic8-open-document-24.png"></div>
-                <div>Historical Docs </a></div></div>
-
         </div>
 
-    <div>
-        <p class="mt-5 text-lg font-semibold">
-            2022 Status
-        </p>
-        <ul class="mt-2 text-blue-500">
-            <!-- <li><a href="./guidance-docs.html">Guidance Docs</a> -->
-            <!-- <li><a href="#installations">Installations</a>
-            <li><a href="#trainings">Trainings</a>
-            <li><a href="#labexpansion">Lab Expansion</a> -->
+<section id="home-skills" class="tw-pt-6 md:tw-pb-[35px]">
+    <div class="container">
 
-        </ul>
-        <ul class="pl-4 text-sm list-decimal">
-                <li>
-                    Arusha DC - 
-                </li>
-                <li>
-                    Monduli DC - 
-                </li>
-                <li>
-                    Meru DC - 
-                </li>
-                <li>
-                    Kondoa DC - 1
-                </li>
-              
-            </ul>
+        <h3 class="text-center inherits-color tw-text-2xl tw-font-medium tw-text-black md:tw-font-normal tw-mb-7">
+            Offline Educational resources at Wide Range of Coverage.
+        </h3>
 
-        <!-- Installations -->
-        <p><a name="installations"></a></p>
-        <p class="mt-5 text-base font-semibold" id="#installations">
-           New Installations
-        </p>
-            
-            <ul class="mt-2 pl-4 text-sm list-decimal">
-               
-               <li>
-                     Abeid Amani 
-                </li>
-
-                <li class="mt-2">
-                     Kikwe 
-                </li>
-
-                <li class="mt-2">
-                     Irkisongo
-                </li>
-
-                <li class="mt-2">
-                     Engutoto
-                </li>
-
-                <li class="mt-2">   
-                     Olemedeye   
-                </li>
-
-                <li class="mt-2">   
-                     Lengijave   
-                </li>
-
-                <li class="mt-2">   
-                     Oljoro   
-                </li>
-
-
-            </ul>
-
-                        
-            <!-- Trainings -->
-            <p><a name="trainings"></a></p>
-            <p class="mt-5 text-base font-semibold" id="trainings">
-                New School Trainings
-            </p>
-
-            <ul class="mt-2 pl-4 text-sm list-decimal">
-                
-               <li>
-                     Abeid Amani 
-                </li>
-
-                <li class="mt-2">
-                     Kikwe 
-                </li>
-
-                <li class="mt-2">
-                     Irkisongo
-                </li>
-
-                <li class="mt-2">
-                     Engutoto
-                </li>
-
-                <li class="mt-2">   
-                     Olemedeye   
-                </li>
-
-                <li class="mt-2">   
-                     Lengijave   
-                </li>
-
-                <li class="mt-2">   
-                     Oljoro   
-                </li>
-
-            </ul>
-
-            <!-- Lab Expansion -->
-            <p><a name="labexpansion"></a></p>
-            <p class="mt-5 text-base font-semibold " id="#labexpansion">
-                Lab Expansion
-            </p>
-            
-            <ul class="mt-2 pl-4 text-sm list-decimal">
-                
-               <li class="mt-2 mb-12">
-                     Mwandet O-level et al.
-                </li>
-
+        <div class="text-center tw-mb-3 tw-text-sm">
+          <p>As of 22 Jan 2022</p>  
         </div>
-           
-    </body>
 
     
+    <div class="lg:tw-flex xl:tw-justify-around xl:tw-mx-8">
+        <div class="skill-card tw-relative tw-rounded-xl lg:tw-rounded-none tw-mb-6 lg:tw-mb-0 tw-flex lg:tw-flex-col group lg:tw-mx-4 lg:tw-max-w-full tw-flex-1 tw-flex-shrink-0 tw-w-full is-frameworks">
+            <div class="skill-card-top tw-z-10 tw-text-center tw-py-3 tw-pl-5 lg:tw-pl-8 tw-pr-6 lg:tw-px-8 tw-rounded-xl tw-relative">
+                <a class="tw-block" href="/dev">
+                    <img class="skill-card-thumbnail lazyloaded" src="/public/imgs/home/tz.svg" width="100" height="100">
+                </a>
+
+                <h4 class="tw-text-3lg tw-leading-tight tw-text-center tw-tracking-tight">
+                    <a class="tw-text-white hover:tw-text-white link" href="/dev">Regions</a>
+                    
+                </h4>
+                    
+                </div>
+
+                <div class="skill-card-meta lg:tw-bg-white tw-flex tw-flex-col tw-justify-around tw-relative tw-w-full tw-py-5 md:tw-py-0 tw-pr-5 lg:tw-px-6 tw-rounded-xl tw-rounded-t-none">
+                    <div class="skill-card-meta-details tw-flex tw-items-center tw-justify-around tw-rounded tw-rounded-t-none lg:tw-py-3 tw-mb-2 lg:tw-mb-0">
+                        <div class="tw-text-center">
+                            <a class="tw-block" href="/"></a>
+                            <span class="tw-block tw--mb-1 tw-text-2xl lg:tw-text-lg tw-text-white lg:tw-text-grey-darkest">
+                                3
+                            </span>
+                            <!-- <div class="tw-text-transparent-50 lg:tw-text-grey-dark tw-text-sm lg:tw-text-2xs">
+                                Regions
+                            </div> -->
+                        
+                    </div>
+                    
+                </div>
+    
+            </div>
+        </div>
+
+
+<!-- Second -->
+        <div class="skill-card tw-relative tw-rounded-xl lg:tw-rounded-none tw-mb-6 lg:tw-mb-0 tw-flex lg:tw-flex-col group lg:tw-mx-4 lg:tw-max-w-full tw-flex-1 tw-flex-shrink-0 tw-w-full is-languages">
+            <div class="skill-card-top tw-z-10 tw-text-center tw-py-3 tw-pl-5 lg:tw-pl-8 tw-pr-6 lg:tw-px-8 tw-rounded-xl tw-relative">
+                <a class="tw-block" href="/dev">
+                    <img class="skill-card-thumbnail lazyloaded" src="/public/imgs/home/arusha-region.svg" width="100" height="100">
+                </a>
+
+                <h4 class="tw-text-3lg tw-leading-tight tw-text-center tw-tracking-tight">
+                    <a class="tw-text-white hover:tw-text-white link" href="/dev">Districts</a>
+                    
+                </h4>
+                    
+                </div>
+
+                <div class="skill-card-meta lg:tw-bg-white tw-flex tw-flex-col tw-justify-around tw-relative tw-w-full tw-py-5 md:tw-py-0 tw-pr-5 lg:tw-px-6 tw-rounded-xl tw-rounded-t-none">
+                    <div class="skill-card-meta-details tw-flex tw-items-center tw-justify-around tw-rounded tw-rounded-t-none lg:tw-py-3 tw-mb-2 lg:tw-mb-0">
+                        <div class="tw-text-center">
+                            <a class="tw-block" href="/dev"></a>
+                            <span class="tw-block tw--mb-1 tw-text-2xl lg:tw-text-lg tw-text-white lg:tw-text-grey-darkest">
+                                6
+                            </span>
+                            <!-- <div class="tw-text-transparent-50 lg:tw-text-grey-dark tw-text-sm lg:tw-text-2xs">
+                                Regions
+                            </div> -->
+                        
+                    </div></div></div>
+                    
+                </div>
+
+                <!-- Third -->
+        <div class="skill-card tw-relative tw-rounded-xl lg:tw-rounded-none tw-mb-6 lg:tw-mb-0 tw-flex lg:tw-flex-col group lg:tw-mx-4 lg:tw-max-w-full tw-flex-1 tw-flex-shrink-0 tw-w-full is-techniques">
+            <div class="skill-card-top tw-z-10 tw-text-center tw-py-3 tw-pl-5 lg:tw-pl-8 tw-pr-6 lg:tw-px-8 tw-rounded-xl tw-relative">
+                <a class="tw-block" href="/dev">
+                    <img class="skill-card-thumbnail lazyloaded" src="/public/imgs/home/school.png" width="100" height="100">
+                </a>
+
+                <h4 class="tw-text-3lg tw-leading-tight tw-text-center tw-tracking-tight">
+                    <a class="tw-text-white hover:tw-text-white link" href="/dev">Schools</a>
+                    
+                </h4>
+                    
+                </div>
+
+                <div class="skill-card-meta lg:tw-bg-white tw-flex tw-flex-col tw-justify-around tw-relative tw-w-full tw-py-5 md:tw-py-0 tw-pr-5 lg:tw-px-6 tw-rounded-xl tw-rounded-t-none">
+                    <div class="skill-card-meta-details tw-flex tw-items-center tw-justify-around tw-rounded tw-rounded-t-none lg:tw-py-3 tw-mb-2 lg:tw-mb-0">
+                        <div class="tw-text-center">
+                            <a class="tw-block" href="/dev"></a>
+                            <span class="tw-block tw--mb-1 tw-text-2xl lg:tw-text-lg tw-text-white lg:tw-text-grey-darkest">
+                                42
+                            </span>
+                            <!-- <div class="tw-text-transparent-50 lg:tw-text-grey-dark tw-text-sm lg:tw-text-2xs">
+                                Regions
+                            </div> -->
+                        
+                    </div>
+                    
+                </div></div></div>
+
+<!-- Four -->
+
+<div class="skill-card tw-relative tw-rounded-xl lg:tw-rounded-none tw-mb-6 lg:tw-mb-0 tw-flex lg:tw-flex-col group lg:tw-mx-4 lg:tw-max-w-full tw-flex-1 tw-flex-shrink-0 tw-w-full is-testing">
+            <div class="skill-card-top tw-z-10 tw-text-center tw-py-3 tw-pl-5 lg:tw-pl-8 tw-pr-6 lg:tw-px-8 tw-rounded-xl tw-relative">
+                <a class="tw-block" href="/dev">
+                    <img class="skill-card-thumbnail lazyloaded" src="/public/imgs/home/computer-lab.png" width="100" height="100">
+                </a>
+
+                <h4 class="tw-text-3lg tw-leading-tight tw-text-center tw-tracking-tight">
+                    <a class="tw-text-white hover:tw-text-white link" href="/dev">Labs</a>
+                    
+                </h4>
+                    
+                </div>
+
+                <div class="skill-card-meta lg:tw-bg-white tw-flex tw-flex-col tw-justify-around tw-relative tw-w-full tw-py-5 md:tw-py-0 tw-pr-5 lg:tw-px-6 tw-rounded-xl tw-rounded-t-none">
+                    <div class="skill-card-meta-details tw-flex tw-items-center tw-justify-around tw-rounded tw-rounded-t-none lg:tw-py-3 tw-mb-2 lg:tw-mb-0">
+                        <div class="tw-text-center">
+                            <a class="tw-block" href="/dev"></a>
+                            <span class="tw-block tw--mb-1 tw-text-2xl lg:tw-text-lg tw-text-white lg:tw-text-grey-darkest">
+                                45
+                            </span>
+                            <!-- <div class="tw-text-transparent-50 lg:tw-text-grey-dark tw-text-sm lg:tw-text-2xs">
+                                Regions
+                            </div> -->
+                        
+                    </div>
+                    
+                </div></div></div>
+
+                <!-- Five -->
+<div class="skill-card tw-relative tw-rounded-xl lg:tw-rounded-none tw-mb-6 lg:tw-mb-0 tw-flex lg:tw-flex-col group lg:tw-mx-4 lg:tw-max-w-full tw-flex-1 tw-flex-shrink-0 tw-w-full is-tooling">
+            <div class="skill-card-top tw-z-10 tw-text-center tw-py-3 tw-pl-5 lg:tw-pl-8 tw-pr-6 lg:tw-px-8 tw-rounded-xl tw-relative">
+                <a class="tw-block" href="/dev">
+                    <img class="skill-card-thumbnail lazyloaded" src="/public/imgs/home/students.png" width="100" height="100">
+                </a>
+
+                <h4 class="tw-text-3lg tw-leading-tight tw-text-center tw-tracking-tight">
+                    <a class="tw-text-white hover:tw-text-white link" href="/dev">Students</a>
+                    
+                </h4>
+                    
+                </div>
+
+                <div class="skill-card-meta lg:tw-bg-white tw-flex tw-flex-col tw-justify-around tw-relative tw-w-full tw-py-5 md:tw-py-0 tw-pr-5 lg:tw-px-6 tw-rounded-xl tw-rounded-t-none">
+                    <div class="skill-card-meta-details tw-flex tw-items-center tw-justify-around tw-rounded tw-rounded-t-none lg:tw-py-3 tw-mb-2 lg:tw-mb-0">
+                        <div class="tw-text-center">
+                            <a class="tw-block" href="/dev"></a>
+                            <span class="tw-block tw--mb-1 tw-text-2xl lg:tw-text-lg tw-text-white lg:tw-text-grey-darkest">
+                                37,000
+                            </span>
+                            <div class="tw-text-transparent-50 lg:tw-text-grey-dark tw-text-sm lg:tw-text-2xs">
+                                Over
+                            </div>
+                        
+                    </div>
+                    
+                </div></div></div>
+
+                <!-- down -->
+            </div></section>
+    </div>
+
+        </div>
+
+    </body>
