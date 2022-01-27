@@ -183923,6 +183923,6 @@ video {
 }
 
 /*custom additions*/
-  .inherits-color{
-    color: rgb(0 0 0)
-},
+ .ttext-black{
+    color: rgb(0 0 0);  
+}
