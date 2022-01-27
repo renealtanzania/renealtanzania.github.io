@@ -183921,4 +183921,8 @@ video {
             animation: bounce 1s infinite;
   }
 }
-  
+
+/*custom additions*/
+  .inherits-color{
+    color: rgb(0 0 0)
+},
