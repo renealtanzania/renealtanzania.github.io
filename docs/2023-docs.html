@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Status - Reneal International Education Outreach</title>
+        <title>2022 Docs - Reneal International Education Outreach</title>
 
          <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
         <!-- Fonts -->
@@ -20,7 +20,7 @@
 
             gtag('config', 'G-8QMK40HJYW');
         </script>
-        
+
         <!-- Styles -->
         <style>
            
@@ -39,15 +39,17 @@
     <body>
         <div class="container px-8">
             <header class="py-6">
-                <h1 class="text-center text-xl font-bold text-blue-500">Current Status </h1>
+                <h1 class="text-center text-xl font-bold">Reneal Tanzania </h1>
             </header>
 
             <p class="text-center text-sm">Last updated: 27/01/2023 - 10:00 EAT</p>
-            
+            <a class="text-blue-500" href="/">
+                Home</a>
+
         
     <div class="grid lg:flex"> 
         <div class="lg:w-1/4"> 
-            <p class="mt-5 text-green-500"><a href="/">Reneal Documentations </a></p>
+            <p class="mt-5 text-green-500">Reneal Documentations </p>
             <div class = "mt-5 flex"><div class="mr-1"><a href="/guidance-docs.html"> 
                 <img src="/public/imgs/svg/guidance-docs_24dp.svg"></div>
                 <div>Guidance Docs</a></div></div>
@@ -60,51 +62,28 @@
                 <img src="/public/imgs/svg/area-covered_24dp.svg"></div>
                 <div>Area Covered </a></div></div> 
 
-                <div class = "mt-5 flex"><div class="mr-1"><a href="/docs/2023-docs.html"> 
+                <div class = "mt-5 flex"><div class="mr-1"><a href="/status/2022-status.html"> 
                 <img src="/public/imgs/svg/training_24dp.svg"></div>
-                <div>2023 Docs </a></div></div>
+                <div>2022 Status </a></div></div>
 
                 <div class = "mt-5 flex"><div class="mr-1"><a href="/docs"> 
                 <img src="/public/imgs/svg/ic8-open-document-24.png"></div>
                 <div>Historical Docs </a></div></div>
 
-                <div class = "mt-5 flex"><div class="mr-1"><a href="/status/previous.html"> 
-                <img src="/public/imgs/svg/training_24dp.svg"></div>
-                <div>Previous Status </a></div></div>
 
         </div>
 
     <div>
-        <p class="mt-5 text-lg font-semibold">
-            2023 Status
+        <p class="mt-5 text-lg font-semibold text-blue-500">
+            2023 Docs
         </p>
         <ul class="mt-2 text-blue-500">
             <!-- <li><a href="./guidance-docs.html">Guidance Docs</a> -->
             <!-- <li><a href="#installations">Installations</a>
             <li><a href="#trainings">Trainings</a>
             <li><a href="#labexpansion">Lab Expansion</a> -->
-
         </ul>
-        <ul class="pl-4 text-sm list-decimal">
-                <li>
-                    Lindi DC - 4
-                </li>
 
-                <li>
-                    Kondoa DC - 2
-                </li>
-                <li>
-                    Monduli DC - 1
-                </li>
-                <li>
-                    Babati TC - 1
-                </li>
-                <li>
-                    Mtwara DC - 1
-                </li>
-                
-              
-            </ul>
 
         <!-- Installations -->
         <p><a name="installations"></a></p>
@@ -113,39 +92,14 @@
         </p>
             
             <ul class="mt-2 pl-4 text-sm list-decimal">
-
                 <li>
-                     Cheif Dodo - 27/01/2023
+                    <a href="/public/installations/2022/amani-abeid-260123.pdf" download="Amani Abeid installation 260123">
+                     Cheif Dodo  - 26/01/2023
+                    </a> |
+                    <a href="/public/donation-letters/2022/amani-abeid-donation-letter.pdf" download="signed donation amani abeid 260123">
+                     Donation letter 
+                    </a>
                 </li>
-               
-               <li class="mt-2">
-                     Kiwalala - 16/03/2023
-                </li>
-
-                <li class="mt-2">   
-                     Nyegendi - 16/03/2023
-                </li>
-
-                <li class="mt-2">
-                     Mtama - 18/03/2023
-                </li>
-
-                <li class="mt-2">
-                     Mahiwa - 18/03/2023
-                </li>
-
-                <li class="mt-2">
-                     Namalenga - 20/03/2023
-                </li>
-
-                <li class="mt-2">   
-                     TBC - /03/2023
-                </li>
-
-                <li class="mt-2">
-                     TBC - /04/2023
-                </li>
-
 
 
             </ul>
@@ -158,36 +112,22 @@
             </p>
 
             <ul class="mt-2 pl-4 text-sm list-decimal">
+                <li>
+                    <a href="/public/trainings/2022/training-amani-abeid-260123.pdf" download="Amani Abeid Training">
+                     Cheif Dodo - 01/02/2023
+                    </a>
+                </li>
+
+
                 
-               <li>
-                    Cheif Dodo - 01/02/2023
-                </li>
 
-                <li class="mt-2">   
-                     Kiwalala - 17/03/2023
-                </li>
+                <!-- <li class="mt-2">
+                    <a href="/public/trainings/2022/poli-training-230922.pdf" download="olemedeye training-231122">
+                     Olemedeye - 18/11/2022
+                    </a>
+                </li> -->
 
-                <li class="mt-2">   
-                     Nyegendi - 17/03/2023
-                </li>
-
-                <li class="mt-2">   
-                     Mtama - 19/03/2023
-                </li>
-
-                <li class="mt-2">
-                     Mahiwa - 19/03/2023
-                </li>
-
-                <li class="mt-2">
-                     Namalenga - 21/03/2023
-                </li>
-
-                <li class="mt-2">
-                     TBC - /03/2023
-                </li>
-
-
+                
 
             </ul>
 
@@ -198,14 +138,16 @@
             </p>
             
             <ul class="mt-2 pl-4 text-sm list-decimal">
-                
-               <li class="mt-2">
-                     TBC /03/2023
+                <li class="mt-2">
+                     - 26/03/2022
                 </li>
 
+                <li class="mt-2">   
+                     - 24/06/2022
+                </li>
 
                 <li class="mt-2 mb-12">   
-                     TBC /03/2023
+                     - 24/06/2022
                 </li>
 
         </div>
