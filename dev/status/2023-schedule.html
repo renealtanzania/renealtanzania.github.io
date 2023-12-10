@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Project Schedule - Reneal International Education Outreach</title>
+
+         <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
+        <!-- Global site tag (gtag.js) - G A -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-8QMK40HJYW"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-8QMK40HJYW');
+        </script>
+  <link href="/public/css/tailwind.css" rel="stylesheet">
+
+  <link href='/public/cal/main.css' rel='stylesheet' />
+  <script src='/public/cal/main.js'></script>
+  <script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      headerToolbar: {
+        left: 'prevYear,prev,next,nextYear today',
+        center: 'title',
+        right: 'dayGridMonth,dayGridWeek,dayGridDay'
+      },
+      initialDate: '2023-09-01',
+      navLinks: true, // can click day/week names to navigate views
+      editable: true,
+      dayMaxEvents: true, // allow "more" link when too many events
+      events: [
+      // Kikwe Installation
+        {
+           title: 'Kikwe Installation',
+          start: '2023-09-04T08:00:00',
+          end: '2023-09-04T15:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Kikwe Training',
+          start: '2023-09-05T08:30:00',
+          end: '2023-09-05T14:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Themi Installation',
+          start: '2023-09-06T08:30:00',
+          end: '2023-09-06T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Themi Training',
+          start: '2023-09-07T09:00:00',
+          end: '2023-09-07T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Oljoro Installation',
+          start: '2023-09-08T08:30:00',
+          end: '2023-09-08T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Oljoro Training',
+          start: '2023-09-09T09:00:00',
+          end: '2023-09-09T12:30:00',
+          color: 'green',
+        },
+
+// Ula Installation
+         {
+          title: 'Ula Secondary School Installation',
+          start: '2023-09-10T06:00:00',
+          end: '2023-09-12T15:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Ula Bus Trip',
+          start: '2023-09-10T07:00:00',
+          end: '2023-09-10T15:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Ula Installation',
+          start: '2023-09-11T08:30:00',
+          end: '2023-09-11T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Ula Training',
+          start: '2023-09-12T08:30:00',
+          end: '2023-09-12T13:30:00',
+          color: 'green',
+        },
+
+      // Babati School Installations
+      {
+           title: 'Babati Schools Installations',
+          start: '2023-09-13T06:00:00',
+          end: '2023-09-28T15:30:00',
+          color: 'blue',
+          url:'/guidance-docs.html',
+        },
+
+        {
+          title: 'Bus Trip',
+          start: '2023-09-13T07:00:00',
+          end: '2023-09-13T16:00:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Nakwa Installation',
+          start: '2023-09-14T08:30:00',
+          end: '2023-09-14T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Nakwa Training',
+          start: '2023-09-15T08:30:00',
+          end: '2023-09-15T13:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Bagara Installation',
+          start: '2023-09-16T10:30:00',
+          end: '2023-09-16T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Bagara Training',
+          start: '2023-09-18T08:30:00',
+          end: '2023-09-18T13:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Komoto Installation',
+          start: '2023-09-19T12:30:00',
+          end: '2023-09-19T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Komoto Training',
+          start: '2023-09-20T09:30:00',
+          end: '2023-09-20T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Kwaraa Installation',
+          start: '2023-09-21T12:30:00',
+          end: '2023-09-21T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Kwaraa Training',
+          start: '2023-09-22T09:30:00',
+          end: '2023-09-22T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Nangara Installation',
+          start: '2023-09-23T08:30:00',
+          end: '2023-09-23T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Nangara Training',
+          start: '2023-09-25T09:30:00',
+          end: '2023-09-25T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Babati Day Installation',
+          start: '2023-09-26T10:30:00',
+          end: '2023-09-26T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Babati Day Training',
+          start: '2023-09-27T09:30:00',
+          end: '2023-09-27T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Bus Trip',
+          start: '2023-09-28T07:00:00',
+          end: '2023-09-28T16:00:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Lengijave Installation',
+          start: '2023-09-29T10:30:00',
+          end: '2023-09-29T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Lengijave Training',
+          start: '2023-09-30T09:30:00',
+          end: '2023-09-30T12:30:00',
+          color: 'green',
+        },
+
+        // My School Visits
+        {
+          title: 'Olmotonyi Visit',
+          start: '2022-02-07T08:02:00',
+          end: '2022-02-07T08:45:00',
+          color: 'green',
+        },
+        {
+          title: 'Kimnyaki Visit',
+          start: '2022-02-07T09:10:00',
+          end: '2022-02-07T10:35:00',
+          color: 'green',
+        },
+        {
+          title: 'Ilboru Visit',
+          start: '2022-02-07T11:00:00',
+          end: '2022-02-07T11:45:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Elerai Visit',
+          start: '2022-02-07T12:30:00',
+          end: '2022-02-07T13:55:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Mringa Visit',
+          start: '2022-02-09T10:30:00',
+          end: '2022-02-09T11:15:00',
+          color: 'green',
+        },
+
+        // Handeni Visits
+
+        {
+          title: 'Handeni Visit',
+          start: '2022-03-01T06:30:00',
+          end: '2022-03-04T15:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Bus Trip',
+          start: '2022-03-01T06:30:00',
+          end: '2022-03-01T14:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Handeni Visit',
+          start: '2022-03-01T14:45:00',
+          end: '2022-03-01T15:50:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Kisaza Visit',
+          start: '2022-03-02T07:45:00',
+          end: '2022-03-02T11:45:00',
+          color: 'green',
+        },
+        {
+          title: 'Ndolwa Visit',
+          start: '2022-03-02T12:30:00',
+          end: '2022-03-02T13:15:00',
+          color: 'green',
+        },
+        {
+          title: 'Mkata Visit',
+          start: '2022-03-02T15:00:00',
+          end: '2022-03-02T15:45:00',
+          color: 'green',
+        },
+        {
+          title: 'Komnyanganyo Visit',
+          start: '2022-03-03T08:50:00',
+          end: '2022-03-03T09:45:00',
+          color: 'green',
+        },
+        {
+          title: 'Misima Visit',
+          start: '2022-03-03T12:30:00',
+          end: '2022-03-03T13:30:00',
+          color: 'green',
+        },
+        {
+          title: 'Back to AR',
+          start: '2022-03-04T06:30:00',
+          end: '2022-03-04T14:30:00',
+          color: 'green',
+        },
+
+        // Remaining Visits
+        {
+          title: 'Oldonyosambu Visit',
+          start: '2022-03-08T08:45:00',
+          end: '2022-03-08T09:45:00',
+          color: 'green',   // an option!
+        },
+        {
+          title: 'Bangata Visit',
+          start: '2022-03-08T10:30:00',
+          end: '2022-03-08T11:15:00',
+          color: 'green',
+        },
+        {
+          title: 'Ngiresi Visit',
+          start: '2022-03-08T12:00:00',
+          end: '2022-03-08T13:45:00',
+          color: 'green',
+        },
+
+        // Installations and Trainings
+
+        {
+           title: 'Lengijave Installation',
+          start: '2022-03-22T08:30:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Engutoto Installation',
+          start: '2022-03-25T10:20:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Irkisongo Installation',
+          start: '2022-03-29T10:20:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Lengijave Training',
+          start: '2022-04-22T14:00:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Engutoto Training',
+          start: '2022-04-22T10:00:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Kikwe Installation',
+          start: '2022-04-20T10:00:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Oljoro Installation',
+          start: '2022-04-19T10:20:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Oljoro Training',
+          start: '2022-04-21T10:00:00',
+          color: 'green',
+        },
+
+
+
+      ]
+    });
+
+    calendar.render();
+  });
+
+</script>
+<style>
+
+  body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+    background-color: black;
+    color: white;
+  }
+
+  #calendar {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+</style>
+</head>
+<body>
+  <ul class="grid grid-cols-3 gap-0 text-center py-4">
+    <li><a class="text-blue-700" href="/guidance-docs.html">BACK</a></li>
+    <li><h1 class="text-center text-2xl font-bold text-blue-500">Schedule </h1></li>
+  </ul>
+  
+  <div id='calendar'></div>
+
+</body>
+</html>
