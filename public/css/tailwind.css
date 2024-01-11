@@ -7,6 +7,12 @@ Document
 ========
 */
 
+/*Sample-out-of*/
+.iframe-phn{
+  max-width: 640px;
+  width: 320;
+  height: 255;
+}
 /**
 Use a better box model (opinionated).
 */

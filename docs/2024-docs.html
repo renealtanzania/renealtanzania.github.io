@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Status - Reneal International Education Outreach</title>
+        <title>2024 Docs - Reneal International Education Outreach</title>
 
          <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
         <!-- Fonts -->
@@ -20,7 +20,7 @@
 
             gtag('config', 'G-8QMK40HJYW');
         </script>
-        
+
         <!-- Styles -->
         <style>
            
@@ -39,15 +39,17 @@
     <body>
         <div class="container px-8">
             <header class="py-6">
-                <h1 class="text-center text-xl font-bold text-blue-500">Current Status </h1>
+                <h1 class="text-center text-xl font-bold">Reneal Docs </h1>
             </header>
 
             <p class="text-center text-sm">Last updated: 11/01/2024 - 17:00 EAT</p>
-            
+            <a class="text-blue-500" href="/">
+                Home</a>
+
         
     <div class="grid lg:flex"> 
         <div class="lg:w-1/4"> 
-            <p class="mt-5 text-green-500"><a href="/">Reneal Documentations </a></p>
+            <p class="mt-5 text-green-500">Reneal Documentations </p>
             <div class = "mt-5 flex"><div class="mr-1"><a href="/guidance-docs.html"> 
                 <img src="/public/imgs/svg/guidance-docs_24dp.svg"></div>
                 <div>Guidance Docs</a></div></div>
@@ -60,76 +62,53 @@
                 <img src="/public/imgs/svg/area-covered_24dp.svg"></div>
                 <div>Area Covered </a></div></div> 
 
-                <div class = "mt-5 flex"><div class="mr-1"><a href="/docs/2023-docs.html"> 
+                <div class = "mt-5 flex"><div class="mr-1"><a href="/status/2023-status.html"> 
                 <img src="/public/imgs/svg/training_24dp.svg"></div>
-                <div>2023 Docs </a></div></div>
+                <div>2023 Status </a></div></div>
 
                 <div class = "mt-5 flex"><div class="mr-1"><a href="/docs"> 
                 <img src="/public/imgs/svg/ic8-open-document-24.png"></div>
                 <div>Historical Docs </a></div></div>
 
-                <div class = "mt-5 flex"><div class="mr-1"><a href="/status/previous.html"> 
-                <img src="/public/imgs/svg/training_24dp.svg"></div>
-                <div>Previous Status </a></div></div>
 
         </div>
 
     <div>
-        <p class="mt-5 text-lg font-semibold">
-            2024 Status
+        <p class="mt-5 text-lg font-semibold text-blue-500">
+            2024 Docs
         </p>
         <ul class="mt-2 text-blue-500">
             <!-- <li><a href="./guidance-docs.html">Guidance Docs</a> -->
             <!-- <li><a href="#installations">Installations</a>
             <li><a href="#trainings">Trainings</a>
             <li><a href="#labexpansion">Lab Expansion</a> -->
-
         </ul>
-        <ul class="pl-4 text-sm list-decimal">
-                <li>
-                    Chalinze DC - 4
-                </li>
 
-                <li>
-                    Kilolo DC - 4
-                </li>
-                <li>
-                    Arusha CC - 1
-                </li>
-                <li>
-                    Karatu DC - 1
-                </li>
-              
-        </ul>
 
         <!-- Installations -->
         <p><a name="installations"></a></p>
         <p class="mt-5 text-base font-semibold" id="#installations">
-           New Installations | <a href="/docs/2024-docs.html" class="text-blue-500"> Docs </a>
+           New Installations
         </p>
             
-            <ul class="mt-2 pl-4 text-sm list-decimal">
-
+            <ul class="mt-5 pl-4 text-sm list-decimal">
                 <li>
-                     Mboga - 07/01/2024
-                </li>
-               
-               <li class="mt-2">
-                     Mdaula - 08/01/2024
-                </li>
-
-                <!-- <li class="mt-2">   
-                     Kiwalala - 00/01/2024
+                    <a href="/public/installations/2024/mboga-110124.pdf" download="Mboga Installation 110124">
+                     Mboga  - 07/01/2024
+                    </a> |
+                    <a href="/public/donation-letters/2024/mboga-donation-letter.pdf" download="signed donation mboga-070124">
+                     Donation letter 
+                    </a>
                 </li>
 
                 <li class="mt-2">
-                     Nyengedi - 00/01/2024
-                </li> -->
-
-
-                <!-- <li class="mt-2">
-                     Olemedeye - 09/08/2023
-                </li> -->
+                    <a href="/public/installations/2024/mdaula-080124.pdf" download="Mdaula Installation 080124">
+                     Mdaula  - 08/01/2024
+                    </a> |
+                    <a href="/public/donation-letters/2024/mdaula-donation-letter.pdf" download="signed donation mdaula-080124">
+                     Donation letter 
+                    </a>
+                </li>
 
 
             </ul>
@@ -141,17 +120,20 @@
                 New School Trainings
             </p>
 
-            <ul class="mt-2 pl-4 text-sm list-decimal">
-                
+            <ul class="mt-2 pl-4 text-sm list-decimal">       
 
-                <!-- <li class="mt-2">   
-                     Kiwalala - 09/02/2024
+
+                <li class="mt-2">
+                    <a href="/public/trainings/2023/kiwalala-training-090223.pdf" download="kiwalala training-090223">
+                     TBC - 00/02/2023
+                    </a>
                 </li>
 
-                <li class="mt-2">   
-                     Nyegendi - 09/02/2024
-                </li> -->
-
+                <li class="mt-2">
+                    <a href="/public/trainings/2023/nyengedi-training-090223.pdf" download="nyengedi training-090223">
+                     TBC - 00/02/2023
+                    </a>
+                </li>
 
             </ul>
 
@@ -162,15 +144,13 @@
             </p>
             
             <ul class="mt-2 pl-4 text-sm list-decimal">
-                
-               <!-- <li class="mt-2">
-                     Abeid Amani - 25/03/2024
+                <li class="mt-2">
+                    TBD - 26/00/2024
                 </li>
 
-
                 <li class="mt-2 mb-12">   
-                     Namanga - 06/05/2024
-                </li> -->
+                    TBC - 24/00/2024
+                </li>
 
         </div>
            
