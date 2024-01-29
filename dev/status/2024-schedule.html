@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Project Schedule - Reneal International Education Outreach</title>
+
+         <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
+        <!-- Global site tag (gtag.js) - G A -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-8QMK40HJYW"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-8QMK40HJYW');
+        </script>
+  <link href="/public/css/tailwind.css" rel="stylesheet">
+
+  <link href='/public/cal/main.css' rel='stylesheet' />
+  <script src='/public/cal/main.js'></script>
+  <script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      headerToolbar: {
+        left: 'prevYear,prev,next,nextYear today',
+        center: 'title',
+        right: 'dayGridMonth,dayGridWeek,dayGridDay'
+      },
+      initialDate: '2024-01-01',
+      navLinks: true, // can click day/week names to navigate views
+      editable: true,
+      dayMaxEvents: true, // allow "more" link when too many events
+      events: [
+      // Chalinze Installation
+      {
+           title: 'Chalinze Schools Installations',
+          start: '2024-01-06T06:00:00',
+          end: '2024-01-14T15:30:00',
+          color: 'blue',
+          url:'/guidance-docs.html',
+        },
+
+      {
+           title: 'Chalinze Trip',
+          start: '2024-01-06T08:00:00',
+          end: '2024-01-04T15:30:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Mboga Installation',
+          start: '2024-01-07T08:00:00',
+          end: '2024-01-07T15:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Mdaula Installation',
+          start: '2024-01-08T08:30:00',
+          end: '2024-01-08T14:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Msata Installation',
+          start: '2024-01-14T09:00:00',
+          end: '2024-01-14T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Mandera Girls Installation',
+          start: '2024-01-14T14:30:00',
+          end: '2024-01-14T17:30:00',
+          color: 'green',
+        },
+
+// Iringa Installation
+         {
+          title: 'Iringa Schools Installation',
+          start: '2024-01-25T06:00:00',
+          end: '2024-01-29T15:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Iringa Bus Trip',
+          start: '2024-01-25T06:00:00',
+          end: '2024-01-25T17:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Selebu Installation',
+          start: '2024-01-26T08:30:00',
+          end: '2024-01-26T11:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Selebu Training',
+          start: '2024-01-26T12:30:00',
+          end: '2024-01-26T15:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Nyalumbu Installation',
+          start: '2024-01-27T08:30:00',
+          end: '2024-01-27T11:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Nyalumbu Training',
+          start: '2024-01-27T12:30:00',
+          end: '2024-01-27T15:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'TEAM MEETING',
+          start: '2024-01-27T17:00:00',
+          end: '2024-01-27T18:30:00',
+          color: 'red',
+        },
+
+        {
+          title: 'Kilolo Installation',
+          start: '2024-01-28T08:30:00',
+          end: '2024-01-28T11:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Kilolo Training',
+          start: '2024-01-28T12:30:00',
+          end: '2024-01-28T15:30:00',
+          color: 'green',
+        },
+
+        //2024 Feb Visits
+        {
+          title: '2024 February Schools Visits',
+          start: '2024-02-01T08:00:00',
+          end: '2024-02-29T15:30:00',
+          color: 'red',
+        },
+
+
+        // Remaining Visits
+        {
+          title: 'Oldonyosambu Visit',
+          start: '2022-03-08T08:45:00',
+          end: '2022-03-08T09:45:00',
+          color: 'green',   // an option!
+        },
+        {
+          title: 'Bangata Visit',
+          start: '2022-03-08T10:30:00',
+          end: '2022-03-08T11:15:00',
+          color: 'green',
+        },
+        {
+          title: 'Ngiresi Visit',
+          start: '2022-03-08T12:00:00',
+          end: '2022-03-08T13:45:00',
+          color: 'green',
+        },
+
+        // Installations and Trainings
+
+        {
+           title: 'Lengijave Installation',
+          start: '2022-03-22T08:30:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Engutoto Installation',
+          start: '2022-03-25T10:20:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Irkisongo Installation',
+          start: '2022-03-29T10:20:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Lengijave Training',
+          start: '2022-04-22T14:00:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Engutoto Training',
+          start: '2022-04-22T10:00:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Kikwe Installation',
+          start: '2022-04-20T10:00:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Oljoro Installation',
+          start: '2022-04-19T10:20:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Oljoro Training',
+          start: '2022-04-21T10:00:00',
+          color: 'green',
+        },
+
+
+
+      ]
+    });
+
+    calendar.render();
+  });
+
+</script>
+<style>
+
+  body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+    background-color: black;
+    color: white;
+  }
+
+  #calendar {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+</style>
+</head>
+<body>
+  <ul class="grid grid-cols-3 gap-0 text-center py-4">
+    <li><a class="text-blue-700" href="/guidance-docs.html">BACK</a></li>
+    <li><h1 class="text-center text-2xl font-bold text-blue-500">Schedule </h1></li>
+  </ul>
+  
+  <div id='calendar'></div>
+
+</body>
+</html>
