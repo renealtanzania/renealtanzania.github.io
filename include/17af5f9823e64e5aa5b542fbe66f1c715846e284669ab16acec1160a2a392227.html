@@ -18,7 +18,7 @@
         </style>
 
         <!-- css -->
-        <link href="public/css/tailwind.css" rel="stylesheet">
+        <link href="/public/css/tailwind.css" rel="stylesheet">
 
 
         <style>
@@ -122,6 +122,17 @@
                     </a>
                 </li>
         </ul>
+
+ <form method="post" action="/status" target="_blank">
+
+    <label class="block text-sm font-medium text-gray-700" for="code-input">Enter 70-character code:</label>
+        <input
+            type="text"
+            id="code-input"
+            class="block w-full px-4 py-2 text-gray-600 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" pattern="[a-zA-Z0-9]{1,64}" minlength="64"/>
+        <button class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Submit</button>
+
+</form>
 
         <!-- Google Docs -->
         <p><a name="labexpansion"></a></p>
