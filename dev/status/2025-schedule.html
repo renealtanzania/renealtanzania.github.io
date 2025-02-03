@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Project Schedule - Reneal International Education Outreach</title>
+
+         <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
+  <link href="/public/css/tailwind.css" rel="stylesheet">
+
+  <link href='/public/cal/main.css' rel='stylesheet' />
+  <script src='/public/cal/main.js'></script>
+  <script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      headerToolbar: {
+        left: 'prevYear,prev,next,nextYear today',
+        center: 'title',
+        right: 'dayGridMonth,dayGridWeek,dayGridDay'
+      },
+      initialDate: '2025-01-01',
+      navLinks: true, // can click day/week names to navigate views
+      editable: true,
+      dayMaxEvents: true, // allow "more" link when too many events
+      events: [
+      // 2025 Installation
+      {  
+           title: '2025 School Visits Update Released',
+          start: '2025-01-27T18:00:00',
+          end: '2025-01-27T18:51:00',
+          color: 'green',
+          url: 'https://drive.google.com/drive/folders/1X7go7jl8kgevYI6nVPtYsqozhTp2sb8e?usp=sharing'
+        },
+
+      {
+           title: 'Neal Celebration for life',
+          start: '2025-02-01T22:00:00',
+          end: '2025-02-01T23:30:00',
+          color: 'blue',
+          url:'https://www.youtube.com/live/pviCakPUiS0',
+        },
+
+        //2025 Feb Visits Runner Testing
+        {
+          title: 'Mringa Update',
+          start: '2025-01-29T09:30:00',
+          end: '2025-01-29T11:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Ilboru Update',
+          start: '2025-01-30T10:20:00',
+          end: '2025-01-30T12:45:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Kiranyi Update',
+          start: '2025-01-31T10:00:00',
+          end: '2025-01-31T11:35:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Olmotonyi Update',
+          start: '2025-01-31T12:20:00',
+          end: '2025-01-31T13:45:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Mukulat Update',
+          start: '2025-02-03T09:20:00',
+          end: '2025-02-03T11:45:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Osiligi Update',
+          start: '2025-02-03T12:10:00',
+          end: '2025-02-03T13:45:00',
+          color: 'green',
+        },
+
+        // Sep 2025
+
+        // Reneal in TZ
+          {
+          title: 'Rene and Neal Arrival at JRO',
+          start: '2025-09-04T20:00:00',
+          end: '2025-09-04T20:15:00',
+          color: 'green',
+           },
+
+
+      ]
+    });
+
+    calendar.render();
+  });
+
+</script>
+<style>
+
+  body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+    background-color: black;
+    color: white;
+  }
+
+  #calendar {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+</style>
+</head>
+<body>
+  <ul class="grid grid-cols-3 gap-0 text-center py-4">
+    <li><a class="text-blue-700" href="/status">BACK</a></li>
+    <li><h1 class="text-center text-2xl font-bold text-blue-500">Project Schedule </h1></li>
+  </ul>
+  
+  <div id='calendar'></div>
+
+</body>
+</html>
