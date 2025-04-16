@@ -3,12 +3,24 @@
 		"name" : " Kelvin Day"
 		"email" :	"kelvinday@gmail.com"
 		"status" : "Active"
+		"skim of work" :
+		"lesson plan" :
 	},
 
 	{
 		"name" : " Manufari Arusha"
 		"email" :	"manufari5@gmail.com"
 		"status" : "Active"
+		"skim of work" :
+		"lesson plan" :
+	},
+
+	{
+		"name" : " Erick M"
+		"email" :	"erick@gmail.com"
+		"status" : "Active"
+		"skim of work" : "https://docs.google.com/spreadsheets/d/1J5RGeJuWlH9PigRLJz4cCKROexdcrXLs2FVvyzKlCMg/edit?usp=sharing"
+		"lesson plan" : "https://docs.google.com/spreadsheets/d/1OoP6v8bDMfMsuryI3MLAkW4NHUhlozW0Hw9XJY4-XrY/edit?usp=sharing"
 	},
 
 ]
