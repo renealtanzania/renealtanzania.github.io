@@ -136,3 +136,10 @@
     --tw-bg-opacity: 1;
     background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1)) /* #3b82f6 */;
 }
+
+.card{--tw-bg-opacity:1;--tw-text-opacity:1;background-color:rgba(255,255,255,var(--tw-bg-opacity));border-color:rgba(120,144,156,.15);border-radius:.934rem;border-width:1px;color:rgba(34,41,47,var(--tw-text-opacity));margin-left:auto;margin-right:auto;max-width:100%;overflow:hidden;position:relative;width:345px}@media(min-width:768px){.card{height:258px;width:335px}}@media(min-width:992px) {
+    .card {
+        height: 300px;
+        width: 600px;
+    }
+}

@@ -20,21 +20,6 @@
     "Finish arrangements" : "04/06/2020 - 12:45"
   },
   
-  "Trainers"
-  {
-    "School"  :	 "School C",
-    "Trainer":  "Justin M",
-    "When"  :  "08/06/2020 - 10:30 - 12:25",
-   
-  },
-  
-  {
-    "School"  :	 "School D",
-    "Trainer":  "James N",
-    "When"  :  "09/06/2020 - 12:50 - 15:10",
-   
-  },
-  
   "Installers"
   {
     "School"  :	 "School C",
@@ -47,6 +32,21 @@
     "School"  :	 "School D",
     "Installer":  "Robert",
     "When"  :  "09/06/2020 - 10:20 - 12:10",
+   
+  },
+    
+  "Trainers"
+  {
+    "School"  :	 "School C",
+    "Trainer":  "Justin M",
+    "When"  :  "08/06/2020 - 10:30 - 12:25",
+   
+  },
+  
+  {
+    "School"  :	 "School D",
+    "Trainer":  "James N",
+    "When"  :  "09/06/2020 - 12:50 - 15:10",
    
   },
   

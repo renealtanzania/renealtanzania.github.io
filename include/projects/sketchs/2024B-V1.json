@@ -1,0 +1,62 @@
+"_____2024B-V1 Project_____"
+
+[
+"Airport"
+  {
+    "Airport Deliverance"  :  "02/03/2025 - 20:00",
+    "Team Tz Airport PickUp" : "03/03/2020 - 14:45"
+  },
+  
+  "JRI Office Deliverance"
+  {
+    "Boxes Delivered"  :  "03/03/2025 - 18:50",
+    "Box Stored" : "03/03/2025 - 20:45"
+  },
+  
+  "Box Arrangements"
+  {
+    "Start arrangements in a certain order"  :  "04/03/2025 - 09:00",
+    "Finish arrangements" : "04/06/2020 - 11:45"
+  },
+  
+  "Box Distributions to Schools"
+  {
+    "Moshi Schools"  :  "05/03/2025 - 10:00",
+    "Mbeya Schools" : "05/03/2025 - 09:45",
+    "Dodoma Schools" : "06/03/2025 - 08:25",
+    "Iringa School" : "07/03/2025 - 12:45",
+    "Manyara School" : "05/03/2025 - 09:45",  
+  },
+  
+  "Installations"
+  {
+    "Viwandani"  :  "09/03/2025",
+    "Mpaguso" : "12/03/2025",
+    "Ikuti" : "13/03/2025",
+    "Lupoto" : "14/03/2025",
+    "Kinyala" : "15/03/2025",
+    "Uhambingeto" : "19/03/2025",
+    "Namwai" : "24/03/2025",
+    "Sanya Juu" : "25/03/2025",
+    "Nuru" : "26/03/2025",
+    "Oshara" : "27/03/2025",
+ 
+  },
+  
+    "Trainings"
+  {
+    "Viwandani"  :  "09/03/2025",
+    "Mpaguso" : "12/03/2025",
+    "Ikuti" : "13/03/2025",
+    "Lupoto" : "14/03/2025",
+    "Kinyala" : "15/03/2025",
+    "Uhambingeto" : "19/03/2025",
+    "Namwai" : "24/03/2025",
+    "Sanya Juu" : "25/03/2025",
+    "Nuru" : "26/03/2025",
+    "Oshara" : "27/03/2025",
+ 
+  },
+  
+  
+  ]
