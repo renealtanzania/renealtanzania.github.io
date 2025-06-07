@@ -8,13 +8,9 @@
 
          <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
 
-        <!-- Styles -->
-        <style>
-           
-        </style>
 
         <!-- css -->
         <link href="/public/css/tailwind.css" rel="stylesheet">
@@ -36,18 +32,16 @@
             <a class="text-blue-500" href="/">
                 Home</a>
 
-        
 
-
-  <!--   <div>
-        <p class="mt-5 text-lg font-semibold">
-            Miscelleneous 
-        </p> -->
-
-        <form class="mt-5" action="/guidance-docum" target="_self" rel="noreferrer noopener">
+<div class="container">
+        <form class="mt-5" action="/login/vpn/v-AWd3.php" target="_self" rel="noreferrer noopener">
             <label class="text-lg font-bold">Password</label>
-            <input type="password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$" minlength="48" class="w-full p-2 text-lg text-gray-600 placeholder-gray-300 shadow-md" placeholder="Enter password">
+            <input type="password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$" minlength="8" class="w-full p-2 text-lg text-gray-600 placeholder-gray-300 shadow-md" placeholder="Enter password">
   
              <!-- <button class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">Login</button> -->
             <button class="mt-5 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">LogIn</button>
         </form>
+
+</div>
+
+        </div>
