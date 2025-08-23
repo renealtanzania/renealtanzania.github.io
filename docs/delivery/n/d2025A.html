@@ -17,7 +17,7 @@
      <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
+      padding: 50px;
       background-color: #f9f9f9;
     }
     h1 {
@@ -57,12 +57,9 @@
       background-color: #003F7FFF;
     }
     .box {
-      background-color: #fff;
-      border: 1px solid #ddd;
       padding: 15px;
       margin-bottom: 25px;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
       max-width: 960px;
       margin-left: auto;
       margin-right: auto;
@@ -87,12 +84,25 @@
       border-collapse: collapse;
       width: 100%;
       font-size: 14px;
+      padding-left:8rem!important;
+      padding-right:8rem!important;
+      padding:0.125rem;vertical-align:middle;
+      max-width: auto;
     }
     th, td {
       border: 1px solid #bbb;
       padding: 8px 12px;
       text-align: left;
     }
+    
+    @media(max-width:668px)
+      { .smo{
+        display:grid;
+        
+      }}
+
+    .px-4{padding-left:1rem!important;padding-right:1rem!important}
+
     th {
       background-color: #e3e3e3;
       user-select: none;
@@ -120,7 +130,7 @@
 
 </head>
 
-<div class="mt-8">
+<div class="px-4 mt-8">
 
 <ul class="flex justify-center gap-x-4 text-lg lg:flex lg:items-center lg:justify-center lg:gap-6 xl:gap-10 mb-5">
     <li><a href="/docs/delivery">Items Delivery</a></li>
@@ -132,7 +142,7 @@
     <div class="mt-5 text-3xl font-bold">
   <h1>Boxes Inventory</h1></div>
 
-  <div class="filters">
+  <div class="filters smo">
     <div>
       <label for="itemFilter">Filter by Item:</label>
       <select id="itemFilter" class="itemFilta">
