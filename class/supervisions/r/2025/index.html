@@ -70,13 +70,14 @@
       white-space: nowrap;
       font-weight: bold;
     }
-    td:nth-of-type(1)::before { content: "Level"; }
-    td:nth-of-type(2)::before { content: "Name"; }
-    td:nth-of-type(3)::before { content: "Phone"; }
-    td:nth-of-type(4)::before { content: "University"; }
-    td:nth-of-type(5)::before { content: "Field Letter"; }
-    td:nth-of-type(6)::before { content: "Date"; }
-    td:nth-of-type(7)::before { content: "Year"; }
+    td:nth-of-type(1)::before { content: "No"; }
+    td:nth-of-type(2)::before { content: "Level"; }
+    td:nth-of-type(3)::before { content: "Name"; }
+    td:nth-of-type(4)::before { content: "Phone"; }
+    td:nth-of-type(5)::before { content: "University"; }
+    td:nth-of-type(6)::before { content: "Field Letter"; }
+    td:nth-of-type(8)::before { content: "Date"; }
+    td:nth-of-type(9)::before { content: "Year"; }
   }
   button {
     padding: 8px 15px;
@@ -85,7 +86,7 @@
     font-size: 1em;
   }
   a.file-link {
-    color: #0066cc;
+    color: #020202;
   }
 </style>
 </head>
@@ -95,11 +96,12 @@
 
   <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search for students..." title="Type to search" />
 
-  <button onclick="printTable()">Print Whole Table</button>
+  <button onclick="printTable()">Print Table</button>
 
   <table id="studentTable" aria-label="Student Registration Table">
     <thead>
       <tr>
+        <th>No</th>
         <th>Level</th>
         <th>Name</th>
         <th>Phone</th>
@@ -111,65 +113,72 @@
     </thead>
     <tbody>
       <tr>
+        <td>1</td>
         <td>Degree</td>
         <td>Emilia Modestus Nzilano</td>
         <td>255743956186</td>
         <td>ATC</td>
-        <td><a href="/public/docs/letters/field-letter.pdf" target="_blank" class="file-link">Link</a></td>
+        <td><a href="/public/docs/letters/field-letter.pdf" target="_blank" class="file-link">Attachment</a></td>
         <td>15-07-2025</td>
         <td>2025</td>
       </tr>
       <tr>
+        <td>2</td>
         <td>Degree</td>
         <td>Gladness G. Tobias</td>
         <td>255750363095</td>
         <td>ATC</td>
-        <td><a href="/public/docs/letters/field-letter.pdf" target="_blank" class="file-link">Link</a></td>
+        <td><a href="/public/docs/letters/field-letter.pdf" target="_blank" class="file-link">Attachment</a></td>
         <td>15-07-2025</td>
         <td>2025</td>
       </tr>
       <tr>
+        <td>3</td>
         <td>Degree</td>
         <td>Happyness Zakaria Tutsi</td>
         <td>255622242958</td>
         <td>ATC</td>
-        <td><a href="/public/docs/letters/field-letter.pdf" target="_blank" class="file-link">Link</a></td>
+        <td><a href="/public/docs/letters/field-letter.pdf" target="_blank" class="file-link">Attachment</a></td>
         <td>15-07-2025</td>
         <td>2025</td>
       </tr>
       <tr>
+        <td>4</td>
         <td>Degree</td>
-        <td>Sabrina Ally Shabani</td>
-        <td>255750203550</td>
+        <td>Aboubakar Ally Shabani</td>
+        <td>255694450084</td>
         <td>ATC</td>
-        <td><a href="/public/docs/letters/field-letter.pdf" target="_blank" class="file-link">Link</a></td>
+        <td><a href="/public/docs/letters/field-letter.pdf" target="_blank" class="file-link">Attachment</a></td>
         <td>15-07-2025</td>
         <td>2025</td>
       </tr>
       <tr>
+        <td>5</td>
         <td>Degree</td>
         <td>Jastin Msechu</td>
         <td>255755453010</td>
         <td>ATC</td>
-        <td><a href="/home/field-letter.pdf" target="_blank" class="file-link">Link</a></td>
+        <td><a href="/public/docs/letters/field-letter.pdf" target="_blank" class="file-link">Attachment</a></td>
         <td>15-07-2025</td>
         <td>2025</td>
       </tr>
       <tr>
+        <td>6</td>
         <td>Diploma</td>
         <td>Ashlyin Said</td>
         <td>255689336695</td>
         <td>ATC</td>
-        <td><a href="/home/field-letter.pdf" target="_blank" class="file-link">Link</a></td>
+        <td><a href="/public/docs/letters/field-letter.pdf" target="_blank" class="file-link">Attachment</a></td>
         <td>15-07-2025</td>
         <td>2025</td>
       </tr>
       <tr>
+        <td>7</td>
         <td>Diploma</td>
-        <td>Amos Lome</td>
-        <td>255750204010</td>
+        <td>Ambrose Lome</td>
+        <td>255748689032</td>
         <td>ATC</td>
-        <td><a href="/home/field-letter.pdf" target="_blank" class="file-link">Link</a></td>
+        <td><a href="/public/docs/letters/field-letter.pdf" target="_blank" class="file-link">Attachment</a></td>
         <td>15-07-2025</td>
         <td>2025</td>
       </tr>
