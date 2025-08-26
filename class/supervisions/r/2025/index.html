@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+
+<title>Student Registration</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: none;
+  }
+  .container {
+    max-width: 1000px;
+    margin: 10px auto;
+    padding: 0 10px;
+  }
+  h1 {
+    text-align: center;
+  }
+  input[type="text"] {
+    margin: 10px 0 15px;
+    padding: 8px;
+    width: 100%;
+    max-width: 300px;
+    box-sizing: border-box;
+    font-size: 1em;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: auto;
+  }
+  th, td {
+    border: 1px solid #777;
+    padding: 8px 10px;
+    text-align: left;
+    word-wrap: break-word;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  @media only screen and (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+      width: 100%;
+    }
+    thead tr {
+      display: none;
+    }
+    tr {
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    td {
+      border: none;
+      position: relative;
+      padding-left: 50%;
+      white-space: normal;
+      text-align: left;
+    }
+    td::before {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 45%;
+      white-space: nowrap;
+      font-weight: bold;
+    }
+    td:nth-of-type(1)::before { content: "Level"; }
+    td:nth-of-type(2)::before { content: "Name"; }
+    td:nth-of-type(3)::before { content: "Phone"; }
+    td:nth-of-type(4)::before { content: "University"; }
+    td:nth-of-type(5)::before { content: "Field Letter"; }
+    td:nth-of-type(6)::before { content: "Date"; }
+    td:nth-of-type(7)::before { content: "Year"; }
+  }
+  button {
+    padding: 8px 15px;
+    margin: 10px 0;
+    cursor: pointer;
+    font-size: 1em;
+  }
+  a.file-link {
+    color: #0066cc;
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Student Registration</h1>
+
+  <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search for students..." title="Type to search" />
+
+  <button onclick="printTable()">Print Whole Table</button>
+
+  <table id="studentTable" aria-label="Student Registration Table">
+    <thead>
+      <tr>
+        <th>Level</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>University</th>
+        <th>Field Letter</th>
+        <th>Date</th>
+        <th>Year</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Degree</td>
+        <td>Emilia Modestus Nzilano</td>
+        <td>255743956186</td>
+        <td>ATC</td>
+        <td><a href="/public/letters/field-letter.pdf" target="_blank" class="file-link">Link</a></td>
+        <td>15-07-2025</td>
+        <td>2025</td>
+      </tr>
+      <tr>
+        <td>Degree</td>
+        <td>Gladness G. Tobias</td>
+        <td>255750363095</td>
+        <td>ATC</td>
+        <td><a href="/public/letters/field-letter.pdf" target="_blank" class="file-link">Link</a></td>
+        <td>15-07-2025</td>
+        <td>2025</td>
+      </tr>
+      <tr>
+        <td>Degree</td>
+        <td>Happyness Zakaria Tutsi</td>
+        <td>255622242958</td>
+        <td>ATC</td>
+        <td><a href="/public/letters/field-letter.pdf" target="_blank" class="file-link">Link</a></td>
+        <td>15-07-2025</td>
+        <td>2025</td>
+      </tr>
+      <tr>
+        <td>Degree</td>
+        <td>Sabrina Ally Shabani</td>
+        <td>255750203550</td>
+        <td>ATC</td>
+        <td><a href="/public/letters/field-letter.pdf" target="_blank" class="file-link">Link</a></td>
+        <td>15-07-2025</td>
+        <td>2025</td>
+      </tr>
+      <tr>
+        <td>Degree</td>
+        <td>Jastin Msechu</td>
+        <td>255755453010</td>
+        <td>ATC</td>
+        <td><a href="/home/field-letter.pdf" target="_blank" class="file-link">Link</a></td>
+        <td>15-07-2025</td>
+        <td>2025</td>
+      </tr>
+      <tr>
+        <td>Diploma</td>
+        <td>Ashlyin Said</td>
+        <td>255689336695</td>
+        <td>ATC</td>
+        <td><a href="/home/field-letter.pdf" target="_blank" class="file-link">Link</a></td>
+        <td>15-07-2025</td>
+        <td>2025</td>
+      </tr>
+      <tr>
+        <td>Diploma</td>
+        <td>Amos Lome</td>
+        <td>255750204010</td>
+        <td>ATC</td>
+        <td><a href="/home/field-letter.pdf" target="_blank" class="file-link">Link</a></td>
+        <td>15-07-2025</td>
+        <td>2025</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  function filterTable() {
+    const filter = document.getElementById('filterInput').value.toLowerCase();
+    const table = document.getElementById('studentTable');
+    const trs = table.getElementsByTagName('tr');
+    for (let i = 1; i < trs.length; i++) {
+      const tds = trs[i].getElementsByTagName('td');
+      let show = false;
+      for (let j = 0; j < tds.length; j++) {
+        let cell = tds[j];
+        if (cell.textContent.toLowerCase().indexOf(filter) > -1) {
+          show = true;
+          break;
+        }
+      }
+      trs[i].style.display = show ? '' : 'none';
+    }
+  }
+
+  function printTable() {
+    const printWindow = window.open('', '', 'width=900,height=600');
+    printWindow.document.write('<html><head><title>Print Student Table</title>');
+    printWindow.document.write('<style>table {width: 100%; border-collapse: collapse;} th, td {border: 1px solid #777; padding: 8px 10px; text-align: left;} th {background-color: #f2f2f2;} body {font-family: Arial;}</style>');
+    printWindow.document.write('</head><body >');
+    printWindow.document.write(document.getElementById('studentTable').outerHTML);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  }
+</script>
+
+</body>
+</html>
