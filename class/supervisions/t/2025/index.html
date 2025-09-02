@@ -105,7 +105,7 @@
     <thead>
       <tr class="filters">
         <th><input type="text" data-column="0" placeholder="Filter Student" /></th>
-        <th><input type="text" data-column="1" placeholder="Filter No" /></th>
+        <th><input type="text" data-column="1" placeholder="Filter Task No" /></th>
         <th><input type="text" data-column="2" placeholder="Filter Level" /></th>
         <th><input type="text" data-column="3" placeholder="Filter Task" /></th>
         <th><input type="text" data-column="4" placeholder="Filter Item ID" /></th>
@@ -116,7 +116,7 @@
       </tr>
       <tr>
         <th>Student</th>
-        <th>No</th>
+        <th>Task No</th>
         <th>Level</th>
         <th>Task</th>
         <th>Item ID</th>
@@ -133,16 +133,16 @@
 <script>
   const data = [
     {"Student":"John Doe","No":"1","Level":"Degree","Task":"Replace CMOS battery","Item ID":"AS503","School Item":"Mlangarini","Repair Status":"Completed","Date":"21-07-2025","Year":"2025"},
-    {"Student":"John Doe","No":"2","Level":"Degree","Task":"Repair Screen","Item ID":"AS73","School Item":"Sokon2","Repair Status":"Pending","Date":"21-07-2025","Year":"2025"},
-    {"Student":"John Doe","No":"3","Level":"Degree","Task":"Repair Keyboard","Item ID":"AS57","School Item":"Mwandet","Repair Status":"Completed","Date":"22-07-2025","Year":"2025"},
+    {"Student":"","No":"2","Level":"Degree","Task":"Repair Screen","Item ID":"AS73","School Item":"Sokon2","Repair Status":"Pending","Date":"21-07-2025","Year":"2025"},
+    {"Student":"","No":"3","Level":"Degree","Task":"Repair Keyboard","Item ID":"AS57","School Item":"Mwandet","Repair Status":"Completed","Date":"22-07-2025","Year":"2025"},
     {"Student":"Alop Denkings","No":"1","Level":"Degree","Task":"Replace CMOS battery","Item ID":"AS145","School Item":"Einoti","Repair Status":"Completed","Date":"23-07-2025","Year":"2025"},
     {"Student":"Jaul Tralo","No":"1","Level":"Diploma","Task":"Repair Power Supply","Item ID":"AS23","School Item":"Nkoarusambu","Repair Status":"Completed","Date":"24-07-2025","Year":"2025"},
-    {"Student":"Jaul Tralo","No":"2","Level":"Diploma","Task":"Internal Blowing","Item ID":"AS34","School Item":"Enduimet","Repair Status":"Pending","Date":"25-07-2025","Year":"2025"},
+    {"Student":"","No":"2","Level":"Diploma","Task":"Internal Blowing","Item ID":"AS34","School Item":"Enduimet","Repair Status":"Pending","Date":"25-07-2025","Year":"2025"},
     {"Student":"Castle Erim","No":"1","Level":"Diploma","Task":"Repair Mouse","Item ID":"AS623","School Item":"Kikwe","Repair Status":"Completed","Date":"24-07-2025","Year":"2025"},
-    {"Student":"Castle Erim","No":"2","Level":"Diploma","Task":"Internal Blowing","Item ID":"AS27","School Item":"Dareda","Repair Status":"Pending","Date":"25-07-2025","Year":"2025"},
+    {"Student":"","No":"2","Level":"Diploma","Task":"Internal Blowing","Item ID":"AS27","School Item":"Dareda","Repair Status":"Pending","Date":"25-07-2025","Year":"2025"},
     {"Student":"Prodol Zoe","No":"1","Level":"Diploma","Task":"Replace CMOS battery","Item ID":"AS48","School Item":"Bagara","Repair Status":"Completed","Date":"23-07-2025","Year":"2025"},
     {"Student":"Brenda Podul","No":"1","Level":"Diploma","Task":"Repair Mouse","Item ID":"AS42","School Item":"Nangara","Repair Status":"Completed","Date":"24-07-2025","Year":"2025"},
-    {"Student":"Brenda Podul","No":"2","Level":"Diploma","Task":"RAM Cleaning","Item ID":"AS27","School Item":"Dareda","Repair Status":"Pending","Date":"25-07-2025","Year":"2025"}
+    {"Student":"","No":"2","Level":"Diploma","Task":"RAM Cleaning","Item ID":"AS27","School Item":"Dareda","Repair Status":"Pending","Date":"25-07-2025","Year":"2025"}
   ];
 
   function populateTable(filteredData) {
