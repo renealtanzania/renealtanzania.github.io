@@ -373,16 +373,6 @@
                     <li>All necessary files required in build-up process will be on the VPN flash drive.</li>
                     
                 </ol>
-                
-                <h3>Authentication</h3>
-                <p>All API requests require authentication. We support both API keys and OAuth 2.0 for secure access.</p>
-                
-                <div class="code-block">
-// Example API key authentication
-curl -H "Authorization: Bearer YOUR_API_KEY" \
-https://api.example.com/v1/users
-                </div>
-            </div>
 
             <div class="content-section">
                 <h2 id="procedures">VPN Creation Procedures</h2>
@@ -400,8 +390,30 @@ https://api.example.com/v1/users
                         chmod 744 buildWgConf0.sh <br>
                         chmod 744 buildWgConf1.sh
                 </div>
-                    <li>All necessary files required in build-up process will be on the VPN flash drive.</li>
-                    
+                    <li>Make a file with a list of the new school names.</li>
+                    <div class="code-block">
+                        // Go to the directory <br>
+                        ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles
+
+                    </div>
+
+                    <li>Create a text file in this directory.  An example file name might be 2025Aschools_wg.(txt).
+                        In this text file, put one school per row, with new school names (“school_name”) added to “-main-server”.
+                        Make sure there is no space in the entry, and make sure there is no extra line at the end of the text file.</li>
+                    Here is an example of what each line would look like in this file:
+                    <div class="code-block">
+                        akeri-main-server <br>
+                        amsha-main-server <br>
+                        mukulat-main-server <br>
+                        sanya_juu-main-server <br>
+                    </div>
+
+                    <li>Edit the bash files that build the wg0.conf and wg1.conf files for each school.
+                        You need to edit the starting address for wireguard (you must coordinate this with Rene, to get the correct starting number). </li>
+                    While still in the ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles directory, use a text editor to edit the two programs that build the wireguard VPN files
+
+
+
                 </ol>
                 
                 <h3>Authentication</h3>
