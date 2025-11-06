@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Server Rebuild - Reneal Documentation</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/public/css/script/tailwindcss3417.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -66,7 +66,7 @@
 <body class="bg-gray-50 text-gray-900">
     <div class="flex min-h-screen">
         <!-- Sidebar Navigation -->
-        <aside class="w-64 bg-white border-r border-gray-200 fixed h-full overflow-y-auto">
+        <aside class="w-64 bg-white border-r border-gray-200 fixed h-full overflow-y-auto sidebar">
             <div class="p-6">
                 <h1 class="text-2xl font-bold text-red-600 mb-8">Reneal Docs</h1>
                 <nav class="space-y-1">
@@ -330,6 +330,22 @@ cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 .</code></pre
                             </li>
                         </ol>
                         <pre><code>sudo python3 install_info_wireguard.py</code></pre>
+
+                        <p class="text-gray-700 mb-4 mt-2">
+                            You will be prompted to enter the name of the school for this new server when you run the program, which will 
+                            be matched against the list that you hand-edited in <strong> install_info_wireguard.py </strong>
+                        </p>
+                        <p class="text-gray-700 mb-4 mt-2">
+                            This program will put the VPN files in /etc/wireguard on your new server.
+                        </p>
+
+                        <p class="text-gray-700 mb-4 mt-2">
+                            Add the newly-created VPN addresses to the full list of hosts.
+                        </p>
+                        <p class="text-gray-700 mb-4 mt-2">
+                            You will need to inform <strong> Rene </strong> of the school names and the VPN wireguard addresses (10.9.0.##).  
+                            She will add them to the full list of hosts in the “hosts” file.
+                        </p>
                     </div>
                 </section>
 
