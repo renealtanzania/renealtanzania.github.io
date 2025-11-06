@@ -410,7 +410,71 @@
 
                     <li>Edit the bash files that build the wg0.conf and wg1.conf files for each school.
                         You need to edit the starting address for wireguard (you must coordinate this with Rene, to get the correct starting number). </li>
-                    While still in the ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles directory, use a text editor to edit the two programs that build the wireguard VPN files
+                    While still in the ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles directory, use a text editor to edit the two programs that build the wireguard VPN files. <br>
+
+                    NOTE: YOU MUST HAND-EDIT THE STARTING ADDRESS (ADDR) FOR WIREGUARD IN THE TWO SCRIPT FILES: buildWgConf0.sh and buildWgConf1.sh (You must discuss with Rene to get the correct starting address each time!).
+                    <div class="code-block">
+                        For 2024B, the wireguard starting address was 117 [eleven servers] <br>
+                        For 2025A, the wireguard starting address was 128 [ten servers] <br>
+                        For 2025B, the wireguard addresses will start with 139 <br>
+                    </div>
+
+                    <li>Now you will run the script to build the new wg0.conf files for each school. <br>
+                        Go to the wg0 folder:
+                        <div class="code-block">
+                            cd wg0
+                        </div>
+                        Confirm that you are in the following directory:
+                        <div class="code-block">
+                            ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg0 <br>
+                            cat ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/2025Aschools_wg | ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/buildWgConf0.sh
+                        </div>
+
+                        This will create the files and put them in:
+                        <div class="code-block">
+                            ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg0
+                        </div>
+
+                    <li>Repeat this for the new wg1.conf files for each school.  <br>
+                    Go to the directory:
+                    <div class="code-block">
+                        cd ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 <br>
+                        cat ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/2025Aschools_wg | ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/buildWgConf1.sh
+                    </div>
+
+                    This will create the files and put them in:
+                    <div class="code-block">
+                        ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1
+                    </div>
+
+                    <li> Now copy the VPN files you have just created to the VPN flash drive so they can be installed on each individual new server. </li>
+                    <div class="code-block">
+                        cd /media/master/RENEALVPN/NewWireguardFiles <br>
+                        cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg0 . <br>
+                        cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 . <br>
+                    </div>
+
+                    <li> Edit the program install_info_wireguard.py with the school name information. </li>
+                    YOU MUST HAND EDIT install_info_wireguard.py WITH THE NAMES OF THE SCHOOLS.
+
+                    <div class="code-block">
+                        cd /media/master/RENEALVPN/NewWireguardFiles
+                    </div>
+
+                    Use a text editor to change the list of school names in install_info_wireguard.py
+
+                    <li>Install the files on each individual server</li>
+                    Then for each new server you are building, you will install the wireguard files.
+                    Boot the new server, sign in to the master account
+                    Insert the VPN USB drive and run the <strong> install_info_wireguard.py </strong>program
+
+                    <div class="code-block">
+                        cd /media/master/RENEALVPN/NewWireguardFiles <br>
+                        sudo python3 install_info_wireguard.py
+                    </div>
+
+                    You will be prompted to enter the name of the school for this new server when you run the program, which will be matched
+                    against the list that you hand-edited in <strong> install_info_wireguard.py </strong>
 
 
 
@@ -421,130 +485,6 @@
                 
                 
             </div>
-            
-            <div class="content-section">
-                <h2 id="api-endpoints">API Endpoints</h2>
-                <p>Our RESTful API provides access to all core platform functionality through standardized endpoints.</p>
-                
-                <table class="api-table">
-                    <thead>
-                        <tr>
-                            <th>Endpoint</th>
-                            <th>Method</th>
-                            <th>Description</th>
-                            <th>Parameters</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>/users</td>
-                            <td>GET</td>
-                            <td>Retrieve list of users</td>
-                            <td>
-                                <span class="badge badge-optional">limit</span>
-                                <span class="badge badge-optional">offset</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>/users/{id}</td>
-                            <td>GET</td>
-                            <td>Retrieve specific user</td>
-                            <td>
-                                <span class="badge badge-required">id</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>/users</td>
-                            <td>POST</td>
-                            <td>Create new user</td>
-                            <td>
-                                <span class="badge badge-required">name</span>
-                                <span class="badge badge-required">email</span>
-                                <span class="badge badge-optional">role</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>/projects</td>
-                            <td>GET</td>
-                            <td>Retrieve list of projects</td>
-                            <td>
-                                <span class="badge badge-optional">status</span>
-                                <span class="badge badge-optional">owner</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="content-section">
-                <h2 id="examples">Code Examples</h2>
-                <p>Here are some common implementation examples to help you get started quickly.</p>
-                
-                <h3>JavaScript Example</h3>
-                <div class="code-block">
-// Fetch user data
-async function getUser(userId) {
-  const response = await fetch(`https://api.example.com/v1/users/${userId}`, {
-    headers: {
-      'Authorization': `Bearer ${API_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  });
-  
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  
-  return await response.json();
-}
 
-// Create new project
-async function createProject(projectData) {
-  const response = await fetch('https://api.example.com/v1/projects', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${API_KEY}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(projectData)
-  });
-  
-  return await response.json();
-}
-                </div>
-                
-                <h3>Python Example</h3>
-                <div class="code-block">
-import requests
-
-# Configure API endpoint and headers
-BASE_URL = "https://api.example.com/v1"
-HEADERS = {
-    "Authorization": f"Bearer {API_KEY}",
-    "Content-Type": "application/json"
-}
-
-# Get user information
-def get_user(user_id):
-    response = requests.get(
-        f"{BASE_URL}/users/{user_id}",
-        headers=HEADERS
-    )
-    response.raise_for_status()
-    return response.json()
-
-# Create new task
-def create_task(task_data):
-    response = requests.post(
-        f"{BASE_URL}/tasks",
-        json=task_data,
-        headers=HEADERS
-    )
-    response.raise_for_status()
-    return response.json()
-                </div>
-            </div>
-        </main>
-    </div>
 </body>
 </html>
