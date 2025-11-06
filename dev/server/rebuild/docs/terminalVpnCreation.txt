@@ -1,0 +1,483 @@
+[master@main-server] ~ 
+❯ cd ~/CodeDevelopment/newSystemBuild 
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild 
+❯ sudo cp -pR /media/master/RENEALVPN/makeWireguardVpnFiles .
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild 
+❯ ls -l
+total 264
+-rwxrwxr-x 1 master master  4487 Feb  5  2022 classCopyByChecksum.py
+-rwxrwxr-x 1 master master   764 Sep 11  2024 cleanupForInstall.sh
+-rwxr-x--- 1 master master 31851 Aug 25  2024 configureNetworkInterfaces.py
+-rw-rw-r-- 1 master master   268 Aug 11  2018 configureWirelessInternet.py
+-rw-rw-r-- 1 master master  4061 Feb  5  2022 copyByChecksum.py
+-rw-rw-r-- 1 master master  1160 Apr 13  2024 copyToAllOS.py
+-rwxr--r-- 1 master master   146 Sep 11  2024 createAllNumberedTeacherAccounts.sh
+drwxr-xr-x 2 master master  4096 Feb  9  2022 EFI
+-rwxr-xr-- 1 master master  1812 Apr 11  2023 findNewerDisk.py
+-rwxr--r-- 1 master master  1801 Aug 24  2024 finishNewSystemBuild.sh
+-rwxrwxr-x 1 master master  1132 Sep  8  2022 finishUpdateSystemBuild.sh
+-rw-rw-r-- 1 master master     0 Feb  9  2022 __init__.py
+-rw-r----- 1 master master    94 Jul 30  2022 installs.ini
+-rw-rw-r-- 1 master master  2247 Oct  6  2017 interfaceBuildPlanning.vym
+drwxrwxr-x 2 master master  4096 Oct 11  2017 interfacesFiles
+lrwxrwxrwx 1 master master    31 Sep 13  2018 localFunctions.py -> ../systemApps/localFunctions.py
+-rwxr-xr-x 1 master master  9180 Sep  8  2022 makeServer.py
+drwxr-xr-x 4 master master  4096 Sep 22  2025 makeWireguardVpnFiles
+-rw-r--r-- 1 master master     0 Jan 31  2022 multiprocessing
+drwxr-xr-x 2 master master  4096 Oct 25  2022 obsolete
+-rw-rw-r-- 1 master master   217 Sep 30  2017 persistent_net_template.txt
+-rw-r----- 1 master master   277 Jul 30  2022 profiles.ini
+-rw-rw-r-- 1 master master  2211 Aug  8  2018 programmingTips.txt
+drwxrwxr-x 2 master master  4096 Apr 11  2023 __pycache__
+-rwxrwxr-x 1 master master 39703 Dec 19  2022 rebuildServerPart1.py
+-rwxrwxr-x 1 master master 16067 Oct 19  2022 rebuildServerPart2.py
+drwxr-xr-x 2 master master  4096 Sep  6  2022 sd_only
+-rw-rw-r-- 1 master master 38109 Dec 19  2022 serverBuildLib.py
+-rwxrwxr-x 1 master master  9295 Oct 19  2022 setupForPimaryOrSecondary.py
+-rwxrwxr-x 1 master master  6163 Sep 19  2017 tester.py
+-rw-rw-r-- 1 master master   490 Sep 11  2022 ud.sh
+-rwxr-xr-- 1 master master  3606 Sep  9  2022 updateFirefox.py
+-rwxr-xr-- 1 master master  4633 Sep 14  2022 updateTeacher.py
+drwxrwxr-x 5 master master  4096 Dec 28  2021 venv
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild 
+❯ cd makeWireguardVpnFiles 
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ ls -l
+total 40
+-rw-r--r-- 1 master master  818 Sep 22  2025 buildWgConf0.sh
+-rw-r--r-- 1 master master  802 Sep 22  2025 buildWgConf1.sh
+-rw-r--r-- 1 master master  246 Apr 16  2023 client_template_wg0
+-rw-r--r-- 1 master master  246 Apr 16  2023 client_template_wg1
+-rw-r--r-- 1 master master 1972 Jul  2  2025 install_info3.py
+-rw-r--r-- 1 master master 1845 Sep 22  2025 install_info_wireguard.py
+-rw-r--r-- 1 master master   36 Sep 22  2025 new_schools_wg
+-rw-r--r-- 1 master master  149 Jan 29  2025 schoolParams.template
+drwxr-xr-x 2 master master 4096 Sep 22  2025 wg0
+drwxr-xr-x 2 master master 4096 Sep 22  2025 wg1
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ chmod 744 buildWgConf0.sh 
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ ls -l                    
+total 40
+-rwxr--r-- 1 master master  818 Sep 22  2025 buildWgConf0.sh
+-rw-r--r-- 1 master master  802 Sep 22  2025 buildWgConf1.sh
+-rw-r--r-- 1 master master  246 Apr 16  2023 client_template_wg0
+-rw-r--r-- 1 master master  246 Apr 16  2023 client_template_wg1
+-rw-r--r-- 1 master master 1972 Jul  2  2025 install_info3.py
+-rw-r--r-- 1 master master 1845 Sep 22  2025 install_info_wireguard.py
+-rw-r--r-- 1 master master   36 Sep 22  2025 new_schools_wg
+-rw-r--r-- 1 master master  149 Jan 29  2025 schoolParams.template
+drwxr-xr-x 2 master master 4096 Sep 22  2025 wg0
+drwxr-xr-x 2 master master 4096 Sep 22  2025 wg1
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ chmod 744 buildWgConf1.sh 
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ ls -l                    
+total 40
+-rwxr--r-- 1 master master  818 Sep 22  2025 buildWgConf0.sh
+-rwxr--r-- 1 master master  802 Sep 22  2025 buildWgConf1.sh
+-rw-r--r-- 1 master master  246 Apr 16  2023 client_template_wg0
+-rw-r--r-- 1 master master  246 Apr 16  2023 client_template_wg1
+-rw-r--r-- 1 master master 1972 Jul  2  2025 install_info3.py
+-rw-r--r-- 1 master master 1845 Sep 22  2025 install_info_wireguard.py
+-rw-r--r-- 1 master master   36 Sep 22  2025 new_schools_wg
+-rw-r--r-- 1 master master  149 Jan 29  2025 schoolParams.template
+drwxr-xr-x 2 master master 4096 Sep 22  2025 wg0
+drwxr-xr-x 2 master master 4096 Sep 22  2025 wg1
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ touch 2025Aschools_wg    
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ ls -l                
+total 40
+-rw-rw-r-- 1 master master    0 Apr  2 06:07 2025Aschools_wg
+-rwxr--r-- 1 master master  818 Sep 22  2025 buildWgConf0.sh
+-rwxr--r-- 1 master master  802 Sep 22  2025 buildWgConf1.sh
+-rw-r--r-- 1 master master  246 Apr 16  2023 client_template_wg0
+-rw-r--r-- 1 master master  246 Apr 16  2023 client_template_wg1
+-rw-r--r-- 1 master master 1972 Jul  2  2025 install_info3.py
+-rw-r--r-- 1 master master 1845 Sep 22  2025 install_info_wireguard.py
+-rw-r--r-- 1 master master   36 Sep 22  2025 new_schools_wg
+-rw-r--r-- 1 master master  149 Jan 29  2025 schoolParams.template
+drwxr-xr-x 2 master master 4096 Sep 22  2025 wg0
+drwxr-xr-x 2 master master 4096 Sep 22  2025 wg1
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ sudo nano 2025Aschools_wg 
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ sudo nano 2025Aschools_wg
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ sudo nano 2025Aschools_wg
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ sudo nano buildWgConf0.sh 
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ sudo nano buildWgConf1.sh 
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ sudo nano buildWgConf0.sh
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ sudo nano buildWgConf1.sh
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ sudo nano buildWgConf0.sh
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ cd wg0
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg0 
+❯ cat ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/2025Aschools_wg | ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/buildWgConf0.sh 
+mukulat-main-server
+starting mukulat-main-server
+138
+sanya_juu-main-server
+starting sanya_juu-main-server
+139
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg0 
+❯ ls -l                                                                                                                                              
+total 8
+drwxrwxr-x 2 master master 4096 Apr  2 06:19 mukulat-main-server
+drwxrwxr-x 2 master master 4096 Apr  2 06:19 sanya_juu-main-server
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg0 
+❯ cd ../
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ cd wg1
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 
+❯ ls -l
+total 0
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 
+❯ cat ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/2025Aschools_wg | ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/buildWgConf1.sh
+mukulat-main-server
+starting mukulat-main-server
+138
+sanya_juu-main-server
+starting sanya_juu-main-server
+139
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 
+❯ ls -l                                                                                                                                              
+total 8
+drwxrwxr-x 2 master master 4096 Apr  2 06:21 mukulat-main-server
+drwxrwxr-x 2 master master 4096 Apr  2 06:21 sanya_juu-main-server
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 
+❯ cd mukulat-main-server        
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1/mukulat-main-server 
+❯ ls -l
+total 16
+-rw-rw-r-- 1 master master  45 Apr  2 06:21 client.psk
+-rw-rw-r-- 1 master master  45 Apr  2 06:21 private.key
+-rw-rw-r-- 1 master master  45 Apr  2 06:21 public.key
+-rw-r--r-- 1 master master 358 Apr  2 06:21 wg1.conf
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1/mukulat-main-server 
+❯ sudo nano wg1.conf 
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1/mukulat-main-server 
+❯ cd  ../../
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles 
+❯ cd /media/master/RENEALVPN/NewWireguardFiles 
+
+[master@main-server] /media/master/RENEALVPN/NewWireguardFiles 
+❯ cp -pR ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg0 .
+
+[master@main-server] /media/master/RENEALVPN/NewWireguardFiles 
+❯ cp -pR ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 .
+
+[master@main-server] /media/master/RENEALVPN/NewWireguardFiles 
+❯ ls -l
+total 96
+-rw-r--r-- 1 master master  1845 Sep 22  2025 install_info_wireguard.py
+drwxr-xr-x 6 master master 32768 Apr  2 06:19 wg0
+drwxr-xr-x 6 master master 32768 Apr  2 06:21 wg1
+
+[master@main-server] /media/master/RENEALVPN/NewWireguardFiles 
+❯ cd wg0 
+
+[master@main-server] /media/master/RENEALVPN/NewWireguardFiles/wg0 
+❯ ls -l                                                              
+total 128
+drwxr-xr-x 2 master master 32768 Sep 22  2025 akeri-main-server
+drwxr-xr-x 2 master master 32768 Sep 22  2025 amsha-main-server
+drwxr-xr-x 2 master master 32768 Apr  2 06:19 mukulat-main-server
+drwxr-xr-x 2 master master 32768 Apr  2 06:19 sanya_juu-main-server
+
+[master@main-server] /media/master/RENEALVPN/NewWireguardFiles/wg0 
+❯ cd ../..
+
+[master@main-server] /media/master/RENEALVPN 
+❯ ls
+makeWireguardVpnFiles  NewWireguardFiles  System Volume Information  VpnFiles
+
+[master@main-server] /media/master/RENEALVPN 
+❯ cd VpnFiles 
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles 
+❯ ls
+LilBlue  openvpn  wireguard
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles 
+❯ cd LilBlue 
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles/LilBlue 
+❯ ls
+2024BVpnInstall  2025AVpnInstall  Aug2024VpnInstall  ca.crt  client.conf.template  Dec2023VpnInstall  install_info3.py  schoolParams.template
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles/LilBlue 
+❯ cd ..
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles 
+❯ cd wireguard 
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles/wireguard 
+❯ ls
+buildWgConf0.sh  buildWgConf.sh     buildWgServer1.sh  client_template      client_template_wg1  hosts  new_hosts     wg0  wg_for_2023.1
+buildWgConf1.sh  buildWgServer0.sh  buildWgServer.sh   client_template_wg0  dist                 names  team-members  wg1  wg_for_new_update
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles/wireguard 
+❯ cat hosts 
+10.9.0.1     server-wg0    server-wg0.lcl
+10.9.0.2     vpnserver-us-wg0    vpnserver-us-wg0.lcl
+10.9.0.3     ada-vpn-wg0    ada-vpn-wg0.lcl
+10.9.0.4     amani-abeid-karume-main-server-wg0    amani-abeid-karume-main-server-wg0.lcl
+10.9.0.6     arusha_day-main-server-wg0    arusha_day-main-server-wg0.lcl
+10.9.0.5     arusha-girls-school-main-server-wg0    arusha-girls-school-main-server-wg0.lcl
+10.9.0.7     babati-day-main-server-wg0    babati-day-main-server-wg0.lcl
+10.9.0.8     bagara-main-server-wg0    bagara-main-server-wg0.lcl
+10.9.0.9     bangata-main-server-wg0    bangata-main-server-wg0.lcl
+10.9.0.10    bicha-main-server-wg0    bicha-main-server-wg0.lcl
+10.9.0.12    bukulu-main-server-wg0    bukulu-main-server-wg0.lcl
+10.9.0.13    chief-dodo-main-server-wg0    chief-dodo-main-server-wg0.lcl
+10.9.0.14    ctu-carmen-lab1-main-server-wg0    ctu-carmen-lab1-main-server-wg0.lcl
+10.9.0.15    ebenezer-main-server-wg0    ebenezer-main-server-wg0.lcl
+10.9.0.16    einoti-main-server-wg0    einoti-main-server-wg0.lcl
+10.9.0.17    elerai-main-server-wg0    elerai-main-server-wg0.lcl
+10.9.0.18    enduimet-main-server-wg0    enduimet-main-server-wg0.lcl
+10.9.0.19    engarenaibor-main-server-wg0    engarenaibor-main-server-wg0.lcl
+10.9.0.20    engutoto-main-server-wg0    engutoto-main-server-wg0.lcl
+10.9.0.21    enyoito-main-server-wg0    enyoito-main-server-wg0.lcl
+10.9.0.22    handeni-main-server-wg0    handeni-main-server-wg0.lcl
+10.9.0.23    ilboru-main-server-wg0    ilboru-main-server-wg0.lcl
+10.9.0.24    ilkiding-main-server-wg0    ilkiding-main-server-wg0.lcl
+10.9.0.25    iringa-main-server-wg0    iringa-main-server-wg0.lcl
+10.9.0.27    irkisale-main-server-wg0    irkisale-main-server-wg0.lcl
+10.9.0.28    irkisongo-main-server-wg0    irkisongo-main-server-wg0.lcl
+10.9.0.29    kikwe-main-server-wg0    kikwe-main-server-wg0.lcl
+10.9.0.30    kimaseki-main-server-wg0    kimaseki-main-server-wg0.lcl
+10.9.0.31    kimnyaki-main-server-wg0    kimnyaki-main-server-wg0.lcl
+10.9.0.32    kinana-main-server-wg0    kinana-main-server-wg0.lcl
+10.9.0.33    kiranyi-main-server-wg0    kiranyi-main-server-wg0.lcl
+10.9.0.34    kisaza-main-server-wg0    kisaza-main-server-wg0.lcl
+10.9.0.35    kiwala-main-server-wg0    kiwala-main-server-wg0.lcl
+10.9.0.36    komnyanganyo-main-server-wg0    komnyanganyo-main-server-wg0.lcl
+10.9.0.37    komoto-main-server-wg0    komoto-main-server-wg0.lcl
+10.9.0.38    kwaraa-main-server-wg0    kwaraa-main-server-wg0.lcl
+10.9.0.39    lengijave-main-server-wg0    lengijave-main-server-wg0.lcl
+10.9.0.40    longido-main-server-wg0    longido-main-server-wg0.lcl
+10.9.0.41    longido-sh-main-server-wg0    longido-sh-main-server-wg0.lcl
+10.9.0.42    mahiwa-main-server-wg0    mahiwa-main-server-wg0.lcl
+10.9.0.43    mateves-main-server-wg0    mateves-main-server-wg0.lcl
+10.9.0.44    matim-elementary-main-server-wg0    matim-elementary-main-server-wg0.lcl
+10.9.0.45    misima-main-server-wg0    misima-main-server-wg0.lcl
+10.9.0.46    mkata-main-server-wg0    mkata-main-server-wg0.lcl
+10.9.0.47    mlangarini-main-server-wg0    mlangarini-main-server-wg0.lcl
+10.9.0.48    mlangarini-sh-main-server-wg0    mlangarini-sh-main-server-wg0.lcl
+10.9.0.49    mringa-main-server-wg0    mringa-main-server-wg0.lcl
+10.9.0.50    mringa-sh-main-server-wg0    mringa-sh-main-server-wg0.lcl
+10.9.0.51    mtama-main-server-wg0    mtama-main-server-wg0.lcl
+10.9.0.52    mukulat-main-server-wg0    mukulat-main-server-wg0.lcl
+10.9.0.53    musomo-main-server-wg0    musomo-main-server-wg0.lcl
+10.9.0.54    muungano-main-server-wg0    muungano-main-server-wg0.lcl
+10.9.0.55    mwandet-main-server-wg0    mwandet-main-server-wg0.lcl
+10.9.0.56    mwandet-sh-main-server-wg0    mwandet-sh-main-server-wg0.lcl
+10.9.0.57    nakwa-main-server-wg0    nakwa-main-server-wg0.lcl
+10.9.0.58    namalenga-main-server-wg0    namalenga-main-server-wg0.lcl
+10.9.0.59    namanga-main-server-wg0    namanga-main-server-wg0.lcl
+10.9.0.60    nangara-main-server-wg0    nangara-main-server-wg0.lcl
+10.9.0.61    ndolwa-main-server-wg0    ndolwa-main-server-wg0.lcl
+10.9.0.62    nduruma-main-server-wg0    nduruma-main-server-wg0.lcl
+10.9.0.63    ngiresi-main-server-wg0    ngiresi-main-server-wg0.lcl
+10.9.0.64    nkoanrua-main-server-wg0    nkoanrua-main-server-wg0.lcl
+10.9.0.65    nkoarusambu-main-server-wg0    nkoarusambu-main-server-wg0.lcl
+10.9.0.66    nyengedi-main-server-wg0    nyengedi-main-server-wg0.lcl
+10.9.0.67    oldadi-main-server-wg0    oldadi-main-server-wg0.lcl
+10.9.0.68    oldonyosambu-main-server-wg0    oldonyosambu-main-server-wg0.lcl
+10.9.0.69    oldonyowas-main-server-wg0    oldonyowas-main-server-wg0.lcl
+10.9.0.70    oljoro-main-server-wg0    oljoro-main-server-wg0.lcl
+10.9.0.71    olmotonyi-main-server-wg0    olmotonyi-main-server-wg0.lcl
+10.9.0.72    olokii-main-server-wg0    olokii-main-server-wg0.lcl
+10.9.0.74    olomedeye-main-server-wg0    olomedeye-main-server-wg0.lcl
+10.9.0.75    olturmet-main-server-wg0    olturmet-main-server-wg0.lcl
+10.9.0.76    osoligi-main-server-wg0    osoligi-main-server-wg0.lcl
+10.9.0.77    poli-main-server-wg0    poli-main-server-wg0.lcl
+10.9.0.78    sambusha-main-server-wg0    sambusha-main-server-wg0.lcl
+10.9.0.79    singisi-main-server-wg0    singisi-main-server-wg0.lcl
+10.9.0.80    sokon-ii-main-server-wg0    sokon-ii-main-server-wg0.lcl
+10.9.0.81    suye-main-server-wg0    suye-main-server-wg0.lcl
+10.9.0.82    test-server-wg0    test-server-wg0.lcl
+10.9.0.83    test-server-2-wg0    test-server-2-wg0.lcl
+10.9.0.84    test-server-3-wg0    test-server-3-wg0.lcl
+10.9.0.85    test-server-4-wg0    test-server-4-wg0.lcl
+10.9.0.86    test-server-5-wg0    test-server-5-wg0.lcl
+10.9.0.87    themi-main-server-wg0    themi-main-server-wg0.lcl
+10.9.0.88    tingatinga-main-server-wg0    tingatinga-main-server-wg0.lcl
+10.9.0.89    tz-emersvr-1-wg0    tz-emersvr-1-wg0.lcl
+10.9.0.90    tz-emersvr-2-wg0    tz-emersvr-2-wg0.lcl
+10.9.0.91    ula-main-server-wg0    ula-main-server-wg0.lcl
+10.9.1.1     server-wg1    server-wg1.lcl
+10.9.1.2     vpnserver-tz-wg1    vpnserver-tz-wg1.lcl
+10.9.1.3     ada-vpn-wg1    ada-vpn-wg1.lcl
+10.9.1.4     amani-abeid-karume-main-server-wg1    amani-abeid-karume-main-server-wg1.lcl
+10.9.1.6     arusha_day-main-server-wg1    arusha_day-main-server-wg1.lcl
+10.9.1.5     arusha-girls-school-main-server-wg1    arusha-girls-school-main-server-wg1.lcl
+10.9.1.7     babati-day-main-server-wg1    babati-day-main-server-wg1.lcl
+10.9.1.8     bagara-main-server-wg1    bagara-main-server-wg1.lcl
+10.9.1.9     bangata-main-server-wg1    bangata-main-server-wg1.lcl
+10.9.1.10    bicha-main-server-wg1    bicha-main-server-wg1.lcl
+10.9.1.12    bukulu-main-server-wg1    bukulu-main-server-wg1.lcl
+10.9.1.13    chief-dodo-main-server-wg1    chief-dodo-main-server-wg1.lcl
+10.9.1.14    ctu-carmen-lab1-main-server-wg1    ctu-carmen-lab1-main-server-wg1.lcl
+10.9.1.15    ebenezer-main-server-wg1    ebenezer-main-server-wg1.lcl
+10.9.1.16    einoti-main-server-wg1    einoti-main-server-wg1.lcl
+10.9.1.17    elerai-main-server-wg1    elerai-main-server-wg1.lcl
+10.9.1.18    enduimet-main-server-wg1    enduimet-main-server-wg1.lcl
+10.9.1.19    engarenaibor-main-server-wg1    engarenaibor-main-server-wg1.lcl
+10.9.1.20    engutoto-main-server-wg1    engutoto-main-server-wg1.lcl
+10.9.1.21    enyoito-main-server-wg1    enyoito-main-server-wg1.lcl
+10.9.1.22    handeni-main-server-wg1    handeni-main-server-wg1.lcl
+10.9.1.23    ilboru-main-server-wg1    ilboru-main-server-wg1.lcl
+10.9.1.24    ilkiding-main-server-wg1    ilkiding-main-server-wg1.lcl
+10.9.1.25    iringa-main-server-wg1    iringa-main-server-wg1.lcl
+10.9.1.27    irkisale-main-server-wg1    irkisale-main-server-wg1.lcl
+10.9.1.28    irkisongo-main-server-wg1    irkisongo-main-server-wg1.lcl
+10.9.1.29    kikwe-main-server-wg1    kikwe-main-server-wg1.lcl
+10.9.1.30    kimaseki-main-server-wg1    kimaseki-main-server-wg1.lcl
+10.9.1.31    kimnyaki-main-server-wg1    kimnyaki-main-server-wg1.lcl
+10.9.1.32    kinana-main-server-wg1    kinana-main-server-wg1.lcl
+10.9.1.33    kiranyi-main-server-wg1    kiranyi-main-server-wg1.lcl
+10.9.1.34    kisaza-main-server-wg1    kisaza-main-server-wg1.lcl
+10.9.1.35    kiwala-main-server-wg1    kiwala-main-server-wg1.lcl
+10.9.1.36    komnyanganyo-main-server-wg1    komnyanganyo-main-server-wg1.lcl
+10.9.1.37    komoto-main-server-wg1    komoto-main-server-wg1.lcl
+10.9.1.38    kwaraa-main-server-wg1    kwaraa-main-server-wg1.lcl
+10.9.1.39    lengijave-main-server-wg1    lengijave-main-server-wg1.lcl
+10.9.1.40    longido-main-server-wg1    longido-main-server-wg1.lcl
+10.9.1.41    longido-sh-main-server-wg1    longido-sh-main-server-wg1.lcl
+10.9.1.42    mahiwa-main-server-wg1    mahiwa-main-server-wg1.lcl
+10.9.1.43    mateves-main-server-wg1    mateves-main-server-wg1.lcl
+10.9.1.44    matim-elementary-main-server-wg1    matim-elementary-main-server-wg1.lcl
+10.9.1.45    misima-main-server-wg1    misima-main-server-wg1.lcl
+10.9.1.46    mkata-main-server-wg1    mkata-main-server-wg1.lcl
+10.9.1.47    mlangarini-main-server-wg1    mlangarini-main-server-wg1.lcl
+10.9.1.48    mlangarini-sh-main-server-wg1    mlangarini-sh-main-server-wg1.lcl
+10.9.1.49    mringa-main-server-wg1    mringa-main-server-wg1.lcl
+10.9.1.50    mringa-sh-main-server-wg1    mringa-sh-main-server-wg1.lcl
+10.9.1.51    mtama-main-server-wg1    mtama-main-server-wg1.lcl
+10.9.1.52    mukulat-main-server-wg1    mukulat-main-server-wg1.lcl
+10.9.1.53    musomo-main-server-wg1    musomo-main-server-wg1.lcl
+10.9.1.54    muungano-main-server-wg1    muungano-main-server-wg1.lcl
+10.9.1.55    mwandet-main-server-wg1    mwandet-main-server-wg1.lcl
+10.9.1.56    mwandet-sh-main-server-wg1    mwandet-sh-main-server-wg1.lcl
+10.9.1.57    nakwa-main-server-wg1    nakwa-main-server-wg1.lcl
+10.9.1.58    namalenga-main-server-wg1    namalenga-main-server-wg1.lcl
+10.9.1.59    namanga-main-server-wg1    namanga-main-server-wg1.lcl
+10.9.1.60    nangara-main-server-wg1    nangara-main-server-wg1.lcl
+10.9.1.61    ndolwa-main-server-wg1    ndolwa-main-server-wg1.lcl
+10.9.1.62    nduruma-main-server-wg1    nduruma-main-server-wg1.lcl
+10.9.1.63    ngiresi-main-server-wg1    ngiresi-main-server-wg1.lcl
+10.9.1.64    nkoanrua-main-server-wg1    nkoanrua-main-server-wg1.lcl
+10.9.1.65    nkoarusambu-main-server-wg1    nkoarusambu-main-server-wg1.lcl
+10.9.1.66    nyengedi-main-server-wg1    nyengedi-main-server-wg1.lcl
+10.9.1.67    oldadi-main-server-wg1    oldadi-main-server-wg1.lcl
+10.9.1.68    oldonyosambu-main-server-wg1    oldonyosambu-main-server-wg1.lcl
+10.9.1.69    oldonyowas-main-server-wg1    oldonyowas-main-server-wg1.lcl
+10.9.1.70    oljoro-main-server-wg1    oljoro-main-server-wg1.lcl
+10.9.1.71    olmotonyi-main-server-wg1    olmotonyi-main-server-wg1.lcl
+10.9.1.72    olokii-main-server-wg1    olokii-main-server-wg1.lcl
+10.9.1.74    olomedeye-main-server-wg1    olomedeye-main-server-wg1.lcl
+10.9.1.75    olturmet-main-server-wg1    olturmet-main-server-wg1.lcl
+10.9.1.76    osoligi-main-server-wg1    osoligi-main-server-wg1.lcl
+10.9.1.77    poli-main-server-wg1    poli-main-server-wg1.lcl
+10.9.1.78    sambusha-main-server-wg1    sambusha-main-server-wg1.lcl
+10.9.1.79    singisi-main-server-wg1    singisi-main-server-wg1.lcl
+10.9.1.80    sokon-ii-main-server-wg1    sokon-ii-main-server-wg1.lcl
+10.9.1.81    suye-main-server-wg1    suye-main-server-wg1.lcl
+10.9.1.82    test-server-wg1    test-server-wg1.lcl
+10.9.1.83    test-server-2-wg1    test-server-2-wg1.lcl
+10.9.1.84    test-server-3-wg1    test-server-3-wg1.lcl
+10.9.1.85    test-server-4-wg1    test-server-4-wg1.lcl
+10.9.1.86    test-server-5-wg1    test-server-5-wg1.lcl
+10.9.1.87    themi-main-server-wg1    themi-main-server-wg1.lcl
+10.9.1.88    tingatinga-main-server-wg1    tingatinga-main-server-wg1.lcl
+10.9.1.89    tz-emersvr-1-wg1    tz-emersvr-1-wg1.lcl
+10.9.1.90    tz-emersvr-2-wg1    tz-emersvr-2-wg1.lcl
+10.9.1.91    ula-main-server-wg1    ula-main-server-wg1.lcl
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles/wireguard 
+❯ ls
+buildWgConf0.sh  buildWgConf.sh     buildWgServer1.sh  client_template      client_template_wg1  hosts  new_hosts     wg0  wg_for_2023.1
+buildWgConf1.sh  buildWgServer0.sh  buildWgServer.sh   client_template_wg0  dist                 names  team-members  wg1  wg_for_new_update
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles/wireguard 
+❯ cd team-members 
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles/wireguard/team-members 
+❯ ls
+team-members.txt  wg0  wg1
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles/wireguard/team-members 
+❯ cd wg0
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles/wireguard/team-members/wg0 
+❯ ls
+team-member-erick  team-member-james  team-member-juma
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles/wireguard/team-members/wg0 
+❯ cd team-member-
+cd: no such file or directory: team-member-
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles/wireguard/team-members/wg0 
+❯ cd team-member-erick                                                                                                                                                                                           ⏎
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles/wireguard/team-members/wg0/team-member-erick 
+❯ ls
+client.psk  private.key  public.key  wg0.conf
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles/wireguard/team-members/wg0/team-member-erick 
+❯ cat wg0.conf 
+#Client Name: team-member-erick
+[Interface]
+Address = 10.9.0.92/32
+ListenPort = 51820
+PrivateKey = kAktLkpP+69aMJMXUIIaNLpbsL0+xw+PNWvKRjwhV2w=
+
+[Peer]
+PublicKey = EDMmJ/n6cHVnu8ZN/6eXjLCJVjq+zHxUpVLRTljjxX0=
+PresharedKey = gSTqsUAVkLwW1xCvNOJ67v7q/3b55c7C4H8tE3PQ0A8=
+AllowedIPs = 10.9.0.0/24
+Endpoint = reneal.duckdns.org:51820
+PersistentKeepalive = 20
+
+[master@main-server] /media/master/RENEALVPN/VpnFiles/wireguard/team-members/wg0/team-member-erick 
+❯ 
+

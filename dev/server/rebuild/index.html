@@ -237,6 +237,10 @@
             margin-bottom: 1rem;
         }
 
+        .mt-5{
+            margin-top: 3rem;
+        }
+
         .toc ul {
             list-style-type: none;
             padding-left: 0;
@@ -260,7 +264,7 @@
             .container {
                 flex-direction: column;
             }
-            
+
             .sidebar {
                 width: 100%;
                 height: auto;
@@ -268,7 +272,7 @@
                 border-right: none;
                 border-bottom: 1px solid var(--border);
             }
-            
+
             .main-content {
                 margin-left: 0;
             }
@@ -295,7 +299,9 @@
                 <ul class="nav-links">
                     <li><a href="#getting-started" class="active">Getting Started</a></li>
                     <li><a href="#vpn-creation-process">VPN Creation Process</a></li>
+                    <li><a href="#vpn-creation-demo">Demo VPN Creation </a></li>
                     <li><a href="#server-build-up">Server Build-Up Process</a></li>
+                    <li><a href="#server-build-up-demo">Demo Server Build-Up</a></li>
                     <li><a href="#">Other</a></li>
                 </ul>
             </div>
@@ -314,7 +320,9 @@
                 <ul>
                     <li><a href="#overview">Overview</a></li>
                     <li><a href="#vpn-creation-process">VPN Creation Process (Wireguard Only)</a></li>
+                    <li><a href="#vpn-creation-demo">Demo VPN Creation Process</a></li>
                     <li><a href="#server-build-up">Server Build Process</a></li>
+                    <li><a href="#server-build-up-demoo">Demo Server Build Process</a></li>
 
                 </ul>
             </div>
@@ -354,7 +362,7 @@
                 </ol>
 
             <div class="content-section">
-                <h2 id="vpn-creation-process">VPN Creation Procedures</h2>
+                <h2 id="vpn-creation-process">1. VPN Creation Procedures</h2>
                 
                 <ol>
                     <li>Boot up the server that you will be using to create the VPN files (you can use the JR Reneal server).  
@@ -455,12 +463,14 @@
                     You will be prompted to enter the name of the school for this new server when you run the program, which will be matched
                     against the list that you hand-edited in <strong> install_info_wireguard.py </strong>
 
-
-
                 </ol>
-                
-                <h3>Authentication</h3>
-                <p>All API requests require authentication. We support both API keys and OAuth 2.0 for secure access.</p>
+
+                <h3 id="vpn-creation-demo">VPN Creation Demo</h3>
+                <a href="/dev/server/rebuild/docs/terminalVpnCreation.txt">VPN Creation Demo</a>
+
+
+                <h2 id="server-build-up" class="mt-5">2. Server Build-Up Procedures</h2>
+                <p>Server build-up process comes next after you have the vpn files ready.</p>
                 
                 
             </div>
