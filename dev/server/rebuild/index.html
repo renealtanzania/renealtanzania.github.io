@@ -230,7 +230,7 @@
                 <!-- Header -->
                 <div class="mb-8 lg:mb-12">
                     <h1 id="introduction" class="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 lg:mb-4">Reneal Server Rebuild</h1>
-                    <p class="text-base sm:text-lg text-black-600">Complete guide to Reneal server build-up procedures and VPN configuration</p>
+                    <p class="text-base sm:text-lg text-black-500">Complete guide to Reneal server build-up procedures and VPN configuration</p>
                 </div>
 
                 <!-- Table of Contents -->
@@ -248,7 +248,7 @@
                 <!-- Introduction Section -->
                 <section class="mb-8 lg:mb-12">
                     <h2 id="overview" class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 lg:mb-6">Introduction</h2>
-                    <p class="text-black-700 leading-relaxed mb-4">
+                    <p class="text-black-500 leading-relaxed mb-4">
                         Welcome to the Official Reneal Documentation for Reneal Server Build-Up. This documentation provides detailed information about Reneal server build-up procedures, VPN creation processes, command lines and related features.
                     </p>
                     
@@ -266,7 +266,7 @@
                         </div>
                     </div>
 
-                    <p class="text-black-700 leading-relaxed mb-6">
+                    <p class="text-black-500 leading-relaxed mb-6">
                         By creating the VPN configuration files beforehand, you ensure a smooth transition and can immediately restore network connectivity after the rebuild is complete.
                     </p>
                 </section>
@@ -323,11 +323,11 @@
                 <!-- Getting Started -->
                 <section class="mb-8 lg:mb-12">
                     <h2 id="getting-started" class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 lg:mb-6">Getting Started</h2>
-                    <p class="text-black-700 leading-relaxed mb-6">
+                    <p class="text-black-500 leading-relaxed mb-6">
                         To begin creating VPN files, follow these steps:
                     </p>
                     <div class="bg-white rounded-lg border border-black-200 p-4 sm:p-6">
-                        <ol class="space-y-3 text-black-700 text-sm sm:text-base">
+                        <ol class="space-y-3 text-black-500 text-sm sm:text-base">
                             <li class="flex items-start">
                                 <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-0.5">1</span>
                                 <span>You must create the VPN files in the <strong>MASTER Account</strong> on a Reneal server</span>
@@ -351,7 +351,7 @@
                     <!-- Step 1 -->
                     <div id="vpn-step1" class="mb-8">
                         <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-4">Setup Environment</h3>
-                        <p class="text-black-700 mb-4 text-sm sm:text-base">
+                        <p class="text-black-500 mb-4 text-sm sm:text-base">
                             Boot up the server that you will be using to create the VPN files (you can use the JR Reneal server). Sign in to the master account and insert the VPN USB flash drive.
                         </p>
                         <div class="info-box rounded-lg p-4 sm:p-6 mb-4">
@@ -359,7 +359,7 @@
                                 <strong>Note:</strong> You should only have to copy the VPN creation files one time, the first time you do this process on the JR Reneal server.
                             </p>
                         </div>
-                        <p class="text-black-700 mb-4 text-sm sm:text-base">Copy the VPN creation files from the VPN USB drive to the JR Reneal server:</p>
+                        <p class="text-black-500 mb-4 text-sm sm:text-base">Copy the VPN creation files from the VPN USB drive to the JR Reneal server:</p>
                         
                         <div class="code-block mb-4">
                             <div class="code-header">
@@ -403,7 +403,7 @@ sanya_juu-main-server</code>
                             </div>
                         </div>
                         
-                        <p class="text-black-700 text-sm sm:text-base">
+                        <p class="text-black-500 text-sm sm:text-base">
                             The file path should be: <code>~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles</code>
                         </p>
                     </div>
@@ -411,7 +411,7 @@ sanya_juu-main-server</code>
                     <!-- Step 3 -->
                     <div id="vpn-step3" class="mb-8">
                         <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-4">Edit Configuration Files</h3>
-                        <p class="text-black-700 mb-4 text-sm sm:text-base">
+                        <p class="text-black-500 mb-4 text-sm sm:text-base">
                             Edit the bash files that build the <code>wg0.conf</code> and <code>wg1.conf</code> files for each school. You need to edit the starting address for wireguard.
                         </p>
                         
@@ -429,8 +429,8 @@ sanya_juu-main-server</code>
                             </div>
                         </div>
                         
-                        <p class="text-black-700 mb-4 text-sm sm:text-base font-semibold">Example address assignments:</p>
-                        <ul class="list-disc list-inside text-black-700 space-y-2 mb-4 text-sm sm:text-base ml-4">
+                        <p class="text-black-500 mb-4 text-sm sm:text-base font-semibold">Example address assignments:</p>
+                        <ul class="list-disc list-inside text-black-500 space-y-2 mb-4 text-sm sm:text-base ml-4">
                             <li>For 2024B, the wireguard starting address was <strong>117</strong> (Eleven servers)</li>
                             <li>For 2025A, the wireguard starting address was <strong>128</strong> (Ten servers)</li>
                             <li>For 2025B, the wireguard addresses will start with <strong>139</strong></li>
@@ -440,12 +440,12 @@ sanya_juu-main-server</code>
                     <!-- Step 4 -->
                     <div id="vpn-step4" class="mb-8">
                         <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-4">Build VPN Files</h3>
-                        <p class="text-black-700 mb-4 text-sm sm:text-base">
+                        <p class="text-black-500 mb-4 text-sm sm:text-base">
                             Now you will run the script to build the new <code>wg0.conf</code> files for each school:
                         </p>
                         
                         <h4 class="text-lg font-semibold text-gray-900 mb-3">Build wg0 configuration files:</h4>
-                        <p class="text-black-700 mb-3 text-sm sm:text-base">Go to the wg0 folder and run the build script:</p>
+                        <p class="text-black-500 mb-3 text-sm sm:text-base">Go to the wg0 folder and run the build script:</p>
                         
                         <div class="code-block mb-4">
                             <div class="code-header">
@@ -465,12 +465,12 @@ cat ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/2025Aschools_wg | \
                             </div>
                         </div>
                         
-                        <p class="text-black-700 mb-6 text-sm sm:text-base">
+                        <p class="text-black-500 mb-6 text-sm sm:text-base">
                             This will create the files and put them in: <code>~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg0</code>
                         </p>
                         
                         <h4 class="text-lg font-semibold text-gray-900 mb-3">Build wg1 configuration files:</h4>
-                        <p class="text-black-700 mb-3 text-sm sm:text-base">Repeat the process for wg1:</p>
+                        <p class="text-black-500 mb-3 text-sm sm:text-base">Repeat the process for wg1:</p>
                         
                         <div class="code-block mb-4">
                             <div class="code-header">
@@ -487,7 +487,7 @@ cat ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/2025Aschools_wg | \
                             </div>
                         </div>
                         
-                        <p class="text-black-700 text-sm sm:text-base">
+                        <p class="text-black-500 text-sm sm:text-base">
                             This will create the files and put them in: <code>~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1</code>
                         </p>
                     </div>
@@ -495,7 +495,7 @@ cat ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/2025Aschools_wg | \
                     <!-- Step 5 -->
                     <div id="vpn-step5" class="mb-8">
                         <h3 class="text-xl sm:text-2xl font-semibold text-black-900 mb-4">Copy Files to Flash Drive</h3>
-                        <p class="text-black-700 mb-4 text-sm sm:text-base">
+                        <p class="text-black-500 mb-4 text-sm sm:text-base">
                             Copy the VPN files you have just created to the VPN flash drive so they can be installed on each individual new server:
                         </p>
                         
@@ -525,10 +525,10 @@ cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 .</code>
                     <!-- Step 6 -->
                     <div id="vpn-step6" class="mb-8">
                         <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-4">Install Files on Each Server</h3>
-                        <p class="text-black-700 mb-4 text-sm sm:text-base">
+                        <p class="text-black-500 mb-4 text-sm sm:text-base">
                             For each new server you are building, you will install the wireguard files:
                         </p>
-                        <ol class="space-y-3 text-black-700 mb-4 text-sm sm:text-base">
+                        <ol class="space-y-3 text-black-500 mb-4 text-sm sm:text-base">
                             <li class="flex items-start">
                                 <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-0.5">1</span>
                                 <span>Boot the new server</span>
@@ -558,18 +558,18 @@ cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 .</code>
                                 <code>sudo python3 install_info_wireguard.py</code>
                             </div>
                         </div>
-                        <p class="text-black-700 mb-4 mt-2">
+                        <p class="text-black-500 mb-4 mt-2">
                             You will be prompted to enter the name of the school for this new server when you run the program, which will 
                             be matched against the list that you hand-edited in <strong> install_info_wireguard.py </strong>
                         </p>
-                        <p class="text-black-700 mb-4 mt-2">
+                        <p class="text-black-500 mb-4 mt-2">
                             This program will put the VPN files in /etc/wireguard on your new server.
                         </p>
 
-                        <p class="text-black-700 mb-4 mt-2">
+                        <p class="text-black-500 mb-4 mt-2">
                             Add the newly-created VPN addresses to the full list of hosts.
                         </p>
-                        <p class="text-black-700 mb-4 mt-2">
+                        <p class="text-black-500 mb-4 mt-2">
                             You will need to inform <strong> Rene </strong> of the school names and the VPN wireguard addresses (10.9.0.##).  
                             She will add them to the full list of hosts in the “hosts” file.
                         </p>
@@ -579,7 +579,7 @@ cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 .</code>
                 <!-- Server Build-Up Procedures -->
                 <section class="mb-8 lg:mb-12">
                     <h2 id="server-buildup" class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 lg:mb-6">Server Build-Up Procedures</h2>
-                    <p class="text-black-700 leading-relaxed mb-6 text-sm sm:text-base">
+                    <p class="text-black-500 leading-relaxed mb-6 text-sm sm:text-base">
                         Server build-up process comes next after you have the VPN files ready. This section covers the complete 6-step process for building a new Reneal server.
                     </p>
 
@@ -589,7 +589,7 @@ cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 .</code>
                             <span class="inline-block w-8 h-8 bg-red-500 text-white rounded-full text-center leading-8 mr-2">1</span>
                             Prepare VPN Files
                         </h3>
-                        <p class="text-black-700 mb-4 text-sm sm:text-base">
+                        <p class="text-black-500 mb-4 text-sm sm:text-base">
                             Before starting the server build, ensure you have completed the VPN file creation process as described in the <a href="#vpn-creation" class="prose-link">VPN Creation Procedures</a> section above.
                         </p>
                     </div>
@@ -600,7 +600,7 @@ cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 .</code>
                             <span class="inline-block w-8 h-8 bg-red-500 text-white rounded-full text-center leading-8 mr-2">2</span>
                             Set BIOS Configuration
                         </h3>
-                        <p class="text-black-700 mb-4 text-sm sm:text-base">
+                        <p class="text-black-500 mb-4 text-sm sm:text-base">
                             Access the BIOS on the new server:
                         </p>
                         <ul class="list-disc list-inside text-gray-700 space-y-2 mb-4 text-sm sm:text-base ml-4">
@@ -610,7 +610,7 @@ cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 .</code>
                         
                         <div class="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 mb-4">
                             <h4 class="font-semibold text-gray-900 mb-3">BIOS Settings to Configure:</h4>
-                            <ul class="space-y-2 text-black-700 text-sm sm:text-base">
+                            <ul class="space-y-2 text-black-500 text-sm sm:text-base">
                                 <li class="flex items-start">
                                     <svg class="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
@@ -663,7 +663,7 @@ cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 .</code>
                         </div>
 
                         <h4 class="font-semibold text-gray-900 mb-3">Boot from USB:</h4>
-                        <ol class="space-y-2 text-black-700 mb-4 text-sm sm:text-base ml-4">
+                        <ol class="space-y-2 text-black-500 mb-4 text-sm sm:text-base ml-4">
                             <li>1. Plug in your Reneal server build USB disk (make sure to use a <strong>USB3 port</strong>)</li>
                             <li>2. Boot the server:
                                 <ul class="list-disc list-inside ml-6 mt-1">
@@ -676,7 +676,7 @@ cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 .</code>
                         </ol>
 
                         <h4 class="font-semibold text-black-900 mb-3 mt-6">Run the Build Process:</h4>
-                        <p class="text-black-700 mb-3 text-sm sm:text-base">Open a terminal window and navigate to the build directory:</p>
+                        <p class="text-black-500 mb-3 text-sm sm:text-base">Open a terminal window and navigate to the build directory:</p>
                         
                         <div class="code-block mb-4">
                             <div class="code-header">
@@ -698,11 +698,11 @@ sudo python3 makeServer.py</code>
                             </p>
                         </div>
 
-                        <p class="text-black-700 text-sm sm:text-base">
+                        <p class="text-black-500 text-sm sm:text-base">
                             <strong>Build Time:</strong> The process will take approximately <strong>2 hours</strong>. It is writing all partitions for both disks. When finished, it will report that everything is complete and you will return to the command line.
                         </p>
                         
-                        <p class="text-black-700 mt-4 text-sm sm:text-base">
+                        <p class="text-black-500 mt-4 text-sm sm:text-base">
                             <strong>After completion:</strong> Shutdown the system, remove the Reneal Server Build USB disk, and store it somewhere safe.
                         </p>
                     </div>
@@ -715,7 +715,7 @@ sudo python3 makeServer.py</code>
                         </h3>
 
                         <h4 class="font-semibold text-gray-900 mb-3">A. Set Boot Order:</h4>
-                        <ol class="space-y-2 text-black-700 mb-6 text-sm sm:text-base ml-4">
+                        <ol class="space-y-2 text-black-500 mb-6 text-sm sm:text-base ml-4">
                             <li>1. Boot the new server and enter BIOS again (press <code>DEL</code>)</li>
                             <li>2. Set the boot order for the two storage devices:
                                 <ul class="list-disc list-inside ml-6 mt-1">
@@ -727,7 +727,7 @@ sudo python3 makeServer.py</code>
                         </ol>
 
                         <h4 class="font-semibold text-gray-900 mb-3">B. Configure School Information:</h4>
-                        <ol class="space-y-2 text-black-700 mb-6 text-sm sm:text-base ml-4">
+                        <ol class="space-y-2 text-black-500 mb-6 text-sm sm:text-base ml-4">
                             <li>1. Sign in as <strong>sysadmin</strong></li>
                             <li>2. Go to the Dashboard and type in the school name in "School Information" (for example, "Einoti Secondary School")</li>
                             <li>3. Confirm the correct number of clients (default is 20)</li>
@@ -735,7 +735,7 @@ sudo python3 makeServer.py</code>
                         </ol>
 
                         <h4 class="font-semibold text-gray-900 mb-3">C. Configure Network Interfaces:</h4>
-                        <p class="text-black-700 mb-3 text-sm sm:text-base">
+                        <p class="text-black-500 mb-3 text-sm sm:text-base">
                             You will need a network switch and ethernet cable for this step.
                         </p>
 
@@ -754,13 +754,13 @@ sudo python3 configureNetworkInterfaces.py</code>
 
                         <div class="bg-gray-100 rounded-lg p-4 sm:p-6 mb-4 border-l-4 border-blue-500">
                             <h5 class="font-semibold text-gray-900 mb-2 text-sm sm:text-base">For Dell Micro Desktops:</h5>
-                            <p class="text-black-700 text-sm mb-3">
+                            <p class="text-black-500 text-sm mb-3">
                                 You must run <code>configureMicroNetworkInterfaces.py</code> instead. This program is saved on the VPN flash drive. Copy it to <code>~/CodeDevelopment/newSystemBuild</code>.
                             </p>
-                            <p class="text-black-700 text-sm mb-3">
+                            <p class="text-black-500 text-sm mb-3">
                                 Before running, copy the files from the flashdrive to:
                             </p>
-                            <ul class="list-disc list-inside text-black-700 text-sm ml-4 mb-3">
+                            <ul class="list-disc list-inside text-black-500 text-sm ml-4 mb-3">
                                 <li><code>/etc/network</code> (1 file)</li>
                                 <li><code>/etc/shorewall</code> (2 files)</li>
                             </ul>
@@ -780,14 +780,14 @@ sudo python3 configureMicroNetworkInterfaces.py</code>
                         </div>
 
                         <h4 class="font-semibold text-gray-900 mb-3 mt-6">Network Interface Configuration:</h4>
-                        <p class="text-black-700 mb-3 text-sm sm:text-base">
+                        <p class="text-black-500 mb-3 text-sm sm:text-base">
                             You will be prompted to plug in and remove LAN connections, so the system can identify and label the network interfaces.
                         </p>
 
                         <div class="grid md:grid-cols-2 gap-4 mb-6">
                             <div class="bg-white rounded-lg border border-gray-200 p-4">
                                 <h5 class="font-semibold text-gray-900 mb-3 text-sm sm:text-base">Standard Servers (4 interfaces):</h5>
-                                <ul class="space-y-2 text-sm text-black-700">
+                                <ul class="space-y-2 text-sm text-black-500">
                                     <li class="flex items-start">
                                         <span class="text-red-500 mr-2">•</span>
                                         <span><strong>Motherboard LAN:</strong> Internet</span>
@@ -805,7 +805,7 @@ sudo python3 configureMicroNetworkInterfaces.py</code>
 
                             <div class="bg-white rounded-lg border border-gray-200 p-4">
                                 <h5 class="font-semibold text-gray-900 mb-3 text-sm sm:text-base">MicroDesktop (2 interfaces):</h5>
-                                <ul class="space-y-2 text-sm text-black-700">
+                                <ul class="space-y-2 text-sm text-black-500">
                                     <li class="flex items-start">
                                         <span class="text-red-500 mr-2">•</span>
                                         <span><strong>Motherboard LAN:</strong> Network switch</span>
@@ -825,10 +825,10 @@ sudo python3 configureMicroNetworkInterfaces.py</code>
                         </div>
 
                         <h4 class="font-semibold text-gray-900 mb-3 mt-6">Files Modified:</h4>
-                        <p class="text-black-700 mb-3 text-sm sm:text-base">
+                        <p class="text-black-500 mb-3 text-sm sm:text-base">
                             The configuration programs modify the following symbolic links and files:
                         </p>
-                        <ul class="list-disc list-inside text-black-700 text-sm sm:text-base ml-4 mb-4">
+                        <ul class="list-disc list-inside text-black-500 text-sm sm:text-base ml-4 mb-4">
                             <li><code>/etc/network/interfaces</code></li>
                             <li><code>/etc/shorewall/interfaces</code></li>
                             <li><code>/etc/shorewall/masq</code></li>
@@ -836,7 +836,7 @@ sudo python3 configureMicroNetworkInterfaces.py</code>
                         </ul>
 
                         <h4 class="font-semibold text-gray-900 mb-3 mt-6">D. Install VPN Files:</h4>
-                        <p class="text-black-700 text-sm sm:text-base">
+                        <p class="text-black-500 text-sm sm:text-base">
                             Follow the instructions in <a href="#vpn-step6" class="prose-link">VPN Installation</a> section to complete the VPN setup.
                         </p>
                     </div>
@@ -848,7 +848,7 @@ sudo python3 configureMicroNetworkInterfaces.py</code>
                             Complete Final Configuration
                         </h3>
 
-                        <p class="text-black-700 mb-4 text-sm sm:text-base">
+                        <p class="text-black-500 mb-4 text-sm sm:text-base">
                             Run the final configuration script to complete the system build:
                         </p>
 
@@ -867,7 +867,7 @@ sudo ./finishNewSystemBuild.sh</code>
 
                         <div class="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 mb-4">
                             <h4 class="font-semibold text-gray-900 mb-3">This program performs:</h4>
-                            <ul class="space-y-2 text-black-700 text-sm sm:text-base">
+                            <ul class="space-y-2 text-black-500 text-sm sm:text-base">
                                 <li class="flex items-start">
                                     <svg class="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
@@ -889,7 +889,7 @@ sudo ./finishNewSystemBuild.sh</code>
                             </ul>
                         </div>
 
-                        <p class="text-black-700 text-sm sm:text-base">
+                        <p class="text-black-500 text-sm sm:text-base">
                             When complete, it will return to the command line. <strong>Shut down the system.</strong>
                         </p>
                     </div>
@@ -902,19 +902,19 @@ sudo ./finishNewSystemBuild.sh</code>
                         </h3>
 
                         <h4 class="font-semibold text-gray-900 mb-3">Setup:</h4>
-                        <ol class="space-y-2 text-black-700 mb-6 text-sm sm:text-base ml-4">
+                        <ol class="space-y-2 text-black-500 mb-6 text-sm sm:text-base ml-4">
                             <li>1. Plug in all of the network interfaces</li>
                             <li>2. Boot the system to the main OS</li>
                             <li>3. Sign in as <strong>sysadmin</strong></li>
                         </ol>
 
                         <h4 class="font-semibold text-gray-900 mb-3">Hardware Information:</h4>
-                        <p class="text-black-700 mb-4 text-sm sm:text-base">
+                        <p class="text-black-500 mb-4 text-sm sm:text-base">
                             Use the Dashboard to get the Hardware Information. Take a picture and send to Rene.
                         </p>
 
                         <h4 class="font-semibold text-gray-900 mb-3">Testing Checklist:</h4>
-                        <ol class="space-y-2 text-black-700 mb-6 text-sm sm:text-base ml-4">
+                        <ol class="space-y-2 text-black-500 mb-6 text-sm sm:text-base ml-4">
                             <li>1. Run systemCheck to make sure no problems are reported.</li>
                             <li>2. Check that a client computer boots properly (student account and teacher account).</li>
                             <li>3. Make sure Kolibri is running properly.</li>
@@ -926,10 +926,10 @@ sudo ./finishNewSystemBuild.sh</code>
 
                     <section class="mb-8 lg:mb-12">
                     <h2 id="ref-sources" class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 lg:mb-6">References & Sources</h2>
-                    <p class="text-black-700 leading-relaxed mb-6 text-sm sm:text-base">
+                    <p class="text-black-500 leading-relaxed mb-6 text-sm sm:text-base">
                         The following are links to sources and references for Reneal Server, VPN Creation and Server Build-Up process:
                     </p>
-                            <ol class="space-y-2 text-gray-700 mb-6 text-sm sm:text-base ml-4">
+                            <ol class="space-y-2 text-black-500 mb-6 text-sm sm:text-base ml-4">
                             <li>1. <a href="/">VPN Creation Process</a></li>
                             <li>2. <a href="/">Server Build-Up Process</a></li>
                             <li>3. <a href="">r1</a></li>
