@@ -340,7 +340,7 @@
                             </li>
                             <li class="flex items-start">
                                 <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-0.5">3</span>
-                                <span>All necessary files required in build-up process will be on the VPN flash drive</span>
+                                <span>All necessary files required in build-up process will be put in the VPN flash drive</span>
                             </li>
                         </ol>
                     </div>
@@ -527,6 +527,12 @@ cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 .</code>
                     <!-- Step 6 -->
                     <div id="vpn-step6" class="mb-8">
                         <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-4">Install Files on Each Server</h3>
+                        <div>
+                            <h4 class="font-bold text-amber-900 mb-2">NOTE: This Step Comes when you are Rebuilding the Server
+                            after you have finished <a href="#build-step4" class="prose-link">Setting a Unique Configuration</a> just before <a href="build-step5" class="prose-link">
+                                Completing Final Configuaration</a> as highlighted on the Server Build-Up Process below.</h4>
+                            </a>
+                        </div>
                         <p class="text-black-500 mb-4 text-sm sm:text-base">
                             For each new server you are building, you will install the wireguard files:
                         </p>
@@ -664,7 +670,7 @@ cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 .</code>
                             </p>
                         </div>
 
-                        <h4 class="font-semibold text-gray-900 mb-3">Boot from USB:</h4>
+                        <h4 class="font-bold text-gray-900 mb-3">Boot from USB:</h4>
                         <ol class="space-y-2 text-black-500 mb-4 text-sm sm:text-base ml-4">
                             <li>1. Plug in your Reneal server build USB disk (make sure to use a <strong>USB3 port</strong>)</li>
                             <li>2. Boot the server:
@@ -677,7 +683,7 @@ cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 .</code>
                             <li>4. Sign in to the master account (password is written on the USB drive)</li>
                         </ol>
 
-                        <h4 class="font-semibold text-black-900 mb-3 mt-6">Run the Build Process:</h4>
+                        <h4 class="font-bold text-black-900 mb-3 mt-6">Run the Build Process:</h4>
                         <p class="text-black-500 mb-3 text-sm sm:text-base">Open a terminal window and navigate to the build directory:</p>
                         
                         <div class="code-block mb-4">
@@ -781,7 +787,7 @@ sudo python3 configureMicroNetworkInterfaces_5.py</code>
                             </div>
                         </div>
 
-                        <h4 class="font-semibold text-gray-900 mb-3 mt-6">Network Interface Configuration:</h4>
+                        <h4 class="font-bold text-gray-900 mb-3 mt-6">Network Interface Configuration:</h4>
                         <p class="text-black-500 mb-3 text-sm sm:text-base">
                             You will be prompted to plug in and remove LAN connections, so the system can identify and label the network interfaces.
                         </p>
@@ -826,7 +832,7 @@ sudo python3 configureMicroNetworkInterfaces_5.py</code>
                             </p>
                         </div>
 
-                        <h4 class="font-semibold text-gray-900 mb-3 mt-6">Files Modified:</h4>
+                        <h4 class="font-bold text-gray-900 mb-3 mt-6">Files Modified:</h4>
                         <p class="text-black-500 mb-3 text-sm sm:text-base">
                             The configuration programs modify the following symbolic links and files:
                         </p>
@@ -837,7 +843,7 @@ sudo python3 configureMicroNetworkInterfaces_5.py</code>
                             <li><code>/etc/udev/rules.d/70-persistent-net.rules</code></li>
                         </ul>
 
-                        <h4 class="font-semibold text-gray-900 mb-3 mt-6">D. Install VPN Files:</h4>
+                        <h4 class="font-bold text-gray-900 mb-3 mt-6">D. Install VPN Files:</h4>
                         <p class="text-black-500 text-sm sm:text-base">
                             Follow the instructions in <a href="#vpn-step6" class="prose-link">VPN Installation</a> section to complete the VPN setup.
                         </p>
@@ -903,19 +909,19 @@ sudo ./finishNewSystemBuild.sh</code>
                             Testing & Verification
                         </h3>
 
-                        <h4 class="font-semibold text-gray-900 mb-3">Setup:</h4>
+                        <h4 class="font-bold text-gray-900 mb-3">Setup:</h4>
                         <ol class="space-y-2 text-black-500 mb-6 text-sm sm:text-base ml-4">
                             <li>1. Plug in all of the network interfaces</li>
                             <li>2. Boot the system to the main OS</li>
                             <li>3. Sign in as <strong>sysadmin</strong></li>
                         </ol>
 
-                        <h4 class="font-semibold text-gray-900 mb-3">Hardware Information:</h4>
+                        <h4 class="font-bold text-gray-900 mb-3">Hardware Information:</h4>
                         <p class="text-black-500 mb-4 text-sm sm:text-base">
                             Use the Dashboard to get the Hardware Information. Take a picture and send to Rene.
                         </p>
 
-                        <h4 class="font-semibold text-gray-900 mb-3">Testing Checklist:</h4>
+                        <h4 class="text-gray-900 mb-3 font-bold">Testing Checklist:</h4>
                         <ol class="space-y-2 text-black-500 mb-6 text-sm sm:text-base ml-4">
                             <li>1. Run systemCheck to make sure no problems are reported.</li>
                             <li>2. Check that a client computer boots properly (student account and teacher account).</li>
@@ -929,14 +935,29 @@ sudo ./finishNewSystemBuild.sh</code>
                     <section class="mb-8 lg:mb-12">
                     <h2 id="ref-sources" class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 lg:mb-6">References & Sources</h2>
                     <p class="text-black-500 leading-relaxed mb-6 text-sm sm:text-base">
-                        The following are links to sources and references for Reneal Server Build-Up Process, VPN Creation and CMDs:
+                        The following are links to sources and references of Reneal Server Build-Up Process, VPN Creation and some of the realated CMDs:
                     </p>
                             <ol class="space-y-2 text-black-500 mb-6 text-sm sm:text-base ml-4">
-                            <li>1. <a href="/">VPN Creation Process</a></li>
-                            <li>2. <a href="/">Server Build-Up Process</a></li>
-                            <li>3. <a href="">r1</a></li>
-                            <li>4. <a href="">r2</a></li>
-                            <li>5. <a href="">r3</a></li>
-                            <li>6. <a href="">r5</a></li>
+                            <li>1. <a href="/dev/server/rebuild/docs/2025A-VPN-Files-Creation-Process-WIREGUARD-ONLY-v2.docx">VPN Creation Process DOC</a></li>
+                            <li>2. <a href="/dev/server/rebuild/docs/2025A-Server-Build-Process-v3.docx">Server Build-Up Process DOC</a></li>
+                            <li>3. <a href="/dev/server/rebuild/docs/terminalVpnCreation.txt">VPN Creation CMD</a></li>
+                            <li>4. <a href="/dev/server/rebuild/docs/rebuild.txt">Rebuild CMD</a></li>
+                            <li>5. <a href="/dev/server/rebuild/docs/add-wiregaurd.txt">Adding Wireguard Files CMD</a></li>
+                            <li>6. <a href="/dev/server/rebuild/docs/finishSystembuild.txt">Finish System Rebuild CMD</a></li>
 
                         </ol>
+                        </section>
+                        </div></section>
+
+
+
+                        <!-- Footer -->
+                <footer class="mt-16 pt-8 border-t border-gray-200">
+                    <div class="flex justify-between items-center text-sm text-gray-600">
+                        <p>&copy; 2025 Reneal Tanzania. All rights reserved.</p>
+                        <a href="#" class="prose-link">Back to Top ↑</a>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    </div>

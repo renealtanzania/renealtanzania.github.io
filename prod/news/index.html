@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+    <title>Blog | Reneal Tanzania</title>
+    <script src="/public/css/script/tailwindcss3417.js"></script>
+    <style>
+        @font-face {
+            font-family: 'figtree-latin-400-normal';
+            src: url('/public/css/script/figtree-latin-400-normal.woff2') format('woff2'),
+            }
+        
+        body {
+            font-family: 'Figtree', sans-serif;
+        }
+        
+        .blog-card {
+            transition: all 0.3s ease;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .category-badge {
+            transition: all 0.2s ease;
+        }
+        
+        .category-badge:hover {
+            transform: scale(1.05);
+        }
+        
+        .category-badge.active {
+            background-color: #7c3aed;
+            color: white;
+        }
+        
+        .featured-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <a href="/"><img src="/public/imgs/ren.jpg" width="60" height="60" alt=""></a>
+
+                    <a href="/"><span class="text-xl font-semibold text-gray-900">Reneal Tanzania</span></a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="/" class="text-gray-600 hover:text-gray-900 font-medium">Home</a>
+                    <a href="#" class="text-purple-600 hover:text-purple-700 font-medium">Blog</a>
+                    <a href="/status" class="text-gray-600 hover:text-gray-900 font-medium">Status</a>
+                    <a href="/guidance-docs.html" class="text-gray-600 hover:text-gray-900 font-medium">Guidance Doc</a>
+                    <a href="https://www.reneal.org" class="text-gray-600 hover:text-gray-900 font-medium">Reneal ORG</a>
+                </div>
+                <button class="md:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-white py-12 sm:py-16 lg:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
+                    News
+                </h1>
+                <p class="text-lg sm:text-xl lg:text-2xl text-gray-600">
+                    Website Updates and School News for Reneal Tanzania.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Filters -->
+    <section class="bg-white border-b border-gray-200 sticky top-16 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-wrap gap-3 justify-center">
+                <button class="category-badge active px-4 py-2 rounded-full text-sm font-medium bg-purple-600 text-white">
+                    All posts
+                </button>
+                <button class="category-badge px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200">
+                    School
+                </button>
+                <button class="category-badge px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200">
+                    Code
+                </button>
+                <button class="category-badge px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200">
+                    Special Visits
+                </button>
+                <button class="category-badge px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200">
+                    Team Meetings
+                </button>
+                <button class="category-badge px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200">
+                    Ashura
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <!-- Featured Posts -->
+        <section class="mb-16">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Recently</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Featured Post 1 -->
+                <div class="blog-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer">
+                    <div class="featured-gradient h-48 sm:h-56 flex items-center justify-center">
+                        <svg class="w-16 h-16 sm:w-20 sm:h-20 text-white opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold text-purple-600 bg-purple-100 rounded-full mb-3">
+                            Code
+                        </span>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                            Renovation and Addition of new features on the site.
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-3">
+                            This include: <br><a href="/">Renovating Home Page, </a> 
+                            <a href="/dev/server/rebuild">New Server Rebuild Page </a>and 
+                            <a href="/prod/news">New News Page </a>
+                        </p>
+                        <div class="mt-4 flex items-center text-sm text-gray-500">
+                            <span>1 min read</span>
+                            <span class="mx-2">•</span>
+                            <span>10/11/2024</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured Post 2 -->
+                <div class="blog-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer">
+                    <div class="h-48 sm:h-56 bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                        <a href="/status"><svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg></a>
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full mb-3">
+                            school
+                        </span>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                            <a href="/status">Completion of 2025A School Installations and Trainings.</a>
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-3">
+                            Chief Mangenya Secondary School marked the end of 2025 School Installations and Trainings on October 28 <sup>th</sup> 2025.
+                        </p>
+                        <div class="mt-4 flex items-center text-sm text-gray-500">
+                            <span>1 min read</span>
+                            <span class="mx-2">•</span>
+                            <span>28/10/2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured Post 3 -->
+                <div class="blog-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer">
+                    <div class="h-48 sm:h-56 bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center">
+                        <svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold text-green-600 bg-green-100 rounded-full mb-3">
+                            special visits
+                        </span>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                            Rene Visit to Tanzania
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-3">
+                            A normal yearly visit of Rene to Tanzania to make follow-up of different aspects about the Project from 04/09 to 30/09/2025.
+                        </p>
+                        <div class="mt-4 flex items-center text-sm text-gray-500">
+                            <span>1 min read</span>
+                            <span class="mx-2">•</span>
+                            <span>01/10/2025</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- All Posts Grid -->
+        <section>
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Other posts</h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Blog Post 1 -->
+                <article class="blog-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                        <a href="/public/guidance-docs/notes/2025/2025-09-20-Team-Meeting.pdf">
+                        <svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/>
+                        </svg></a>
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold text-purple-600 bg-purple-100 rounded-full mb-3">
+                            <a href="/public/guidance-docs/notes/2025/2025-09-20-Team-Meeting.pdf">team meetings</a>
+                        </span>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+                            <a href="/public/guidance-docs/notes/2025/2025-09-20-Team-Meeting.pdf">Team Meeting at JRI</a>
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-3">
+                            <a href="/public/guidance-docs/notes/2025/2025-09-20-Team-Meeting.pdf">
+                            A Meeting covered about School assignments, Status of Tasks and Upcoming Meetings.</a>
+                        </p>
+                        <div class="mt-4 flex items-center text-sm text-gray-500">
+                            <span>6 min read</span>
+                            <span class="mx-2">•</span>
+                            <span>20/09/2025</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Blog Post 2 -->
+                <article class="blog-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                        <a href="/public/guidance-docs/notes/2025/2025-09-13-Team-Meeting.pdf">
+                        <svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/>
+                        </svg></a>
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold text-purple-600 bg-purple-100 rounded-full mb-3">
+                            <a href="/public/guidance-docs/notes/2025/2025-09-13-Team-Meeting.pdf">team meetings</a>
+                        </span>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+                            <a href="/public/guidance-docs/notes/2025/2025-09-13-Team-Meeting.pdf">Team Meeting at JRI</a>
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-3">
+                            <a href="/public/guidance-docs/notes/2025/2025-09-13-Team-Meeting.pdf">
+                            A Meeting covered about Feedback, Issues and Team Communication.</a>
+                        </p>
+                        <div class="mt-4 flex items-center text-sm text-gray-500">
+                            <span>5 min read</span>
+                            <span class="mx-2">•</span>
+                            <span>13/09/2025</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Blog Post 3 -->
+                <article class="blog-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                        <a href="/public/guidance-docs/notes/2025/2025-09-11-Server-Info.pdf">
+                        <svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/>
+                        </svg></a>
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold text-purple-600 bg-purple-100 rounded-full mb-3">
+                            <a href="/public/guidance-docs/notes/2025/2025-09-11-Server-Info.pdf">team meetings</a>
+                        </span>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+                            <a href="/public/guidance-docs/notes/2025/2025-09-11-Server-Info.pdf">Team Meeting at JRI</a>
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-3">
+                            <a href="/public/guidance-docs/notes/2025/2025-09-11-Server-Info.pdf">
+                            A Meeting covered about Reneal Server.</a>
+                        </p>
+                        <div class="mt-4 flex items-center text-sm text-gray-500">
+                            <span>7 min read</span>
+                            <span class="mx-2">•</span>
+                            <span>11/09/2025</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Blog Post 4 -->
+                <article class="blog-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                        <a href="/public/guidance-docs/notes/2025/2025-09-08-Team-Meeting.pdf">
+                        <svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/>
+                        </svg></a>
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold text-purple-600 bg-purple-100 rounded-full mb-3">
+                            <a href="/public/guidance-docs/notes/2025/2025-09-08-Team-Meeting.pdf">team meetings</a>
+                        </span>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+                            <a href="/public/guidance-docs/notes/2025/2025-09-08-Team-Meeting.pdf">Team Meeting at JRI</a>
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-3">
+                            <a href="/public/guidance-docs/notes/2025/2025-09-08-Team-Meeting.pdf">
+                            A Meeting covered about Future of Reneal, Trip Goals.</a>
+                        </p>
+                        <div class="mt-4 flex items-center text-sm text-gray-500">
+                            <span>6 min read</span>
+                            <span class="mx-2">•</span>
+                            <span>08/09/2025</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Blog Post 5 -->
+                <div class="blog-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center">
+                        <a href="/docs/delivery"><svg class="w-16 h-16 sm:w-20 sm:h-20 text-white opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg></a>
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full mb-3">
+                            <a href="/docs/delivery">code</a>
+                        </span>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                            <a href="/docs/delivery">School Delivery Page</a>
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-3">
+                            <a href="/docs/delivery">According to Shipments we can now print reports when schools take their equipments to us.</a>
+                        <div class="mt-4 flex items-center text-sm text-gray-500">
+                            <span>1 min read</span>
+                            <span class="mx-2">•</span>
+                            <span>22/08/2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blog Post 6 -->
+                <div class="blog-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center">
+                        <a href="/status"><svg class="w-16 h-16 sm:w-20 sm:h-20 text-white opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg></a>
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full mb-3">
+                            <a href="/status">code</a>
+                        </span>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                            <a href="/status">ATC Students Field Work</a>
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-3">
+                            <a href="/status">A Page Where ATC Students are registered and a Page where Equipments repaired a registered. They began their
+                                field work at 15<sup>th</sup> July 2025.
+                            </a>  
+                        <div class="mt-4 flex items-center text-sm text-gray-500">
+                            <span>1 min read</span>
+                            <span class="mx-2">•</span>
+                            <span>14/08/2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blog Post 7 -->
+                <article class="blog-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-red-400 to-pink-500 flex items-center justify-center">
+                        <a href="/status"><svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg></a>
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full mb-3">
+                            <a href="/status">school</a>
+                        </span>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+                            <a href="/status">Begining of 2025A School Installations and Trainings</a>
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-3">
+                            <a href="/status">On 15<sup>th</sup> July 2025, Manyara Girls SS was the First 2025A School Shipment to be installed.</a>
+                        </p>
+                        <div class="mt-4 flex items-center text-sm text-gray-500">
+                            <span>1 min read</span>
+                            <span class="mx-2">•</span>
+                            <span>15/07/2025</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Blog Post 8 -->
+                <div class="blog-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center">
+                        <a href="/include/projects"><svg class="w-16 h-16 sm:w-20 sm:h-20 text-white opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg></a>
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full mb-3">
+                            <a href="/include/projects">code</a>
+                        </span>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                            <a href="/include/projects">Project Management Page</a>
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-3">
+                            <a href="/include/projects">A Page that records all activities that are done to make a school sucessfully installed.</a><br>
+                            Also making of <a href="/dev/activities/team.html">Team Activities Page</a>
+                        <div class="mt-4 flex items-center text-sm text-gray-500">
+                            <span>1 min read</span>
+                            <span class="mx-2">•</span>
+                            <span>10/07/2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blog Post 9 -->
+                <article class="blog-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-green-400 to-cyan-500 flex items-center justify-center">
+                        <a href="/status"><svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg></a>
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold text-green-600 bg-green-100 rounded-full mb-3">
+                            <a href="/status">school</a>
+                        </span>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+                            <a href="/status">Completion of 2024B School Installations and Trainings</a>
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-3">
+                            <a href="/status">Oshara Secondary School marked the end of 2024B School Installations and Trainings on March 27 <sup>th</sup> 2025.
+                                </a>
+                        </p>
+                        <div class="mt-4 flex items-center text-sm text-gray-500">
+                            <span>1 min read</span>
+                            <span class="mx-2">•</span>
+                            <span>28/03/2025</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+</main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
+                <div class="col-span-2 md:col-span-4 lg:col-span-1">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <h3 class="text-2xl font-bold mb-4">
+                        <span class="text-green-400">Reneal</span> Tanzania
+                    </h3>
+                        <!-- <span class="text-xl font-semibold text-white">Reneal Tanzania</span> -->
+                    </div>
+                    <p class="text-sm">
+                        Empowering education through accessible offline resources and technology.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-white mb-4 text-sm">Product</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="/status/districts.html" class="hover:text-white transition-colors">Labs</a></li>
+                        <li><a href="/status/schools.html" class="hover:text-white transition-colors">Schools</a></li>
+                        <li><a href="/areas-covered.html" class="hover:text-white transition-colors">Area Covered</a></li>
+                        <!-- <li><a href="#" class="hover:text-white transition-colors">Enter</a></li> -->
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-white mb-4 text-sm">Our NGO</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="/status/summary.html" class="hover:text-white transition-colors">About</a></li>
+                        <li><a href="/public/guidance-docs/Computerization-Strategy-for-Government-Secondary-Schools-combined.pdf" class="hover:text-white transition-colors">Introduction</a></li>
+                        <li><a href="/prod/news" class="hover:text-white transition-colors">News</a></li>
+                        <li><a href="https://www.reneal.org" target="_blank" rel="noreferrer noopener" class="hover:text-white transition-colors">Reneal ORG</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-white mb-4 text-sm">Resources</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="/guidance-docs.html" class="hover:text-white transition-colors">Documentation</a></li>
+                        <li><a href="/prod/news" class="hover:text-white transition-colors">Blog</a></li>
+                        <li><a href="/public/imgs/home/ren-conts.png" class="hover:text-white transition-colors">Contacts</a></li>
+                        <!-- <li><a href="#" class="hover:text-white transition-colors">Customers</a></li> -->
+                    </ul>
+                </div>
+                
+                
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                <p class="text-sm">© 2020-2025 Reneal Tanzania. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="https://facebook.com" class="text-gray-400 hover:text-white transition">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                        <a href="https://instagram.com" class="text-gray-400 hover:text-white transition">
+                            <img src="/public/imgs/home/instagram-logo.svg" width="25" height="25">
+                        </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Category filter functionality
+        const categoryBadges = document.querySelectorAll('.category-badge');
+        
+        categoryBadges.forEach(badge => {
+            badge.addEventListener('click', function() {
+                // Remove active class from all badges
+                categoryBadges.forEach(b => b.classList.remove('active', 'bg-purple-600', 'text-white'));
+                categoryBadges.forEach(b => b.classList.add('bg-gray-100', 'text-gray-700'));
+                
+                // Add active class to clicked badge
+                this.classList.remove('bg-gray-100', 'text-gray-700');
+                this.classList.add('active', 'bg-purple-600', 'text-white');
+            });
+        });
+    </script>
+</body>
+</html>
