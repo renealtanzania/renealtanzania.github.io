@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+    <title>Various site changes | Code</title>
+    <script src="/public/css/script/tailwindcss3417.js"></script>
+    <style>
+
+        @font-face {
+            font-family: 'figtree-latin-400-normal';
+            src: url('/public/css/script/figtree-latin-400-normal.woff2') format('woff2')
+        }
+
+        body {
+            font-family: 'Figtree', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .prose a {
+            color: #667eea;
+            text-decoration: none;
+            border-bottom: 1px solid #667eea;
+            transition: all 0.2s;
+        }
+
+        .prose a:hover {
+            color: #764ba2;
+            border-bottom-color: #764ba2;
+        }
+
+        .case-study-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .case-study-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+<!-- Navigation -->
+<nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center space-x-2">
+                <a href="/"><img src="/public/imgs/ren.jpg" width="60" height="60" alt=""></a>
+
+                <a href="/"><span class="text-xl font-semibold text-gray-900">Reneal Tanzania</span></a>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="/" class="text-gray-600 hover:text-gray-900 font-medium">Home</a>
+                <a href="#" class="text-purple-600 hover:text-purple-700 font-medium">Code</a>
+                <a href="/status" class="text-gray-600 hover:text-gray-900 font-medium">Status</a>
+                <a href="/guidance-docs.html" class="text-gray-600 hover:text-gray-900 font-medium">Guidance Doc</a>
+<!--                <a href="https://www.reneal.org" class="text-gray-600 hover:text-gray-900 font-medium">Reneal ORG</a>-->
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<header class="gradient-bg text-white py-16 sm:py-24">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <p class="text-sm sm:text-base font-medium uppercase tracking-wide mb-4 opacity-90">Website Changes </p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+                New Site Additions and Improvements Tracker
+            </h1>
+            <p class="text-lg sm:text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
+                Ease Tracing of new features and increments of the website.
+            </p>
+            <div class="mt-8 flex items-center justify-center space-x-4 text-sm opacity-80">
+                <span>Last Updated</span>
+                <span>•</span>
+                <span>10 <sup>th</sup> November 2025</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <!-- Introduction -->
+    <article class="prose prose-lg max-w-none">
+<div class="grid gap-8 sm:gap-10 mb-12">
+    <!-- Eliminating Busywork -->
+    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 sm:p-8 border border-blue-100">
+        <h3 class="text-xl sm:text-2xl font-bold mb-4 text-gray-900">Changes Made</h3>
+        <p class="text-base sm:text-lg leading-relaxed text-gray-700 mb-6">
+            Name of the page which is clickable and it's Description. It consists of a number value, page type and a launched date of the concerned page.
+        </p>
+
+        <!-- Case Studies -->
+        <div class="space-y-4">
+            <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
+                <a href="/prod/news"><h4 class="font-semibold text-purple-600 mb-2">1125a. News Page -- New Addition - 09/11/2025</h4></a>
+                <p class="text-gray-700 text-sm sm:text-base">The goal is to provide brief information about what is going-on on the project.
+                Initially my thought was focusing on what's going-on on the website changes, but i expanded it to cover more about the project in general. </p>
+            </div>
+            <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
+                <a href="/dev/server/rebuild"> <h4 class="font-semibold text-purple-600 mb-2">1125a. Server Reuild Page -- New Addition - 09/11/2025</h4></a>
+                <p class="text-gray-700 text-sm sm:text-base">Complete guide to Reneal Server Build-up Procedures and VPN Configuration.</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
+                <a href="/"> <h4 class="font-semibold text-purple-600 mb-2">1125a. Home Page -- New Addition - 09/11/2025</h4></a>
+                <p class="text-gray-700 text-sm sm:text-base">Complete change of home page that has modern and clean design that also ensures mobile responsive.</p>
+            </div>
+        
+            <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
+                <a href="/docs/delivery"> <h4 class="font-semibold text-purple-600 mb-2">0825a. School Delivery Page -- New Addition - 22/08/2025</h4></a>
+                <p class="text-gray-700 text-sm sm:text-base">According to Shipments we can now print reports when schools take their equipments to us.</p>
+            </div>
+
+            <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
+                <a href="/"> <h4 class="font-semibold text-purple-600 mb-2">0825b. Repair Supervision Page -- New Addition - 10/08/2025</h4></a>
+                <p class="text-gray-700 text-sm sm:text-base">Students can register their repairs inorder for us to keep track of our equipments.</p>
+            </div>
+
+            <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
+                <a href="/"> <h4 class="font-semibold text-purple-600 mb-2">0825a. Student Registration Page -- New Addition - 04/08/2025</h4></a>
+                <p class="text-gray-700 text-sm sm:text-base">New Students can now be registered when they begin their field work to us.</p>
+            </div>
+
+        <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
+                <a href="/include/projects"> <h4 class="font-semibold text-purple-600 mb-2">0725a. Project Management Page(s) -- New Addition - 10/07/2025</h4></a>
+                <p class="text-gray-700 text-sm sm:text-base">This Addition feature organized the project in a way that is ease to keep track of all what's 
+                    going-on in the project.</p>
+            </div>
+
+        <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
+                <a href="/dev/activities/team.html"> <h4 class="font-semibold text-purple-600 mb-2">0625a. Team Activities Page(s) -- New Addition - 28/06/2025</h4></a>
+                <p class="text-gray-700 text-sm sm:text-base">This feature helps team member to keep in track all of his work activities especially office 
+                    related ones.</p>
+            </div>
+
+        <div class="mt-6 p-4 bg-blue-100 border-l-4 border-blue-600 rounded">
+            <p class="text-gray-800 font-medium text-sm sm:text-base">
+                This page will keep track about all what's going on in website development, it will be updated moving continously.
+            </p>
+        </div>
+        </div>
+
+    </div>
+
+
+
+        </section>
+    </article>
+</main>
