@@ -57,8 +57,26 @@
                 <a href="/project" class="text-gray-600 hover:text-gray-900 font-medium">Project</a>
                 <a href="/prod/news" class="text-gray-600 hover:text-gray-900 font-medium">News</a>
                 <a href="/status" class="text-gray-600 hover:text-gray-900 font-medium">Status</a>
-                <a href="/guidance-docs.html" class="text-gray-600 hover:text-gray-900 font-medium">Guidance Doc</a>
+                <a href="/prod/news/category/ashura" class="text-gray-600 hover:text-gray-900 font-medium">Ashura</a>
 <!--                <a href="https://www.reneal.org" class="text-gray-600 hover:text-gray-900 font-medium">Reneal ORG</a>-->
+            </div>
+            <button id="mobileMenuButton" class="md:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                    <svg id="closeIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden pb-4">
+                <div class="flex flex-col space-y-3 pt-2">
+                    <a href="/prod/news" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">News</a>
+                    <a href="/prod/news/category/ashura" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">Ashura</a>
+                    <a href="/guidance-docs.html" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">Guidance Docs</a>
+                    <a href="https://www.reneal.org" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100 border-b">Reneal ORG</a>
+                </div>
             </div>
         </div>
     </div>
@@ -78,7 +96,7 @@
             <div class="mt-8 flex items-center justify-center space-x-4 text-sm opacity-80">
                 <span>Last Updated</span>
                 <span>•</span>
-                <span>13 <sup>th</sup> November 2025</span>
+                <span>14 <sup>th</sup> November 2025</span>
             </div>
         </div>
     </div>
@@ -89,7 +107,7 @@
     <article class="prose prose-lg max-w-none">
 <div class="grid gap-8 sm:gap-10 mb-12">
     <!-- Eliminating Busywork -->
-    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 sm:p-8 border border-blue-100">
+    <div class="bg-gradient-to-br from-blue-100 to-indigo-50 rounded-xl p-6 sm:p-8 border border-blue-100">
         <h3 class="text-xl sm:text-2xl font-bold mb-4 text-gray-900">Changes Made</h3>
         <p class="text-base sm:text-lg leading-relaxed text-gray-700 mb-6">
             Name of the page which is clickable and it's Description. It consists of a number value, page type and a launched date of the concerned page.
@@ -98,6 +116,24 @@
 
         <!-- Case Studies -->
         <div class="space-y-4">
+            <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
+                <a href="/prod/news/category/"> <h4 class="font-semibold text-purple-600 mb-2">1125h. News View Page -- Major Addition - 14/11/2025</h4></a>
+                <p class="text-gray-700 text-sm sm:text-base">Created the design</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
+                <a href="/team-members"> <h4 class="font-semibold text-purple-600 mb-2">1125h. Ashura's Page -- Major Addition - 14/11/2025</h4></a>
+                <p class="text-gray-700 text-sm sm:text-base">Created the design</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
+                <a href="/prod/news/category/code"> <h4 class="font-semibold text-blue-600 mb-2">1125h. Code, Index and News Page -- Minor Addition - 14/11/2025</h4></a>
+                <p class="text-gray-700 text-sm sm:text-base">Added Mobile Dropdown Menu for the following pages;
+                    <a href="/">Home</a>,
+                    <a href="">Website changes</a>,
+                    <a href="/prod/news">News</a> and 
+                    <a href="/prod/news/category/ashura">Ashura's Pages</a>
+
+                </p>
+            </div>
             <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
                 <a href="/include/projects/p/2025A-V1"> <h4 class="font-semibold text-blue-600 mb-2">1125g. 2025A Files Addition -- Minor Addition - 13/11/2025</h4></a>
                 <p class="text-gray-700 text-sm sm:text-base">Finished Adding 4 2025A school files to project management page and 
@@ -138,7 +174,7 @@
                 <p class="text-gray-700 text-sm sm:text-base">Changing team member icons</p>
             </div>
             <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
-                <a href="/team-members"> <h4 class="font-semibold text-blue-600 mb-2">1125d. Team Members Index Page -- Major Addition - 03/11/2025</h4></a>
+                <a href="/team-members"> <h4 class="font-semibold text-purple-600 mb-2">1125d. Team Members Index Page -- Major Addition - 03/11/2025</h4></a>
                 <p class="text-gray-700 text-sm sm:text-base">Changing the design</p>
             </div>
             <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
@@ -171,12 +207,12 @@
             </div>
 
             <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
-                <a href="/"> <h4 class="font-semibold text-purple-600 mb-2">0825b. Repair Supervision Page -- New Addition - 10/08/2025</h4></a>
+                <a href="/class/supervisions"> <h4 class="font-semibold text-purple-600 mb-2">0825b. Repair Supervision Page -- New Addition - 10/08/2025</h4></a>
                 <p class="text-gray-700 text-sm sm:text-base">Students can register their repairs inorder for us to keep track of our equipments.</p>
             </div>
 
             <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
-                <a href="/"> <h4 class="font-semibold text-purple-600 mb-2">0825a. Student Registration Page -- New Addition - 04/08/2025</h4></a>
+                <a href="/class/supervisions/r/2025"> <h4 class="font-semibold text-purple-600 mb-2">0825a. Student Registration Page -- New Addition - 04/08/2025</h4></a>
                 <p class="text-gray-700 text-sm sm:text-base">New Students can now be registered when they begin their field work to us.</p>
             </div>
 
@@ -200,7 +236,7 @@
         </div>
 </div>
 
-<div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 sm:p-8 border border-purple-100">
+<div class="bg-gradient-to-br from-purple-100 to-pink-50 rounded-xl p-6 sm:p-8 border border-purple-100">
                         <h3 class="text-xl sm:text-2xl font-bold mb-4 text-gray-900">Newly Recognition Page Modules</h3>
                         <p class="text-base sm:text-lg leading-relaxed text-gray-700 mb-6">
                             The following are the newly Important Website Pages.
@@ -212,9 +248,15 @@
                                 <p class="text-gray-700 text-sm sm:text-base">Provides updates about what's going-on in the project.</p>
                             </div>
                             <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
-                                <a href="/team-members"><h4 class="font-semibold text-green-600 mb-2">Team Members Team Page</h4><a></a>
+                                <a href="/team-members/team.html"><h4 class="font-semibold text-green-600 mb-2">Team Members Index Page</h4><a></a>
                                 <p class="text-gray-700 text-sm sm:text-base">The module brings together tools that team members can use to  
                                     ease their work on the project.</p>
+                            </div>
+                            <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
+                                <a href="/team-members/team.html"><h4 class="font-semibold text-green-600 mb-2">Team Members Team Page</h4><a></a>
+                                <p class="text-gray-700 text-sm sm:text-base">The page brings out the means where each member can share their excel
+                                    files online privately.                          
+                                </p>
                             </div>
                             <div class="bg-white rounded-lg p-4 sm:p-5 case-study-card">
                                 <a href="/project"><h4 class="font-semibold text-green-600 mb-2">Project</h4></a>
@@ -243,3 +285,41 @@
         </section>
     </article>
 </main>
+
+<script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+        const closeIcon = document.getElementById('closeIcon');
+
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+            menuIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideMenu = mobileMenu.contains(event.target);
+            const isClickOnButton = mobileMenuButton.contains(event.target);
+            
+            if (!isClickInsideMenu && !isClickOnButton && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        });
+
+        // Close mobile menu when window is resized to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768 && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        });
+    </script>
+
+    </body>
+</html>

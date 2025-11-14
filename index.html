@@ -33,11 +33,23 @@
                 <button class="bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition hidden md:block">
                     Project
                 </button></a>
-                <button class="md:hidden text-gray-700">
+                <button id="mobileMenuButton" class="md:hidden text-gray-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
+                    <svg id="closeIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
                 </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden pb-4">
+                <div class="flex flex-col space-y-3 pt-2">
+                    <a href="/status/summary.html" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">About</a>
+                    <a href="/prod/news" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">News</a>
+                    <a href="/team-members/members" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">Members</a>
+                    <a href="/guidance-docs.html" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100 border-b">Guidance Docs</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -59,9 +71,9 @@
                 <a href="/status" class="bg-white text-blue-700 px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-50 transition transform hover:scale-105 shadow-lg">
                     Status
                 </a>
-                    <a href="/guidance-docs.html" class="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-green-700 transition transform hover:scale-105 shadow-lg border-2 border-white">
+                <!-- <a href="/guidance-docs.html" class="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-green-700 transition transform hover:scale-105 shadow-lg border-2 border-white">
                     Guide
-                </a>
+                </a> -->
                 <!-- <a href="/dev/activities/team.html" class="bg-white text-blue-700 px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-50 transition transform hover:scale-105 shadow-lg">
                     Activities
                 </a> -->
@@ -384,5 +396,41 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+        const closeIcon = document.getElementById('closeIcon');
+
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+            menuIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideMenu = mobileMenu.contains(event.target);
+            const isClickOnButton = mobileMenuButton.contains(event.target);
+            
+            if (!isClickInsideMenu && !isClickOnButton && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        });
+
+        // Close mobile menu when window is resized to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768 && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        });
+    </script>
+
 </body>
 </html>
