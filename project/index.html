@@ -35,6 +35,15 @@
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Search Bar -->
+    <div class="mb-8">
+        <input
+                type="text"
+                id="searchInput"
+                placeholder="Search resources..."
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+        />
+    </div>
         <!-- Quick Stats Banner -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div class="bg-white rounded-lg shadow p-4 border-l-4 border-blue-500">
@@ -56,26 +65,26 @@
         </div>
 
         <!-- Cards Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Card 1: Statistics -->
-            <a href="/status/previous.html"><div class="card bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-1">
-                <div class="h-2 bg-gradient-to-r from-blue-500 to-blue-600"></div>
+        <div id="cardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Card 1: News -->
+            <a href="/prod/news"><div class="card bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-1">
+                <div class="h-2 bg-gradient-to-r from-yellow-500 to-yellow-600"></div>
                 <div class="p-6">
                     <div class="flex items-start justify-between mb-4">
-                        <div class="p-3 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600">
+                        <div class="p-3 rounded-lg bg-gradient-to-r from-yellow-500 to-yellow-600">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="12" y1="20" x2="12" y2="10"></line>
-                                <line x1="18" y1="20" x2="18" y2="4"></line>
-                                <line x1="6" y1="20" x2="6" y2="16"></line>
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                             </svg>
                         </div>
                         <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                            21 Current Schools Installed
+                            News Info
                         </span>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">Statistics</h3>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">News</h3>
                     <p class="text-sm text-gray-600 leading-relaxed">
-                        View previous installed and trained school metrics across all areas
+                        Information, updates, important announcements and notifications
                     </p>
                     <div class="mt-4 pt-4 border-t border-gray-100">
                         <button class="text-sm font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
@@ -105,7 +114,7 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-900 mb-2">Project Management</h3>
                     <p class="text-sm text-gray-600 leading-relaxed">
-                        Track ongoing projects, milestones, and team assignments
+                        Track ongoing projects, milestones and team assignments
                     </p>
                     <div class="mt-4 pt-4 border-t border-gray-100">
                         <button class="text-sm font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
@@ -135,7 +144,7 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-900 mb-2">Documentation</h3>
                     <p class="text-sm text-gray-600 leading-relaxed">
-                        Access technical guides, training materials, and policy documents
+                        Access technical guides, training materials and policy documents
                     </p>
                     <div class="mt-4 pt-4 border-t border-gray-100">
                         <button class="text-sm font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
@@ -244,8 +253,39 @@
                 </div>
             </div></a>
 
-            <!-- Card 7: Meeting Schedule -->
-            <div class="card bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-1">
+            <!-- Card 7: Statistics -->
+            <a href="/status/previous.html"><div class="card bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-1">
+                <div class="h-2 bg-gradient-to-r from-blue-500 to-blue-600"></div>
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="p-3 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="20" x2="12" y2="10"></line>
+                                <line x1="18" y1="20" x2="18" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="16"></line>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                            21 Current Schools Installed
+                        </span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Statistics</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        View previous installed and trained school metrics across all areas
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <button class="text-sm font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
+                            Access Module
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div></a>
+
+            <!-- Card 8: Meeting Schedule -->
+            <a href="/prod/meetings"><div class="card bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-1">
                 <div class="h-2 bg-gradient-to-r from-indigo-500 to-indigo-600"></div>
                 <div class="p-6">
                     <div class="flex items-start justify-between mb-4">
@@ -274,9 +314,9 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div></a>
 
-            <!-- Card 8: Reports & Analytics -->
+            <!-- Card 9: Reports & Analytics -->
             <div class="card bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-1">
                 <div class="h-2 bg-gradient-to-r from-pink-500 to-pink-600"></div>
                 <div class="p-6">
@@ -294,36 +334,6 @@
                     <h3 class="text-lg font-bold text-gray-900 mb-2">Reports & Analytics</h3>
                     <p class="text-sm text-gray-600 leading-relaxed">
                         Custom reports and export data to members
-                    </p>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <button class="text-sm font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
-                            Access Module
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 9: Notifications -->
-            <div class="card bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-1">
-                <div class="h-2 bg-gradient-to-r from-yellow-500 to-yellow-600"></div>
-                <div class="p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="p-3 rounded-lg bg-gradient-to-r from-yellow-500 to-yellow-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                            </svg>
-                        </div>
-                        <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                            3 New Alerts
-                        </span>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">Notifications</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">
-                        Alerts, updates, and important announcements
                     </p>
                     <div class="mt-4 pt-4 border-t border-gray-100">
                         <button class="text-sm font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
@@ -462,6 +472,37 @@
                 // Add active state to clicked card
                 this.classList.add('ring-2', 'ring-blue-500');
             });
+        });
+    </script>
+
+    <!-- Search Functionality -->
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const cardsContainer = document.getElementById('cardsContainer');
+        const noResults = document.getElementById('noResults');
+        const allCards = cardsContainer.querySelectorAll('a');
+
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            let visibleCount = 0;
+
+            allCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (visibleCount === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
         });
     </script>
 </body>
