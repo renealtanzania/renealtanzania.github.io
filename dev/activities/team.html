@@ -1,110 +1,189 @@
+
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reneal Team Tz - Activities Dashboard</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+    <script src="/public/css/script/tailwindcss3417.js"></script>
 
-        <title>Team - Reneal International Education Outreach</title>
+</head>
+<body class="bg-slate-300 text-slate-800 font-sans antialiased selection:bg-blue-200">
 
-         <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
-
-        <!-- css -->
-        <link href="/public/css/lara.css" rel="stylesheet">
-        <link href="/public/css/custom.css" rel="stylesheet">
-
-
-    </head>
-    <body>
-
-   <div class="mt-8">    
-        <div class="ml-14 -mb-5 hidden md:block md:overflow-hidden">
-                <a href="/">
-                    <img src="/public/imgs/ren.jpg" width="80" height="80" alt="">
-                </a>
-            </div>
-        <ul class="flex justify-center gap-x-4 text-lg lg:flex lg:items-center lg:justify-center lg:gap-6 xl:gap-10 mb-8">
-                <li><a href="/">Home</a></li>
-                <li><a href="/status" target="_blank">Status</a></li>
-                
-                
-            </ul>
-    </div>
-
-<div class="relative">
-    <h1 class="max-w-3xl mx-auto text-5xl font-bold text-black text-center md:text-6xl lg:text-7xl"> Reneal <br class="hidden lg:inline"><span class="text-green-500">Team Tz</span></h1>
-    <p class="mt-6 max-w-xl mx-auto text-center text-gray-700 text-md leading-relaxed md:mt-8 md:text-lg lg:mt-10">Reneal Team Members - Activities Management Area. Through Google Docs you can Authorize which Files to Share and which Not. </p>
-    <div class="mb-5 mt-6 max-w-sm mx-auto flex flex-col justify-center items-center gap-4 sm:flex-row md:mt-8 lg:mt-10">
-                                
-
-        <a class="group relative inline-flex border border-red-600 focus:outline-none w-full sm:w-auto" href="/dev/activities/">
-            <span class="w-full inline-flex items-center justify-center self-stretch px-4 py-2 text-sm text-red-600 text-center font-bold uppercase bg-white ring-1 ring-red-600 ring-offset-1 transform transition-transform group-hover:-translate-y-1 group-hover:-translate-x-1 group-focus:-translate-y-1 group-focus:-translate-x-1">
-                Activities
-            </span>
-        </a>
-
-        <a class="group relative inline-flex border border-red-600 focus:outline-none w-full sm:w-auto" target="_blank" href="https://docs.google.com/spreadsheets/u/0/" rel="noreferrer noopener">
-            <span class="w-full inline-flex items-center justify-center self-stretch px-4 py-2 text-sm text-red-600 text-center font-bold uppercase bg-white ring-1 ring-red-600 ring-offset-1 transform transition-transform group-hover:-translate-y-1 group-hover:-translate-x-1 group-focus:-translate-y-1 group-focus:-translate-x-1">
-                Docs LogIn 
-            </span>
-        </a>
-
-        <a class="group relative inline-flex border border-red-500 focus:outline-none w-full sm:w-auto" href="/class/supervisions/works.html">
-            <span class="w-full inline-flex items-center justify-center self-stretch px-4 py-2 text-sm text-white text-center font-bold uppercase bg-red-500 ring-1 ring-red-500 ring-offset-1 ring-offset-red-500 transform transition-transform group-hover:-translate-y-1 group-hover:-translate-x-1 group-focus:-translate-y-1 group-focus:-translate-x-1">
-                Works
-            </span>
-        </a>
-
-
-</div></div>
-
-
-   <div class="flex justify-center gap-x-4 text-lg lg:flex lg:items-center lg:justify-center lg:gap-6 xl:gap-10 mb-2 tw-mt-10">
-       <h3 class="text-3xl">Meetings</h3>
-   </div>
-
-
-    <div class="container mb-5"><a href="/public/guidance-docs/notes/action-plan-052025.pdf">
-        <img src="/public/imgs/nhome/action-plan-hm.png" width="180" height="180" alt="">
-        <p>May 2025 - Action Plan</p></a>
-    </div>
-
-    <div class="container">
-
-    <p class="text-xl mt-8 font-semibold" id="trainings">
-                Team Meetings
-            </p>
-
-            <ul class="mt-2 pl-4 text-md list-decimal">       
-
-
-                <li class="mt-2">
-                    <a href="/public/guidance-docs/notes/2025/2025-09-08-Team-Meeting.pdf">
-                     Team Meeting - 08/09/2025
-                    </a>
-                </li>
-
-                <li class="mt-2">
-                    <a href="/public/guidance-docs/notes/2025/2025-09-11-Server-Info.pdf">
-                     Team Meeting - 11/09/2025
-                    </a>
-                </li>
-
-                <li class="mt-2">
-                    <a href="/public/guidance-docs/notes/2025/2025-09-13-Team-Meeting.pdf">
-                     Team Meeting - 13/09/2025
-                    </a>
-                </li>
-
-                <li class="mt-2 mb-5">
-                    <a href="/public/guidance-docs/notes/2025/2025-09-20-Team-Meeting.pdf">
-                     Team Meeting - 20/09/2025
-                    </a>
-                </li>
-
-
-                </ul>
-
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <!-- Logo Placeholder -->
+                     <a href="/">
+                    <img src="/public/imgs/ren.jpg" alt="Reneal Logo" class="h-10 w-15 object-cover shadow-sm"></a><a href="/">
+                    <span class="font-bold text-xl text-slate-900 tracking-tight">Reneal<span class="text-blue-600">Tanzania</span></span></a>
                 </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+                    <a href="/status" class="text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Status</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header / Hero -->
+    <div class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center lg:text-left">
+            <div class="lg:flex lg:items-center lg:justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-900 sm:text-4xl">Reneal Team Actions</h1>
+                    <p class="mt-2 max-w-2xl text-lg text-slate-600">
+                        Action Plan Area & Physical Meetings Hub.
+                    </p>
+                    <p class="mt-1 text-sm text-blue-500">
+                        Use Google Docs to authorize file sharing permissions.
+                    </p>
+                </div>
+                <div class="mt-8 lg:mt-0 flex flex-col sm:flex-row gap-3">
+                    <a href="https://docs.google.com/spreadsheets/u/0/" target="_blank" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Docs LogIn
+                    </a>
+                    <a href="/dev/activities/" class="inline-flex items-center justify-center px-5 py-3 border border-slate-300 text-base font-medium rounded-lg text-slate-700 bg-white hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+                        View Activities
+                    </a>
+                    <a href="/class/supervisions/works.html" class="inline-flex items-center justify-center px-5 py-3 border border-slate-300 text-base font-medium rounded-lg text-slate-700 bg-white hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+                        Works
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <!-- Section Label -->
+        <div class="flex items-center gap-2 mb-6">
+            <div class="h-8 w-1 bg-blue-600 rounded-full"></div>
+            <h2 class="text-2xl font-bold text-slate-800">Internal Meetings & Action Plans</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Featured Action Plan Card -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-slate-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                    <div class="bg-blue-50 p-4 border-b border-blue-100">
+                        <h3 class="text-lg font-semibold text-blue-800 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                            Featured Plan
+                        </h3>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col items-center text-center">
+                        <img src="/public/imgs/nhome/action-plan-hm.png" alt="Action Plan May 2025" class="w-full h-auto rounded-lg shadow-sm mb-4 object-cover transform transition hover:scale-105 duration-300">
+                        <h4 class="text-xl font-bold text-slate-800 mb-2">May 2025 - Action Plan</h4>
+                        <p class="text-slate-500 text-sm mb-6">Strategic overview and action items for the upcoming quarter.</p>
+                        <a href="/public/guidance-docs/notes/action-plan-052025.pdf" class="mt-auto w-full inline-flex items-center justify-center px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors text-sm font-medium">
+                            Download PDF
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meeting List -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-md border border-slate-100 overflow-hidden h-full">
+                    <div class="bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center">
+                        <h3 class="text-lg font-semibold text-slate-800">Recent Physical Team Meetings</h3>
+                        <span class="px-3 py-1 text-xs font-bold text-green-700 bg-green-100 rounded-full">Active</span>
+                    </div>
+                    <div class="divide-y divide-slate-100">
+                        
+                        <!-- Item 1 -->
+                        <a href="/public/guidance-docs/notes/2025/2025-09-20-Team-Meeting.pdf" class="block p-5 hover:bg-blue-50 transition duration-150 group">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <div class="bg-blue-100 text-blue-600 p-3 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-blue-600 mb-1">September 20, 2025</p>
+                                        <h4 class="text-base font-semibold text-slate-800 group-hover:text-blue-700">Upcoming Meeting, School Status</h4>
+                                    </div>
+                                </div>
+                                <svg class="w-5 h-5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </div>
+                        </a>
+
+                        <!-- Item 2 -->
+                        <a href="/public/guidance-docs/notes/2025/2025-09-13-Team-Meeting.pdf" class="block p-5 hover:bg-blue-50 transition duration-150 group">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <div class="bg-slate-100 text-slate-500 p-3 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-slate-500 mb-1">September 13, 2025</p>
+                                        <h4 class="text-base font-semibold text-slate-800 group-hover:text-blue-700">Feeback, Team Communication</h4>
+                                    </div>
+                                </div>
+                                <svg class="w-5 h-5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </div>
+                        </a>
+
+                        <!-- Item 3 -->
+                        <a href="/public/guidance-docs/notes/2025/2025-09-11-Server-Info.pdf" class="block p-5 hover:bg-blue-50 transition duration-150 group">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <div class="bg-slate-100 text-slate-500 p-3 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path></svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-slate-500 mb-1">September 11, 2025</p>
+                                        <h4 class="text-base font-semibold text-slate-800 group-hover:text-blue-700">Reneal Server Info</h4>
+                                    </div>
+                                </div>
+                                <svg class="w-5 h-5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </div>
+                        </a>
+
+                        <!-- Item 4 -->
+                        <a href="/public/guidance-docs/notes/2025/2025-09-08-Team-Meeting.pdf" class="block p-5 hover:bg-blue-50 transition duration-150 group">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <div class="bg-slate-100 text-slate-500 p-3 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-slate-500 mb-1">September 08, 2025</p>
+                                        <h4 class="text-base font-semibold text-slate-800 group-hover:text-blue-700">Trip Goals, Future of Reneal</h4>
+                                    </div>
+                                </div>
+                                <svg class="w-5 h-5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-12">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center gap-2 mb-4 md:mb-0">
+                    <span class="text-slate-500 text-sm">© 2025 Reneal Tanzania. All rights reserved.</span>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="/team-members/team.html" class="text-slate-400 hover:text-blue-600 transition-colors text-sm">Team Members</a>
+                    <a href="/prod/news" class="text-slate-400 hover:text-blue-600 transition-colors text-sm">News </a>
+                    <a href="/areas-covered.html" class="text-slate-400 hover:text-blue-600 transition-colors text-sm">Area Covered</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>
