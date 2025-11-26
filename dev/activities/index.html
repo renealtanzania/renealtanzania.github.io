@@ -8,15 +8,11 @@
     <title>Activities - Reneal Tanzania</title>
     
     <script src="/public/css/script/tailwindcss3417.js"></script>
-    <link href="/public/fonts/noto-sans.woff2">
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['"Noto Sans"', 'sans-serif'],
-                    },
                     colors: {
                         reneal: {
                             50: '#f0f9ff',
@@ -51,6 +47,7 @@
             <div class="flex justify-between h-16">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
+                <a class="mr-2" href="/"><img src="/public/imgs/ren.jpg" width="60" height="60" alt=""></a>
                     <a href="/" class="text-2xl font-bold text-blue-700 tracking-tight">
                         Reneal<span class="text-green-600">Tanzania</span>
                     </a>
@@ -59,7 +56,7 @@
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex md:items-center md:space-x-8">
                     <a href="/" class="text-slate-600 hover:text-reneal-600 font-medium transition">Home</a>
-                    <a href="/guidance-docs.html" class="text-slate-600 hover:text-reneal-600 font-medium transition">Guidance Docs</a>
+                    <a href="/team-members/team.html" class="text-slate-600 hover:text-reneal-600 font-medium transition">Team Dashboard</a>
                     <a href="/areas-covered.html" class="text-slate-600 hover:text-reneal-600 font-medium transition">Area Covered</a>
                     <a href="/status/previous.html" class="text-slate-600 hover:text-reneal-600 font-medium transition">Status</a>
                 </div>
@@ -94,7 +91,7 @@
             <p class="text-reneal-100 text-lg">Central hub for operational tasks, logs, and checklists.</p>
             <div class="mt-4 flex items-center text-sm text-reneal-200 bg-reneal-800 w-fit px-3 py-1 rounded-full">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                Last updated: 25/11/2025 - 11:00 EAT
+                Last updated: 25/11/2025 - 13:00 EAT
             </div>
         </div>
     </header>
@@ -115,11 +112,11 @@
                     <svg class="w-5 h-5 text-slate-300 group-hover:text-reneal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </div>
                 <h3 class="text-xl font-bold text-slate-800 group-hover:text-reneal-600 transition">Actions and Meetings</h3>
-                <p class="text-slate-500 mt-2 text-sm">Manage office actions and meetings.</p>
+                <p class="text-slate-500 mt-2 text-sm">Manage office actions and physical meetings.</p>
             </a>
 
             <!-- Installations -->
-            <a href="/dev/installations/index.html" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition duration-300">
+            <a href="/docs/2025-docs.html" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition duration-300">
                 <div class="flex items-center justify-between mb-4">
                     <div class="p-3 bg-green-50 rounded-lg group-hover:bg-green-100 transition">
                         <!-- Icon: Server/Install -->
@@ -128,7 +125,7 @@
                     <svg class="w-5 h-5 text-slate-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </div>
                 <h3 class="text-xl font-bold text-slate-800 group-hover:text-green-700 transition">Installations</h3>
-                <p class="text-slate-500 mt-2 text-sm">Logs and guides for server and client deployments.</p>
+                <p class="text-slate-500 mt-2 text-sm">Donation letters and guides for server client deployments.</p>
             </a>
 
             <!-- Trainings -->
@@ -158,7 +155,7 @@
             </a>
 
             <!-- Current Tasks -->
-            <a href="/dev/current-tasks/index.html" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition duration-300">
+            <a href="/docs/index.html" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition duration-300">
                 <div class="flex items-center justify-between mb-4">
                     <div class="p-3 bg-red-50 rounded-lg group-hover:bg-red-100 transition">
                         <!-- Icon: Lightning/Urgent -->
@@ -166,8 +163,8 @@
                     </div>
                     <svg class="w-5 h-5 text-slate-300 group-hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </div>
-                <h3 class="text-xl font-bold text-slate-800 group-hover:text-red-700 transition">Current Tasks</h3>
-                <p class="text-slate-500 mt-2 text-sm">Active jobs, immediate priorities, and ongoing work.</p>
+                <h3 class="text-xl font-bold text-slate-800 group-hover:text-red-700 transition">Noted Works</h3>
+                <p class="text-slate-500 mt-2 text-sm">Jobs done, recent works and references.</p>
             </a>
 
             <!-- Checklists -->
