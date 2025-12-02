@@ -18,8 +18,8 @@
                     <div class="text-2xl font-bold text-blue-700">
                         <div class="flex items-center">
                             <a href="/">
-                            <img src="/public/imgs/ren.jpg" width="60" height="60" alt="">
-                        </a>
+                                <img src="/public/imgs/ren.jpg" width="60" height="60" alt="">
+                            </a>
                         <span class="text-green-600 ml-2">Reneal</span> Tanzania
                         </div>
                     </div>
@@ -28,13 +28,18 @@
                    <a href="/public/guidance-docs/Computerization-Strategy-for-Government-Secondary-Schools-combined.pdf" class="text-gray-700 hover:text-blue-700 font-medium transition">Introduction</a>
                    <a href="/status/summary.html" class="text-gray-700 hover:text-blue-700 font-medium transition">About</a>
                    <a href="/prod/news" class="text-gray-700 hover:text-blue-700 font-medium transition">News</a>
-                   <a href="/team-members/team.html" class="text-gray-700 hover:text-blue-700 font-medium transition">Members</a>
+                   <button id="mobileMenuBtn" class="md:hidden flex items-center">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                   </button>
+                   <!-- <a href="/" class="text-gray-700 hover:text-blue-700 font-medium transition">Memb</a> -->
 
                 </div>
-                <a href="/project">
+                <!-- <a href="/">
                 <button class="bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition hidden md:block">
                     Project
-                </button></a>
+                </button></a> -->
                 <button id="mobileMenuButton" class="md:hidden text-gray-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -49,7 +54,7 @@
                 <div class="flex flex-col space-y-3 pt-2">
                     <a href="/status/summary.html" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">About</a>
                     <a href="/prod/news" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">News</a>
-                    <a href="/team-members/members" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">Members</a>
+                    <!-- <a href="/" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">Memb</a> -->
                     <a href="/guidance-docs.html" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100 border-b">Guidance Docs</a>
                 </div>
             </div>
@@ -73,10 +78,10 @@
                 <a href="/status" class="bg-white text-blue-700 px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-50 transition transform hover:scale-105 shadow-lg">
                     Status
                 </a>
-                <!-- <a href="/guidance-docs.html" class="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-green-700 transition transform hover:scale-105 shadow-lg border-2 border-white">
-                    Guide
-                </a> -->
-                <!-- <a href="/dev/activities/team.html" class="bg-white text-blue-700 px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-50 transition transform hover:scale-105 shadow-lg">
+                <a href="/login.html" class="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-green-700 transition transform hover:scale-105 shadow-lg border-2 border-white">
+                    LogIn
+                </a>
+                <!-- <a href="/" class="bg-white text-blue-700 px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-50 transition transform hover:scale-105 shadow-lg">
                     Activities
                 </a> -->
             </div>
@@ -771,6 +776,57 @@
                 closeIcon.classList.add('hidden');
             }
         });
+    </script>
+
+    <!-- Load Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/path.js"></script>
+    <script src="js/provider.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/gate.js"></script>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Update auth links based on authentication status
+        function updateAuthLinks() {
+            const authLinks = document.getElementById('authLinks');
+            const authLinksMobile = document.getElementById('authLinksMobile');
+            
+            if (Auth.check()) {
+                const user = Auth.user();
+                const links = `
+                    <a href="dashboard.html" class="text-gray-600 hover:text-gray-900">Dashboard</a>
+                    <span class="text-gray-600">Hi, ${user.name}</span>
+                    <button onclick="handleLogout()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+                        Logout
+                    </button>
+                `;
+                authLinks.innerHTML = links;
+                authLinksMobile.innerHTML = links.replace('inline-flex', 'block');
+            } else {
+                const links = `
+                    <a href="login.html" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+                        Login
+                    </a>
+                `;
+                authLinks.innerHTML = links;
+                authLinksMobile.innerHTML = links;
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
+
+        updateAuthLinks();
     </script>
 
 </body>

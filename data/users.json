@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Rene B",
+    "email": "rene@gmail.com",
+    "status": "Active",
+    "password": "11223344",
+    "position": "founder",
+    "role": "admin"
+  },
+  {
+    "name": "David Nyangaka",
+    "email": "david@gmail.com",
+    "status": "Active",
+    "password": "11223344",
+    "position": "director",
+    "role": "admin"
+  },
+  {
+    "name": "Justin Msechu",
+    "email": "justin@gmail.com",
+    "status": "Active",
+    "password": "11223344",
+    "position": "technician",
+    "role": "team-member"
+  },
+  {
+    "name": "James Ngahemelwa",
+    "email": "james@gmail.com",
+    "status": "Active",
+    "password": "11223344",
+    "position": "technician",
+    "role": "team-member"
+  },
+  {
+    "name": "Erick M",
+    "email": "erick@gmail.com",
+    "status": "Active",
+    "password": "12345678",
+    "position": "website developer",
+    "role": "super-admin"
+  },
+  {
+    "name": "Juma Ramadhani",
+    "email": "juma@gmail.com",
+    "status": "Active",
+    "password": "11223344",
+    "position": "technician",
+    "role": "team-member"
+  },
+  {
+    "name": "Aboubakar Frenk",
+    "email": "abou@gmail.com",
+    "status": "Active",
+    "password": "11223344",
+    "position": "technician",
+    "role": "team-member"
+  },
+  {
+    "name": "Ashura Yusuph",
+    "email": "ashura@gmail.com",
+    "status": "Active",
+    "password": "11223344",
+    "position": "media",
+    "role": "team-member"
+  },
+    {
+    "name": "Janeth Mbaga",
+    "email": "janeth@gmail.com",
+    "status": "Active",
+    "password": "11223344",
+    "position": "technician",
+    "role": "team-member"
+  },
+  {
+    "name": "Daniel Nkoo",
+    "email": "daniel@gmail.com",
+    "status": "Active",
+    "password": "11223344",
+    "position": "technician",
+    "role": "team-member"
+  }
+]

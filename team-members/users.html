@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users - Reneal Tanzania</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+    <script src="/public/css/script/tailwindcss3417.js"></script>
+    <!-- CRITICAL: middleware.js MUST be first -->
+    <script src="js/middleware.js"></script>
+    
+    <!-- Debug: Check if middleware loaded -->
+    <script>
+        console.log('📍 Page: users/index.html');
+        console.log('🔒 Middleware loaded:', typeof window.Middleware !== 'undefined');
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="text-2xl font-bold text-indigo-600">Reneal Tanzania</a>
+                    <div class="hidden md:flex space-x-6">
+                        <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
+                        <a href="../dashboard.html" class="text-gray-600 hover:text-gray-900">Dashboard</a>
+                        <a href="index.html" class="text-indigo-600 font-medium">Users</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="userInfo" class="text-sm text-gray-600"></span>
+                    <button onclick="handleLogout()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">User Management</h1>
+                <p class="text-gray-600 mt-2">Manage system users and their roles</p>
+            </div>
+            <button data-can="manage-users" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 font-semibold">
+                + Add User
+            </button>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-gray-600 text-sm mb-2">Total Users</h3>
+                <p class="text-3xl font-bold text-gray-900" id="totalUsers">0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-gray-600 text-sm mb-2">Admins</h3>
+                <p class="text-3xl font-bold text-purple-600" id="totalAdmins">0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-gray-600 text-sm mb-2">Team Members</h3>
+                <p class="text-3xl font-bold text-blue-600" id="totalTeam">0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-gray-600 text-sm mb-2">Active</h3>
+                <p class="text-3xl font-bold text-green-600" id="totalActive">0</p>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Name</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Email</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Position</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Role</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900" data-can="manage-users">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody" class="divide-y divide-gray-200">
+                        <!-- Users will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Load Scripts - middleware.js MUST be first -->
+    <script src="../js/middleware.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/path.js"></script>
+    <script src="../js/provider.js"></script>
+    <script src="../js/routes.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/gate.js"></script>
+    <script src="../js/guard.js"></script>
+
+    <script>
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
+
+        // Display user info
+        const user = Auth.user();
+        if (user) {
+            document.getElementById('userInfo').textContent = `${user.name} (${user.role})`;
+        }
+
+        // Load and display users
+        async function loadUsers() {
+            const users = await Provider.getAllUsers();
+            const tbody = document.getElementById('usersTableBody');
+            
+            // Update stats
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalAdmins').textContent = users.filter(u => u.role === 'admin' || u.role === 'super-admin').length;
+            document.getElementById('totalTeam').textContent = users.filter(u => u.role === 'team-member').length;
+            document.getElementById('totalActive').textContent = users.filter(u => u.status === 'Active').length;
+
+            const roleColors = {
+                'admin': 'bg-purple-100 text-purple-800',
+                'super-admin': 'bg-red-100 text-red-800',
+                'team-member': 'bg-blue-100 text-blue-800'
+            };
+
+            const canManage = await Gate.can('manage-users');
+
+            const usersHTML = users.map(member => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-full flex items-center justify-center text-white font-semibold mr-3">
+                                ${member.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                            </div>
+                            <span class="font-medium text-gray-900">${member.name}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">${member.email}</td>
+                    <td class="px-6 py-4 text-gray-600">${member.position}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold ${roleColors[member.role]}">
+                            ${member.role}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center px-2 py-1 rounded text-xs ${member.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">
+                            <span class="w-2 h-2 rounded-full ${member.status === 'Active' ? 'bg-green-500' : 'bg-gray-500'} mr-2"></span>
+                            ${member.status}
+                        </span>
+                    </td>
+                    ${canManage ? `
+                    <td class="px-6 py-4">
+                        <button class="text-indigo-600 hover:text-indigo-700 mr-3">Edit</button>
+                        <button class="text-red-600 hover:text-red-700">Delete</button>
+                    </td>
+                    ` : ''}
+                </tr>
+            `).join('');
+
+            tbody.innerHTML = usersHTML;
+        }
+
+        loadUsers();
+    </script>
+</body>
+</html>

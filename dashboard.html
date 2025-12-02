@@ -1,0 +1,539 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Reneal Tanzania </title>
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+    <script src="/public/css/script/tailwindcss3417.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#7c3aed',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-300">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-8">
+                    <span class="text-2xl font-bold text-indigo-600">Reneal Tanzania</span>
+                    <div class="hidden md:flex space-x-6">
+                        <a href="index.html" class="text-gray-600 hover:text-gray-900">Home</a>
+                        <a href="dashboard.html" class="text-indigo-600 font-medium">Dashboard</a>
+                        <a href="contacts.html" class="text-gray-600 hover:text-gray-900">Contacts</a>
+                        <!-- <a href="team-members/team.html" data-can="view-team" class="text-gray-600 hover:text-gray-900">Team</a> -->
+                        <!-- <a href="users/index.html" data-can="view-users" class="text-gray-600 hover:text-gray-900">Users</a> -->
+                        <!-- <a href="project/index.html" data-can="view-projects" class="text-gray-600 hover:text-gray-900">Projects</a> -->
+                        <a href="/dev/settings.html" data-can="view-settings" class="text-gray-600 hover:text-gray-900">Settings</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="userInfo" class="text-sm text-gray-600"></span>
+                    <button onclick="handleLogout()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow p-6 border-l-4 border-primary">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Deployed This Year</p>
+                        <p class="text-3xl font-bold text-gray-900 mt-2">21</p>
+                        <p class="text-xs text-green-600 mt-1">↑ 4 Last month</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Team Members</p>
+                        <p class="text-3xl font-bold text-gray-900 mt-2">8</p>
+                        <p class="text-xs text-green-600 mt-1">↑ plus two </p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">More Than</p>
+                        <p class="text-3xl font-bold text-gray-900 mt-2">2490</p>
+                        <p class="text-xs text-gray-500 mt-1">Laptops</p>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-500">
+                <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Districts</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-2">23</p>
+                            <span class="text-sm text-gray-600">As Of: <span id="lastUpdate"></span></span>
+
+                        </div>
+                        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                    <div class="">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            
+            <!-- Recent Status -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h2 class="text-lg font-semibold text-gray-900">Recent Installations Overview</h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                    <div>
+                                        <p class="font-medium text-gray-900">Mbeya Region (5 schools)</p>
+                                        <p class="text-sm text-gray-600">Installations + Trainings</p>
+                                    </div>
+                                </div>
+                                <span class="text-sm font-medium text-green-700">100% Done</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                    <div>
+                                        <p class="font-medium text-gray-900">Tanga Region (4 schools)</p>
+                                        <p class="text-sm text-gray-600">Installations + Trainings</p>
+                                    </div>
+                                </div>
+                                <span class="text-sm font-medium text-green-700">99.8% Done</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                    <div>
+                                        <p class="font-medium text-gray-900">Arusha Region (1 school)</p>
+                                        <p class="text-sm text-gray-600">Installation + Training</p>
+                                    </div>
+                                </div>
+                                <span class="text-sm font-medium text-green-700">99.8% Done</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                    <div>
+                                        <p class="font-medium text-gray-900">Manyara Region (1 school)</p>
+                                        <p class="text-sm text-gray-600">Installation + Training</p>
+                                    </div>
+                                </div>
+                                <span class="text-sm font-medium text-green-700">98.5% Done</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h2 class="text-lg font-semibold text-gray-900">Directory Actions</h2>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <a href="/project" data-can="view-projects" class="w-full px-4 py-3 bg-primary text-white rounded-lg hover:bg-blue-700 transition text-left flex items-center space-x-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            <span>Project</span>
+                        </a>
+
+                        <a href="/team-members/team.html" data-can="view-team" class="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-left flex items-center space-x-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>  
+                            <span>Team Members</span>
+                        </a>
+
+                        <a href="/prod/meetings" class="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition text-left flex items-center space-x-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <span>Meetings</span>
+                        </a>
+
+                        <a href="/team-members/users.html" class="w-full px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition text-left flex items-center space-x-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            <span>Users</span>
+                            
+                        </a>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+
+        <!-- Recent Activity & Top Schools -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Recent Activity -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-900">Recent Activity</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                            <div class="flex-1">
+                                <p class="text-sm text-gray-900">2025A Phase Completion</p>
+                                <p class="text-xs text-gray-500">Chief Mangenya Secondary School - 28/10/2025</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                            <div class="flex-1">
+                                <p class="text-sm text-gray-900">Team Meeting</p>
+                                <p class="text-xs text-gray-500">All Members Meet - 30/09/2025</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3">
+                            <div class="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                            <div class="flex-1">
+                                <p class="text-sm text-gray-900">New educational content added</p>
+                                <p class="text-xs text-gray-500">Khan Academy Math modules - 1 day ago</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3">
+                            <div class="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
+                            <div class="flex-1">
+                                <p class="text-sm text-gray-900">Maintenance scheduled</p>
+                                <p class="text-xs text-gray-500">Dar es Salaam schools - Tomorrow 2:00 AM</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3">
+                            <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                            <div class="flex-1">
+                                <p class="text-sm text-gray-900">Bandwidth optimization successful</p>
+                                <p class="text-xs text-gray-500">Cache hit rate improved to 58% - 2 days ago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Performing Schools -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-900">Top Performing Schools (Last Year)</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
+                            <div>
+                                <p class="font-medium text-gray-900">🥇 Arusha Secondary School</p>
+                                <p class="text-sm text-gray-600">18,450 learning hours</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-semibold text-green-600">+24%</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border-l-4 border-gray-400">
+                            <div>
+                                <p class="font-medium text-gray-900">🥈 Mwanza Tech Academy</p>
+                                <p class="text-sm text-gray-600">15,230 learning hours</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-semibold text-green-600">+18%</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 bg-orange-50 rounded-lg border-l-4 border-orange-400">
+                            <div>
+                                <p class="font-medium text-gray-900">🥉 Dodoma Secondary School</p>
+                                <p class="text-sm text-gray-600">12,890 learning hours</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-semibold text-green-600">+15%</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div>
+                                <p class="font-medium text-gray-900">4. Kilimanjaro Primary School</p>
+                                <p class="text-sm text-gray-600">10,560 learning hours</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-semibold text-green-600">+12%</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div>
+                                <p class="font-medium text-gray-900">5. Kondoa Secondary Academy </p>
+                                <p class="text-sm text-gray-600">9,840 learning hours</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-semibold text-green-600">+9%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phases & Time Statistics -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+            
+            <!-- Phases Status -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-900">Previous Phases Status</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">2024B</span>
+                                <span class="text-sm text-gray-600">10 / 10 </span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">2025A</span>
+                                <span class="text-sm text-gray-600">11/11</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">Year Status</span>
+                                <span class="text-sm text-gray-600">82%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 82%"></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                            <p class="text-sm font-medium text-blue-900">💡 Bandwidth Savings</p>
+                            <p class="text-2xl font-bold text-blue-700 mt-1">Over 420 Laptops</p>
+                            <p class="text-xs text-blue-600 mt-1">Plus Other Equipments Installations</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Alerts -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-900">Important Alerts</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-3">
+                        <div class="p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded">
+                            <div class="flex items-start">
+                                <svg class="w-5 h-5 text-yellow-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-yellow-800">Server maintenance actions</p>
+                                    <p class="text-xs text-yellow-700 mt-1">Dar es Salaam - Server 3 needs disk cleanup</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-green-50 border-l-4 border-green-400 rounded">
+                            <div class="flex items-start">
+                                <svg class="w-5 h-5 text-green-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-green-800">All backups completed</p>
+                                    <p class="text-xs text-green-700 mt-1">24/24 schools backed up successfully</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
+                            <div class="flex items-start">
+                                <svg class="w-5 h-5 text-blue-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-blue-800">New content available</p>
+                                    <p class="text-xs text-blue-700 mt-1">Updated Physics simulations ready for deployment</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-gray-50 border-l-4 border-gray-300 rounded">
+                            <div class="flex items-start">
+                                <svg class="w-5 h-5 text-gray-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-800">Scheduled report generation</p>
+                                    <p class="text-xs text-gray-700 mt-1">Monthly donor report due in 3 days</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-sm text-gray-600">© 2025 Reneal Tanzania </p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-sm text-gray-600 hover:text-primary">Documentation</a>
+                    <a href="#" class="text-sm text-gray-600 hover:text-primary">Support</a>
+                    <a href="#" class="text-sm text-gray-600 hover:text-primary">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/path.js"></script>
+    <script src="js/provider.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/gate.js"></script>
+    <script src="js/guard.js"></script>
+
+    <script>
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
+
+        // Display user info
+        function displayUserInfo() {
+            const user = Auth.user();
+            if (user) {
+                document.getElementById('userInfo').textContent = `${user.name} (${user.role})`;
+                
+                const profileInfo = document.getElementById('profileInfo');
+                profileInfo.innerHTML = `
+                    <div class="flex items-center justify-between py-2 border-b">
+                        <span class="text-gray-600">Name:</span>
+                        <span class="font-semibold text-gray-900">${user.name}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b">
+                        <span class="text-gray-600">Email:</span>
+                        <span class="font-semibold text-gray-900">${user.email}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b">
+                        <span class="text-gray-600">Position:</span>
+                        <span class="font-semibold text-gray-900">${user.position}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-gray-600">Role:</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-semibold">${user.role}</span>
+                    </div>
+                `;
+            }
+        }
+
+        // Update session timer
+        function updateSessionTimer() {
+            const remaining = Auth.getSessionTimeRemaining();
+            const minutes = Math.floor(remaining / 60);
+            const seconds = remaining % 60;
+            document.getElementById('sessionTimer').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        displayUserInfo();
+        updateSessionTimer();
+        setInterval(updateSessionTimer, 1000);
+    </script>
+
+    <script>
+        // Update timestamp
+        function updateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit'
+            };
+            document.getElementById('lastUpdate').textContent = now.toLocaleDateString('en-US', options);
+        }
+        updateTime();
+        setInterval(updateTime, 60000);
+    </script>
+</body>
+</html>
+                                

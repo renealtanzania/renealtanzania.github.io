@@ -1,0 +1,81 @@
+[
+  {
+    "page name": "Home",
+    "url": "index.html"
+  },
+  {
+    "page name": "Dashboard",
+    "url": "dashboard.html",
+    "type": "protected"
+  },
+  {
+    "page name": "Settings",
+    "url": "settings.html",
+    "viewer": "admin, super-admin",
+    "type": "protected"
+  },
+  {
+    "page name": "Contacts",
+    "url": "contacts.html"
+  },
+  {
+    "page name": "Team Members",
+    "url": "team-members/team.html",
+    "viewer": "admin, super-admin, team-member",
+    "type": "protected"
+  },
+    {
+    "page name": "Project",
+    "url": "project/index.html",
+    "viewer": "admin, super-admin",
+    "type": "protected"
+  },
+  {
+    "page name": "Users",
+    "url": "users/index.html",
+    "viewer": "admin, super-admin, team-member",
+    "type": "protected"
+  },
+  {
+    "page name": "Guidance Docs",
+    "url": "/guidance-docs.html",
+    "viewer": "admin, super-admin, team-member",
+    "type": "protected"
+  },
+  {
+    "page name": "Auth Structure",
+    "url": "auth/index.html",
+    "viewer": "super-admin",
+    "type": "protected"
+  },
+   {
+    "page name": "Code Category",
+    "url": "/prod/news/category/code",
+    "viewer": "admin, super-admin",
+    "type": "protected"
+  },
+
+  {
+    "page name": "Delivery Note",
+    "url": "/docs/delivery/index.html",
+    "viewer": "admin, super-admin, team-member",
+    "type": "protected"
+  }, 
+
+  {
+    "page name": "Meetings Page",
+    "url": "/prod/meetings/index.html",
+    "viewer": "admin, super-admin, team-member",
+    "type": "protected"
+  },
+
+  {
+    "page name": "Meetings Page",
+    "url": "/team-members/index.html",
+    "viewer": "admin, super-admin, team-member",
+    "type": "protected"
+  }
+  
+
+  
+]
