@@ -28,12 +28,7 @@
                    <a href="/public/guidance-docs/Computerization-Strategy-for-Government-Secondary-Schools-combined.pdf" class="text-gray-700 hover:text-blue-700 font-medium transition">Introduction</a>
                    <a href="/status/summary.html" class="text-gray-700 hover:text-blue-700 font-medium transition">About</a>
                    <a href="/prod/news" class="text-gray-700 hover:text-blue-700 font-medium transition">News</a>
-                   <button id="mobileMenuBtn" class="md:hidden flex items-center">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                   </button>
-                   <!-- <a href="/" class="text-gray-700 hover:text-blue-700 font-medium transition">Memb</a> -->
+                   <!-- <a href="/" class="text-gray-700 hover:text-blue-700 font-medium transition">Me</a> -->
 
                 </div>
                 <!-- <a href="/">
@@ -776,57 +771,6 @@
                 closeIcon.classList.add('hidden');
             }
         });
-    </script>
-
-    <!-- Load Scripts -->
-    <script src="js/config.js"></script>
-    <script src="js/path.js"></script>
-    <script src="js/provider.js"></script>
-    <script src="js/routes.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/gate.js"></script>
-
-    <script>
-        // Mobile menu toggle
-        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
-        });
-
-        // Update auth links based on authentication status
-        function updateAuthLinks() {
-            const authLinks = document.getElementById('authLinks');
-            const authLinksMobile = document.getElementById('authLinksMobile');
-            
-            if (Auth.check()) {
-                const user = Auth.user();
-                const links = `
-                    <a href="dashboard.html" class="text-gray-600 hover:text-gray-900">Dashboard</a>
-                    <span class="text-gray-600">Hi, ${user.name}</span>
-                    <button onclick="handleLogout()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
-                        Logout
-                    </button>
-                `;
-                authLinks.innerHTML = links;
-                authLinksMobile.innerHTML = links.replace('inline-flex', 'block');
-            } else {
-                const links = `
-                    <a href="login.html" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
-                        Login
-                    </a>
-                `;
-                authLinks.innerHTML = links;
-                authLinksMobile.innerHTML = links;
-            }
-        }
-
-        function handleLogout() {
-            if (confirm('Are you sure you want to logout?')) {
-                Auth.logout();
-            }
-        }
-
-        updateAuthLinks();
     </script>
 
 </body>
