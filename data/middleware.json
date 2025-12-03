@@ -24,6 +24,12 @@
     "viewer": "admin, super-admin, team-member",
     "type": "protected"
   },
+  {
+    "page name": "Team Members",
+    "url": "team-members/index.html",
+    "viewer": "admin, super-admin, team-member",
+    "type": "protected"
+  },
     {
     "page name": "Project",
     "url": "project/index.html",
