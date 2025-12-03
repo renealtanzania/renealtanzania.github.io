@@ -19,13 +19,13 @@
     "url": "contacts.html"
   },
   {
-    "page name": "Team Members",
+    "page name": "Team Members Team",
     "url": "team-members/team.html",
     "viewer": "admin, super-admin, team-member",
     "type": "protected"
   },
   {
-    "page name": "Team Members",
+    "page name": "Team Members Index",
     "url": "team-members/index.html",
     "viewer": "admin, super-admin, team-member",
     "type": "protected"
@@ -76,8 +76,8 @@
   },
 
   {
-    "page name": "Meetings Page",
-    "url": "/team-members/index.html",
+    "page name": "Previous Docs",
+    "url": "/docs/index.html",
     "viewer": "admin, super-admin, team-member",
     "type": "protected"
   },
@@ -92,6 +92,13 @@
   {
     "page name": "Dev Activities",
     "url": "/dev/activities/index.html",
+    "viewer": "admin, super-admin, team-member",
+    "type": "protected"
+  },
+
+  {
+    "page name": "Previous Status",
+    "url": "/status/previous.html",
     "viewer": "admin, super-admin, team-member",
     "type": "protected"
   }
