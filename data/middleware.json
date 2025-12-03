@@ -81,6 +81,13 @@
     "url": "/guidance-docs.html",
     "viewer": "admin, super-admin, team-member",
     "type": "protected"
+  },
+
+  {
+    "page name": "Dev Activities",
+    "url": "/dev/activities/index.html",
+    "viewer": "admin, super-admin, team-member",
+    "type": "protected"
   }
   
 
