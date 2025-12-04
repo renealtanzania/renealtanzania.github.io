@@ -10,7 +10,7 @@
   },
   {
     "page name": "Settings",
-    "url": "settings.html",
+    "url": "/dev/settings.html",
     "viewer": "admin, super-admin",
     "type": "protected"
   },

@@ -58,7 +58,8 @@ const Middleware = {
       const routes = await this.loadMiddlewareConfig();
       const currentRoute = this.findCurrentRoute(routes);
       
-      // If route not found in middleware, it's public by default
+      // If route not found in middleware, it's a public route by default
+      // (URLs not in config are assumed to be valid public pages in the project)
       if (!currentRoute) {
         console.log('[Middleware] Route not in config - allowing access (public)');
         return true;
@@ -69,8 +70,8 @@ const Middleware = {
         // Check authentication FIRST
         if (!this.isAuthenticated()) {
           console.log('[Middleware] BLOCKED - Not authenticated');
-          this.redirectToLogin(); // Redirect to LOGIN, not unauthorized
-          return true;
+          this.redirectToLogin();
+          return true; // Return true to skip blockPage() and redirect directly
         }
 
         // ONLY check role-based access if user IS authenticated
@@ -78,8 +79,8 @@ const Middleware = {
           const hasAccess = await this.checkRoleAccess(currentRoute.viewer);
           if (!hasAccess) {
             console.log('[Middleware] BLOCKED - Insufficient permissions (wrong role)');
-            this.redirectToUnauthorized(); // Only NOW redirect to unauthorized
-            return false;
+            this.redirectToUnauthorized();
+            return true; // Return true to skip blockPage() and redirect directly
           }
         }
 
@@ -200,7 +201,7 @@ const Middleware = {
       <head>
         <meta charset="UTF-8">
         <title>Access Denied</title>
-        <script src="../script/tailwindcss3417.js"></script>
+        <script src="/public/css/script/tailwindcss3417.js"></script>
       </head>
       <body class="bg-gray-100 flex items-center justify-center min-h-screen">
         <div class="text-center">
@@ -210,7 +211,7 @@ const Middleware = {
             </svg>
           </div>
           <h1 class="text-4xl font-bold text-gray-900 mb-4">Access Denied</h1>
-          <p class="text-gray-600 mb-6">Checking your permissions...</p>
+          <p class="text-gray-600 mb-6">Unable to verify access. Redirecting...</p>
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
         </div>
       </body>
