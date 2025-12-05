@@ -38,7 +38,7 @@
   },
   {
     "page name": "Users",
-    "url": "users/index.html",
+    "url": "team-members/users.html",
     "viewer": "admin, super-admin, team-member",
     "type": "protected"
   },
@@ -100,6 +100,20 @@
     "page name": "Previous Status",
     "url": "/status/previous.html",
     "viewer": "admin, super-admin, team-member",
+    "type": "protected"
+  },
+
+  {
+    "page name": "Include Projects",
+    "url": "/include/projects/index.html",
+    "viewer": "admin, super-admin",
+    "type": "protected"
+  },
+
+  {
+    "page name": "Projects Drive",
+    "url": "/include/projects/drive/index.html",
+    "viewer": "admin, super-admin",
     "type": "protected"
   }
   
