@@ -7,6 +7,7 @@
     <title>Dashboard - Reneal Tanzania </title>
     <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
     <script src="/public/css/script/tailwindcss3417.js"></script>
+    <script src="/public/css/script/chart451.js"></script>
     <script src="/js/middleware.js"></script>
 
 
@@ -234,83 +235,134 @@
         </div>
 
         <!-- Recent Activity & Top Schools -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-8">
             
-            <!-- Recent Activity -->
-            <div class="bg-white rounded-lg shadow">
-                <div class="px-6 py-4 border-b border-gray-200">
-                    <h2 class="text-lg font-semibold text-gray-900">Notable Activities</h2>
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Form 4 Statistics (2019-2024)</h2>
+            
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-blue-50 rounded-lg p-4">
+                    <p class="text-sm text-gray-600">Average Pass Rate</p>
+                    <p class="text-3xl font-bold text-blue-600">78%</p>
                 </div>
-                <div class="p-6">
-                    <div class="space-y-4">
-
-                        <div class="flex items-start space-x-3">
-                            <div class="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
-                            <div class="flex-1">
-                                <p class="text-sm text-gray-900">November Monthly Report</p>
-                                <p class="text-xs text-gray-500">Submission of Report in 7 days</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start space-x-3">
-                            <div class="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
-                            <div class="flex-1">
-                                <p class="text-sm text-gray-900">Virtual Team Meeting</p>
-                                <p class="text-xs text-gray-500">Zoom Team Meeting Taking Place on 08/12/2025</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start space-x-3">
-                            <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                            <div class="flex-1">
-                                <p class="text-sm text-gray-900">Authentication System</p>
-                                <p class="text-xs text-gray-500">New authentication system that gives access to resourcefull materials inside the app.</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start space-x-3">
-                            <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                            <div class="flex-1">
-                                <p class="text-sm text-gray-900">Team Members System</p>
-                                <p class="text-xs text-gray-500">Members can control and use the resources of the system with ease.</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start space-x-3">
-                            <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                            <div class="flex-1">
-                                <p class="text-sm text-gray-900">2025A Phase Completion</p>
-                                <p class="text-xs text-gray-500">Chief Mangenya Secondary School - 28/10/2025</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start space-x-3">
-                            <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                            <div class="flex-1">
-                                <p class="text-sm text-gray-900">Team Meeting</p>
-                                <p class="text-xs text-gray-500">All Members Meet - 30/09/2025</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start space-x-3">
-                            <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                            <div class="flex-1">
-                                <p class="text-sm text-gray-900">Maintenance scheduled</p>
-                                <p class="text-xs text-gray-500">All schools facing issues - March - August</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start space-x-3">
-                            <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                            <div class="flex-1">
-                                <p class="text-sm text-gray-900">2025 School Visits</p>
-                                <p class="text-xs text-gray-500">Everyone visited their schools in 2025 </p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="bg-green-50 rounded-lg p-4">
+                    <p class="text-sm text-gray-600">Total Students (2024)</p>
+                    <p class="text-3xl font-bold text-green-600">212</p>
+                </div>
+                <div class="bg-purple-50 rounded-lg p-4">
+                    <p class="text-sm text-gray-600">Schools (2024)</p>
+                    <p class="text-3xl font-bold text-purple-600">17</p>
                 </div>
             </div>
 
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">Performance Trends</h3>
+                    <canvas id="form4PerformanceChart"></canvas>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">School Participation</h3>
+                    <canvas id="form4ParticipationChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form 2 Statistics -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Form 2 Statistics (2019-2024)</h2>
+            
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-orange-50 rounded-lg p-4">
+                    <p class="text-sm text-gray-600">Average Pass Rate</p>
+                    <p class="text-3xl font-bold text-orange-600">62%</p>
+                </div>
+                <div class="bg-teal-50 rounded-lg p-4">
+                    <p class="text-sm text-gray-600">Total Students (2024)</p>
+                    <p class="text-3xl font-bold text-teal-600">911</p>
+                </div>
+                <div class="bg-pink-50 rounded-lg p-4">
+                    <p class="text-sm text-gray-600">Schools (2024)</p>
+                    <p class="text-3xl font-bold text-pink-600">28</p>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">Performance Trends</h3>
+                    <canvas id="form2PerformanceChart"></canvas>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">School Participation</h3>
+                    <canvas id="form2ParticipationChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Year-over-Year Comparison</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Year</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Form 4 Pass %</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Form 4 Students</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Form 2 Pass %</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Form 2 Students</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-4 py-3 text-sm">2019</td>
+                            <td class="px-4 py-3 text-sm">62%</td>
+                            <td class="px-4 py-3 text-sm">21</td>
+                            <td class="px-4 py-3 text-sm">53%</td>
+                            <td class="px-4 py-3 text-sm">294</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="px-4 py-3 text-sm">2020</td>
+                            <td class="px-4 py-3 text-sm">62%</td>
+                            <td class="px-4 py-3 text-sm">21</td>
+                            <td class="px-4 py-3 text-sm">47%</td>
+                            <td class="px-4 py-3 text-sm">204</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 text-sm">2021</td>
+                            <td class="px-4 py-3 text-sm">100%</td>
+                            <td class="px-4 py-3 text-sm">40</td>
+                            <td class="px-4 py-3 text-sm">72%</td>
+                            <td class="px-4 py-3 text-sm">320</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="px-4 py-3 text-sm">2022</td>
+                            <td class="px-4 py-3 text-sm">87%</td>
+                            <td class="px-4 py-3 text-sm">55</td>
+                            <td class="px-4 py-3 text-sm">53%</td>
+                            <td class="px-4 py-3 text-sm">539</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 text-sm">2023</td>
+                            <td class="px-4 py-3 text-sm">88%</td>
+                            <td class="px-4 py-3 text-sm">210</td>
+                            <td class="px-4 py-3 text-sm">84%</td>
+                            <td class="px-4 py-3 text-sm">673</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="px-4 py-3 text-sm font-semibold">2024</td>
+                            <td class="px-4 py-3 text-sm font-semibold">90%</td>
+                            <td class="px-4 py-3 text-sm font-semibold">212</td>
+                            <td class="px-4 py-3 text-sm font-semibold">78%</td>
+                            <td class="px-4 py-3 text-sm font-semibold">911</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
             <!-- Top Performing Schools -->
             <div class="bg-white rounded-lg shadow">
                 <div class="px-6 py-4 border-b border-gray-200">
@@ -496,13 +548,8 @@
         </div>
     </footer>
 
-    <script src="js/config.js"></script>
-    <script src="js/path.js"></script>
-    <script src="js/provider.js"></script>
-    <script src="js/routes.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/gate.js"></script>
-    <script src="js/guard.js"></script>
+ <script src="js/bundle.js"></script>
+
 
     <script>
         function handleLogout() {
@@ -568,6 +615,190 @@
         }
         updateTime();
         setInterval(updateTime, 60000);
+    </script>
+
+    <script>
+        // Form 4 Data
+        const form4Years = ['2019', '2020', '2021', '2022', '2023', '2024'];
+        const form4PassRates = [62, 62, 100, 87, 88, 90];
+        const form4Students = [21, 21, 40, 55, 210, 212];
+        const form4Schools = [2, 2, 3, 4, 13, 17];
+
+        // Form 2 Data
+        const form2Years = ['2019', '2020', '2021', '2022', '2023', '2024'];
+        const form2PassRates = [53, 47, 72, 53, 84, 78];
+        const form2Students = [294, 204, 320, 539, 673, 911];
+        const form2Schools = [10, 10, 13, 17, 23, 28];
+
+        // Form 4 Performance Chart
+        const form4PerfCtx = document.getElementById('form4PerformanceChart').getContext('2d');
+        new Chart(form4PerfCtx, {
+            type: 'line',
+            data: {
+                labels: form4Years,
+                datasets: [
+                    {
+                        label: 'Pass Rate (%)',
+                        data: form4PassRates,
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        yAxisID: 'y',
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Total Students',
+                        data: form4Students,
+                        borderColor: 'rgb(34, 197, 94)',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        yAxisID: 'y1',
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Pass Rate (%)'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Students'
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Form 4 Participation Chart
+        const form4PartCtx = document.getElementById('form4ParticipationChart').getContext('2d');
+        new Chart(form4PartCtx, {
+            type: 'bar',
+            data: {
+                labels: form4Years,
+                datasets: [{
+                    label: 'Number of Schools',
+                    data: form4Schools,
+                    backgroundColor: 'rgba(147, 51, 234, 0.7)',
+                    borderColor: 'rgb(147, 51, 234)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Schools'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Form 2 Performance Chart
+        const form2PerfCtx = document.getElementById('form2PerformanceChart').getContext('2d');
+        new Chart(form2PerfCtx, {
+            type: 'line',
+            data: {
+                labels: form2Years,
+                datasets: [
+                    {
+                        label: 'Pass Rate (%)',
+                        data: form2PassRates,
+                        borderColor: 'rgb(249, 115, 22)',
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        yAxisID: 'y',
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Total Students',
+                        data: form2Students,
+                        borderColor: 'rgb(20, 184, 166)',
+                        backgroundColor: 'rgba(20, 184, 166, 0.1)',
+                        yAxisID: 'y1',
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Pass Rate (%)'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Students'
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Form 2 Participation Chart
+        const form2PartCtx = document.getElementById('form2ParticipationChart').getContext('2d');
+        new Chart(form2PartCtx, {
+            type: 'bar',
+            data: {
+                labels: form2Years,
+                datasets: [{
+                    label: 'Number of Schools',
+                    data: form2Schools,
+                    backgroundColor: 'rgba(236, 72, 153, 0.7)',
+                    borderColor: 'rgb(236, 72, 153)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Schools'
+                        }
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html>

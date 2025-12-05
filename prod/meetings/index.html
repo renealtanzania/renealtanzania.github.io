@@ -5,13 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meeting Schedule</title>
     <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
-    <script src="/js/middleware.js"></script>
     <script src="/public/css/script/tailwindcss3417.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="/js/middleware.js"></script>
+
 
     
 </head>
 <body class="bg-gray-200 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-8">
+                    <span class="text-2xl font-bold text-indigo-600">Reneal Tanzania</span>
+                    <div class="hidden md:flex space-x-6">
+                        <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
+                        <a href="" class="text-indigo-600 font-medium">Meetings</a>
+                        <a href="/dashboard.html" class="text-gray-600 hover:text-gray-900">Dashboard</a>
+                        <!-- <a href="team-" data-can="view-team" class="text-gray-600 hover:text-gray-900">Team</a> -->
+                        <!-- <a href="us/l.html" data-can="view-users" class="text-gray-600 hover:text-gray-900">Users</a> -->
+                        <!-- <a href="pct/ipx.html" data-can="view-projects" class="text-gray-600 hover:text-gray-900">Projects</a> -->
+                        <a href="/dev/settings.html" data-can="view-settings" class="text-gray-600 hover:text-gray-900">Settings</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="userInfo" class="text-sm text-gray-600"></span>
+                    <button onclick="handleLogout()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+  
       <!-- First Section -->
   <section class="py-24 px-8" id="programs">
     <div class="max-w-7xl mx-auto">
@@ -79,13 +105,58 @@
   </section>
     
 
-    <script src="/js/config.js"></script>
-    <script src="/js/path.js"></script>
-    <script src="/js/provider.js"></script>
-    <script src="/js/routes.js"></script>
-    <script src="/js/auth.js"></script>
-    <script src="/js/gate.js"></script>
-    <script src="/js/guard.js"></script>
+  <script src="/js/bundle.js"></script>
+
+  <script>
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
+
+        // Display user info
+        function displayUserInfo() {
+            const user = Auth.user();
+            if (user) {
+                document.getElementById('userInfo').textContent = `${user.name} (${user.role})`;
+                
+                const profileInfo = document.getElementById('profileInfo');
+                profileInfo.innerHTML = `
+                    <div class="flex items-center justify-between py-2 border-b">
+                        <span class="text-gray-600">Name:</span>
+                        <span class="font-semibold text-gray-900">${user.name}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b">
+                        <span class="text-gray-600">Email:</span>
+                        <span class="font-semibold text-gray-900">${user.email}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b">
+                        <span class="text-gray-600">Position:</span>
+                        <span class="font-semibold text-gray-900">${user.position}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-gray-600">Role:</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-semibold">${user.role}</span>
+                    </div>
+                `;
+            }
+        }
+
+        // Update session timer
+        function updateSessionTimer() {
+            const remaining = Auth.getSessionTimeRemaining();
+            const minutes = Math.floor(remaining / 60);
+            const seconds = remaining % 60;
+            document.getElementById('sessionTimer').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        displayUserInfo();
+        updateSessionTimer();
+        setInterval(updateSessionTimer, 1000);
+    </script>
+
+
 
 </body>
 </html>
