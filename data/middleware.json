@@ -110,6 +110,13 @@
     "type": "protected"
   },
 
+    {
+    "page name": "Insights",
+    "url": "/prod/settings/index.html",
+    "viewer": "super-admin",
+    "type": "protected"
+  },
+
   {
     "page name": "Projects Drive",
     "url": "/include/projects/drive/index.html",
