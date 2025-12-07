@@ -110,9 +110,16 @@
     "type": "protected"
   },
 
-    {
+  {
     "page name": "Insights",
-    "url": "/prod/settings/insights.html",
+    "url": "/prod/settings/insights2026.html",
+    "viewer": "super-admin",
+    "type": "protected"
+  },
+
+    {
+    "page name": "TODO Schedule",
+    "url": "/prod/settings/todo2026.html",
     "viewer": "super-admin",
     "type": "protected"
   },
