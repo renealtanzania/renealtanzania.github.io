@@ -112,7 +112,7 @@
 
     {
     "page name": "Insights",
-    "url": "/prod/settings/index.html",
+    "url": "/prod/settings/insights.html",
     "viewer": "super-admin",
     "type": "protected"
   },
