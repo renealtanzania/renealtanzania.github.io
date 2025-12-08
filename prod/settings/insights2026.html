@@ -46,7 +46,7 @@
         <div class="flex items-center justify-between max-w-7xl mx-auto">
             <div class="flex items-center gap-2 md:gap-3 overflow-x-auto">
                 <div class="font-bold text-xl tracking-tight bg-black text-white px-2 py-1 rounded select-none shrink-0">EM</div>
-                <div class="hidden lg:block text-sm font-bold text-black border-b-2 border-black pb-0.5 shrink-0">ToDo Calendar</div>
+                <div class="hidden lg:block text-sm font-bold text-black border-b-2 border-black pb-0.5 shrink-0">Done Activities</div>
                 <div class="hidden lg:block text-gray-300 shrink-0">|</div>
                 <div class="flex items-center gap-2 text-xs md:text-sm">
                     <a href="/prod/news/category/code" class="hover:text-blue-800 transition whitespace-nowrap hidden md:inline">Web Changes</a>
@@ -74,8 +74,12 @@
                     <span class="hidden md:inline text-gray-300">|</span>
                     <a href="/status" class="hover:text-blue-800 transition whitespace-nowrap hidden lg:inline">Status</a>
                     <span class="hidden lg:inline text-gray-300">|</span>
-                    <a href="/project" class="hover:text-blue-800 transition whitespace-nowrap hidden lg:inline">Project</a>|
+                    <a href="/project" class="hover:text-blue-800 transition whitespace-nowrap hidden lg:inline">Project</a>
+                    <span class="hidden md:inline text-gray-300">|</span>
                     <a href="/" class="hover:text-blue-800 transition whitespace-nowrap hidden lg:inline">Home</a>
+                    <span class="hidden md:inline text-gray-300">|</span>
+                    <a href="/prod/settings/todo2026.html" class="hover:text-blue-800 transition whitespace-nowrap hidden lg:inline">ToDo</a>
+
 
                 </div>
             </div>
@@ -171,7 +175,11 @@
                     { id: 6, text: "Reneal Virtual Meeting: Annual Team Meeting", time: "20:00-22:00", type: "purple" }
                 ],
                 "2025-12-07": [
-                    { id: 1, text: "Reneal Website - Various changes and debugging", time: "05:25", type: "blue", isDone: false  }
+                    { id: 1, text: "Reneal Website - Various changes and debugging", time: "05:25", type: "blue", isDone: false  },
+                    { id: 2, text: "Reneal Website - ToDo Page Construction", time: "05:45-07:00", type: "blue", isDone: false  },
+                    { id: 3, text: "Reneal Website - Added Equipment and Logistics section to team members and admin dashboard", time: "20:25-21:00", type: "blue", isDone: false  }
+
+                    
                 ],
             },
             tasks: {
@@ -179,6 +187,11 @@
                     { id: 101, text: "Reneal Server: GoAccess and Squid Proxy", completed: false },
                     { id: 102, text: "Reneal Website: Working on authentications", completed: false },
                     { id: 103, text: "Reneal Website: Working on calendar components", completed: false }
+                ],
+                "2025-12-08": [
+                    { id: 104, text: "Reneal Server: GoAccess and Squid Proxy", completed: false },
+                    { id: 105, text: "Team Members Page: Activities Page", completed: false },
+                    { id: 103, text: "CheckUp: Website to Sync and Other Drive Files", completed: false }
                 ]
             }
         };

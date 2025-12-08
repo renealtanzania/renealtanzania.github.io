@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
     <title>TODO Schedule</title>
     <script src="/public/css/script/tailwindcss3417.js"></script>
     <script src="/js/middleware.js"></script>
@@ -24,7 +25,7 @@
                     <div class="hidden md:flex space-x-6">
                         <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
                         <a href="/dashboard.html" class="text-gray-600 hover:text-gray-900">Dashboard</a>
-                        <a href="/dev/settings.html" class="text-indigo-600 font-medium">Settings</a>
+                        <a href="/prod/settings/insights2026.html" class="text-indigo-600 font-medium">My Schedule</a>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -182,48 +183,51 @@
         // Developers can directly add events with dates like: "12/07/2025"
         let events = [
             {
-                date: "12/10/2025",
-                title: '2 year business anniversary',
-                category: 'anniversary',
-                time: '3:30pm - 4:00pm',
-                description: 'GH Designs: Logo Redesign',
-                attendees: 4
-            },
-            {
-                date: "12/14/2025",
-                title: 'Login issues in Chrome',
-                category: 'bug',
-                description: 'Ideas for marketing in Team: Customer Support',
-                type: 'email'
-            },
-            {
-                date: "12/21/2025",
-                title: 'Blog Post due',
-                category: 'deadline',
-                description: 'Hiring in Hiring',
-                isTask: true
-            },
-            {
-                date: "12/02/2025",
-                title: 'Blog Post due',
-                category: 'production',
-                description: 'Hiring in Hiring',
-                isTask: true
-            },
-            {
                 date: "12/08/2025",
-                title: 'Blog Post due',
-                category: 'management',
-                time: '12:30pm - 4:00pm',
-                description: 'Hiring in Hiring',
+                title: 'Activities Page Renovation',
+                category: 'dev',
+                time: '08:00 - 13:00',
+                description: 'Trainings, Equipments and Noted Works Plus Other Rising Stuffs',
+                type: 'work'
+            },
+            {
+                date: "12/10/2025",
+                title: 'Activities Page Renovation',
+                category: 'dev',
+                time: '08:00 - 13:00',
+                description: 'Checklist and Miscelleneous + GoAccess & Squid Proxy',
+                type: 'work'
+            },
+            {
+                date: "12/11/2025",
+                title: 'Activities Page Renovation',
+                category: 'dev',
+                time: '08:00 - 13:00',
+                description: 'Complete page Renovations + GoAccess & Squid Proxy',
+                isTask: true
+            },
+            {
+                date: "12/12/2025",
+                title: 'GoAccess and Squid Proxy',
+                category: 'dev',
+                time: '08:00 - 13:00',
+                description: 'Checking Stats Integration to the Server',
+                isTask: true
+            },
+            {
+                date: "12/09/2025",
+                title: 'Holiday',
+                category: 'holiday',
+                time: '00:30 - 23:00',
+                description: 'Public Holiday',
                 isTask: true
             },
             {
                 date: "12/07/2025",
-                title: 'Today\'s meeting',
-                category: 'meeting',
-                time: '2:00pm - 3:00pm',
-                description: 'Team sync'
+                title: 'Arranging Weekly Activities',
+                category: 'plan',
+                time: '16:00 - 17:00',
+                description: 'Weekly Activities'
             }
         ];
 
