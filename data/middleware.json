@@ -61,6 +61,13 @@
     "type": "protected"
   },
 
+     {
+    "page name": "News",
+    "url": "/prod/news/index.html",
+    "viewer": "admin, super-admin, team-member",
+    "type": "protected"
+  },
+
   {
     "page name": "Delivery Note",
     "url": "/docs/delivery/index.html",
