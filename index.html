@@ -20,21 +20,31 @@
                             <a href="/">
                                 <img src="/public/imgs/ren.jpg" width="60" height="60" alt="">
                             </a>
-                        <span class="text-green-600 ml-2">Reneal</span> Tanzania
+                            <span class="text-green-600 ml-2">Reneal</span> Tanzania
                         </div>
                     </div>
                 </div>
-                <div class="hidden md:flex space-x-8">
-                   <a href="/public/guidance-docs/Computerization-Strategy-for-Government-Secondary-Schools-combined.pdf" class="text-gray-700 hover:text-blue-700 font-medium transition">Introduction</a>
-                   <a href="/status/summary.html" class="text-gray-700 hover:text-blue-700 font-medium transition">About</a>
-                   <!-- <a href="/progho" class="text-gray-700 hover:text-blue-700 font-medium transition">News</a> -->
-                   <!-- <a href="/" class="text-gray-700 hover:text-blue-700 font-medium transition">Me</a> -->
-
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/public/guidance-docs/Computerization-Strategy-for-Government-Secondary-Schools-combined.pdf" class="text-gray-700 hover:text-blue-700 font-medium transition">Introduction</a>
+                    <a href="/status/summary.html" class="text-gray-700 hover:text-blue-700 font-medium transition">About</a>
+                    
+                    <!-- User Info Section (shown when logged in) -->
+                    <div id="userInfoSection" class="hidden flex items-center space-x-4">
+                        <div class="text-right">
+                            <p id="userNameDisplay" class="text-sm font-semibold text-gray-900"></p>
+                            <p id="userRoleDisplay" class="text-xs text-gray-600"></p>
+                        </div>
+                        <button onclick="handleLogout()" id="logoutButton" href="/dashboard.html" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
+                            Logout
+                        </button>
+                    </div>
+                    
+                    <!-- Login Button (shown when not logged in) -->
+                    <!-- <a id="logoutButton" href="/login.html" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+                        LogIn
+                    </a> -->
                 </div>
-                <!-- <a href="/">
-                <button class="bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition hidden md:block">
-                    Project
-                </button></a> -->
+                
                 <button id="mobileMenuButton" class="md:hidden text-gray-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -44,17 +54,49 @@
                     </svg>
                 </button>
             </div>
+            
             <!-- Mobile Menu -->
             <div id="mobileMenu" class="hidden md:hidden pb-4">
                 <div class="flex flex-col space-y-3 pt-2">
                     <a href="/status/summary.html" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">About</a>
                     <a href="/prod/news" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">News</a>
-                    <!-- <a href="/" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">Memb</a> -->
                     <a href="/guidance-docs.html" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100 border-b">Guidance Docs</a>
+                    
+                    <!-- Mobile User Info -->
+                    <div id="mobileUserInfo" class="hidden py-2 border-t border-gray-100">
+                        <p id="mobileUserName" class="font-semibold text-gray-900"></p>
+                        <p id="mobileUserRole" class="text-sm text-gray-600"></p>
+                        <a href="/dashboard.html" class="mt-2 inline-block bg-blue-700 text-white px-4 py-2 rounded-lg">Dashboard</a>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
+
+    <!-- Alert Notification Banner (visible to everyone) -->
+    <div id="alertBanner" class="bg-yellow-50 border-l-4 border-yellow-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-start md:items-center">
+                    <svg class="w-6 h-6 text-yellow-600 mr-3 flex-shrink-0 mt-1 md:mt-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    <div>
+                        <p class="font-medium text-yellow-800">Important Updates Available</p>
+                        <p class="text-sm text-yellow-700">We have <span id="alertCount" class="font-semibold">3</span> 
+                            important notifications of Dec 10<sup>th</sup> 2025. Sign in to view full details.
+                        </p>
+                    </div>
+                </div>
+                <button id="viewDetailsBtn" onclick="handleViewDetails()" class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-lg font-medium transition flex items-center justify-center whitespace-nowrap">
+                    <span id="btnText">View Details</span>
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section id="home" class="relative bg-gradient-to-br from-blue-700 via-blue-600 to-green-600 text-white py-24 overflow-hidden">
@@ -73,12 +115,9 @@
                 <a href="/status" class="bg-white text-blue-700 px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-50 transition transform hover:scale-105 shadow-lg">
                     Status
                 </a>
-                <a href="/login.html" class="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-green-700 transition transform hover:scale-105 shadow-lg border-2 border-white">
+                <a href="/login.html" id="heroLoginButton" class="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-green-700 transition transform hover:scale-105 shadow-lg border-2 border-white">
                     LogIn
                 </a>
-                <!-- <a href="/" class="bg-white text-blue-700 px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-50 transition transform hover:scale-105 shadow-lg">
-                    Activities
-                </a> -->
             </div>
         </div>
     </section>
@@ -746,16 +785,67 @@
         </div>
     </footer>
 
+    
+   <script src="js/bundle.js"></script>
+
     <script>
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
+
+        // Handle view details button click
+        function handleViewDetails() {
+            if (typeof Auth !== 'undefined' && Auth.check()) {
+                // User is logged in, go to dashboard
+                window.location.href = '/dashboard.html';
+            } else {
+                // User not logged in, redirect to login with return URL
+                window.location.href = '/login.html?returnUrl=' + encodeURIComponent('/dashboard.html');
+            }
+        }
+
+        // Check if user is logged in and display user info
+        function checkAuthAndDisplayUser() {
+            if (typeof Auth !== 'undefined' && Auth.check()) {
+                const user = Auth.user();
+                
+                // Desktop user info
+                document.getElementById('userNameDisplay').textContent = user.name;
+                document.getElementById('userRoleDisplay').textContent = user.role;
+                document.getElementById('userInfoSection').classList.remove('hidden');
+                document.getElementById('userInfoSection').classList.add('flex');
+                // document.getElementById('loginButton').classList.add('hidden');
+                document.getElementById('logoutButton').classList.add();
+
+                
+                // Mobile user info
+                document.getElementById('mobileUserName').textContent = user.name;
+                document.getElementById('mobileUserRole').textContent = user.role;
+                document.getElementById('mobileUserInfo').classList.remove('hidden');
+                
+                // Update alert banner button text for logged-in users
+                document.getElementById('btnText').textContent = 'View Dashboard';
+                
+                // Change hero button to Dashboard
+                const heroButton = document.getElementById('heroLoginButton');
+                heroButton.href = '/dashboard.html';
+                heroButton.textContent = 'Go to Dashboard';
+            }
+        }
+
+        // Run on page load
+        document.addEventListener('DOMContentLoaded', checkAuthAndDisplayUser);
+
         // Mobile menu toggle
         const mobileMenuButton = document.getElementById('mobileMenuButton');
         const mobileMenu = document.getElementById('mobileMenu');
-        const menuIcon = document.getElementById('menuIcon');
         const closeIcon = document.getElementById('closeIcon');
 
         mobileMenuButton.addEventListener('click', function() {
             mobileMenu.classList.toggle('hidden');
-            menuIcon.classList.toggle('hidden');
             closeIcon.classList.toggle('hidden');
         });
 
@@ -766,7 +856,6 @@
             
             if (!isClickInsideMenu && !isClickOnButton && !mobileMenu.classList.contains('hidden')) {
                 mobileMenu.classList.add('hidden');
-                menuIcon.classList.remove('hidden');
                 closeIcon.classList.add('hidden');
             }
         });
@@ -775,7 +864,6 @@
         window.addEventListener('resize', function() {
             if (window.innerWidth >= 768 && !mobileMenu.classList.contains('hidden')) {
                 mobileMenu.classList.add('hidden');
-                menuIcon.classList.remove('hidden');
                 closeIcon.classList.add('hidden');
             }
         });
