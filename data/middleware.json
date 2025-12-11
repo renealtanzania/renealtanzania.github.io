@@ -124,12 +124,20 @@
     "type": "protected"
   },
 
-    {
+  {
     "page name": "TODO Schedule",
     "url": "/prod/settings/todo2026.html",
     "viewer": "super-admin",
     "type": "protected"
   },
+
+  {
+    "page name": "Equipments Server Analysis",
+    "url": "/dev/equipments/servers-december25.html",
+    "viewer": "admin, super-admin, team-member",
+    "type": "protected"
+  },
+
 
   {
     "page name": "Projects Drive",

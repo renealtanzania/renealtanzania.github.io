@@ -40,9 +40,9 @@
                     </div>
                     
                     <!-- Login Button (shown when not logged in) -->
-                    <!-- <a id="logoutButton" href="/login.html" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+                    <a id="loginButton" href="/login.html" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
                         LogIn
-                    </a> -->
+                    </a>
                 </div>
                 
                 <button id="mobileMenuButton" class="md:hidden text-gray-700">
@@ -116,11 +116,11 @@
                     Status
                 </a>
                 <a href="https://www.youtube.com/watch?v=Sp-d4pn8Lk8" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer"  class="bg-pink-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-pink-700 transition transform hover:scale-105 shadow-lg border-2 border-white">
-                    Teachers
+                    Teacher's Orientation
                 </a>
-                <a href="/login.html" id="heroLoginButton" class="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-green-700 transition transform hover:scale-105 shadow-lg border-2 border-white">
+                <!-- <a href="/login.html" id="heroLoginButton" class="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-green-700 transition transform hover:scale-105 shadow-lg border-2 border-white">
                     LogIn
-                </a>
+                </a> -->
             </div>
         </div>
     </section>
@@ -820,7 +820,7 @@
                 document.getElementById('userRoleDisplay').textContent = user.role;
                 document.getElementById('userInfoSection').classList.remove('hidden');
                 document.getElementById('userInfoSection').classList.add('flex');
-                // document.getElementById('loginButton').classList.add('hidden');
+                document.getElementById('loginButton').classList.add('hidden');
                 document.getElementById('logoutButton').classList.add();
 
                 
