@@ -61,6 +61,8 @@
                     <a href="/status/summary.html" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">About</a>
                     <a href="/prod/news" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">News</a>
                     <a href="/guidance-docs.html" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100 border-b">Guidance Docs</a>
+                    <a href="login.html" class="text-green-700 hover:text-green-900 py-2 border-t border-green-100 border-b font-bold">Login</a>
+
                     
                     <!-- Mobile User Info -->
                     <div id="mobileUserInfo" class="hidden py-2 border-t border-gray-100">
@@ -112,9 +114,9 @@
                 Providing offline educational resources and computer labs to schools across Tanzania
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/status" class="bg-white text-blue-700 px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-50 transition transform hover:scale-105 shadow-lg">
+                <button onclick="handleStatusDetails()" href="/status" class="bg-white text-blue-700 px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-50 transition transform hover:scale-105 shadow-lg">
                     Status
-                </a>
+                </button>
                 <a href="https://www.youtube.com/watch?v=Sp-d4pn8Lk8" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer"  class="bg-pink-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-pink-700 transition transform hover:scale-105 shadow-lg border-2 border-white">
                     Teacher's Orientation
                 </a>
@@ -807,6 +809,17 @@
             } else {
                 // User not logged in, redirect to login with return URL
                 window.location.href = '/login.html?returnUrl=' + encodeURIComponent('/dashboard.html');
+            }
+        }
+
+        // Handle view details button click
+        function handleStatusDetails() {
+            if (typeof Auth !== 'undefined' && Auth.check()) {
+                // User is logged in, go to status
+                window.location.href = '/status';
+            } else {
+                // User not logged in, redirect to login with return URL
+                window.location.href = '/login.html?returnUrl=' + encodeURIComponent('/status');
             }
         }
 
