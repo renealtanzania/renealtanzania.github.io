@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+    <title>Blog Posts - Reneal Tanzania</title>
+    <script src="/public/css/script/tailwindcss3417.js"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        
+        .category-btn {
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #64748b;
+        }
+        
+        .category-btn:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+        
+        .category-btn.active {
+            background: linear-gradient(to right, #2563eb, #4f46e5);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <div class="flex items-center justify-center">
+                        <a href="/"><img src="/public/imgs/ren.jpg" width="60" height="60" alt=""></a>
+                    </div>
+                    <span class="text-base sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Reneal Tanzania</span>
+                </div>
+                <a href="/" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 py-1.5 sm:px-6 sm:py-2 rounded-lg hover:shadow-lg transition text-sm sm:text-base">
+                    Home
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+        <div class="text-center">
+            <div class="inline-block mb-4">
+                <span class="bg-blue-100 text-blue-700 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold">Blog News</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-4 sm:mb-6 leading-tight">
+                Blog Posts<br/>
+                <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Across Reneal Tanzania</span>
+            </h1>
+            <p class="text-base sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto">
+                Explore news from different locations and sources from our project
+            </p>
+        </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+        <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-lg">
+            <!-- Category Tags -->
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold text-slate-700 mb-3">Filter by Category</h3>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="filterByCategory('all')" class="category-btn active px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition">
+                        All
+                    </button>
+                    <button onclick="filterByCategory('school')" class="category-btn px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition">
+                        School
+                    </button>
+                    <button onclick="filterByCategory('special-visit')" class="category-btn px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition">
+                        Special-Visit
+                    </button>
+                   
+                </div>
+            </div>
+
+            <!-- Sort Options -->
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-sm text-slate-600">Sort by:</span>
+                    <select onchange="sortUseCases(this.value)" class="px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                    </select>
+                </div>
+                <div class="text-sm text-slate-600">
+                    <span id="resultCount">12</span> results
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Grid -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <div id="useCasesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <!-- Cards will be inserted here by JavaScript -->
+        </div>
+
+        <!-- No Results Message -->
+        <div id="noResults" class="hidden text-center py-12">
+            <div class="text-6xl mb-4">🔍</div>
+            <h3 class="text-xl font-semibold text-slate-900 mb-2">No use cases found</h3>
+            <p class="text-slate-600">Try adjusting your filters</p>
+        </div>
+    </section>
+
+    <!-- Pagination -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 lg:pb-20">
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button onclick="changePage('prev')" id="prevBtn" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto">
+                ← Previous
+            </button>
+            <div id="pageNumbers" class="flex gap-2 flex-wrap justify-center">
+                <!-- Page numbers will be inserted here -->
+            </div>
+            <button onclick="changePage('next')" id="nextBtn" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto">
+                Next →
+            </button>
+        </div>
+    </section>
+
+        <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-300 py-10 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h3 class="text-white text-lg font-bold mb-2">Reneal International Education Outreach</h3>
+                    <p class="text-sm text-slate-400">Bridging the digital divide in Tanzanian education.</p>
+                </div>
+                <div class="flex md:justify-end space-x-6">
+                    <a href="/status" class="hover:text-white transition">Status</a>
+                    <!-- <a href="/docs" class="hover:text-white transition">Historical Docs</a> -->
+                    <a href="/public/imgs/home/ren-conts.png" class="hover:text-white transition">Contact</a>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 mt-8 pt-8 text-sm text-center md:text-left text-slate-500">
+                &copy; <script>document.write(new Date().getFullYear())</script> Reneal International. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Use Cases Data
+        const useCases = [
+            {
+                id: 1,
+                title: "Completion of 2025A School Installations and Trainings.",
+                description: "Chief Mangenya Secondary School marked the end of 2025 School Installations and Trainings on October 28<sup>th</sup> 2025.",
+                category: "school",
+                image: "/prod/news/imgs/school/chief-mangenya-261025.png",
+                date: new Date("2025-10-28")
+            },
+            {
+                id: 2,
+                title: "Rene Visit to Tanzania",
+                description: "A normal yearly visit of Rene to Tanzania to make follow-up of different aspects about the Project from 04/09 to 30/09/2025.",
+                category: "special-visit",
+                image: "/prod/news/imgs/special-visits/renevisit.png",
+                date: new Date("2025-10-01"),
+                link: "/prod/news/category/special-visits/files/NewRenealVisit-040925.pdf"
+            },
+            {
+                id: 3,
+                title: "Beginning of 2025A School Installations and Trainings",
+                description: "On 15<sup>th</sup> July 2025, Manyara Girls SS was the First 2025A School Shipment to be installed.",
+                category: "school",
+                image: "/prod/blog/imgs/svgpng/installations-begin-2025A.png",
+                date: new Date("2025-07-15")
+            }
+
+        ];
+
+        // State
+        let currentPage = 1;
+        let currentCategory = 'all';
+        let currentSort = 'newest';
+        const itemsPerPage = 6;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderUseCases();
+        });
+
+        function filterByCategory(category) {
+            currentCategory = category;
+            currentPage = 1;
+            
+            // Update button styles
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderUseCases();
+        }
+
+        function sortUseCases(sortOrder) {
+            currentSort = sortOrder;
+            currentPage = 1;
+            renderUseCases();
+        }
+
+        function getFilteredUseCases() {
+            let filtered = currentCategory === 'all' 
+                ? [...useCases] 
+                : useCases.filter(uc => uc.category === currentCategory);
+            
+            // Sort
+            filtered.sort((a, b) => {
+                return currentSort === 'newest' 
+                    ? b.date - a.date 
+                    : a.date - b.date;
+            });
+            
+            return filtered;
+        }
+
+        function renderUseCases() {
+            const filtered = getFilteredUseCases();
+            const startIdx = (currentPage - 1) * itemsPerPage;
+            const endIdx = startIdx + itemsPerPage;
+            const paginated = filtered.slice(startIdx, endIdx);
+            
+            const grid = document.getElementById('useCasesGrid');
+            const noResults = document.getElementById('noResults');
+            
+            if (paginated.length === 0) {
+                grid.classList.add('hidden');
+                noResults.classList.remove('hidden');
+            } else {
+                grid.classList.remove('hidden');
+                noResults.classList.add('hidden');
+                
+                grid.innerHTML = paginated.map(uc => createUseCaseCard(uc)).join('');
+            }
+            
+            // Update result count
+            document.getElementById('resultCount').textContent = filtered.length;
+            
+            // Update pagination
+            renderPagination(filtered.length);
+        }
+
+        function createUseCaseCard(useCase) {
+            return `
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 fade-in group cursor-pointer">
+                    <!-- Image Section -->
+                    <div class="relative h-48 sm:h-56 overflow-hidden">
+                        <a href = "${useCase.link}">
+                        <img src="${useCase.image}" 
+                             alt="${useCase.title}" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                             onerror="this.src='https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&q=80'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                        </a>
+                        
+                        <!-- Category Tag on Image -->
+                        <div class="absolute top-4 left-4">
+                            <span class="inline-block px-3 py-1 bg-white/90 backdrop-blur-sm text-slate-800 rounded-full text-xs font-medium capitalize shadow-lg">
+                                ${useCase.category}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Content Section -->
+                    <div class="p-5 sm:p-6">
+                        <h3 class="text-lg sm:text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                            ${useCase.title}
+                        </h3>
+                        <a href = "${useCase.link}">
+                        <p class="text-sm text-slate-600 mb-4 line-clamp-2">
+                            ${useCase.description}
+                        </p>
+                        </a>
+                        
+                        <!-- Date -->
+                        <div class="flex items-center text-xs text-slate-500">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            ${formatDate(useCase.date)}
+                        </div>
+
+                        
+                    </div>
+                </div>
+            `;
+        }
+
+        function formatDate(date) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        function renderPagination(totalItems) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const pageNumbers = document.getElementById('pageNumbers');
+            
+            pageNumbers.innerHTML = '';
+            
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.onclick = () => goToPage(i);
+                btn.className = `w-10 h-10 rounded-lg text-sm font-medium transition ${
+                    i === currentPage 
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white' 
+                        : 'border border-slate-300 text-slate-700 hover:bg-slate-50'
+                }`;
+                pageNumbers.appendChild(btn);
+            }
+            
+            // Update prev/next buttons
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+        }
+
+        function changePage(direction) {
+            const filtered = getFilteredUseCases();
+            const totalPages = Math.ceil(filtered.length / itemsPerPage);
+            
+            if (direction === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (direction === 'next' && currentPage < totalPages) {
+                currentPage++;
+            }
+            
+            renderUseCases();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderUseCases();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+
+    <style>
+        .category-btn {
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #64748b;
+        }
+        
+        .category-btn:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+        
+        .category-btn.active {
+            background: linear-gradient(to right, #2563eb, #4f46e5);
+            color: white;
+            border-color: transparent;
+        }
+    </style>
+</body>
+</html>

@@ -138,9 +138,16 @@
     "type": "protected"
   },
 
-    {
+  {
     "page name": "Status",
     "url": "/status/index.html",
+    "viewer": "admin, super-admin, team-member",
+    "type": "protected"
+  },
+
+    {
+    "page name": "Online Training",
+    "url": "/dev/trainings/online-trainings/index.html",
     "viewer": "admin, super-admin, team-member",
     "type": "protected"
   },

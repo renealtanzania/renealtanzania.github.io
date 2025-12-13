@@ -27,6 +27,8 @@
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="/public/guidance-docs/Computerization-Strategy-for-Government-Secondary-Schools-combined.pdf" class="text-gray-700 hover:text-blue-700 font-medium transition">Introduction</a>
                     <a href="/status/summary.html" class="text-gray-700 hover:text-blue-700 font-medium transition">About</a>
+                    <a href="/prod/blog" class="text-gray-700 hover:text-blue-700 font-medium transition">Blog</a>
+
                     
                     <!-- User Info Section (shown when logged in) -->
                     <div id="userInfoSection" class="hidden flex items-center space-x-4">
@@ -58,6 +60,7 @@
             <!-- Mobile Menu -->
             <div id="mobileMenu" class="hidden md:hidden pb-4">
                 <div class="flex flex-col space-y-3 pt-2">
+                    <a href="/prod/blog" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">Blog Posts</a>
                     <a href="/status/summary.html" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">About</a>
                     <a href="/prod/news" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">News</a>
                     <a href="/guidance-docs.html" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100 border-b">Guidance Docs</a>
@@ -114,9 +117,9 @@
                 Providing offline educational resources and computer labs to schools across Tanzania
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button onclick="handleStatusDetails()" href="/status" class="bg-white text-blue-700 px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-50 transition transform hover:scale-105 shadow-lg">
+                <a href="/status" class="bg-white text-blue-700 px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-50 transition transform hover:scale-105 shadow-lg">
                     Status
-                </button>
+                </a>
                 <a href="https://www.youtube.com/watch?v=Sp-d4pn8Lk8" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer"  class="bg-pink-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-pink-700 transition transform hover:scale-105 shadow-lg border-2 border-white">
                     Teacher's Orientation
                 </a>
@@ -135,7 +138,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
     <div class="container lg:flex lg:flex-row sm:flex-col justify-center items-center px-4 py-2">
-        <div class="mt-2"><a href="/public/imgs/teachers-trained-220925.png">
+        <div class="mt-2"><a href="/status/schools.html">
             <img src="/public/imgs/nhome/lb3.png" width="90%" height="90%" alt="">
         </a></div>
 
@@ -623,7 +626,7 @@
                             <a href="/status">Beginning of 2025A School Installations and Trainings</a>
                         </h3>
                         <p class="text-gray-900 text-sm line-clamp-3">
-                            <a href="/status">On 15<sup>th</sup> July 2025, Manyara Girls SS was the First 2025A School Shipment to be installed.</a>
+                            <a href="/status">On 15<sup>th</sup> July 2025, Losinoni was the First 2025A School Shipment to be installed.</a>
                         </p>
                         <div class="mt-4 flex items-center text-sm text-gray-500">
                             <span>1 min read</span>
@@ -809,17 +812,6 @@
             } else {
                 // User not logged in, redirect to login with return URL
                 window.location.href = '/login.html?returnUrl=' + encodeURIComponent('/dashboard.html');
-            }
-        }
-
-        // Handle view details button click
-        function handleStatusDetails() {
-            if (typeof Auth !== 'undefined' && Auth.check()) {
-                // User is logged in, go to status
-                window.location.href = '/status';
-            } else {
-                // User not logged in, redirect to login with return URL
-                window.location.href = '/login.html?returnUrl=' + encodeURIComponent('/status');
             }
         }
 
