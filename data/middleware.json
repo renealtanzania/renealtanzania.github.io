@@ -138,6 +138,12 @@
     "type": "protected"
   },
 
+    {
+    "page name": "Status",
+    "url": "/status/index.html",
+    "viewer": "admin, super-admin, team-member",
+    "type": "protected"
+  },
 
   {
     "page name": "Projects Drive",
