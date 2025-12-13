@@ -166,7 +166,8 @@
                 description: "Chief Mangenya Secondary School marked the end of 2025 School Installations and Trainings on October 28<sup>th</sup> 2025.",
                 category: "school",
                 image: "/prod/news/imgs/school/chief-mangenya-261025.png",
-                date: new Date("2025-10-28")
+                date: new Date("2025-10-28"),
+                link: "#"
             },
             {
                 id: 2,
@@ -183,8 +184,20 @@
                 description: "On 15<sup>th</sup> July 2025, Manyara Girls SS was the First 2025A School Shipment to be installed.",
                 category: "school",
                 image: "/prod/blog/imgs/svgpng/installations-begin-2025A.png",
-                date: new Date("2025-07-15")
-            }
+                date: new Date("2025-07-15"),
+                link: "#"
+
+            }, 
+            {
+                id: 4,
+                title: "Completion of 2024B School Installations and Trainings",
+                description: "Oshara Secondary School marked the end of 2024B School Installations and Trainings on March 27<sup>th</sup> 2025.",
+                category: "school",
+                image: "/prod/blog/imgs/svgpng/installations-begin-2025A.png",
+                date: new Date("2025-03-28"),
+                link: "#"
+
+            },
 
         ];
 
@@ -282,9 +295,12 @@
                     
                     <!-- Content Section -->
                     <div class="p-5 sm:p-6">
+                        <a href = "${useCase.link}">
+
                         <h3 class="text-lg sm:text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
                             ${useCase.title}
                         </h3>
+                        </a>
                         <a href = "${useCase.link}">
                         <p class="text-sm text-slate-600 mb-4 line-clamp-2">
                             ${useCase.description}
