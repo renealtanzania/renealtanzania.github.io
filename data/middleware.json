@@ -5,7 +5,7 @@
   },
   {
     "page name": "Dashboard",
-    "url": "dashboard.html",
+    "url": "/box/dashboard.html",
     "type": "protected"
   },
   {

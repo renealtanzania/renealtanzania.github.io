@@ -11,15 +11,15 @@ const Config = {
   paths: {
     users: 'data/users.json',
     middleware: 'data/middleware.json',
-    login: 'login.html',
+    login: 'box/login.html',
     unauthorized: 'unauthorized.html',
-    dashboard: 'dashboard.html'
+    dashboard: 'box/dashboard.html'
   },
 
   // Application Metadata
   app: {
     name: 'Reneal Tanzania',
-    version: '1.0.0',
+    version: '2.0.0',
     description: 'Educational Outreach Platform'
   },
 

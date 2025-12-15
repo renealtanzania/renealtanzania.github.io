@@ -32,7 +32,7 @@
                     <span class="text-2xl font-bold text-indigo-600">Reneal Tanzania</span>
                     <div class="hidden md:flex space-x-6">
                         <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
-                        <a href="dashboard.html" class="text-indigo-600 font-medium">Dashboard</a>
+                        <a href="/box/dashboard.html" class="text-indigo-600 font-medium">Dashboard</a>
                         <a href="/box" data-can="view-team" class="text-gray-600 hover:text-gray-900">Team Home</a>
                         <!-- <a href="us/l.html" data-can="view-users" class="text-gray-600 hover:text-gray-900">Users</a> -->
                         <!-- <a href="pct/ipx.html" data-can="view-projects" class="text-gray-600 hover:text-gray-900">Projects</a> -->
@@ -169,7 +169,7 @@
 
                     <!-- Alert 3 -->
                     <div class="bg-gray-50 border-l-4 border-gray-400 rounded-lg p-4 hover:shadow-md transition">
-                        <a href="/dashboard.html"> <div class="flex items-start">
+                        <a href="/box/dashboard.html"> <div class="flex items-start">
                             <svg class="w-6 h-6 text-gray-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                             </svg>
@@ -600,7 +600,7 @@
                 <p class="text-sm text-gray-600">© 2025 Reneal Tanzania </p>
                 <div class="flex space-x-6 mt-4 md:mt-0">
                     <a href="#" class="text-sm text-gray-600 hover:text-primary">Documentation</a>
-                    <a href="#" class="text-sm text-gray-600 hover:text-primary">Support</a>
+                    <a href="https://ol.tie.go.tz" class="text-sm text-gray-600 hover:text-primary">TIE</a>
                     <a href="#" class="text-sm text-gray-600 hover:text-primary">Contact</a>
                 </div>
             </div>
@@ -614,6 +614,7 @@
         function handleLogout() {
             if (confirm('Are you sure you want to logout?')) {
                 Auth.logout();
+                window.location.href = '/box';
             }
         }
 

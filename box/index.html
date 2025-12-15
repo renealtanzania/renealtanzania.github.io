@@ -47,7 +47,7 @@
                         <p id="userNameDisplay" class="text-sm font-semibold text-gray-900"></p>
                         <p id="userRoleDisplay" class="text-xs text-gray-600"></p>
                     </div>
-                    <button onclick="handleLogout()" id="logoutButton" href="/dashboard.html" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
+                    <button onclick="handleLogout()" id="logoutButton" href="/box/dashboard.html" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
                         Logout
                     </button>
                 </div>
@@ -67,14 +67,14 @@
                 <div class="flex flex-col space-y-3 pt-2">
                     <a href="/prod/blog" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">Blog Posts</a>
                     <!-- <a href="/prod/neasws" class="text-gray-700 hover:text-gray-900 py-2 border-t border-gray-100">News</a> -->
-                    <a href="/login.html" id="mobileLoginLink" class="text-green-700 hover:text-green-900 py-2 border-t border-green-100 border-b font-bold">Login</a>
+                    <a href="box/login.html" id="mobileLoginLink" class="text-green-700 hover:text-green-900 py-2 border-t border-green-100 border-b font-bold">Login</a>
 
                     
                     <!-- Mobile User Info -->
                     <div id="mobileUserInfo" class="hidden py-2 border-t border-gray-100">
                         <p id="mobileUserName" class="font-semibold text-gray-900"></p>
                         <p id="mobileUserRole" class="text-sm text-gray-600"></p>
-                        <a href="/dashboard.html" class="mt-2 inline-block bg-blue-700 text-white px-4 py-2 rounded-lg">Dashboard</a>
+                        <a href="box/dashboard.html" class="mt-2 inline-block bg-blue-700 text-white px-4 py-2 rounded-lg">Dashboard</a>
                     </div>
                 </div>
             </div>
@@ -184,7 +184,7 @@
                                 </div>
                             </a>
                         </div>
-                        <a href="/" class="block text-center mt-6 text-blue-600 hover:text-blue-700 font-medium">
+                        <a href="/box" class="block text-center mt-6 text-blue-600 hover:text-blue-700 font-medium">
                             Updating  →
                         </a>
                     </div>
@@ -225,21 +225,20 @@
                     <ul class="space-y-3 text-gray-600">
                         <!-- <li><a href="#" class="hover:text-gray-900">Documentation</a></li> -->
                         <!-- <li><a href="/dev/server/rebuild" class="hover:text-gray-900">Server Setup</a></li> -->
-                        <!-- <li><a href="#" class="hover:text-gray-900">Training</a></li> -->
+                        <li><a href="https://ol.tie.go.tz" class="hover:text-gray-900">TIE Books</a></li>
                         <li><a href="#" class="hover:text-gray-900">Contact</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-900 mb-4">Connect</h4>
                     <div class="flex gap-4">
-                        <a href="#" class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition">
-                            <i class="fab fa-facebook text-gray-600"></i>
+                        <a href="https://facebook.com" class="text-gray-400 hover:text-white transition">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
                         </a>
-                        <a href="#" class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition">
-                            <i class="fab fa-twitter text-gray-600"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition">
-                            <i class="fab fa-linkedin text-gray-600"></i>
+                        <a href="https://instagram.com" class="text-gray-400 hover:text-white transition">
+                            <img src="/public/imgs/home/instagram-logo.svg" width="25" height="25">
                         </a>
                     </div>
                 </div>
@@ -264,10 +263,10 @@
         function handleViewDetails() {
             if (typeof Auth !== 'undefined' && Auth.check()) {
                 // User is logged in, go to dashboard
-                window.location.href = '/dashboard.html';
+                window.location.href = '/box/dashboard.html';
             } else {
                 // User not logged in, redirect to login with return URL
-                window.location.href = '/login.html?returnUrl=' + encodeURIComponent('/dashboard.html');
+                window.location.href = '/box/login.html?returnUrl=' + encodeURIComponent('box/dashboard.html');
             }
         }
 
@@ -296,7 +295,7 @@
                 // Update mobile menu login link
                 const mobileLoginLink = document.getElementById('mobileLoginLink');
                 mobileLoginLink.textContent = 'Go to Dashboard';
-                mobileLoginLink.href = '/dashboard.html';
+                mobileLoginLink.href = 'box/dashboard.html';
                 mobileLoginLink.classList.remove('text-green-700', 'hover:text-green-900', 'border-green-100');
                 mobileLoginLink.classList.add('text-blue-700', 'hover:text-blue-900', 'border-blue-100');
             }
