@@ -115,9 +115,8 @@
                 const result = await Auth.login(email, password);
                 
                 if (result.success) {
-                    // Get return URL or default to dashboard
-                    const returnUrl = Auth.getReturnUrl();
-                    window.location.href = returnUrl;
+                    // Redirect to dashboard with absolute path
+                    window.location.href = '/box/dashboard.html';
                 } else {
                     errorDiv.classList.remove('hidden');
                     errorDiv.querySelector('p').textContent = result.message;
