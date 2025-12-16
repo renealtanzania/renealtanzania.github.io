@@ -19,7 +19,7 @@ const Config = {
   // Application Metadata
   app: {
     name: 'Reneal Tanzania',
-    version: '1.0.0',
+    version: '2.0.0',
     description: 'Educational Outreach Platform'
   },
 

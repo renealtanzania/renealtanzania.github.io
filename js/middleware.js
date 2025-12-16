@@ -232,7 +232,7 @@ const Middleware = {
     localStorage.setItem('reneal_return_url', window.location.pathname);
     
     // Redirect
-    window.location.replace(prefix + 'login.html');
+    window.location.replace(prefix + 'box/login.html');
   },
 
   // Redirect to unauthorized page
