@@ -26,6 +26,11 @@
     "type": "public"
   },
   {
+    "page name": "Box Login",
+    "url": "/box/login.html",
+    "type": "public"
+  },
+  {
     "page name": "Team Members Team",
     "url": "team-members/team.html",
     "viewer": "admin, super-admin, team-member",
