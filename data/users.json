@@ -11,7 +11,7 @@
     "name": "David Nyangaka",
     "email": "david@gmail.com",
     "status": "Active",
-    "password": "11223344",
+    "password": "david@team",
     "position": "director",
     "role": "admin"
   },
@@ -19,7 +19,7 @@
     "name": "Justin Msechu",
     "email": "justin@gmail.com",
     "status": "Active",
-    "password": "11223344",
+    "password": "justin@team",
     "position": "technician",
     "role": "team-member"
   },
@@ -27,7 +27,7 @@
     "name": "James Ngahemelwa",
     "email": "james@gmail.com",
     "status": "Active",
-    "password": "11223344",
+    "password": "james@team",
     "position": "technician",
     "role": "team-member"
   },
@@ -43,7 +43,7 @@
     "name": "Juma Ramadhani",
     "email": "juma@gmail.com",
     "status": "Active",
-    "password": "11223344",
+    "password": "juma@team",
     "position": "technician",
     "role": "team-member"
   },
@@ -51,7 +51,7 @@
     "name": "Aboubakar Frenk",
     "email": "abou@gmail.com",
     "status": "Active",
-    "password": "11223344",
+    "password": "abou@team",
     "position": "technician",
     "role": "team-member"
   },
@@ -59,7 +59,7 @@
     "name": "Ashura Yusuph",
     "email": "ashura@gmail.com",
     "status": "Active",
-    "password": "11223344",
+    "password": "ashura@team",
     "position": "media",
     "role": "team-member"
   },
@@ -67,7 +67,7 @@
     "name": "Janeth Mbaga",
     "email": "janeth@gmail.com",
     "status": "Active",
-    "password": "11223344",
+    "password": "janeth@team",
     "position": "technician",
     "role": "team-member"
   },
@@ -75,7 +75,7 @@
     "name": "Daniel Nkoo",
     "email": "daniel@gmail.com",
     "status": "Active",
-    "password": "11223344",
+    "password": "daniel@team",
     "position": "technician",
     "role": "team-member"
   }
