@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+    <title>Computer Lab Stats Tracker</title>
+    <script src="/public/css/script/tailwindcss3417.js"></script>
+    <style>
+        .school-card {
+            transition: all 0.3s ease;
+        }
+        .school-card:hover {
+            transform: translateY(-2px);
+        }
+        .info-section {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .info-section.active {
+            max-height: 2000px;
+        }
+        .pagination-btn {
+            transition: all 0.2s ease;
+        }
+        .pagination-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+        }
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                <h1 class="text-2xl md:text-3xl font-bold text-indigo-700 mb-2 md:mb-0">
+                    🖥️ Computer Lab Stats Tracker
+                </h1>
+                <div class="flex items-center space-x-4">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Search schools..." 
+                        class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full md:w-64"
+                    >
+                    <select id="filterSelect" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="all">All Schools</option>
+                        <option value="excellent">Excellent</option>
+                        <option value="good">Good</option>
+                        <option value="fair">Fair</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Overview -->
+    <div class="container mx-auto px-4 py-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">Total Schools</p>
+                        <p class="text-3xl font-bold text-indigo-600" id="totalSchools">98</p>
+                    </div>
+                    <div class="text-4xl">🏫</div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">Active Reports</p>
+                        <p class="text-3xl font-bold text-green-600">750</p>
+                    </div>
+                    <div class="text-4xl">📊</div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">Current Page</p>
+                        <p class="text-3xl font-bold text-blue-600" id="currentPageDisplay">1</p>
+                    </div>
+                    <div class="text-4xl">📄</div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">Total Pages</p>
+                        <p class="text-3xl font-bold text-purple-600" id="totalPages">5</p>
+                    </div>
+                    <div class="text-4xl">📚</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schools Grid -->
+        <div id="schoolsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Schools will be dynamically generated here -->
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="flex flex-col sm:flex-row items-center justify-between bg-white rounded-lg shadow-md p-4 gap-4">
+            <div class="text-sm text-gray-600">
+                Showing <span id="showingStart" class="font-semibold">1</span> to <span id="showingEnd" class="font-semibold">15</span> of <span id="totalSchoolsText" class="font-semibold">75</span> schools
+            </div>
+            
+            <div class="flex items-center space-x-2">
+                <button onclick="goToPage(1)" class="pagination-btn px-3 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 font-medium text-sm" id="firstBtn">
+                    First
+                </button>
+                <button onclick="previousPage()" class="pagination-btn px-3 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 font-medium text-sm" id="prevBtn">
+                    Previous
+                </button>
+                
+                <div class="flex items-center space-x-1" id="pageNumbers">
+                    <!-- Page numbers will be inserted here -->
+                </div>
+                
+                <button onclick="nextPage()" class="pagination-btn px-3 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 font-medium text-sm" id="nextBtn">
+                    Next
+                </button>
+                <button onclick="goToPage(totalPagesCount)" class="pagination-btn px-3 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 font-medium text-sm" id="lastBtn">
+                    Last
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const schools = [
+            { name: "Amani Abeid Karume", status: "excellent", students: 850, id: 1, urls: {
+                report1: "reports/2026/abkarume/report1.pdf",
+                report2: "reports/2026/abkarume/report2.pdf",
+                midterm1: "reports/2026/abkarume/midterm1.pdf",
+                terminal1: "reports/2026/abkarume/terminal1.pdf",
+                midterm2: "reports/2026/abkarume/midterm2.pdf",
+                terminal2: "reports/2026/abkarume/terminal2.pdf",
+                apache_full: "logs/abkarume/apache/full.log",
+                apache_7days: "logs/abkarume/apache/7days.log",
+                squid_full: "logs/abkarume/squid/full.log",
+                squid_7days: "logs/abkarume/squid/7days.log"
+            }},
+            { name: "Einoti Secondary School", status: "excellent", students: 420, id: 2, urls: {
+                report1: "reports/2026/einoti/report1.pdf",
+                report2: "reports/2026/einoti/report2.pdf",
+                midterm1: "reports/2026/einoti/midterm1.pdf",
+                terminal1: "reports/2026/einoti/terminal1.pdf",
+                midterm2: "reports/2026/einoti/midterm2.pdf",
+                terminal2: "reports/2026/einoti/terminal2.pdf",
+                apache_full: "logs/einoti/apache/full.log",
+                apache_7days: "logs/einoti/apache/7days.log",
+                squid_full: "logs/einoti/squid/full.log",
+                squid_7days: "logs/einoti/squid/7days.log"
+            }},
+            { name: "Florian Secondary School", status: "excellent", students: 650, id: 3, urls: {
+                report1: "reports/2026/florian/report1.pdf",
+                report2: "reports/2026/florian/report2.pdf",
+                midterm1: "reports/2026/florian/midterm1.pdf",
+                terminal1: "reports/2026/florian/terminal1.pdf",
+                midterm2: "reports/2026/florian/midterm2.pdf",
+                terminal2: "reports/2026/florian/terminal2.pdf",
+                apache_full: "logs/florian/apache/full.log",
+                apache_7days: "logs/florian/apache/7days.log",
+                squid_full: "logs/florian/squid/full.log",
+                squid_7days: "logs/florian/squid/7days.log"
+            }},
+            { name: "Mkonoo Secondary School", status: "excellent", students: 780, id: 4, urls: {
+                report1: "reports/2026/mkonoo/report1.pdf",
+                report2: "reports/2026/mkonoo/report2.pdf",
+                midterm1: "reports/2026/mkonoo/midterm1.pdf",
+                terminal1: "reports/2026/mkonoo/terminal1.pdf",
+                midterm2: "reports/2026/mkonoo/midterm2.pdf",
+                terminal2: "reports/2026/mkonoo/terminal2.pdf",
+                apache_full: "logs/mkonoo/apache/full.log",
+                apache_7days: "logs/mkonoo/apache/7days.log",
+                squid_full: "logs/mkonoo/squid/full.log",
+                squid_7days: "logs/mkonoo/squid/7days.log"
+            }},
+            { name: "Mlangarini Secondary School", status: "excellent", students: 920, id: 5, urls: {
+                report1: "reports/2026/mlangarini/report1.pdf",
+                report2: "reports/2026/mlangarini/report2.pdf",
+                midterm1: "reports/2026/mlangarini/midterm1.pdf",
+                terminal1: "reports/2026/mlangarini/terminal1.pdf",
+                midterm2: "reports/2026/mlangarini/midterm2.pdf",
+                terminal2: "reports/2026/mlangarini/terminal2.pdf",
+                apache_full: "logs/mlangarini/apache/full.log",
+                apache_7days: "logs/mlangarini/apache/7days.log",
+                squid_full: "logs/mlangarini/squid/full.log",
+                squid_7days: "logs/mlangarini/squid/7days.log"
+            }},
+            { name: "Lucas Malia Secondary School", status: "excellent", students: 540, id: 6, urls: {
+                report1: "reports/2026/lucasmalia/report1.pdf",
+                report2: "reports/2026/lucasmalia/report2.pdf",
+                midterm1: "reports/2026/lucasmalia/midterm1.pdf",
+                terminal1: "reports/2026/lucasmalia/terminal1.pdf",
+                midterm2: "reports/2026/lucasmalia/midterm2.pdf",
+                terminal2: "reports/2026/lucasmalia/terminal2.pdf",
+                apache_full: "logs/lucasmalia/apache/full.log",
+                apache_7days: "logs/lucasmalia/apache/7days.log",
+                squid_full: "logs/lucasmalia/squid/full.log",
+                squid_7days: "logs/lucasmalia/squid/7days.log"
+            }},
+            { name: "Namanga Secondary School", status: "excellent", students: 890, id: 7, urls: {
+                report1: "reports/2026/namanga/report1.pdf",
+                report2: "reports/2026/namanga/report2.pdf",
+                midterm1: "reports/2026/namanga/midterm1.pdf",
+                terminal1: "reports/2026/namanga/terminal1.pdf",
+                midterm2: "reports/2026/namanga/midterm2.pdf",
+                terminal2: "reports/2026/namanga/terminal2.pdf",
+                apache_full: "logs/namanga/apache/full.log",
+                apache_7days: "logs/namanga/apache/7days.log",
+                squid_full: "logs/namanga/squid/full.log",
+                squid_7days: "logs/namanga/squid/7days.log"
+            }},
+            { name: "Tinga Tinga Secondary School", status: "excellent", students: 480, id: 8, urls: {
+                report1: "reports/2026/tingatinga/report1.pdf",
+                report2: "reports/2026/tingatinga/report2.pdf",
+                midterm1: "reports/2026/tingatinga/midterm1.pdf",
+                terminal1: "reports/2026/tingatinga/terminal1.pdf",
+                midterm2: "reports/2026/tingatinga/midterm2.pdf",
+                terminal2: "reports/2026/tingatinga/terminal2.pdf",
+                apache_full: "logs/tingatinga/apache/full.log",
+                apache_7days: "logs/tingatinga/apache/7days.log",
+                squid_full: "logs/tingatinga/squid/full.log",
+                squid_7days: "logs/tingatinga/squid/7days.log"
+            }},
+            { name: "Ndolwa Secondary School", status: "excellent", students: 390, id: 9, urls: {
+                report1: "reports/2026/ndolwa/report1.pdf",
+                report2: "reports/2026/ndolwa/report2.pdf",
+                midterm1: "reports/2026/ndolwa/midterm1.pdf",
+                terminal1: "reports/2026/ndolwa/terminal1.pdf",
+                midterm2: "reports/2026/ndolwa/midterm2.pdf",
+                terminal2: "reports/2026/ndolwa/terminal2.pdf",
+                apache_full: "logs/ndolwa/apache/full.log",
+                apache_7days: "logs/ndolwa/apache/7days.log",
+                squid_full: "logs/ndolwa/squid/full.log",
+                squid_7days: "logs/ndolwa/squid/7days.log"
+            }},
+            { name: "Mtama Secondary School", status: "excellent", students: 1050, id: 10, urls: {
+                report1: "reports/2026/mtama/report1.pdf",
+                report2: "reports/2026/mtama/report2.pdf",
+                midterm1: "reports/2026/mtama/midterm1.pdf",
+                terminal1: "reports/2026/mtama/terminal1.pdf",
+                midterm2: "reports/2026/mtama/midterm2.pdf",
+                terminal2: "reports/2026/mtama/terminal2.pdf",
+                apache_full: "logs/mtama/apache/full.log",
+                apache_7days: "logs/mtama/apache/7days.log",
+                squid_full: "logs/mtama/squid/full.log",
+                squid_7days: "logs/mtama/squid/7days.log"
+            }},
+            { name: "Banjika Secondary School", status: "excellent", students: 620, id: 11, urls: {
+                report1: "reports/2026/banjika/report1.pdf",
+                report2: "reports/2026/banjika/report2.pdf",
+                midterm1: "reports/2026/banjika/midterm1.pdf",
+                terminal1: "reports/2026/banjika/terminal1.pdf",
+                midterm2: "reports/2026/banjika/midterm2.pdf",
+                terminal2: "reports/2026/banjika/terminal2.pdf",
+                apache_full: "logs/banjika/apache/full.log",
+                apache_7days: "logs/banjika/apache/7days.log",
+                squid_full: "logs/banjika/squid/full.log",
+                squid_7days: "logs/banjika/squid/7days.log"
+            }},
+            { name: "Bukulu Secondary School", status: "excellent", students: 810, id: 12, urls: {
+                report1: "reports/2026/bukulu/report1.pdf",
+                report2: "reports/2026/bukulu/report2.pdf",
+                midterm1: "reports/2026/bukulu/midterm1.pdf",
+                terminal1: "reports/2026/bukulu/terminal1.pdf",
+                midterm2: "reports/2026/bukulu/midterm2.pdf",
+                terminal2: "reports/2026/bukulu/terminal2.pdf",
+                apache_full: "logs/bukulu/apache/full.log",
+                apache_7days: "logs/bukulu/apache/7days.log",
+                squid_full: "logs/bukulu/squid/full.log",
+                squid_7days: "logs/bukulu/squid/7days.log"
+            }},
+            { name: "Nkoarusambu Secondary School", status: "excellent", students: 710, id: 13, urls: {
+                report1: "reports/2026/nkoarusambu/report1.pdf",
+                report2: "reports/2026/nkoarusambu/report2.pdf",
+                midterm1: "reports/2026/nkoarusambu/midterm1.pdf",
+                terminal1: "reports/2026/nkoarusambu/terminal1.pdf",
+                midterm2: "reports/2026/nkoarusambu/midterm2.pdf",
+                terminal2: "reports/2026/nkoarusambu/terminal2.pdf",
+                apache_full: "logs/nkoarusambu/apache/full.log",
+                apache_7days: "logs/nkoarusambu/apache/7days.log",
+                squid_full: "logs/nkoarusambu/squid/full.log",
+                squid_7days: "logs/nkoarusambu/squid/7days.log"
+            }},
+            { name: "Irkisongo Secondary School", status: "excellent", students: 350, id: 14, urls: {
+                report1: "reports/2026/irkisongo/report1.pdf",
+                report2: "reports/2026/irkisongo/report2.pdf",
+                midterm1: "reports/2026/irkisongo/midterm1.pdf",
+                terminal1: "reports/2026/irkisongo/terminal1.pdf",
+                midterm2: "reports/2026/irkisongo/midterm2.pdf",
+                terminal2: "reports/2026/irkisongo/terminal2.pdf",
+                apache_full: "logs/irkisongo/apache/full.log",
+                apache_7days: "logs/irkisongo/apache/7days.log",
+                squid_full: "logs/irkisongo/squid/full.log",
+                squid_7days: "logs/irkisongo/squid/7days.log"
+            }},
+            { name: "Dareda Secodary School", status: "excellent", students: 980, id: 15, urls: {
+                report1: "reports/2026/dareda/report1.pdf",
+                report2: "reports/2026/dareda/report2.pdf",
+                midterm1: "reports/2026/dareda/midterm1.pdf",
+                terminal1: "reports/2026/dareda/terminal1.pdf",
+                midterm2: "reports/2026/dareda/midterm2.pdf",
+                terminal2: "reports/2026/dareda/terminal2.pdf",
+                apache_full: "logs/dareda/apache/full.log",
+                apache_7days: "logs/dareda/apache/7days.log",
+                squid_full: "logs/dareda/squid/full.log",
+                squid_7days: "logs/dareda/squid/7days.log"
+            }},
+            { name: "Buchanan Charter School", status: "good", students: 560, id: 16, urls: {
+                report1: "reports/2026/buchanan/report1.pdf",
+                report2: "reports/2026/buchanan/report2.pdf",
+                midterm1: "reports/2026/buchanan/midterm1.pdf",
+                terminal1: "reports/2026/buchanan/terminal1.pdf",
+                midterm2: "reports/2026/buchanan/midterm2.pdf",
+                terminal2: "reports/2026/buchanan/terminal2.pdf",
+                apache_full: "logs/buchanan/apache/full.log",
+                apache_7days: "logs/buchanan/apache/7days.log",
+                squid_full: "logs/buchanan/squid/full.log",
+                squid_7days: "logs/buchanan/squid/7days.log"
+            }},
+            { name: "Johnson High School", status: "good", students: 870, id: 17, urls: {
+                report1: "reports/2026/johnson/report1.pdf",
+                report2: "reports/2026/johnson/report2.pdf",
+                midterm1: "reports/2026/johnson/midterm1.pdf",
+                terminal1: "reports/2026/johnson/terminal1.pdf",
+                midterm2: "reports/2026/johnson/midterm2.pdf",
+                terminal2: "reports/2026/johnson/terminal2.pdf",
+                apache_full: "logs/johnson/apache/full.log",
+                apache_7days: "logs/johnson/apache/7days.log",
+                squid_full: "logs/johnson/squid/full.log",
+                squid_7days: "logs/johnson/squid/7days.log"
+            }},
+            { name: "Grant Middle School", status: "good", students: 690, id: 18, urls: {
+                report1: "reports/2026/grant/report1.pdf",
+                report2: "reports/2026/grant/report2.pdf",
+                midterm1: "reports/2026/grant/midterm1.pdf",
+                terminal1: "reports/2026/grant/terminal1.pdf",
+                midterm2: "reports/2026/grant/midterm2.pdf",
+                terminal2: "reports/2026/grant/terminal2.pdf",
+                apache_full: "logs/grant/apache/full.log",
+                apache_7days: "logs/grant/apache/7days.log",
+                squid_full: "logs/grant/squid/full.log",
+                squid_7days: "logs/grant/squid/7days.log"
+            }},
+            { name: "Hayes Elementary", status: "good", students: 410, id: 19, urls: {
+                report1: "reports/2026/hayes/report1.pdf",
+                report2: "reports/2026/hayes/report2.pdf",
+                midterm1: "reports/2026/hayes/midterm1.pdf",
+                terminal1: "reports/2026/hayes/terminal1.pdf",
+                midterm2: "reports/2026/hayes/midterm2.pdf",
+                terminal2: "reports/2026/hayes/terminal2.pdf",
+                apache_full: "logs/hayes/apache/full.log",
+                apache_7days: "logs/hayes/apache/7days.log",
+                squid_full: "logs/hayes/squid/full.log",
+                squid_7days: "logs/hayes/squid/7days.log"
+            }},
+            { name: "Garfield Academy", status: "good", students: 750, id: 20, urls: {
+                report1: "reports/2026/garfield/report1.pdf",
+                report2: "reports/2026/garfield/report2.pdf",
+                midterm1: "reports/2026/garfield/midterm1.pdf",
+                terminal1: "reports/2026/garfield/terminal1.pdf",
+                midterm2: "reports/2026/garfield/midterm2.pdf",
+                terminal2: "reports/2026/garfield/terminal2.pdf",
+                apache_full: "logs/garfield/apache/full.log",
+                apache_7days: "logs/garfield/apache/7days.log",
+                squid_full: "logs/garfield/squid/full.log",
+                squid_7days: "logs/garfield/squid/7days.log"
+            }},
+            { name: "Arthur Science School", status: "fair", students: 640, id: 21, urls: {
+                report1: "reports/2026/arthur/report1.pdf",
+                report2: "reports/2026/arthur/report2.pdf",
+                midterm1: "reports/2026/arthur/midterm1.pdf",
+                terminal1: "reports/2026/arthur/terminal1.pdf",
+                midterm2: "reports/2026/arthur/midterm2.pdf",
+                terminal2: "reports/2026/arthur/terminal2.pdf",
+                apache_full: "logs/arthur/apache/full.log",
+                apache_7days: "logs/arthur/apache/7days.log",
+                squid_full: "logs/arthur/squid/full.log",
+                squid_7days: "logs/arthur/squid/7days.log"
+            }},
+            { name: "Cleveland High School", status: "good", students: 860, id: 22, urls: {
+                report1: "reports/2026/cleveland/report1.pdf",
+                report2: "reports/2026/cleveland/report2.pdf",
+                midterm1: "reports/2026/cleveland/midterm1.pdf",
+                terminal1: "reports/2026/cleveland/terminal1.pdf",
+                midterm2: "reports/2026/cleveland/midterm2.pdf",
+                terminal2: "reports/2026/cleveland/terminal2.pdf",
+                apache_full: "logs/cleveland/apache/full.log",
+                apache_7days: "logs/cleveland/apache/7days.log",
+                squid_full: "logs/cleveland/squid/full.log",
+                squid_7days: "logs/cleveland/squid/7days.log"
+            }},
+            { name: "McKinley Middle School", status: "good", students: 580, id: 23, urls: {
+                report1: "reports/2026/mckinley/report1.pdf",
+                report2: "reports/2026/mckinley/report2.pdf",
+                midterm1: "reports/2026/mckinley/midterm1.pdf",
+                terminal1: "reports/2026/mckinley/terminal1.pdf",
+                midterm2: "reports/2026/mckinley/midterm2.pdf",
+                terminal2: "reports/2026/mckinley/terminal2.pdf",
+                apache_full: "logs/mckinley/apache/full.log",
+                apache_7days: "logs/mckinley/apache/7days.log",
+                squid_full: "logs/mckinley/squid/full.log",
+                squid_7days: "logs/mckinley/squid/7days.log"
+            }},
+            { name: "Roosevelt Tech Institute", status: "excellent", students: 910, id: 24, urls: {
+                report1: "reports/2026/roosevelttech/report1.pdf",
+                report2: "reports/2026/roosevelttech/report2.pdf",
+                midterm1: "reports/2026/roosevelttech/midterm1.pdf",
+                terminal1: "reports/2026/roosevelttech/terminal1.pdf",
+                midterm2: "reports/2026/roosevelttech/midterm2.pdf",
+                terminal2: "reports/2026/roosevelttech/terminal2.pdf",
+                apache_full: "logs/roosevelttech/apache/full.log",
+                apache_7days: "logs/roosevelttech/apache/7days.log",
+                squid_full: "logs/roosevelttech/squid/full.log",
+                squid_7days: "logs/roosevelttech/squid/7days.log"
+            }},
+            { name: "Taft Elementary", status: "good", students: 370, id: 25, urls: {
+                report1: "reports/2026/taft/report1.pdf",
+                report2: "reports/2026/taft/report2.pdf",
+                midterm1: "reports/2026/taft/midterm1.pdf",
+                terminal1: "reports/2026/taft/terminal1.pdf",
+                midterm2: "reports/2026/taft/midterm2.pdf",
+                terminal2: "reports/2026/taft/terminal2.pdf",
+                apache_full: "logs/taft/apache/full.log",
+                apache_7days: "logs/taft/apache/7days.log",
+                squid_full: "logs/taft/squid/full.log",
+                squid_7days: "logs/taft/squid/7days.log"
+            }},
+            { name: "Wilson Charter Academy", status: "good", students: 790, id: 26, urls: {
+                report1: "reports/2026/wilson/report1.pdf",
+                report2: "reports/2026/wilson/report2.pdf",
+                midterm1: "reports/2026/wilson/midterm1.pdf",
+                terminal1: "reports/2026/wilson/terminal1.pdf",
+                midterm2: "reports/2026/wilson/midterm2.pdf",
+                terminal2: "reports/2026/wilson/terminal2.pdf",
+                apache_full: "logs/wilson/apache/full.log",
+                apache_7days: "logs/wilson/apache/7days.log",
+                squid_full: "logs/wilson/squid/full.log",
+                squid_7days: "logs/wilson/squid/7days.log"
+            }},
+            { name: "Harding High School", status: "fair", students: 840, id: 27, urls: {
+                report1: "reports/2026/harding/report1.pdf",
+                report2: "reports/2026/harding/report2.pdf",
+                midterm1: "reports/2026/harding/midterm1.pdf",
+                terminal1: "reports/2026/harding/terminal1.pdf",
+                midterm2: "reports/2026/harding/midterm2.pdf",
+                terminal2: "reports/2026/harding/terminal2.pdf",
+                apache_full: "logs/harding/apache/full.log",
+                apache_7days: "logs/harding/apache/7days.log",
+                squid_full: "logs/harding/squid/full.log",
+                squid_7days: "logs/harding/squid/7days.log"
+            }},
+            { name: "Coolidge Middle School", status: "good", students: 520, id: 28, urls: {
+                report1: "reports/2026/coolidge/report1.pdf",
+                report2: "reports/2026/coolidge/report2.pdf",
+                midterm1: "reports/2026/coolidge/midterm1.pdf",
+                terminal1: "reports/2026/coolidge/terminal1.pdf",
+                midterm2: "reports/2026/coolidge/midterm2.pdf",
+                terminal2: "reports/2026/coolidge/terminal2.pdf",
+                apache_full: "logs/coolidge/apache/full.log",
+                apache_7days: "logs/coolidge/apache/7days.log",
+                squid_full: "logs/coolidge/squid/full.log",
+                squid_7days: "logs/coolidge/squid/7days.log"
+            }},
+            { name: "Hoover STEM Center", status: "excellent", students: 1020, id: 29, urls: {
+                report1: "reports/2026/hoover/report1.pdf",
+                report2: "reports/2026/hoover/report2.pdf",
+                midterm1: "reports/2026/hoover/midterm1.pdf",
+                terminal1: "reports/2026/hoover/terminal1.pdf",
+                midterm2: "reports/2026/hoover/midterm2.pdf",
+                terminal2: "reports/2026/hoover/terminal2.pdf",
+                apache_full: "logs/hoover/apache/full.log",
+                apache_7days: "logs/hoover/apache/7days.log",
+                squid_full: "logs/hoover/squid/full.log",
+                squid_7days: "logs/hoover/squid/7days.log"
+            }},
+            { name: "Truman Community School", status: "good", students: 670, id: 30, urls: {
+                report1: "reports/2026/truman/report1.pdf",
+                report2: "reports/2026/truman/report2.pdf",
+                midterm1: "reports/2026/truman/midterm1.pdf",
+                terminal1: "reports/2026/truman/terminal1.pdf",
+                midterm2: "reports/2026/truman/midterm2.pdf",
+                terminal2: "reports/2026/truman/terminal2.pdf",
+                apache_full: "logs/truman/apache/full.log",
+                apache_7days: "logs/truman/apache/7days.log",
+                squid_full: "logs/truman/squid/full.log",
+                squid_7days: "logs/truman/squid/7days.log"
+            }},
+            { name: "Eisenhower High School", status: "excellent", students: 950, id: 31, urls: {
+                report1: "reports/2026/eisenhower/report1.pdf",
+                report2: "reports/2026/eisenhower/report2.pdf",
+                midterm1: "reports/2026/eisenhower/midterm1.pdf",
+                terminal1: "reports/2026/eisenhower/terminal1.pdf",
+                midterm2: "reports/2026/eisenhower/midterm2.pdf",
+                terminal2: "reports/2026/eisenhower/terminal2.pdf",
+                apache_full: "logs/eisenhower/apache/full.log",
+                apache_7days: "logs/eisenhower/apache/7days.log",
+                squid_full: "logs/eisenhower/squid/full.log",
+                squid_7days: "logs/eisenhower/squid/7days.log"
+            }},
+            { name: "Kennedy Middle School", status: "good", students: 580, id: 32, urls: {
+                report1: "reports/2026/kennedy/report1.pdf",
+                report2: "reports/2026/kennedy/report2.pdf",
+                midterm1: "reports/2026/kennedy/midterm1.pdf",
+                terminal1: "reports/2026/kennedy/terminal1.pdf",
+                midterm2: "reports/2026/kennedy/midterm2.pdf",
+                terminal2: "reports/2026/kennedy/terminal2.pdf",
+                apache_full: "logs/kennedy/apache/full.log",
+                apache_7days: "logs/kennedy/apache/7days.log",
+                squid_full: "logs/kennedy/squid/full.log",
+                squid_7days: "logs/kennedy/squid/7days.log"
+            }},
+            { name: "Nixon Elementary", status: "good", students: 430, id: 33, urls: {
+                report1: "reports/2026/nixon/report1.pdf",
+                report2: "reports/2026/nixon/report2.pdf",
+                midterm1: "reports/2026/nixon/midterm1.pdf",
+                terminal1: "reports/2026/nixon/terminal1.pdf",
+                midterm2: "reports/2026/nixon/midterm2.pdf",
+                terminal2: "reports/2026/nixon/terminal2.pdf",
+                apache_full: "logs/nixon/apache/full.log",
+                apache_7days: "logs/nixon/apache/7days.log",
+                squid_full: "logs/nixon/squid/full.log",
+                squid_7days: "logs/nixon/squid/7days.log"
+            }},
+            { name: "Ford Technical Institute", status: "excellent", students: 880, id: 34, urls: {
+                report1: "reports/2026/ford/report1.pdf",
+                report2: "reports/2026/ford/report2.pdf",
+                midterm1: "reports/2026/ford/midterm1.pdf",
+                terminal1: "reports/2026/ford/terminal1.pdf",
+                midterm2: "reports/2026/ford/midterm2.pdf",
+                terminal2: "reports/2026/ford/terminal2.pdf",
+                apache_full: "logs/ford/apache/full.log",
+                apache_7days: "logs/ford/apache/7days.log",
+                squid_full: "logs/ford/squid/full.log",
+                squid_7days: "logs/ford/squid/7days.log"
+            }},
+            { name: "Carter Charter School", status: "fair", students: 610, id: 35, urls: {
+                report1: "reports/2026/carter/report1.pdf",
+                report2: "reports/2026/carter/report2.pdf",
+                midterm1: "reports/2026/carter/midterm1.pdf",
+                terminal1: "reports/2026/carter/terminal1.pdf",
+                midterm2: "reports/2026/carter/midterm2.pdf",
+                terminal2: "reports/2026/carter/terminal2.pdf",
+                apache_full: "logs/carter/apache/full.log",
+                apache_7days: "logs/carter/apache/7days.log",
+                squid_full: "logs/carter/squid/full.log",
+                squid_7days: "logs/carter/squid/7days.log"
+            }},
+            { name: "Reagan High School", status: "good", students: 920, id: 36, urls: {
+                report1: "reports/2026/reagan/report1.pdf",
+                report2: "reports/2026/reagan/report2.pdf",
+                midterm1: "reports/2026/reagan/midterm1.pdf",
+                terminal1: "reports/2026/reagan/terminal1.pdf",
+                midterm2: "reports/2026/reagan/midterm2.pdf",
+                terminal2: "reports/2026/reagan/terminal2.pdf",
+                apache_full: "logs/reagan/apache/full.log",
+                apache_7days: "logs/reagan/apache/7days.log",
+                squid_full: "logs/reagan/squid/full.log",
+                squid_7days: "logs/reagan/squid/7days.log"
+            }},
+            { name: "Bush Middle School", status: "good", students: 550, id: 37, urls: {
+                report1: "reports/2026/bush/report1.pdf",
+                report2: "reports/2026/bush/report2.pdf",
+                midterm1: "reports/2026/bush/midterm1.pdf",
+                terminal1: "reports/2026/bush/terminal1.pdf",
+                midterm2: "reports/2026/bush/midterm2.pdf",
+                terminal2: "reports/2026/bush/terminal2.pdf",
+                apache_full: "logs/bush/apache/full.log",
+                apache_7days: "logs/bush/apache/7days.log",
+                squid_full: "logs/bush/squid/full.log",
+                squid_7days: "logs/bush/squid/7days.log"
+            }},
+            { name: "Clinton Elementary", status: "excellent", students: 470, id: 38, urls: {
+                report1: "reports/2026/clinton/report1.pdf",
+                report2: "reports/2026/clinton/report2.pdf",
+                midterm1: "reports/2026/clinton/midterm1.pdf",
+                terminal1: "reports/2026/clinton/terminal1.pdf",
+                midterm2: "reports/2026/clinton/midterm2.pdf",
+                terminal2: "reports/2026/clinton/terminal2.pdf",
+                apache_full: "logs/clinton/apache/full.log",
+                apache_7days: "logs/clinton/apache/7days.log",
+                squid_full: "logs/clinton/squid/full.log",
+                squid_7days: "logs/clinton/squid/7days.log"
+            }},
+            { name: "Obama STEM Academy", status: "excellent", students: 1100, id: 39, urls: {
+                report1: "reports/2026/obama/report1.pdf",
+                report2: "reports/2026/obama/report2.pdf",
+                midterm1: "reports/2026/obama/midterm1.pdf",
+                terminal1: "reports/2026/obama/terminal1.pdf",
+                midterm2: "reports/2026/obama/midterm2.pdf",
+                terminal2: "reports/2026/obama/terminal2.pdf",
+                apache_full: "logs/obama/apache/full.log",
+                apache_7days: "logs/obama/apache/7days.log",
+                squid_full: "logs/obama/squid/full.log",
+                squid_7days: "logs/obama/squid/7days.log"
+            }},
+            { name: "Trump Community School", status: "good", students: 720, id: 40, urls: {
+                report1: "reports/2026/trump/report1.pdf",
+                report2: "reports/2026/trump/report2.pdf",
+                midterm1: "reports/2026/trump/midterm1.pdf",
+                terminal1: "reports/2026/trump/terminal1.pdf",
+                midterm2: "reports/2026/trump/midterm2.pdf",
+                terminal2: "reports/2026/trump/terminal2.pdf",
+                apache_full: "logs/trump/apache/full.log",
+                apache_7days: "logs/trump/apache/7days.log",
+                squid_full: "logs/trump/squid/full.log",
+                squid_7days: "logs/trump/squid/7days.log"
+            }},
+            { name: "Biden High School", status: "excellent", students: 890, id: 41, urls: {
+                report1: "reports/2026/biden/report1.pdf",
+                report2: "reports/2026/biden/report2.pdf",
+                midterm1: "reports/2026/biden/midterm1.pdf",
+                terminal1: "reports/2026/biden/terminal1.pdf",
+                midterm2: "reports/2026/biden/midterm2.pdf",
+                terminal2: "reports/2026/biden/terminal2.pdf",
+                apache_full: "logs/biden/apache/full.log",
+                apache_7days: "logs/biden/apache/7days.log",
+                squid_full: "logs/biden/squid/full.log",
+                squid_7days: "logs/biden/squid/7days.log"
+            }},
+            { name: "Hamilton Middle School", status: "good", students: 630, id: 42, urls: {
+                report1: "reports/2026/hamilton/report1.pdf",
+                report2: "reports/2026/hamilton/report2.pdf",
+                midterm1: "reports/2026/hamilton/midterm1.pdf",
+                terminal1: "reports/2026/hamilton/terminal1.pdf",
+                midterm2: "reports/2026/hamilton/midterm2.pdf",
+                terminal2: "reports/2026/hamilton/terminal2.pdf",
+                apache_full: "logs/hamilton/apache/full.log",
+                apache_7days: "logs/hamilton/apache/7days.log",
+                squid_full: "logs/hamilton/squid/full.log",
+                squid_7days: "logs/hamilton/squid/7days.log"
+            }},
+            { name: "Franklin Elementary", status: "good", students: 400, id: 43, urls: {
+                report1: "reports/2026/franklin/report1.pdf",
+                report2: "reports/2026/franklin/report2.pdf",
+                midterm1: "reports/2026/franklin/midterm1.pdf",
+                terminal1: "reports/2026/franklin/terminal1.pdf",
+                midterm2: "reports/2026/franklin/midterm2.pdf",
+                terminal2: "reports/2026/franklin/terminal2.pdf",
+                apache_full: "logs/franklin/apache/full.log",
+                apache_7days: "logs/franklin/apache/7days.log",
+                squid_full: "logs/franklin/squid/full.log",
+                squid_7days: "logs/franklin/squid/7days.log"
+            }},
+            { name: "Edison Technical College", status: "excellent", students: 1050, id: 44, urls: {
+                report1: "reports/2026/edison/report1.pdf",
+                report2: "reports/2026/edison/report2.pdf",
+                midterm1: "reports/2026/edison/midterm1.pdf",
+                terminal1: "reports/2026/edison/terminal1.pdf",
+                midterm2: "reports/2026/edison/midterm2.pdf",
+                terminal2: "reports/2026/edison/terminal2.pdf",
+                apache_full: "logs/edison/apache/full.log",
+                apache_7days: "logs/edison/apache/7days.log",
+                squid_full: "logs/edison/squid/full.log",
+                squid_7days: "logs/edison/squid/7days.log"
+            }},
+            { name: "Tesla Charter School", status: "excellent", students: 780, id: 45, urls: {
+                report1: "reports/2026/tesla/report1.pdf",
+                report2: "reports/2026/tesla/report2.pdf",
+                midterm1: "reports/2026/tesla/midterm1.pdf",
+                terminal1: "reports/2026/tesla/terminal1.pdf",
+                midterm2: "reports/2026/tesla/midterm2.pdf",
+                terminal2: "reports/2026/tesla/terminal2.pdf",
+                apache_full: "logs/tesla/apache/full.log",
+                apache_7days: "logs/tesla/apache/7days.log",
+                squid_full: "logs/tesla/squid/full.log",
+                squid_7days: "logs/tesla/squid/7days.log"
+            }},
+            { name: "Einstein High School", status: "excellent", students: 940, id: 46, urls: {
+                report1: "reports/2026/einstein/report1.pdf",
+                report2: "reports/2026/einstein/report2.pdf",
+                midterm1: "reports/2026/einstein/midterm1.pdf",
+                terminal1: "reports/2026/einstein/terminal1.pdf",
+                midterm2: "reports/2026/einstein/midterm2.pdf",
+                terminal2: "reports/2026/einstein/terminal2.pdf",
+                apache_full: "logs/einstein/apache/full.log",
+                apache_7days: "logs/einstein/apache/7days.log",
+                squid_full: "logs/einstein/squid/full.log",
+                squid_7days: "logs/einstein/squid/7days.log"
+            }},
+            { name: "Curie Middle School", status: "good", students: 590, id: 47, urls: {
+                report1: "reports/2026/curie/report1.pdf",
+                report2: "reports/2026/curie/report2.pdf",
+                midterm1: "reports/2026/curie/midterm1.pdf",
+                terminal1: "reports/2026/curie/terminal1.pdf",
+                midterm2: "reports/2026/curie/midterm2.pdf",
+                terminal2: "reports/2026/curie/terminal2.pdf",
+                apache_full: "logs/curie/apache/full.log",
+                apache_7days: "logs/curie/apache/7days.log",
+                squid_full: "logs/curie/squid/full.log",
+                squid_7days: "logs/curie/squid/7days.log"
+            }},
+            { name: "Newton Elementary", status: "good", students: 440, id: 48, urls: {
+                report1: "reports/2026/newton/report1.pdf",
+                report2: "reports/2026/newton/report2.pdf",
+                midterm1: "reports/2026/newton/midterm1.pdf",
+                terminal1: "reports/2026/newton/terminal1.pdf",
+                midterm2: "reports/2026/newton/midterm2.pdf",
+                terminal2: "reports/2026/newton/terminal2.pdf",
+                apache_full: "logs/newton/apache/full.log",
+                apache_7days: "logs/newton/apache/7days.log",
+                squid_full: "logs/newton/squid/full.log",
+                squid_7days: "logs/newton/squid/7days.log"
+            }},
+            { name: "Darwin Science Academy", status: "excellent", students: 870, id: 49, urls: {
+                report1: "reports/2026/darwin/report1.pdf",
+                report2: "reports/2026/darwin/report2.pdf",
+                midterm1: "reports/2026/darwin/midterm1.pdf",
+                terminal1: "reports/2026/darwin/terminal1.pdf",
+                midterm2: "reports/2026/darwin/midterm2.pdf",
+                terminal2: "reports/2026/darwin/terminal2.pdf",
+                apache_full: "logs/darwin/apache/full.log",
+                apache_7days: "logs/darwin/apache/7days.log",
+                squid_full: "logs/darwin/squid/full.log",
+                squid_7days: "logs/darwin/squid/7days.log"
+            }},
+            { name: "Galileo STEM Center", status: "excellent", students: 980, id: 50, urls: {
+                report1: "reports/2026/galileo/report1.pdf",
+                report2: "reports/2026/galileo/report2.pdf",
+                midterm1: "reports/2026/galileo/midterm1.pdf",
+                terminal1: "reports/2026/galileo/terminal1.pdf",
+                midterm2: "reports/2026/galileo/midterm2.pdf",
+                terminal2: "reports/2026/galileo/terminal2.pdf",
+                apache_full: "logs/galileo/apache/full.log",
+                apache_7days: "logs/galileo/apache/7days.log",
+                squid_full: "logs/galileo/squid/full.log",
+                squid_7days: "logs/galileo/squid/7days.log"
+            }},
+            { name: "Hawking High School", status: "good", students: 850, id: 51, urls: {
+                report1: "reports/2026/hawking/report1.pdf",
+                report2: "reports/2026/hawking/report2.pdf",
+                midterm1: "reports/2026/hawking/midterm1.pdf",
+                terminal1: "reports/2026/hawking/terminal1.pdf",
+                midterm2: "reports/2026/hawking/midterm2.pdf",
+                terminal2: "reports/2026/hawking/terminal2.pdf",
+                apache_full: "logs/hawking/apache/full.log",
+                apache_7days: "logs/hawking/apache/7days.log",
+                squid_full: "logs/hawking/squid/full.log",
+                squid_7days: "logs/hawking/squid/7days.log"
+            }},
+            { name: "Feynman Middle School", status: "fair", students: 600, id: 52, urls: {
+                report1: "reports/2026/feynman/report1.pdf",
+                report2: "reports/2026/feynman/report2.pdf",
+                midterm1: "reports/2026/feynman/midterm1.pdf",
+                terminal1: "reports/2026/feynman/terminal1.pdf",
+                midterm2: "reports/2026/feynman/midterm2.pdf",
+                terminal2: "reports/2026/feynman/terminal2.pdf",
+                apache_full: "logs/feynman/apache/full.log",
+                apache_7days: "logs/feynman/apache/7days.log",
+                squid_full: "logs/feynman/squid/full.log",
+                squid_7days: "logs/feynman/squid/7days.log"
+            }},
+            { name: "Sagan Elementary", status: "good", students: 390, id: 53, urls: {
+                report1: "reports/2026/sagan/report1.pdf",
+                report2: "reports/2026/sagan/report2.pdf",
+                midterm1: "reports/2026/sagan/midterm1.pdf",
+                terminal1: "reports/2026/sagan/terminal1.pdf",
+                midterm2: "reports/2026/sagan/midterm2.pdf",
+                terminal2: "reports/2026/sagan/terminal2.pdf",
+                apache_full: "logs/sagan/apache/full.log",
+                apache_7days: "logs/sagan/apache/7days.log",
+                squid_full: "logs/sagan/squid/full.log",
+                squid_7days: "logs/sagan/squid/7days.log"
+            }},
+            { name: "Tyson Charter School", status: "excellent", students: 820, id: 54, urls: {
+                report1: "reports/2026/tyson/report1.pdf",
+                report2: "reports/2026/tyson/report2.pdf",
+                midterm1: "reports/2026/tyson/midterm1.pdf",
+                terminal1: "reports/2026/tyson/terminal1.pdf",
+                midterm2: "reports/2026/tyson/midterm2.pdf",
+                terminal2: "reports/2026/tyson/terminal2.pdf",
+                apache_full: "logs/tyson/apache/full.log",
+                apache_7days: "logs/tyson/apache/7days.log",
+                squid_full: "logs/tyson/squid/full.log",
+                squid_7days: "logs/tyson/squid/7days.log"
+            }},
+            { name: "Nye Technical Institute", status: "good", students: 740, id: 55, urls: {
+                report1: "reports/2026/nye/report1.pdf",
+                report2: "reports/2026/nye/report2.pdf",
+                midterm1: "reports/2026/nye/midterm1.pdf",
+                terminal1: "reports/2026/nye/terminal1.pdf",
+                midterm2: "reports/2026/nye/midterm2.pdf",
+                terminal2: "reports/2026/nye/terminal2.pdf",
+                apache_full: "logs/nye/apache/full.log",
+                apache_7days: "logs/nye/apache/7days.log",
+                squid_full: "logs/nye/squid/full.log",
+                squid_7days: "logs/nye/squid/7days.log"
+            }},
+            { name: "Pasteur High School", status: "good", students: 880, id: 56, urls: {
+                report1: "reports/2026/pasteur/report1.pdf",
+                report2: "reports/2026/pasteur/report2.pdf",
+                midterm1: "reports/2026/pasteur/midterm1.pdf",
+                terminal1: "reports/2026/pasteur/terminal1.pdf",
+                midterm2: "reports/2026/pasteur/midterm2.pdf",
+                terminal2: "reports/2026/pasteur/terminal2.pdf",
+                apache_full: "logs/pasteur/apache/full.log",
+                apache_7days: "logs/pasteur/apache/7days.log",
+                squid_full: "logs/pasteur/squid/full.log",
+                squid_7days: "logs/pasteur/squid/7days.log"
+            }},
+            { name: "Fleming Middle School", status: "good", students: 570, id: 57, urls: {
+                report1: "reports/2026/fleming/report1.pdf",
+                report2: "reports/2026/fleming/report2.pdf",
+                midterm1: "reports/2026/fleming/midterm1.pdf",
+                terminal1: "reports/2026/fleming/terminal1.pdf",
+                midterm2: "reports/2026/fleming/midterm2.pdf",
+                terminal2: "reports/2026/fleming/terminal2.pdf",
+                apache_full: "logs/fleming/apache/full.log",
+                apache_7days: "logs/fleming/apache/7days.log",
+                squid_full: "logs/fleming/squid/full.log",
+                squid_7days: "logs/fleming/squid/7days.log"
+            }},
+            { name: "Watson Elementary", status: "fair", students: 420, id: 58, urls: {
+                report1: "reports/2026/watson/report1.pdf",
+                report2: "reports/2026/watson/report2.pdf",
+                midterm1: "reports/2026/watson/midterm1.pdf",
+                terminal1: "reports/2026/watson/terminal1.pdf",
+                midterm2: "reports/2026/watson/midterm2.pdf",
+                terminal2: "reports/2026/watson/terminal2.pdf",
+                apache_full: "logs/watson/apache/full.log",
+                apache_7days: "logs/watson/apache/7days.log",
+                squid_full: "logs/watson/squid/full.log",
+                squid_7days: "logs/watson/squid/7days.log"
+            }},
+            { name: "Crick Science Academy", status: "excellent", students: 910, id: 59, urls: {
+                report1: "reports/2026/crick/report1.pdf",
+                report2: "reports/2026/crick/report2.pdf",
+                midterm1: "reports/2026/crick/midterm1.pdf",
+                terminal1: "reports/2026/crick/terminal1.pdf",
+                midterm2: "reports/2026/crick/midterm2.pdf",
+                terminal2: "reports/2026/crick/terminal2.pdf",
+                apache_full: "logs/crick/apache/full.log",
+                apache_7days: "logs/crick/apache/7days.log",
+                squid_full: "logs/crick/squid/full.log",
+                squid_7days: "logs/crick/squid/7days.log"
+            }},
+            { name: "Mendel STEM Center", status: "good", students: 690, id: 60, urls: {
+                report1: "reports/2026/mendel/report1.pdf",
+                report2: "reports/2026/mendel/report2.pdf",
+                midterm1: "reports/2026/mendel/midterm1.pdf",
+                terminal1: "reports/2026/mendel/terminal1.pdf",
+                midterm2: "reports/2026/mendel/midterm2.pdf",
+                terminal2: "reports/2026/mendel/terminal2.pdf",
+                apache_full: "logs/mendel/apache/full.log",
+                apache_7days: "logs/mendel/apache/7days.log",
+                squid_full: "logs/mendel/squid/full.log",
+                squid_7days: "logs/mendel/squid/7days.log"
+            }},
+            { name: "Bohr High School", status: "excellent", students: 960, id: 61, urls: {
+                report1: "reports/2026/bohr/report1.pdf",
+                report2: "reports/2026/bohr/report2.pdf",
+                midterm1: "reports/2026/bohr/midterm1.pdf",
+                terminal1: "reports/2026/bohr/terminal1.pdf",
+                midterm2: "reports/2026/bohr/midterm2.pdf",
+                terminal2: "reports/2026/bohr/terminal2.pdf",
+                apache_full: "logs/bohr/apache/full.log",
+                apache_7days: "logs/bohr/apache/7days.log",
+                squid_full: "logs/bohr/squid/full.log",
+                squid_7days: "logs/bohr/squid/7days.log"
+            }},
+            { name: "Planck Middle School", status: "good", students: 610, id: 62, urls: {
+                report1: "reports/2026/planck/report1.pdf",
+                report2: "reports/2026/planck/report2.pdf",
+                midterm1: "reports/2026/planck/midterm1.pdf",
+                terminal1: "reports/2026/planck/terminal1.pdf",
+                midterm2: "reports/2026/planck/midterm2.pdf",
+                terminal2: "reports/2026/planck/terminal2.pdf",
+                apache_full: "logs/planck/apache/full.log",
+                apache_7days: "logs/planck/apache/7days.log",
+                squid_full: "logs/planck/squid/full.log",
+                squid_7days: "logs/planck/squid/7days.log"
+            }},
+            { name: "Heisenberg Elementary", status: "good", students: 450, id: 63, urls: {
+                report1: "reports/2026/heisenberg/report1.pdf",
+                report2: "reports/2026/heisenberg/report2.pdf",
+                midterm1: "reports/2026/heisenberg/midterm1.pdf",
+                terminal1: "reports/2026/heisenberg/terminal1.pdf",
+                midterm2: "reports/2026/heisenberg/midterm2.pdf",
+                terminal2: "reports/2026/heisenberg/terminal2.pdf",
+                apache_full: "logs/heisenberg/apache/full.log",
+                apache_7days: "logs/heisenberg/apache/7days.log",
+                squid_full: "logs/heisenberg/squid/full.log",
+                squid_7days: "logs/heisenberg/squid/7days.log"
+            }},
+            { name: "Schrodinger Charter School", status: "excellent", students: 830, id: 64, urls: {
+                report1: "reports/2026/schrodinger/report1.pdf",
+                report2: "reports/2026/schrodinger/report2.pdf",
+                midterm1: "reports/2026/schrodinger/midterm1.pdf",
+                terminal1: "reports/2026/schrodinger/terminal1.pdf",
+                midterm2: "reports/2026/schrodinger/midterm2.pdf",
+                terminal2: "reports/2026/schrodinger/terminal2.pdf",
+                apache_full: "logs/schrodinger/apache/full.log",
+                apache_7days: "logs/schrodinger/apache/7days.log",
+                squid_full: "logs/schrodinger/squid/full.log",
+                squid_7days: "logs/schrodinger/squid/7days.log"
+            }},
+            { name: "Dirac Technical College", status: "good", students: 770, id: 65, urls: {
+                report1: "reports/2026/dirac/report1.pdf",
+                report2: "reports/2026/dirac/report2.pdf",
+                midterm1: "reports/2026/dirac/midterm1.pdf",
+                terminal1: "reports/2026/dirac/terminal1.pdf",
+                midterm2: "reports/2026/dirac/midterm2.pdf",
+                terminal2: "reports/2026/dirac/terminal2.pdf",
+                apache_full: "logs/dirac/apache/full.log",
+                apache_7days: "logs/dirac/apache/7days.log",
+                squid_full: "logs/dirac/squid/full.log",
+                squid_7days: "logs/dirac/squid/7days.log"
+            }},
+            { name: "Maxwell High School", status: "good", students: 890, id: 66, urls: {
+                report1: "reports/2026/maxwell/report1.pdf",
+                report2: "reports/2026/maxwell/report2.pdf",
+                midterm1: "reports/2026/maxwell/midterm1.pdf",
+                terminal1: "reports/2026/maxwell/terminal1.pdf",
+                midterm2: "reports/2026/maxwell/midterm2.pdf",
+                terminal2: "reports/2026/maxwell/terminal2.pdf",
+                apache_full: "logs/maxwell/apache/full.log",
+                apache_7days: "logs/maxwell/apache/7days.log",
+                squid_full: "logs/maxwell/squid/full.log",
+                squid_7days: "logs/maxwell/squid/7days.log"
+            }},
+            { name: "Faraday Middle School", status: "fair", students: 580, id: 67, urls: {
+                report1: "reports/2026/faraday/report1.pdf",
+                report2: "reports/2026/faraday/report2.pdf",
+                midterm1: "reports/2026/faraday/midterm1.pdf",
+                terminal1: "reports/2026/faraday/terminal1.pdf",
+                midterm2: "reports/2026/faraday/midterm2.pdf",
+                terminal2: "reports/2026/faraday/terminal2.pdf",
+                apache_full: "logs/faraday/apache/full.log",
+                apache_7days: "logs/faraday/apache/7days.log",
+                squid_full: "logs/faraday/squid/full.log",
+                squid_7days: "logs/faraday/squid/7days.log"
+            }},
+            { name: "Ohm Elementary", status: "good", students: 410, id: 68, urls: {
+                report1: "reports/2026/ohm/report1.pdf",
+                report2: "reports/2026/ohm/report2.pdf",
+                midterm1: "reports/2026/ohm/midterm1.pdf",
+                terminal1: "reports/2026/ohm/terminal1.pdf",
+                midterm2: "reports/2026/ohm/midterm2.pdf",
+                terminal2: "reports/2026/ohm/terminal2.pdf",
+                apache_full: "logs/ohm/apache/full.log",
+                apache_7days: "logs/ohm/apache/7days.log",
+                squid_full: "logs/ohm/squid/full.log",
+                squid_7days: "logs/ohm/squid/7days.log"
+            }},
+            { name: "Volta Science Academy", status: "excellent", students: 860, id: 69, urls: {
+                report1: "reports/2026/volta/report1.pdf",
+                report2: "reports/2026/volta/report2.pdf",
+                midterm1: "reports/2026/volta/midterm1.pdf",
+                terminal1: "reports/2026/volta/terminal1.pdf",
+                midterm2: "reports/2026/volta/midterm2.pdf",
+                terminal2: "reports/2026/volta/terminal2.pdf",
+                apache_full: "logs/volta/apache/full.log",
+                apache_7days: "logs/volta/apache/7days.log",
+                squid_full: "logs/volta/squid/full.log",
+                squid_7days: "logs/volta/squid/7days.log"
+            }},
+            { name: "Ampere STEM Center", status: "good", students: 720, id: 70, urls: {
+                report1: "reports/2026/ampere/report1.pdf",
+                report2: "reports/2026/ampere/report2.pdf",
+                midterm1: "reports/2026/ampere/midterm1.pdf",
+                terminal1: "reports/2026/ampere/terminal1.pdf",
+                midterm2: "reports/2026/ampere/midterm2.pdf",
+                terminal2: "reports/2026/ampere/terminal2.pdf",
+                apache_full: "logs/ampere/apache/full.log",
+                apache_7days: "logs/ampere/apache/7days.log",
+                squid_full: "logs/ampere/squid/full.log",
+                squid_7days: "logs/ampere/squid/7days.log"
+            }},
+            { name: "Joule High School", status: "excellent", students: 930, id: 71, urls: {
+                report1: "reports/2026/joule/report1.pdf",
+                report2: "reports/2026/joule/report2.pdf",
+                midterm1: "reports/2026/joule/midterm1.pdf",
+                terminal1: "reports/2026/joule/terminal1.pdf",
+                midterm2: "reports/2026/joule/midterm2.pdf",
+                terminal2: "reports/2026/joule/terminal2.pdf",
+                apache_full: "logs/joule/apache/full.log",
+                apache_7days: "logs/joule/apache/7days.log",
+                squid_full: "logs/joule/squid/full.log",
+                squid_7days: "logs/joule/squid/7days.log"
+            }},
+            { name: "Kelvin Middle School", status: "good", students: 590, id: 72, urls: {
+                report1: "reports/2026/kelvin/report1.pdf",
+                report2: "reports/2026/kelvin/report2.pdf",
+                midterm1: "reports/2026/kelvin/midterm1.pdf",
+                terminal1: "reports/2026/kelvin/terminal1.pdf",
+                midterm2: "reports/2026/kelvin/midterm2.pdf",
+                terminal2: "reports/2026/kelvin/terminal2.pdf",
+                apache_full: "logs/kelvin/apache/full.log",
+                apache_7days: "logs/kelvin/apache/7days.log",
+                squid_full: "logs/kelvin/squid/full.log",
+                squid_7days: "logs/kelvin/squid/7days.log"
+            }},
+            { name: "Celsius Elementary", status: "good", students: 430, id: 73, urls: {
+                report1: "reports/2026/celsius/report1.pdf",
+                report2: "reports/2026/celsius/report2.pdf",
+                midterm1: "reports/2026/celsius/midterm1.pdf",
+                terminal1: "reports/2026/celsius/terminal1.pdf",
+                midterm2: "reports/2026/celsius/midterm2.pdf",
+                terminal2: "reports/2026/celsius/terminal2.pdf",
+                apache_full: "logs/celsius/apache/full.log",
+                apache_7days: "logs/celsius/apache/7days.log",
+                squid_full: "logs/celsius/squid/full.log",
+                squid_7days: "logs/celsius/squid/7days.log"
+            }},
+            { name: "Fahrenheit Charter School", status: "fair", students: 670, id: 74, urls: {
+                report1: "reports/2026/fahrenheit/report1.pdf",
+                report2: "reports/2026/fahrenheit/report2.pdf",
+                midterm1: "reports/2026/fahrenheit/midterm1.pdf",
+                terminal1: "reports/2026/fahrenheit/terminal1.pdf",
+                midterm2: "reports/2026/fahrenheit/midterm2.pdf",
+                terminal2: "reports/2026/fahrenheit/terminal2.pdf",
+                apache_full: "logs/fahrenheit/apache/full.log",
+                apache_7days: "logs/fahrenheit/apache/7days.log",
+                squid_full: "logs/fahrenheit/squid/full.log",
+                squid_7days: "logs/fahrenheit/squid/7days.log"
+            }},
+            { name: "Pascal Technical Institute", status: "excellent", students: 810, id: 75, urls: {
+                report1: "reports/2026/pascal/report1.pdf",
+                report2: "reports/2026/pascal/report2.pdf",
+                midterm1: "reports/2026/pascal/midterm1.pdf",
+                terminal1: "reports/2026/pascal/terminal1.pdf",
+                midterm2: "reports/2026/pascal/midterm2.pdf",
+                terminal2: "reports/2026/pascal/terminal2.pdf",
+                apache_full: "logs/pascal/apache/full.log",
+                apache_7days: "logs/pascal/apache/7days.log",
+                squid_full: "logs/pascal/squid/full.log",
+                squid_7days: "logs/pascal/squid/7days.log"
+            }},
+            { name: "Kiranyi Secondary School", status: "excellent", students: 840, id: 76, urls: {
+                report1: "reports/2026/kiranyi/report1.pdf",
+                report2: "reports/2026/kiranyi/report2.pdf",
+                midterm1: "reports/2026/kiranyi/midterm1.pdf",
+                terminal1: "reports/2026/kiranyi/terminal1.pdf",
+                midterm2: "reports/2026/kiranyi/midterm2.pdf",
+                terminal2: "reports/2026/kiranyi/terminal2.pdf",
+                apache_full: "logs/kiranyi/apache/full.log",
+                apache_7days: "logs/kiranyi/apache/7days.log",
+                squid_full: "logs/kiranyi/squid/full.log",
+                squid_7days: "logs/kiranyi/squid/7days.log"
+            }},
+            { name: "Suye Secondary School", status: "excellent", students: 410, id: 77, urls: {
+                report1: "reports/2026/suye/report1.pdf",
+                report2: "reports/2026/suye/report2.pdf",
+                midterm1: "reports/2026/suye/midterm1.pdf",
+                terminal1: "reports/2026/suye/terminal1.pdf",
+                midterm2: "reports/2026/suye/midterm2.pdf",
+                terminal2: "reports/2026/suye/terminal2.pdf",
+                apache_full: "logs/suye/apache/full.log",
+                apache_7days: "logs/suye/apache/7days.log",
+                squid_full: "logs/suye/squid/full.log",
+                squid_7days: "logs/suye/squid/7days.log"
+            }},
+            { name: "Elerai Secondary School", status: "excellent", students: 640, id: 78, urls: {
+                report1: "reports/2026/elerai/report1.pdf",
+                report2: "reports/2026/elerai/report2.pdf",
+                midterm1: "reports/2026/elerai/midterm1.pdf",
+                terminal1: "reports/2026/elerai/terminal1.pdf",
+                midterm2: "reports/2026/elerai/midterm2.pdf",
+                terminal2: "reports/2026/elerai/terminal2.pdf",
+                apache_full: "logs/elerai/apache/full.log",
+                apache_7days: "logs/elerai/apache/7days.log",
+                squid_full: "logs/elerai/squid/full.log",
+                squid_7days: "logs/elerai/squid/7days.log"
+            }},
+            { name: "Mringa Secondary School", status: "excellent", students: 730, id: 79, urls: {
+                report1: "reports/2026/mringa/report1.pdf",
+                report2: "reports/2026/mringa/report2.pdf",
+                midterm1: "reports/2026/mringa/midterm1.pdf",
+                terminal1: "reports/2026/mringa/terminal1.pdf",
+                midterm2: "reports/2026/mringa/midterm2.pdf",
+                terminal2: "reports/2026/mringa/terminal2.pdf",
+                apache_full: "logs/mringa/apache/full.log",
+                apache_7days: "logs/mringa/apache/7days.log",
+                squid_full: "logs/mringa/squid/full.log",
+                squid_7days: "logs/mringa/squid/7days.log"
+            }},
+            { name: "Olmotonyi Secondary School", status: "excellent", students: 610, id: 80, urls: {
+                report1: "reports/2026/olmotonyi/report1.pdf",
+                report2: "reports/2026/olmotonyi/report2.pdf",
+                midterm1: "reports/2026/olmotonyi/midterm1.pdf",
+                terminal1: "reports/2026/olmotonyi/terminal1.pdf",
+                midterm2: "reports/2026/olmotonyi/midterm2.pdf",
+                terminal2: "reports/2026/olmotonyi/terminal2.pdf",
+                apache_full: "logs/olmotonyi/apache/full.log",
+                apache_7days: "logs/olmotonyi/apache/7days.log",
+                squid_full: "logs/olmotonyi/squid/full.log",
+                squid_7days: "logs/olmotonyi/squid/7days.log"
+            }},
+            { name: "SokonII Secondary School", status: "excellent", students: 540, id: 81, urls: {
+                report1: "reports/2026/sokon2/report1.pdf",
+                report2: "reports/2026/sokon2/report2.pdf",
+                midterm1: "reports/2026/sokon2/midterm1.pdf",
+                terminal1: "reports/2026/sokon2/terminal1.pdf",
+                midterm2: "reports/2026/sokon2/midterm2.pdf",
+                terminal2: "reports/2026/sokon2/terminal2.pdf",
+                apache_full: "logs/sokon2/apache/full.log",
+                apache_7days: "logs/sokon2/apache/7days.log",
+                squid_full: "logs/sokon2/squid/full.log",
+                squid_7days: "logs/sokon2/squid/7days.log"
+            }},
+            { name: "Lincoln High School", status: "excellent", students: 850, id: 82, urls: {
+                report1: "reports/2026/lincoln/report1.pdf",
+                report2: "reports/2026/lincoln/report2.pdf",
+                midterm1: "reports/2026/lincoln/midterm1.pdf",
+                terminal1: "reports/2026/lincoln/terminal1.pdf",
+                midterm2: "reports/2026/lincoln/midterm2.pdf",
+                terminal2: "reports/2026/lincoln/terminal2.pdf",
+                apache_full: "logs/lincoln/apache/full.log",
+                apache_7days: "logs/lincoln/apache/7days.log",
+                squid_full: "logs/lincoln/squid/full.log",
+                squid_7days: "logs/lincoln/squid/7days.log"
+            }},
+            { name: "Washington Elementary", status: "excellent", students: 420, id: 83, urls: {
+                report1: "reports/2026/washington/report1.pdf",
+                report2: "reports/2026/washington/report2.pdf",
+                midterm1: "reports/2026/washington/midterm1.pdf",
+                terminal1: "reports/2026/washington/terminal1.pdf",
+                midterm2: "reports/2026/washington/midterm2.pdf",
+                terminal2: "reports/2026/washington/terminal2.pdf",
+                apache_full: "logs/washington/apache/full.log",
+                apache_7days: "logs/washington/apache/7days.log",
+                squid_full: "logs/washington/squid/full.log",
+                squid_7days: "logs/washington/squid/7days.log"
+            }},
+            { name: "Roosevelt Middle School", status: "excellent", students: 650, id: 84, urls: {
+                report1: "reports/2026/roosevelt/report1.pdf",
+                report2: "reports/2026/roosevelt/report2.pdf",
+                midterm1: "reports/2026/roosevelt/midterm1.pdf",
+                terminal1: "reports/2026/roosevelt/terminal1.pdf",
+                midterm2: "reports/2026/roosevelt/midterm2.pdf",
+                terminal2: "reports/2026/roosevelt/terminal2.pdf",
+                apache_full: "logs/roosevelt/apache/full.log",
+                apache_7days: "logs/roosevelt/apache/7days.log",
+                squid_full: "logs/roosevelt/squid/full.log",
+                squid_7days: "logs/roosevelt/squid/7days.log"
+            }},
+            { name: "Jefferson Academy", status: "good", students: 780, id: 85, urls: {
+                report1: "reports/2026/jefferson/report1.pdf",
+                report2: "reports/2026/jefferson/report2.pdf",
+                midterm1: "reports/2026/jefferson/midterm1.pdf",
+                terminal1: "reports/2026/jefferson/terminal1.pdf",
+                midterm2: "reports/2026/jefferson/midterm2.pdf",
+                terminal2: "reports/2026/jefferson/terminal2.pdf",
+                apache_full: "logs/jefferson/apache/full.log",
+                apache_7days: "logs/jefferson/apache/7days.log",
+                squid_full: "logs/jefferson/squid/full.log",
+                squid_7days: "logs/jefferson/squid/7days.log"
+            }},
+            { name: "Madison Technical Institute", status: "excellent", students: 920, id: 86, urls: {
+                report1: "reports/2026/madison/report1.pdf",
+                report2: "reports/2026/madison/report2.pdf",
+                midterm1: "reports/2026/madison/midterm1.pdf",
+                terminal1: "reports/2026/madison/terminal1.pdf",
+                midterm2: "reports/2026/madison/midterm2.pdf",
+                terminal2: "reports/2026/madison/terminal2.pdf",
+                apache_full: "logs/madison/apache/full.log",
+                apache_7days: "logs/madison/apache/7days.log",
+                squid_full: "logs/madison/squid/full.log",
+                squid_7days: "logs/madison/squid/7days.log"
+            }},
+            { name: "Monroe Charter School", status: "good", students: 540, id: 87, urls: {
+                report1: "reports/2026/monroe/report1.pdf",
+                report2: "reports/2026/monroe/report2.pdf",
+                midterm1: "reports/2026/monroe/midterm1.pdf",
+                terminal1: "reports/2026/monroe/terminal1.pdf",
+                midterm2: "reports/2026/monroe/midterm2.pdf",
+                terminal2: "reports/2026/monroe/terminal2.pdf",
+                apache_full: "logs/monroe/apache/full.log",
+                apache_7days: "logs/monroe/apache/7days.log",
+                squid_full: "logs/monroe/squid/full.log",
+                squid_7days: "logs/monroe/squid/7days.log"
+            }},
+            { name: "Adams High School", status: "good", students: 890, id: 88, urls: {
+                report1: "reports/2026/adams/report1.pdf",
+                report2: "reports/2026/adams/report2.pdf",
+                midterm1: "reports/2026/adams/midterm1.pdf",
+                terminal1: "reports/2026/adams/terminal1.pdf",
+                midterm2: "reports/2026/adams/midterm2.pdf",
+                terminal2: "reports/2026/adams/terminal2.pdf",
+                apache_full: "logs/adams/apache/full.log",
+                apache_7days: "logs/adams/apache/7days.log",
+                squid_full: "logs/adams/squid/full.log",
+                squid_7days: "logs/adams/squid/7days.log"
+            }},
+            { name: "Jackson Middle School", status: "good", students: 480, id: 89, urls: {
+                report1: "reports/2026/jackson/report1.pdf",
+                report2: "reports/2026/jackson/report2.pdf",
+                midterm1: "reports/2026/jackson/midterm1.pdf",
+                terminal1: "reports/2026/jackson/terminal1.pdf",
+                midterm2: "reports/2026/jackson/midterm2.pdf",
+                terminal2: "reports/2026/jackson/terminal2.pdf",
+                apache_full: "logs/jackson/apache/full.log",
+                apache_7days: "logs/jackson/apache/7days.log",
+                squid_full: "logs/jackson/squid/full.log",
+                squid_7days: "logs/jackson/squid/7days.log"
+            }},
+            { name: "Van Buren Elementary", status: "good", students: 390, id: 90, urls: {
+                report1: "reports/2026/vanburen/report1.pdf",
+                report2: "reports/2026/vanburen/report2.pdf",
+                midterm1: "reports/2026/vanburen/midterm1.pdf",
+                terminal1: "reports/2026/vanburen/terminal1.pdf",
+                midterm2: "reports/2026/vanburen/midterm2.pdf",
+                terminal2: "reports/2026/vanburen/terminal2.pdf",
+                apache_full: "logs/vanburen/apache/full.log",
+                apache_7days: "logs/vanburen/apache/7days.log",
+                squid_full: "logs/vanburen/squid/full.log",
+                squid_7days: "logs/vanburen/squid/7days.log"
+            }},
+            { name: "Harrison STEM Academy", status: "excellent", students: 1050, id: 91, urls: {
+                report1: "reports/2026/harrison/report1.pdf",
+                report2: "reports/2026/harrison/report2.pdf",
+                midterm1: "reports/2026/harrison/midterm1.pdf",
+                terminal1: "reports/2026/harrison/terminal1.pdf",
+                midterm2: "reports/2026/harrison/midterm2.pdf",
+                terminal2: "reports/2026/harrison/terminal2.pdf",
+                apache_full: "logs/harrison/apache/full.log",
+                apache_7days: "logs/harrison/apache/7days.log",
+                squid_full: "logs/harrison/squid/full.log",
+                squid_7days: "logs/harrison/squid/7days.log"
+            }},
+            { name: "Tyler Community School", status: "good", students: 620, id: 92, urls: {
+                report1: "reports/2026/tyler/report1.pdf",
+                report2: "reports/2026/tyler/report2.pdf",
+                midterm1: "reports/2026/tyler/midterm1.pdf",
+                terminal1: "reports/2026/tyler/terminal1.pdf",
+                midterm2: "reports/2026/tyler/midterm2.pdf",
+                terminal2: "reports/2026/tyler/terminal2.pdf",
+                apache_full: "logs/tyler/apache/full.log",
+                apache_7days: "logs/tyler/apache/7days.log",
+                squid_full: "logs/tyler/squid/full.log",
+                squid_7days: "logs/tyler/squid/7days.log"
+            }},
+            { name: "Polk High School", status: "good", students: 810, id: 93, urls: {
+                report1: "reports/2026/polk/report1.pdf",
+                report2: "reports/2026/polk/report2.pdf",
+                midterm1: "reports/2026/polk/midterm1.pdf",
+                terminal1: "reports/2026/polk/terminal1.pdf",
+                midterm2: "reports/2026/polk/midterm2.pdf",
+                terminal2: "reports/2026/polk/terminal2.pdf",
+                apache_full: "logs/polk/apache/full.log",
+                apache_7days: "logs/polk/apache/7days.log",
+                squid_full: "logs/polk/squid/full.log",
+                squid_7days: "logs/polk/squid/7days.log"
+            }},
+            { name: "Taylor Middle School", status: "fair", students: 710, id: 94, urls: {
+                report1: "reports/2026/taylor/report1.pdf",
+                report2: "reports/2026/taylor/report2.pdf",
+                midterm1: "reports/2026/taylor/midterm1.pdf",
+                terminal1: "reports/2026/taylor/terminal1.pdf",
+                midterm2: "reports/2026/taylor/midterm2.pdf",
+                terminal2: "reports/2026/taylor/terminal2.pdf",
+                apache_full: "logs/taylor/apache/full.log",
+                apache_7days: "logs/taylor/apache/7days.log",
+                squid_full: "logs/taylor/squid/full.log",
+                squid_7days: "logs/taylor/squid/7days.log"
+            }},
+            { name: "Fillmore Elementary", status: "good", students: 350, id: 95, urls: {
+                report1: "reports/2026/fillmore/report1.pdf",
+                report2: "reports/2026/fillmore/report2.pdf",
+                midterm1: "reports/2026/fillmore/midterm1.pdf",
+                terminal1: "reports/2026/fillmore/terminal1.pdf",
+                midterm2: "reports/2026/fillmore/midterm2.pdf",
+                terminal2: "reports/2026/fillmore/terminal2.pdf",
+                apache_full: "logs/fillmore/apache/full.log",
+                apache_7days: "logs/fillmore/apache/7days.log",
+                squid_full: "logs/fillmore/squid/full.log",
+                squid_7days: "logs/fillmore/squid/7days.log"
+            }},
+            { name: "Pierce Technical College", status: "excellent", students: 980, id: 96, urls: {
+                report1: "reports/2026/pierce/report1.pdf",
+                report2: "reports/2026/pierce/report2.pdf",
+                midterm1: "reports/2026/pierce/midterm1.pdf",
+                terminal1: "reports/2026/pierce/terminal1.pdf",
+                midterm2: "reports/2026/pierce/midterm2.pdf",
+                terminal2: "reports/2026/pierce/terminal2.pdf",
+                apache_full: "logs/pierce/apache/full.log",
+                apache_7days: "logs/pierce/apache/7days.log",
+                squid_full: "logs/pierce/squid/full.log",
+                squid_7days: "logs/pierce/squid/7days.log"
+            }},
+            { name: "Manyara Girls Secondary School", status: "fair", students: 710, id: 97, urls: {
+                report1: "reports/2026/manyara-girls-ss/report1.pdf",
+                report2: "reports/2026/manyara-girls-ss/report2.pdf",
+                midterm1: "reports/2026/manyara-girls-ss/midterm1.pdf",
+                terminal1: "reports/2026/manyara-girls-ss/terminal1.pdf",
+                midterm2: "reports/2026/manyara-girls-ss/midterm2.pdf",
+                terminal2: "reports/2026/manyara-girls-ss/terminal2.pdf",
+                apache_full: "logs/manyara-girls-ss/apache/full.log",
+                apache_7days: "logs/manyara-girls-ss/apache/7days.log",
+                squid_full: "logs/manyara-girls-ss/squid/full.log",
+                squid_7days: "logs/manyara-girls-ss/squid/7days.log"
+            }},
+            { name: "Losinoni", status: "good", students: 350, id: 98, urls: {
+                report1: "reports/2026/losinoni/report1.pdf",
+                report2: "reports/2026/losinoni/report2.pdf",
+                midterm1: "reports/2026/losinoni/midterm1.pdf",
+                terminal1: "reports/2026/losinoni/terminal1.pdf",
+                midterm2: "reports/2026/losinoni/midterm2.pdf",
+                terminal2: "reports/2026/losinoni/terminal2.pdf",
+                apache_full: "logs/losinoni/apache/full.log",
+                apache_7days: "logs/losinoni/apache/7days.log",
+                squid_full: "logs/losinoni/squid/full.log",
+                squid_7days: "logs/losinoni/squid/7days.log"
+            }},
+        ];
+
+        let currentPage = 1;
+        const schoolsPerPage = 15;
+        let filteredSchools = [...schools];
+        let totalPagesCount = Math.ceil(schools.length / schoolsPerPage);
+
+        function getStatusColor(status) {
+            const colors = {
+                excellent: 'bg-green-100 text-green-800',
+                good: 'bg-blue-100 text-blue-800',
+                fair: 'bg-yellow-100 text-yellow-800'
+            };
+            return colors[status] || 'bg-gray-100 text-gray-800';
+        }
+
+        function getStatusBorder(status) {
+            const borders = {
+                excellent: 'border-l-4 border-green-500',
+                good: 'border-l-4 border-blue-500',
+                fair: 'border-l-4 border-yellow-500'
+            };
+            return borders[status] || 'border-l-4 border-gray-500';
+        }
+
+        function generateSchoolCard(school, index) {
+            const statusColor = getStatusColor(school.status);
+            const statusBorder = getStatusBorder(school.status);
+            
+            return `
+                <div class="school-card bg-white rounded-lg shadow-md overflow-hidden ${statusBorder}" data-status="${school.status}" data-name="${school.name.toLowerCase()}">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-gray-800">${school.name}</h3>
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold ${statusColor}">
+                                ${school.status.toUpperCase()}
+                            </span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Total Students:</span>
+                                <span class="font-semibold text-indigo-600">${school.students}</span>
+                            </div>
+                        </div>
+
+                        <!-- Report Links -->
+                        <div class="grid grid-cols-2 gap-2 mb-3">
+                            <button onclick="toggleInfo(${index}, 'report1')" class="info-btn px-3 py-2 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 transition text-sm font-medium">
+                                📄 Report 1
+                            </button>
+                            <button onclick="toggleInfo(${index}, 'report2')" class="info-btn px-3 py-2 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition text-sm font-medium">
+                                📄 Report 2
+                            </button>
+                            <button onclick="toggleInfo(${index}, 'midterm1')" class="info-btn px-3 py-2 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition text-sm font-medium">
+                                📝 Mid-term1
+                            </button>
+                            <button onclick="toggleInfo(${index}, 'terminal1')" class="info-btn px-3 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition text-sm font-medium">
+                                📊 Terminal1
+                            </button>
+                            <button onclick="toggleInfo(${index}, 'midterm2')" class="info-btn px-3 py-2 bg-pink-50 text-pink-700 rounded-lg hover:bg-pink-100 transition text-sm font-medium">
+                                📝 Mid-term2
+                            </button>
+                            <button onclick="toggleInfo(${index}, 'terminal2')" class="info-btn px-3 py-2 bg-cyan-50 text-cyan-700 rounded-lg hover:bg-cyan-100 transition text-sm font-medium">
+                                📊 Terminal2
+                            </button>
+                            <button onclick="toggleInfo(${index}, 'apache_full')" class="info-btn px-3 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition text-sm font-medium">
+                                🔴 Apache Full
+                            </button>
+                            <button onclick="toggleInfo(${index}, 'apache_7days')" class="info-btn px-3 py-2 bg-orange-50 text-orange-700 rounded-lg hover:bg-orange-100 transition text-sm font-medium">
+                                🟠 Apache 7d
+                            </button>
+                            <button onclick="toggleInfo(${index}, 'squid_full')" class="info-btn px-3 py-2 bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition text-sm font-medium">
+                                🔵 Squid Full
+                            </button>
+                            <button onclick="toggleInfo(${index}, 'squid_7days')" class="info-btn px-3 py-2 bg-emerald-50 text-emerald-700 rounded-lg hover:bg-emerald-100 transition text-sm font-medium">
+                                🟢 Squid 7d
+                            </button>
+                        </div>
+
+                        <!-- Info Sections -->
+                        <div id="info-${index}-report1" class="info-section">
+                            <div class="bg-indigo-50 rounded-lg p-4 mt-2">
+                                <h4 class="font-semibold text-indigo-900 mb-2">Report 1</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>• Generated: ${new Date().toLocaleDateString()}</li>
+                                    <li>• Status: Completed</li>
+                                    <li>• Total Entries: ${Math.floor(Math.random() * 500 + 100)}</li>
+                                    <li>• Last Updated: ${Math.floor(Math.random() * 24)} hours ago</li>
+                                    <li>• <a href="${school.urls.report1}" class="text-indigo-600 hover:underline" target="_blank">Download PDF</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="info-${index}-report2" class="info-section">
+                            <div class="bg-purple-50 rounded-lg p-4 mt-2">
+                                <h4 class="font-semibold text-purple-900 mb-2">Report 2</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>• Generated: ${new Date().toLocaleDateString()}</li>
+                                    <li>• Status: Completed</li>
+                                    <li>• Total Entries: ${Math.floor(Math.random() * 500 + 100)}</li>
+                                    <li>• Last Updated: ${Math.floor(Math.random() * 24)} hours ago</li>
+                                    <li>• <a href="${school.urls.report2}" class="text-purple-600 hover:underline" target="_blank">Download PDF</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="info-${index}-midterm1" class="info-section">
+                            <div class="bg-green-50 rounded-lg p-4 mt-2">
+                                <h4 class="font-semibold text-green-900 mb-2">Mid-term 1 Results</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>• Period: First Semester</li>
+                                    <li>• Participants: ${Math.floor(school.students * 0.95)}</li>
+                                    <li>• Average Score: ${Math.floor(Math.random() * 20 + 70)}%</li>
+                                    <li>• Pass Rate: ${Math.floor(Math.random() * 15 + 80)}%</li>
+                                    <li>• <a href="${school.urls.midterm1}" class="text-green-600 hover:underline" target="_blank">View Details</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="info-${index}-terminal1" class="info-section">
+                            <div class="bg-blue-50 rounded-lg p-4 mt-2">
+                                <h4 class="font-semibold text-blue-900 mb-2">Terminal 1 Results</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>• Period: First Semester Final</li>
+                                    <li>• Participants: ${Math.floor(school.students * 0.93)}</li>
+                                    <li>• Average Score: ${Math.floor(Math.random() * 20 + 70)}%</li>
+                                    <li>• Pass Rate: ${Math.floor(Math.random() * 15 + 80)}%</li>
+                                    <li>• <a href="${school.urls.terminal1}" class="text-blue-600 hover:underline" target="_blank">View Details</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="info-${index}-midterm2" class="info-section">
+                            <div class="bg-pink-50 rounded-lg p-4 mt-2">
+                                <h4 class="font-semibold text-pink-900 mb-2">Mid-term 2 Results</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>• Period: Second Semester</li>
+                                    <li>• Participants: ${Math.floor(school.students * 0.96)}</li>
+                                    <li>• Average Score: ${Math.floor(Math.random() * 20 + 70)}%</li>
+                                    <li>• Pass Rate: ${Math.floor(Math.random() * 15 + 80)}%</li>
+                                    <li>• <a href="${school.urls.midterm2}" class="text-pink-600 hover:underline" target="_blank">View Details</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="info-${index}-terminal2" class="info-section">
+                            <div class="bg-cyan-50 rounded-lg p-4 mt-2">
+                                <h4 class="font-semibold text-cyan-900 mb-2">Terminal 2 Results</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>• Period: Second Semester Final</li>
+                                    <li>• Participants: ${Math.floor(school.students * 0.94)}</li>
+                                    <li>• Average Score: ${Math.floor(Math.random() * 20 + 70)}%</li>
+                                    <li>• Pass Rate: ${Math.floor(Math.random() * 15 + 80)}%</li>
+                                    <li>• <a href="${school.urls.terminal2}" class="text-cyan-600 hover:underline" target="_blank">View Details</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="info-${index}-apache_full" class="info-section">
+                            <div class="bg-red-50 rounded-lg p-4 mt-2">
+                                <h4 class="font-semibold text-red-900 mb-2">Apache Full Log</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>• Total Requests: ${(Math.floor(Math.random() * 900 + 100) * 1000).toLocaleString()}</li>
+                                    <li>• Unique Visitors: ${Math.floor(Math.random() * 5000 + 1000).toLocaleString()}</li>
+                                    <li>• Error Rate: ${(Math.random() * 2).toFixed(2)}%</li>
+                                    <li>• Avg Response Time: ${Math.floor(Math.random() * 200 + 50)}ms</li>
+                                    <li>• <a href="${school.urls.apache_full}" class="text-red-600 hover:underline" target="_blank">Download Full Log</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="info-${index}-apache_7days" class="info-section">
+                            <div class="bg-orange-50 rounded-lg p-4 mt-2">
+                                <h4 class="font-semibold text-orange-900 mb-2">Apache Last 7 Days</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>• Total Requests: ${(Math.floor(Math.random() * 90 + 10) * 1000).toLocaleString()}</li>
+                                    <li>• Unique Visitors: ${Math.floor(Math.random() * 500 + 100).toLocaleString()}</li>
+                                    <li>• Error Rate: ${(Math.random() * 2).toFixed(2)}%</li>
+                                    <li>• Avg Response Time: ${Math.floor(Math.random() * 200 + 50)}ms</li>
+                                    <li>• <a href="${school.urls.apache_7days}" class="text-orange-600 hover:underline" target="_blank">Download Log</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="info-${index}-squid_full" class="info-section">
+                            <div class="bg-teal-50 rounded-lg p-4 mt-2">
+                                <h4 class="font-semibold text-teal-900 mb-2">Squid Full Log</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>• Total Requests: ${(Math.floor(Math.random() * 1500 + 500) * 1000).toLocaleString()}</li>
+                                    <li>• Cache Hit Rate: ${Math.floor(Math.random() * 20 + 70)}%</li>
+                                    <li>• Bandwidth Saved: ${Math.floor(Math.random() * 500 + 100)} GB</li>
+                                    <li>• Blocked Requests: ${Math.floor(Math.random() * 10000 + 1000).toLocaleString()}</li>
+                                    <li>• <a href="${school.urls.squid_full}" class="text-teal-600 hover:underline" target="_blank">Download Full Log</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="info-${index}-squid_7days" class="info-section">
+                            <div class="bg-emerald-50 rounded-lg p-4 mt-2">
+                                <h4 class="font-semibold text-emerald-900 mb-2">Squid Last 7 Days</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>• Total Requests: ${(Math.floor(Math.random() * 150 + 50) * 1000).toLocaleString()}</li>
+                                    <li>• Cache Hit Rate: ${Math.floor(Math.random() * 20 + 70)}%</li>
+                                    <li>• Bandwidth Saved: ${Math.floor(Math.random() * 50 + 10)} GB</li>
+                                    <li>• Blocked Requests: ${Math.floor(Math.random() * 1000 + 100).toLocaleString()}</li>
+                                    <li>• <a href="${school.urls.squid_7days}" class="text-emerald-600 hover:underline" target="_blank">Download Log</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSchools() {
+            const startIndex = (currentPage - 1) * schoolsPerPage;
+            const endIndex = startIndex + schoolsPerPage;
+            const schoolsToShow = filteredSchools.slice(startIndex, endIndex);
+            
+            const container = document.getElementById('schoolsContainer');
+            container.innerHTML = schoolsToShow.map((school, index) => 
+                generateSchoolCard(school, startIndex + index)
+            ).join('');
+            
+            updatePaginationInfo();
+            updatePaginationControls();
+        }
+
+        function updatePaginationInfo() {
+            const startIndex = (currentPage - 1) * schoolsPerPage + 1;
+            const endIndex = Math.min(currentPage * schoolsPerPage, filteredSchools.length);
+            
+            document.getElementById('showingStart').textContent = startIndex;
+            document.getElementById('showingEnd').textContent = endIndex;
+            document.getElementById('totalSchoolsText').textContent = filteredSchools.length;
+            document.getElementById('currentPageDisplay').textContent = currentPage;
+            document.getElementById('totalPages').textContent = totalPagesCount;
+        }
+
+        function updatePaginationControls() {
+            const pageNumbersContainer = document.getElementById('pageNumbers');
+            pageNumbersContainer.innerHTML = '';
+            
+            // Calculate page range to show
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPagesCount, currentPage + 2);
+            
+            // Adjust if we're near the beginning or end
+            if (currentPage <= 3) {
+                endPage = Math.min(5, totalPagesCount);
+            }
+            if (currentPage >= totalPagesCount - 2) {
+                startPage = Math.max(1, totalPagesCount - 4);
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.textContent = i;
+                pageBtn.onclick = () => goToPage(i);
+                pageBtn.className = `pagination-btn px-3 py-2 rounded-lg font-medium text-sm ${
+                    i === currentPage 
+                        ? 'bg-indigo-600 text-white' 
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`;
+                pageNumbersContainer.appendChild(pageBtn);
+            }
+            
+            // Enable/disable navigation buttons
+            document.getElementById('firstBtn').disabled = currentPage === 1;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPagesCount;
+            document.getElementById('lastBtn').disabled = currentPage === totalPagesCount;
+        }
+
+        function goToPage(pageNum) {
+            currentPage = pageNum;
+            renderSchools();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextPage() {
+            if (currentPage < totalPagesCount) {
+                currentPage++;
+                renderSchools();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderSchools();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function toggleInfo(schoolIndex, infoType) {
+            const infoSection = document.getElementById(`info-${schoolIndex}-${infoType}`);
+            
+            // Close all other info sections in this school card
+            const allInfoSections = document.querySelectorAll(`[id^="info-${schoolIndex}-"]`);
+            allInfoSections.forEach(section => {
+                if (section.id !== `info-${schoolIndex}-${infoType}`) {
+                    section.classList.remove('active');
+                }
+            });
+            
+            // Toggle current section
+            infoSection.classList.toggle('active');
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            filteredSchools = schools.filter(school => 
+                school.name.toLowerCase().includes(searchTerm)
+            );
+            totalPagesCount = Math.ceil(filteredSchools.length / schoolsPerPage);
+            currentPage = 1;
+            renderSchools();
+        });
+
+        // Filter functionality
+        document.getElementById('filterSelect').addEventListener('change', function(e) {
+            const filterValue = e.target.value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            filteredSchools = schools.filter(school => {
+                const matchesSearch = school.name.toLowerCase().includes(searchTerm);
+                const matchesFilter = filterValue === 'all' || school.status === filterValue;
+                return matchesSearch && matchesFilter;
+            });
+            
+            totalPagesCount = Math.ceil(filteredSchools.length / schoolsPerPage);
+            currentPage = 1;
+            renderSchools();
+        });
+
+        // Initialize
+        renderSchools();
+    </script>
+</body>
+</html>
