@@ -52,12 +52,20 @@
                         <option value="all">All Schools</option>
                         <option value="excellent">Excellent</option>
                         <option value="good">Good</option>
-                        <option value="fair">Fair</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                        <option value="bad">Bad</option>
+                        <option value="verybad">Very Bad</option>
+
                     </select>
                 </div>
             </div>
         </div>
     </header>
+
+    <div class="mt-2 mb-2 text-center">
+        Last Updated: <span>26 <sup>th</sup> December 2025</span> -<span>17:00 EAT</span>
+    </div>
 
     <!-- Stats Overview -->
     <div class="container mx-auto px-4 py-6">
@@ -135,7 +143,7 @@
 
     <script>
         const schools = [
-            { name: "Amani Abeid Karume", status: "excellent", students: 850, id: 1, urls: {
+            { name: "Amani Abeid Karume", status: "excellent", schoolrank: 1, id: 1, urls: {
                 report1: "/include/school-reports/reports/2026/abkarume/report1.pdf",
                 report2: "/include/school-reports/reports/2026/abkarume/report2.pdf",
                 midterm1: "/include/school-reports/reports/2026/abkarume/midterm1.pdf",
@@ -147,7 +155,7 @@
                 squid_full: "/include/school-reports/reports/2026/logs/abkarume/squid-full.html",
                 squid_7days: "/include/school-reports/reports/2026/logs/abkarume/squid-7days.html"
             }},
-            { name: "Einoti Secondary School", status: "excellent", students: 420, id: 2, urls: {
+            { name: "Einoti Secondary School", status: "excellent", schoolrank: 2, id: 2, urls: {
                 report1: "/include/school-reports/reports/2026/einoti/report1.pdf",
                 report2: "/include/school-reports/reports/2026/einoti/report2.pdf",
                 midterm1: "/include/school-reports/reports/2026/einoti/midterm1.pdf",
@@ -159,7 +167,7 @@
                 squid_full: "/include/school-reports/reports/2026/logs/einoti/squid-full.html",
                 squid_7days: "/include/school-reports/reports/2026/logs/einoti/squid-7days.html"
             }},
-            { name: "Florian Secondary School", status: "excellent", students: 650, id: 3, urls: {
+            { name: "Florian Secondary School", status: "excellent", schoolrank: 3, id: 3, urls: {
                 report1: "/include/school-reports/reports/2026/florian/report1.pdf",
                 report2: "/include/school-reports/reports/2026/florian/report2.pdf",
                 midterm1: "/include/school-reports/reports/2026/florian/midterm1.pdf",
@@ -171,7 +179,7 @@
                 squid_full: "/include/school-reports/reports/2026/logs/florian/squid-full.html",
                 squid_7days: "/include/school-reports/reports/2026/logs/florian/squid-7days.html"
             }},
-            { name: "Mkonoo Secondary School", status: "excellent", students: 780, id: 4, urls: {
+            { name: "Mkonoo Secondary School", status: "excellent", schoolrank: 4, id: 4, urls: {
                 report1: "/include/school-reports/reports/2026/mkonoo/report1.pdf",
                 report2: "/include/school-reports/reports/2026/mkonoo/report2.pdf",
                 midterm1: "/include/school-reports/reports/2026/mkonoo/midterm1.pdf",
@@ -183,7 +191,7 @@
                 squid_full: "/include/school-reports/reports/2026/logs/mkonoo/squid-full.html",
                 squid_7days: "/include/school-reports/reports/2026/logs/mkonoo/squid-7days.html"
             }},
-            { name: "Mlangarini Secondary School", status: "excellent", students: 920, id: 5, urls: {
+            { name: "Mlangarini Secondary School", status: "excellent", schoolrank: 5, id: 5, urls: {
                 report1: "/include/school-reports/reports/2026/mlangarini/report1.pdf",
                 report2: "/include/school-reports/reports/2026/mlangarini/report2.pdf",
                 midterm1: "/include/school-reports/reports/2026/mlangarini/midterm1.pdf",
@@ -195,7 +203,7 @@
                 squid_full: "/include/school-reports/reports/2026/logs/mlangarini/squid-full.html",
                 squid_7days: "/include/school-reports/reports/2026/logs/mlangarini/squid-7days.html"
             }},
-            { name: "Lucas Malia Secondary School", status: "excellent", students: 540, id: 6, urls: {
+            { name: "Lucas Malia Secondary School", status: "excellent", schoolrank: 6, id: 6, urls: {
                 report1: "/include/school-reports/reports/2026/lucasmalia/report1.pdf",
                 report2: "/include/school-reports/reports/2026/lucasmalia/report2.pdf",
                 midterm1: "/include/school-reports/reports/2026/lucasmalia/midterm1.pdf",
@@ -207,7 +215,7 @@
                 squid_full: "/include/school-reports/reports/2026/logs/lucasmalia/squid-full.html",
                 squid_7days: "/include/school-reports/reports/2026/logs/lucasmalia/squid-7days.html"
             }},
-            { name: "Namanga Secondary School", status: "excellent", students: 890, id: 7, urls: {
+            { name: "Namanga Secondary School", status: "excellent", schoolrank: 7, id: 7, urls: {
                 report1: "/include/school-reports/reports/2026/namanga/report1.pdf",
                 report2: "/include/school-reports/reports/2026/namanga/report2.pdf",
                 midterm1: "/include/school-reports/reports/2026/namanga/midterm1.pdf",
@@ -219,7 +227,7 @@
                 squid_full: "/include/school-reports/reports/2026/logs/namanga/squid-full.html",
                 squid_7days: "/include/school-reports/reports/2026/logs/namanga/squid-7days.html"
             }},
-            { name: "Tinga Tinga Secondary School", status: "excellent", students: 480, id: 8, urls: {
+            { name: "Tinga Tinga Secondary School", status: "excellent", schoolrank: 8, id: 8, urls: {
                 report1: "/include/school-reports/reports/2026/tingatinga/report1.pdf",
                 report2: "/include/school-reports/reports/2026/tingatinga/report2.pdf",
                 midterm1: "/include/school-reports/reports/2026/tingatinga/midterm1.pdf",
@@ -231,7 +239,7 @@
                 squid_full: "/include/school-reports/reports/2026/logs/tingatinga/squid-full.html",
                 squid_7days: "/include/school-reports/reports/2026/logs/tingatinga/squid-7days.html"
             }},
-            { name: "Ndolwa Secondary School", status: "excellent", students: 390, id: 9, urls: {
+            { name: "Ndolwa Secondary School", status: "excellent", schoolrank: 9, id: 9, urls: {
                 report1: "/include/school-reports/reports/2026/ndolwa/report1.pdf",
                 report2: "/include/school-reports/reports/2026/ndolwa/report2.pdf",
                 midterm1: "/include/school-reports/reports/2026/ndolwa/midterm1.pdf",
@@ -243,7 +251,7 @@
                 squid_full: "/include/school-reports/reports/2026/logs/ndolwa/squid-full.html",
                 squid_7days: "/include/school-reports/reports/2026/logs/ndolwa/squid-7days.html"
             }},
-            { name: "Mtama Secondary School", status: "excellent", students: 1050, id: 10, urls: {
+            { name: "Mtama Secondary School", status: "excellent", schoolrank: 10, id: 10, urls: {
                 report1: "/include/school-reports/reports/2026/mtama/report1.pdf",
                 report2: "/include/school-reports/reports/2026/mtama/report2.pdf",
                 midterm1: "/include/school-reports/reports/2026/mtama/midterm1.pdf",
@@ -255,7 +263,7 @@
                 squid_full: "/include/school-reports/reports/2026/logs/mtama/squid-full.html",
                 squid_7days: "/include/school-reports/reports/2026/logs/mtama/squid-7days.html"
             }},
-            { name: "Banjika Secondary School", status: "excellent", students: 620, id: 11, urls: {
+            { name: "Banjika Secondary School", status: "excellent", schoolrank: 11, id: 11, urls: {
                 report1: "reports/2026/banjika/report1.pdf",
                 report2: "reports/2026/banjika/report2.pdf",
                 midterm1: "reports/2026/banjika/midterm1.pdf",
@@ -267,7 +275,7 @@
                 squid_full: "reports/2026/logs/banjika/squid-full.html",
                 squid_7days: "reports/2026/logs/banjika/squid-7days.html"
             }},
-            { name: "Bukulu Secondary School", status: "excellent", students: 810, id: 12, urls: {
+            { name: "Bukulu Secondary School", status: "excellent", schoolrank: 12, id: 12, urls: {
                 report1: "reports/2026/bukulu/report1.pdf",
                 report2: "reports/2026/bukulu/report2.pdf",
                 midterm1: "reports/2026/bukulu/midterm1.pdf",
@@ -279,7 +287,7 @@
                 squid_full: "reports/2026/logs/bukulu/squid-full.html",
                 squid_7days: "reports/2026/logs/bukulu/squid-7days.html"
             }},
-            { name: "Nkoarusambu Secondary School", status: "excellent", students: 710, id: 13, urls: {
+            { name: "Nkoarusambu Secondary School", status: "excellent", schoolrank: 13, id: 13, urls: {
                 report1: "reports/2026/nkoarusambu/report1.pdf",
                 report2: "reports/2026/nkoarusambu/report2.pdf",
                 midterm1: "reports/2026/nkoarusambu/midterm1.pdf",
@@ -291,7 +299,7 @@
                 squid_full: "reports/2026/logs/nkoarusambu/squid-full.html",
                 squid_7days: "reports/2026/logs/nkoarusambu/squid-7days.html"
             }},
-            { name: "Irkisongo Secondary School", status: "excellent", students: 350, id: 14, urls: {
+            { name: "Irkisongo Secondary School", status: "excellent", schoolrank: 14, id: 14, urls: {
                 report1: "reports/2026/irkisongo/report1.pdf",
                 report2: "reports/2026/irkisongo/report2.pdf",
                 midterm1: "reports/2026/irkisongo/midterm1.pdf",
@@ -303,7 +311,7 @@
                 squid_full: "reports/2026/logs/irkisongo/squid-full.html",
                 squid_7days: "reports/2026/logs/irkisongo/squid-7days.html"
             }},
-            { name: "Dareda Secodary School", status: "excellent", students: 980, id: 15, urls: {
+            { name: "Dareda Secodary School", status: "excellent", schoolrank: 15, id: 15, urls: {
                 report1: "reports/2026/dareda/report1.pdf",
                 report2: "reports/2026/dareda/report2.pdf",
                 midterm1: "reports/2026/dareda/midterm1.pdf",
@@ -315,7 +323,7 @@
                 squid_full: "reports/2026/logs/dareda/squid-full.html",
                 squid_7days: "reports/2026/logs/dareda/squid-7days.html"
             }},
-            { name: "Buchanan Charter School", status: "good", students: 560, id: 16, urls: {
+            { name: "Buchanan Charter School", status: "good", schoolrank: 16, id: 16, urls: {
                 report1: "reports/2026/buchanan/report1.pdf",
                 report2: "reports/2026/buchanan/report2.pdf",
                 midterm1: "reports/2026/buchanan/midterm1.pdf",
@@ -327,7 +335,7 @@
                 squid_full: "reports/2026/logs/buchanan/squid-full.html",
                 squid_7days: "reports/2026/logs/buchanan/squid-7days.html"
             }},
-            { name: "Johnson High School", status: "good", students: 870, id: 17, urls: {
+            { name: "Johnson High School", status: "good", schoolrank: 17, id: 17, urls: {
                 report1: "reports/2026/johnson/report1.pdf",
                 report2: "reports/2026/johnson/report2.pdf",
                 midterm1: "reports/2026/johnson/midterm1.pdf",
@@ -339,7 +347,7 @@
                 squid_full: "reports/2026/logs/johnson/squid-full.html",
                 squid_7days: "reports/2026/logs/johnson/squid-7days.html"
             }},
-            { name: "Grant Middle School", status: "good", students: 690, id: 18, urls: {
+            { name: "Grant Middle School", status: "good", schoolrank: 18, id: 18, urls: {
                 report1: "reports/2026/grant/report1.pdf",
                 report2: "reports/2026/grant/report2.pdf",
                 midterm1: "reports/2026/grant/midterm1.pdf",
@@ -351,7 +359,7 @@
                 squid_full: "reports/2026/logs/grant/squid-full.html",
                 squid_7days: "reports/2026/logs/grant/squid-7days.html"
             }},
-            { name: "Hayes Elementary", status: "good", students: 410, id: 19, urls: {
+            { name: "Hayes Elementary", status: "good", schoolrank: 19, id: 19, urls: {
                 report1: "reports/2026/hayes/report1.pdf",
                 report2: "reports/2026/hayes/report2.pdf",
                 midterm1: "reports/2026/hayes/midterm1.pdf",
@@ -363,7 +371,7 @@
                 squid_full: "reports/2026/logs/hayes/squid-full.html",
                 squid_7days: "reports/2026/logs/hayes/squid-7days.html"
             }},
-            { name: "Garfield Academy", status: "good", students: 750, id: 20, urls: {
+            { name: "Garfield Academy", status: "good", schoolrank: 20, id: 20, urls: {
                 report1: "reports/2026/garfield/report1.pdf",
                 report2: "reports/2026/garfield/report2.pdf",
                 midterm1: "reports/2026/garfield/midterm1.pdf",
@@ -375,7 +383,7 @@
                 squid_full: "reports/2026/logs/garfield/squid-full.html",
                 squid_7days: "reports/2026/logs/garfield/squid-7days.html"
             }},
-            { name: "Arthur Science School", status: "fair", students: 640, id: 21, urls: {
+            { name: "Arthur Science School", status: "medium", schoolrank: 21, id: 21, urls: {
                 report1: "reports/2026/arthur/report1.pdf",
                 report2: "reports/2026/arthur/report2.pdf",
                 midterm1: "reports/2026/arthur/midterm1.pdf",
@@ -387,7 +395,7 @@
                 squid_full: "reports/2026/logs/arthur/squid-full.html",
                 squid_7days: "reports/2026/logs/arthur/squid-7days.html"
             }},
-            { name: "Cleveland High School", status: "good", students: 860, id: 22, urls: {
+            { name: "Cleveland High School", status: "good", schoolrank: 22, id: 22, urls: {
                 report1: "reports/2026/cleveland/report1.pdf",
                 report2: "reports/2026/cleveland/report2.pdf",
                 midterm1: "reports/2026/cleveland/midterm1.pdf",
@@ -399,7 +407,7 @@
                 squid_full: "reports/2026/logs/cleveland/squid-full.html",
                 squid_7days: "reports/2026/logs/cleveland/squid-7days.html"
             }},
-            { name: "McKinley Middle School", status: "good", students: 580, id: 23, urls: {
+            { name: "McKinley Middle School", status: "good", schoolrank: 23, id: 23, urls: {
                 report1: "reports/2026/mckinley/report1.pdf",
                 report2: "reports/2026/mckinley/report2.pdf",
                 midterm1: "reports/2026/mckinley/midterm1.pdf",
@@ -411,7 +419,7 @@
                 squid_full: "reports/2026/logs/mckinley/squid-full.html",
                 squid_7days: "reports/2026/logs/mckinley/squid-7days.html"
             }},
-            { name: "Roosevelt Tech Institute", status: "excellent", students: 910, id: 24, urls: {
+            { name: "Roosevelt Tech Institute", status: "excellent", schoolrank: 24, id: 24, urls: {
                 report1: "reports/2026/roosevelttech/report1.pdf",
                 report2: "reports/2026/roosevelttech/report2.pdf",
                 midterm1: "reports/2026/roosevelttech/midterm1.pdf",
@@ -423,7 +431,7 @@
                 squid_full: "reports/2026/logs/roosevelttech/squid-full.html",
                 squid_7days: "reports/2026/logs/roosevelttech/squid-7days.html"
             }},
-            { name: "Taft Elementary", status: "good", students: 370, id: 25, urls: {
+            { name: "Taft Elementary", status: "good", schoolrank: 25, id: 25, urls: {
                 report1: "reports/2026/taft/report1.pdf",
                 report2: "reports/2026/taft/report2.pdf",
                 midterm1: "reports/2026/taft/midterm1.pdf",
@@ -435,7 +443,7 @@
                 squid_full: "reports/2026/logs/taft/squid-full.html",
                 squid_7days: "reports/2026/logs/taft/squid-7days.html"
             }},
-            { name: "Wilson Charter Academy", status: "good", students: 790, id: 26, urls: {
+            { name: "Wilson Charter Academy", status: "good", schoolrank: 26, id: 26, urls: {
                 report1: "reports/2026/wilson/report1.pdf",
                 report2: "reports/2026/wilson/report2.pdf",
                 midterm1: "reports/2026/wilson/midterm1.pdf",
@@ -447,7 +455,7 @@
                 squid_full: "reports/2026/logs/wilson/squid-full.html",
                 squid_7days: "reports/2026/logs/wilson/squid-7days.html"
             }},
-            { name: "Harding High School", status: "fair", students: 840, id: 27, urls: {
+            { name: "Harding High School", status: "medium", schoolrank: 27, id: 27, urls: {
                 report1: "reports/2026/harding/report1.pdf",
                 report2: "reports/2026/harding/report2.pdf",
                 midterm1: "reports/2026/harding/midterm1.pdf",
@@ -459,7 +467,7 @@
                 squid_full: "logs/harding/squid-full.html",
                 squid_7days: "logs/harding/squid-7days.html"
             }},
-            { name: "Coolidge Middle School", status: "good", students: 520, id: 28, urls: {
+            { name: "Coolidge Middle School", status: "good", schoolrank: 28, id: 28, urls: {
                 report1: "reports/2026/coolidge/report1.pdf",
                 report2: "reports/2026/coolidge/report2.pdf",
                 midterm1: "reports/2026/coolidge/midterm1.pdf",
@@ -471,7 +479,7 @@
                 squid_full: "logs/coolidge/squid-full.html",
                 squid_7days: "logs/coolidge/squid-7days.html"
             }},
-            { name: "Hoover STEM Center", status: "excellent", students: 1020, id: 29, urls: {
+            { name: "Hoover STEM Center", status: "excellent", schoolrank: 29, id: 29, urls: {
                 report1: "reports/2026/hoover/report1.pdf",
                 report2: "reports/2026/hoover/report2.pdf",
                 midterm1: "reports/2026/hoover/midterm1.pdf",
@@ -483,7 +491,7 @@
                 squid_full: "logs/hoover/squid-full.html",
                 squid_7days: "logs/hoover/squid-7days.html"
             }},
-            { name: "Truman Community School", status: "good", students: 670, id: 30, urls: {
+            { name: "Truman Community School", status: "good", schoolrank: 30, id: 30, urls: {
                 report1: "reports/2026/truman/report1.pdf",
                 report2: "reports/2026/truman/report2.pdf",
                 midterm1: "reports/2026/truman/midterm1.pdf",
@@ -495,7 +503,7 @@
                 squid_full: "logs/truman/squid-full.html",
                 squid_7days: "logs/truman/squid-7days.html"
             }},
-            { name: "Eisenhower High School", status: "excellent", students: 950, id: 31, urls: {
+            { name: "Eisenhower High School", status: "excellent", schoolrank: 31, id: 31, urls: {
                 report1: "reports/2026/eisenhower/report1.pdf",
                 report2: "reports/2026/eisenhower/report2.pdf",
                 midterm1: "reports/2026/eisenhower/midterm1.pdf",
@@ -507,7 +515,7 @@
                 squid_full: "logs/eisenhower/squid/full.log",
                 squid_7days: "logs/eisenhower/squid/7days.log"
             }},
-            { name: "Kennedy Middle School", status: "good", students: 580, id: 32, urls: {
+            { name: "Kennedy Middle School", status: "good", schoolrank: 32, id: 32, urls: {
                 report1: "reports/2026/kennedy/report1.pdf",
                 report2: "reports/2026/kennedy/report2.pdf",
                 midterm1: "reports/2026/kennedy/midterm1.pdf",
@@ -519,7 +527,7 @@
                 squid_full: "logs/kennedy/squid/full.log",
                 squid_7days: "logs/kennedy/squid/7days.log"
             }},
-            { name: "Nixon Elementary", status: "good", students: 430, id: 33, urls: {
+            { name: "Nixon Elementary", status: "good", schoolrank: 33, id: 33, urls: {
                 report1: "reports/2026/nixon/report1.pdf",
                 report2: "reports/2026/nixon/report2.pdf",
                 midterm1: "reports/2026/nixon/midterm1.pdf",
@@ -531,7 +539,7 @@
                 squid_full: "logs/nixon/squid/full.log",
                 squid_7days: "logs/nixon/squid/7days.log"
             }},
-            { name: "Ford Technical Institute", status: "excellent", students: 880, id: 34, urls: {
+            { name: "Ford Technical Institute", status: "excellent", schoolrank: 34, id: 34, urls: {
                 report1: "reports/2026/ford/report1.pdf",
                 report2: "reports/2026/ford/report2.pdf",
                 midterm1: "reports/2026/ford/midterm1.pdf",
@@ -543,7 +551,7 @@
                 squid_full: "logs/ford/squid/full.log",
                 squid_7days: "logs/ford/squid/7days.log"
             }},
-            { name: "Carter Charter School", status: "fair", students: 610, id: 35, urls: {
+            { name: "Carter Charter School", status: "medium", schoolrank: 35, id: 35, urls: {
                 report1: "reports/2026/carter/report1.pdf",
                 report2: "reports/2026/carter/report2.pdf",
                 midterm1: "reports/2026/carter/midterm1.pdf",
@@ -555,7 +563,7 @@
                 squid_full: "logs/carter/squid/full.log",
                 squid_7days: "logs/carter/squid/7days.log"
             }},
-            { name: "Reagan High School", status: "good", students: 920, id: 36, urls: {
+            { name: "Reagan High School", status: "good", schoolrank: 36, id: 36, urls: {
                 report1: "reports/2026/reagan/report1.pdf",
                 report2: "reports/2026/reagan/report2.pdf",
                 midterm1: "reports/2026/reagan/midterm1.pdf",
@@ -567,7 +575,7 @@
                 squid_full: "logs/reagan/squid/full.log",
                 squid_7days: "logs/reagan/squid/7days.log"
             }},
-            { name: "Bush Middle School", status: "good", students: 550, id: 37, urls: {
+            { name: "Bush Middle School", status: "good", schoolrank: 37, id: 37, urls: {
                 report1: "reports/2026/bush/report1.pdf",
                 report2: "reports/2026/bush/report2.pdf",
                 midterm1: "reports/2026/bush/midterm1.pdf",
@@ -579,7 +587,7 @@
                 squid_full: "logs/bush/squid/full.log",
                 squid_7days: "logs/bush/squid/7days.log"
             }},
-            { name: "Clinton Elementary", status: "excellent", students: 470, id: 38, urls: {
+            { name: "Clinton Elementary", status: "excellent", schoolrank: 38, id: 38, urls: {
                 report1: "reports/2026/clinton/report1.pdf",
                 report2: "reports/2026/clinton/report2.pdf",
                 midterm1: "reports/2026/clinton/midterm1.pdf",
@@ -591,7 +599,7 @@
                 squid_full: "logs/clinton/squid/full.log",
                 squid_7days: "logs/clinton/squid/7days.log"
             }},
-            { name: "Obama STEM Academy", status: "excellent", students: 1100, id: 39, urls: {
+            { name: "Obama STEM Academy", status: "excellent", schoolrank: 39, id: 39, urls: {
                 report1: "reports/2026/obama/report1.pdf",
                 report2: "reports/2026/obama/report2.pdf",
                 midterm1: "reports/2026/obama/midterm1.pdf",
@@ -603,7 +611,7 @@
                 squid_full: "logs/obama/squid/full.log",
                 squid_7days: "logs/obama/squid/7days.log"
             }},
-            { name: "Trump Community School", status: "good", students: 720, id: 40, urls: {
+            { name: "Trump Community School", status: "good", schoolrank: 40, id: 40, urls: {
                 report1: "reports/2026/trump/report1.pdf",
                 report2: "reports/2026/trump/report2.pdf",
                 midterm1: "reports/2026/trump/midterm1.pdf",
@@ -615,7 +623,7 @@
                 squid_full: "logs/trump/squid/full.log",
                 squid_7days: "logs/trump/squid/7days.log"
             }},
-            { name: "Biden High School", status: "excellent", students: 890, id: 41, urls: {
+            { name: "Biden High School", status: "excellent", schoolrank: 41, id: 41, urls: {
                 report1: "reports/2026/biden/report1.pdf",
                 report2: "reports/2026/biden/report2.pdf",
                 midterm1: "reports/2026/biden/midterm1.pdf",
@@ -627,7 +635,7 @@
                 squid_full: "logs/biden/squid/full.log",
                 squid_7days: "logs/biden/squid/7days.log"
             }},
-            { name: "Hamilton Middle School", status: "good", students: 630, id: 42, urls: {
+            { name: "Hamilton Middle School", status: "good", schoolrank: 42, id: 42, urls: {
                 report1: "reports/2026/hamilton/report1.pdf",
                 report2: "reports/2026/hamilton/report2.pdf",
                 midterm1: "reports/2026/hamilton/midterm1.pdf",
@@ -639,7 +647,7 @@
                 squid_full: "logs/hamilton/squid/full.log",
                 squid_7days: "logs/hamilton/squid/7days.log"
             }},
-            { name: "Franklin Elementary", status: "good", students: 400, id: 43, urls: {
+            { name: "Franklin Elementary", status: "good", schoolrank: 43, id: 43, urls: {
                 report1: "reports/2026/franklin/report1.pdf",
                 report2: "reports/2026/franklin/report2.pdf",
                 midterm1: "reports/2026/franklin/midterm1.pdf",
@@ -651,7 +659,7 @@
                 squid_full: "logs/franklin/squid/full.log",
                 squid_7days: "logs/franklin/squid/7days.log"
             }},
-            { name: "Edison Technical College", status: "excellent", students: 1050, id: 44, urls: {
+            { name: "Edison Technical College", status: "excellent", schoolrank: 44, id: 44, urls: {
                 report1: "reports/2026/edison/report1.pdf",
                 report2: "reports/2026/edison/report2.pdf",
                 midterm1: "reports/2026/edison/midterm1.pdf",
@@ -663,7 +671,7 @@
                 squid_full: "logs/edison/squid/full.log",
                 squid_7days: "logs/edison/squid/7days.log"
             }},
-            { name: "Tesla Charter School", status: "excellent", students: 780, id: 45, urls: {
+            { name: "Tesla Charter School", status: "excellent", schoolrank: 45, id: 45, urls: {
                 report1: "reports/2026/tesla/report1.pdf",
                 report2: "reports/2026/tesla/report2.pdf",
                 midterm1: "reports/2026/tesla/midterm1.pdf",
@@ -675,7 +683,7 @@
                 squid_full: "logs/tesla/squid/full.log",
                 squid_7days: "logs/tesla/squid/7days.log"
             }},
-            { name: "Einstein High School", status: "excellent", students: 940, id: 46, urls: {
+            { name: "Einstein High School", status: "excellent", schoolrank: 46, id: 46, urls: {
                 report1: "reports/2026/einstein/report1.pdf",
                 report2: "reports/2026/einstein/report2.pdf",
                 midterm1: "reports/2026/einstein/midterm1.pdf",
@@ -687,7 +695,7 @@
                 squid_full: "logs/einstein/squid/full.log",
                 squid_7days: "logs/einstein/squid/7days.log"
             }},
-            { name: "Curie Middle School", status: "good", students: 590, id: 47, urls: {
+            { name: "Curie Middle School", status: "good", schoolrank: 47, id: 47, urls: {
                 report1: "reports/2026/curie/report1.pdf",
                 report2: "reports/2026/curie/report2.pdf",
                 midterm1: "reports/2026/curie/midterm1.pdf",
@@ -699,7 +707,7 @@
                 squid_full: "logs/curie/squid/full.log",
                 squid_7days: "logs/curie/squid/7days.log"
             }},
-            { name: "Newton Elementary", status: "good", students: 440, id: 48, urls: {
+            { name: "Newton Elementary", status: "good", schoolrank: 48, id: 48, urls: {
                 report1: "reports/2026/newton/report1.pdf",
                 report2: "reports/2026/newton/report2.pdf",
                 midterm1: "reports/2026/newton/midterm1.pdf",
@@ -711,7 +719,7 @@
                 squid_full: "logs/newton/squid/full.log",
                 squid_7days: "logs/newton/squid/7days.log"
             }},
-            { name: "Darwin Science Academy", status: "excellent", students: 870, id: 49, urls: {
+            { name: "Darwin Science Academy", status: "excellent", schoolrank: 49, id: 49, urls: {
                 report1: "reports/2026/darwin/report1.pdf",
                 report2: "reports/2026/darwin/report2.pdf",
                 midterm1: "reports/2026/darwin/midterm1.pdf",
@@ -723,7 +731,7 @@
                 squid_full: "logs/darwin/squid/full.log",
                 squid_7days: "logs/darwin/squid/7days.log"
             }},
-            { name: "Galileo STEM Center", status: "excellent", students: 980, id: 50, urls: {
+            { name: "Galileo STEM Center", status: "excellent", schoolrank: 50, id: 50, urls: {
                 report1: "reports/2026/galileo/report1.pdf",
                 report2: "reports/2026/galileo/report2.pdf",
                 midterm1: "reports/2026/galileo/midterm1.pdf",
@@ -735,7 +743,7 @@
                 squid_full: "logs/galileo/squid/full.log",
                 squid_7days: "logs/galileo/squid/7days.log"
             }},
-            { name: "Hawking High School", status: "good", students: 850, id: 51, urls: {
+            { name: "Hawking High School", status: "low", schoolrank: 51, id: 51, urls: {
                 report1: "reports/2026/hawking/report1.pdf",
                 report2: "reports/2026/hawking/report2.pdf",
                 midterm1: "reports/2026/hawking/midterm1.pdf",
@@ -747,7 +755,7 @@
                 squid_full: "logs/hawking/squid/full.log",
                 squid_7days: "logs/hawking/squid/7days.log"
             }},
-            { name: "Feynman Middle School", status: "fair", students: 600, id: 52, urls: {
+            { name: "Feynman Middle School", status: "medium", schoolrank: 52, id: 52, urls: {
                 report1: "reports/2026/feynman/report1.pdf",
                 report2: "reports/2026/feynman/report2.pdf",
                 midterm1: "reports/2026/feynman/midterm1.pdf",
@@ -759,7 +767,7 @@
                 squid_full: "logs/feynman/squid/full.log",
                 squid_7days: "logs/feynman/squid/7days.log"
             }},
-            { name: "Sagan Elementary", status: "good", students: 390, id: 53, urls: {
+            { name: "Sagan Elementary", status: "verybad", schoolrank: 53, id: 53, urls: {
                 report1: "reports/2026/sagan/report1.pdf",
                 report2: "reports/2026/sagan/report2.pdf",
                 midterm1: "reports/2026/sagan/midterm1.pdf",
@@ -771,7 +779,7 @@
                 squid_full: "logs/sagan/squid/full.log",
                 squid_7days: "logs/sagan/squid/7days.log"
             }},
-            { name: "Tyson Charter School", status: "excellent", students: 820, id: 54, urls: {
+            { name: "Tyson Charter School", status: "excellent", schoolrank: 54, id: 54, urls: {
                 report1: "reports/2026/tyson/report1.pdf",
                 report2: "reports/2026/tyson/report2.pdf",
                 midterm1: "reports/2026/tyson/midterm1.pdf",
@@ -783,7 +791,7 @@
                 squid_full: "logs/tyson/squid/full.log",
                 squid_7days: "logs/tyson/squid/7days.log"
             }},
-            { name: "Nye Technical Institute", status: "good", students: 740, id: 55, urls: {
+            { name: "Nye Technical Institute", status: "good", schoolrank: 55, id: 55, urls: {
                 report1: "reports/2026/nye/report1.pdf",
                 report2: "reports/2026/nye/report2.pdf",
                 midterm1: "reports/2026/nye/midterm1.pdf",
@@ -795,7 +803,7 @@
                 squid_full: "logs/nye/squid/full.log",
                 squid_7days: "logs/nye/squid/7days.log"
             }},
-            { name: "Pasteur High School", status: "good", students: 880, id: 56, urls: {
+            { name: "Pasteur High School", status: "bad", schoolrank: 56, id: 56, urls: {
                 report1: "reports/2026/pasteur/report1.pdf",
                 report2: "reports/2026/pasteur/report2.pdf",
                 midterm1: "reports/2026/pasteur/midterm1.pdf",
@@ -807,7 +815,7 @@
                 squid_full: "logs/pasteur/squid/full.log",
                 squid_7days: "logs/pasteur/squid/7days.log"
             }},
-            { name: "Fleming Middle School", status: "good", students: 570, id: 57, urls: {
+            { name: "Fleming Middle School", status: "good", schoolrank: 57, id: 57, urls: {
                 report1: "reports/2026/fleming/report1.pdf",
                 report2: "reports/2026/fleming/report2.pdf",
                 midterm1: "reports/2026/fleming/midterm1.pdf",
@@ -819,7 +827,7 @@
                 squid_full: "logs/fleming/squid/full.log",
                 squid_7days: "logs/fleming/squid/7days.log"
             }},
-            { name: "Watson Elementary", status: "fair", students: 420, id: 58, urls: {
+            { name: "Watson Elementary", status: "medium", schoolrank: 58, id: 58, urls: {
                 report1: "reports/2026/watson/report1.pdf",
                 report2: "reports/2026/watson/report2.pdf",
                 midterm1: "reports/2026/watson/midterm1.pdf",
@@ -831,7 +839,7 @@
                 squid_full: "logs/watson/squid/full.log",
                 squid_7days: "logs/watson/squid/7days.log"
             }},
-            { name: "Crick Science Academy", status: "excellent", students: 910, id: 59, urls: {
+            { name: "Crick Science Academy", status: "excellent", schoolrank: 59, id: 59, urls: {
                 report1: "reports/2026/crick/report1.pdf",
                 report2: "reports/2026/crick/report2.pdf",
                 midterm1: "reports/2026/crick/midterm1.pdf",
@@ -843,7 +851,7 @@
                 squid_full: "logs/crick/squid/full.log",
                 squid_7days: "logs/crick/squid/7days.log"
             }},
-            { name: "Mendel STEM Center", status: "good", students: 690, id: 60, urls: {
+            { name: "Mendel STEM Center", status: "good", schoolrank: 60, id: 60, urls: {
                 report1: "reports/2026/mendel/report1.pdf",
                 report2: "reports/2026/mendel/report2.pdf",
                 midterm1: "reports/2026/mendel/midterm1.pdf",
@@ -855,7 +863,7 @@
                 squid_full: "logs/mendel/squid/full.log",
                 squid_7days: "logs/mendel/squid/7days.log"
             }},
-            { name: "Bohr High School", status: "excellent", students: 960, id: 61, urls: {
+            { name: "Bohr High School", status: "excellent", schoolrank: 61, id: 61, urls: {
                 report1: "reports/2026/bohr/report1.pdf",
                 report2: "reports/2026/bohr/report2.pdf",
                 midterm1: "reports/2026/bohr/midterm1.pdf",
@@ -867,7 +875,7 @@
                 squid_full: "logs/bohr/squid/full.log",
                 squid_7days: "logs/bohr/squid/7days.log"
             }},
-            { name: "Planck Middle School", status: "good", students: 610, id: 62, urls: {
+            { name: "Planck Middle School", status: "good", schoolrank: 62, id: 62, urls: {
                 report1: "reports/2026/planck/report1.pdf",
                 report2: "reports/2026/planck/report2.pdf",
                 midterm1: "reports/2026/planck/midterm1.pdf",
@@ -879,7 +887,7 @@
                 squid_full: "logs/planck/squid/full.log",
                 squid_7days: "logs/planck/squid/7days.log"
             }},
-            { name: "Heisenberg Elementary", status: "good", students: 450, id: 63, urls: {
+            { name: "Heisenberg Elementary", status: "good", schoolrank: 63, id: 63, urls: {
                 report1: "reports/2026/heisenberg/report1.pdf",
                 report2: "reports/2026/heisenberg/report2.pdf",
                 midterm1: "reports/2026/heisenberg/midterm1.pdf",
@@ -891,7 +899,7 @@
                 squid_full: "logs/heisenberg/squid/full.log",
                 squid_7days: "logs/heisenberg/squid/7days.log"
             }},
-            { name: "Schrodinger Charter School", status: "excellent", students: 830, id: 64, urls: {
+            { name: "Schrodinger Charter School", status: "excellent", schoolrank: 64, id: 64, urls: {
                 report1: "reports/2026/schrodinger/report1.pdf",
                 report2: "reports/2026/schrodinger/report2.pdf",
                 midterm1: "reports/2026/schrodinger/midterm1.pdf",
@@ -903,7 +911,7 @@
                 squid_full: "logs/schrodinger/squid/full.log",
                 squid_7days: "logs/schrodinger/squid/7days.log"
             }},
-            { name: "Dirac Technical College", status: "good", students: 770, id: 65, urls: {
+            { name: "Dirac Technical College", status: "good", schoolrank: 65, id: 65, urls: {
                 report1: "reports/2026/dirac/report1.pdf",
                 report2: "reports/2026/dirac/report2.pdf",
                 midterm1: "reports/2026/dirac/midterm1.pdf",
@@ -915,7 +923,7 @@
                 squid_full: "logs/dirac/squid/full.log",
                 squid_7days: "logs/dirac/squid/7days.log"
             }},
-            { name: "Maxwell High School", status: "good", students: 890, id: 66, urls: {
+            { name: "Maxwell High School", status: "good", schoolrank: 66, id: 66, urls: {
                 report1: "reports/2026/maxwell/report1.pdf",
                 report2: "reports/2026/maxwell/report2.pdf",
                 midterm1: "reports/2026/maxwell/midterm1.pdf",
@@ -927,7 +935,7 @@
                 squid_full: "logs/maxwell/squid/full.log",
                 squid_7days: "logs/maxwell/squid/7days.log"
             }},
-            { name: "Faraday Middle School", status: "fair", students: 580, id: 67, urls: {
+            { name: "Faraday Middle School", status: "medium", schoolrank: 67, id: 67, urls: {
                 report1: "reports/2026/faraday/report1.pdf",
                 report2: "reports/2026/faraday/report2.pdf",
                 midterm1: "reports/2026/faraday/midterm1.pdf",
@@ -939,7 +947,7 @@
                 squid_full: "logs/faraday/squid/full.log",
                 squid_7days: "logs/faraday/squid/7days.log"
             }},
-            { name: "Ohm Elementary", status: "good", students: 410, id: 68, urls: {
+            { name: "Ohm Elementary", status: "good", schoolrank: 68, id: 68, urls: {
                 report1: "reports/2026/ohm/report1.pdf",
                 report2: "reports/2026/ohm/report2.pdf",
                 midterm1: "reports/2026/ohm/midterm1.pdf",
@@ -951,7 +959,7 @@
                 squid_full: "logs/ohm/squid/full.log",
                 squid_7days: "logs/ohm/squid/7days.log"
             }},
-            { name: "Volta Science Academy", status: "excellent", students: 860, id: 69, urls: {
+            { name: "Volta Science Academy", status: "excellent", schoolrank: 69, id: 69, urls: {
                 report1: "reports/2026/volta/report1.pdf",
                 report2: "reports/2026/volta/report2.pdf",
                 midterm1: "reports/2026/volta/midterm1.pdf",
@@ -963,7 +971,7 @@
                 squid_full: "logs/volta/squid/full.log",
                 squid_7days: "logs/volta/squid/7days.log"
             }},
-            { name: "Ampere STEM Center", status: "good", students: 720, id: 70, urls: {
+            { name: "Ampere STEM Center", status: "good", schoolrank: 70, id: 70, urls: {
                 report1: "reports/2026/ampere/report1.pdf",
                 report2: "reports/2026/ampere/report2.pdf",
                 midterm1: "reports/2026/ampere/midterm1.pdf",
@@ -975,7 +983,7 @@
                 squid_full: "logs/ampere/squid/full.log",
                 squid_7days: "logs/ampere/squid/7days.log"
             }},
-            { name: "Joule High School", status: "excellent", students: 930, id: 71, urls: {
+            { name: "Joule High School", status: "excellent", schoolrank: 71, id: 71, urls: {
                 report1: "reports/2026/joule/report1.pdf",
                 report2: "reports/2026/joule/report2.pdf",
                 midterm1: "reports/2026/joule/midterm1.pdf",
@@ -987,7 +995,7 @@
                 squid_full: "logs/joule/squid/full.log",
                 squid_7days: "logs/joule/squid/7days.log"
             }},
-            { name: "Kelvin Middle School", status: "good", students: 590, id: 72, urls: {
+            { name: "Kelvin Middle School", status: "good", schoolrank: 72, id: 72, urls: {
                 report1: "reports/2026/kelvin/report1.pdf",
                 report2: "reports/2026/kelvin/report2.pdf",
                 midterm1: "reports/2026/kelvin/midterm1.pdf",
@@ -999,7 +1007,7 @@
                 squid_full: "logs/kelvin/squid/full.log",
                 squid_7days: "logs/kelvin/squid/7days.log"
             }},
-            { name: "Celsius Elementary", status: "good", students: 430, id: 73, urls: {
+            { name: "Celsius Elementary", status: "good", schoolrank: 73, id: 73, urls: {
                 report1: "reports/2026/celsius/report1.pdf",
                 report2: "reports/2026/celsius/report2.pdf",
                 midterm1: "reports/2026/celsius/midterm1.pdf",
@@ -1011,7 +1019,7 @@
                 squid_full: "logs/celsius/squid/full.log",
                 squid_7days: "logs/celsius/squid/7days.log"
             }},
-            { name: "Fahrenheit Charter School", status: "fair", students: 670, id: 74, urls: {
+            { name: "Fahrenheit Charter School", status: "medium", schoolrank: 74, id: 74, urls: {
                 report1: "reports/2026/fahrenheit/report1.pdf",
                 report2: "reports/2026/fahrenheit/report2.pdf",
                 midterm1: "reports/2026/fahrenheit/midterm1.pdf",
@@ -1023,7 +1031,7 @@
                 squid_full: "logs/fahrenheit/squid/full.log",
                 squid_7days: "logs/fahrenheit/squid/7days.log"
             }},
-            { name: "Pascal Technical Institute", status: "excellent", students: 810, id: 75, urls: {
+            { name: "Pascal Technical Institute", status: "excellent", schoolrank: 75, id: 75, urls: {
                 report1: "reports/2026/pascal/report1.pdf",
                 report2: "reports/2026/pascal/report2.pdf",
                 midterm1: "reports/2026/pascal/midterm1.pdf",
@@ -1035,7 +1043,7 @@
                 squid_full: "logs/pascal/squid/full.log",
                 squid_7days: "logs/pascal/squid/7days.log"
             }},
-            { name: "Kiranyi Secondary School", status: "excellent", students: 840, id: 76, urls: {
+            { name: "Kiranyi Secondary School", status: "excellent", schoolrank: 76, id: 76, urls: {
                 report1: "reports/2026/kiranyi/report1.pdf",
                 report2: "reports/2026/kiranyi/report2.pdf",
                 midterm1: "reports/2026/kiranyi/midterm1.pdf",
@@ -1047,7 +1055,7 @@
                 squid_full: "logs/kiranyi/squid/full.log",
                 squid_7days: "logs/kiranyi/squid/7days.log"
             }},
-            { name: "Suye Secondary School", status: "excellent", students: 410, id: 77, urls: {
+            { name: "Suye Secondary School", status: "excellent", schoolrank: 77, id: 77, urls: {
                 report1: "reports/2026/suye/report1.pdf",
                 report2: "reports/2026/suye/report2.pdf",
                 midterm1: "reports/2026/suye/midterm1.pdf",
@@ -1059,7 +1067,7 @@
                 squid_full: "logs/suye/squid/full.log",
                 squid_7days: "logs/suye/squid/7days.log"
             }},
-            { name: "Elerai Secondary School", status: "excellent", students: 640, id: 78, urls: {
+            { name: "Elerai Secondary School", status: "excellent", schoolrank: 78, id: 78, urls: {
                 report1: "reports/2026/elerai/report1.pdf",
                 report2: "reports/2026/elerai/report2.pdf",
                 midterm1: "reports/2026/elerai/midterm1.pdf",
@@ -1071,7 +1079,7 @@
                 squid_full: "logs/elerai/squid/full.log",
                 squid_7days: "logs/elerai/squid/7days.log"
             }},
-            { name: "Mringa Secondary School", status: "excellent", students: 730, id: 79, urls: {
+            { name: "Mringa Secondary School", status: "excellent", schoolrank: 79, id: 79, urls: {
                 report1: "reports/2026/mringa/report1.pdf",
                 report2: "reports/2026/mringa/report2.pdf",
                 midterm1: "reports/2026/mringa/midterm1.pdf",
@@ -1083,7 +1091,7 @@
                 squid_full: "logs/mringa/squid/full.log",
                 squid_7days: "logs/mringa/squid/7days.log"
             }},
-            { name: "Olmotonyi Secondary School", status: "excellent", students: 610, id: 80, urls: {
+            { name: "Olmotonyi Secondary School", status: "excellent", schoolrank: 80, id: 80, urls: {
                 report1: "reports/2026/olmotonyi/report1.pdf",
                 report2: "reports/2026/olmotonyi/report2.pdf",
                 midterm1: "reports/2026/olmotonyi/midterm1.pdf",
@@ -1095,7 +1103,7 @@
                 squid_full: "logs/olmotonyi/squid/full.log",
                 squid_7days: "logs/olmotonyi/squid/7days.log"
             }},
-            { name: "SokonII Secondary School", status: "excellent", students: 540, id: 81, urls: {
+            { name: "SokonII Secondary School", status: "excellent", schoolrank: 81, id: 81, urls: {
                 report1: "reports/2026/sokon2/report1.pdf",
                 report2: "reports/2026/sokon2/report2.pdf",
                 midterm1: "reports/2026/sokon2/midterm1.pdf",
@@ -1107,7 +1115,7 @@
                 squid_full: "logs/sokon2/squid/full.log",
                 squid_7days: "logs/sokon2/squid/7days.log"
             }},
-            { name: "Lincoln High School", status: "excellent", students: 850, id: 82, urls: {
+            { name: "Lincoln High School", status: "excellent", schoolrank: 82, id: 82, urls: {
                 report1: "reports/2026/lincoln/report1.pdf",
                 report2: "reports/2026/lincoln/report2.pdf",
                 midterm1: "reports/2026/lincoln/midterm1.pdf",
@@ -1119,7 +1127,7 @@
                 squid_full: "logs/lincoln/squid/full.log",
                 squid_7days: "logs/lincoln/squid/7days.log"
             }},
-            { name: "Washington Elementary", status: "excellent", students: 420, id: 83, urls: {
+            { name: "Washington Elementary", status: "excellent", schoolrank: 83, id: 83, urls: {
                 report1: "reports/2026/washington/report1.pdf",
                 report2: "reports/2026/washington/report2.pdf",
                 midterm1: "reports/2026/washington/midterm1.pdf",
@@ -1131,7 +1139,7 @@
                 squid_full: "logs/washington/squid/full.log",
                 squid_7days: "logs/washington/squid/7days.log"
             }},
-            { name: "Roosevelt Middle School", status: "excellent", students: 650, id: 84, urls: {
+            { name: "Roosevelt Middle School", status: "excellent", schoolrank: 84, id: 84, urls: {
                 report1: "reports/2026/roosevelt/report1.pdf",
                 report2: "reports/2026/roosevelt/report2.pdf",
                 midterm1: "reports/2026/roosevelt/midterm1.pdf",
@@ -1143,7 +1151,7 @@
                 squid_full: "logs/roosevelt/squid/full.log",
                 squid_7days: "logs/roosevelt/squid/7days.log"
             }},
-            { name: "Jefferson Academy", status: "good", students: 780, id: 85, urls: {
+            { name: "Jefferson Academy", status: "good", schoolrank: 85, id: 85, urls: {
                 report1: "reports/2026/jefferson/report1.pdf",
                 report2: "reports/2026/jefferson/report2.pdf",
                 midterm1: "reports/2026/jefferson/midterm1.pdf",
@@ -1155,7 +1163,7 @@
                 squid_full: "logs/jefferson/squid/full.log",
                 squid_7days: "logs/jefferson/squid/7days.log"
             }},
-            { name: "Madison Technical Institute", status: "excellent", students: 920, id: 86, urls: {
+            { name: "Madison Technical Institute", status: "excellent", schoolrank: 86, id: 86, urls: {
                 report1: "reports/2026/madison/report1.pdf",
                 report2: "reports/2026/madison/report2.pdf",
                 midterm1: "reports/2026/madison/midterm1.pdf",
@@ -1167,7 +1175,7 @@
                 squid_full: "logs/madison/squid/full.log",
                 squid_7days: "logs/madison/squid/7days.log"
             }},
-            { name: "Monroe Charter School", status: "good", students: 540, id: 87, urls: {
+            { name: "Monroe Charter School", status: "good", schoolrank: 87, id: 87, urls: {
                 report1: "reports/2026/monroe/report1.pdf",
                 report2: "reports/2026/monroe/report2.pdf",
                 midterm1: "reports/2026/monroe/midterm1.pdf",
@@ -1179,7 +1187,7 @@
                 squid_full: "logs/monroe/squid/full.log",
                 squid_7days: "logs/monroe/squid/7days.log"
             }},
-            { name: "Adams High School", status: "good", students: 890, id: 88, urls: {
+            { name: "Adams High School", status: "good", schoolrank: 88, id: 88, urls: {
                 report1: "reports/2026/adams/report1.pdf",
                 report2: "reports/2026/adams/report2.pdf",
                 midterm1: "reports/2026/adams/midterm1.pdf",
@@ -1191,7 +1199,7 @@
                 squid_full: "logs/adams/squid/full.log",
                 squid_7days: "logs/adams/squid/7days.log"
             }},
-            { name: "Jackson Middle School", status: "good", students: 480, id: 89, urls: {
+            { name: "Jackson Middle School", status: "good", schoolrank: 89, id: 89, urls: {
                 report1: "reports/2026/jackson/report1.pdf",
                 report2: "reports/2026/jackson/report2.pdf",
                 midterm1: "reports/2026/jackson/midterm1.pdf",
@@ -1203,7 +1211,7 @@
                 squid_full: "logs/jackson/squid/full.log",
                 squid_7days: "logs/jackson/squid/7days.log"
             }},
-            { name: "Van Buren Elementary", status: "good", students: 390, id: 90, urls: {
+            { name: "Van Buren Elementary", status: "good", schoolrank: 90, id: 90, urls: {
                 report1: "reports/2026/vanburen/report1.pdf",
                 report2: "reports/2026/vanburen/report2.pdf",
                 midterm1: "reports/2026/vanburen/midterm1.pdf",
@@ -1215,7 +1223,7 @@
                 squid_full: "logs/vanburen/squid/full.log",
                 squid_7days: "logs/vanburen/squid/7days.log"
             }},
-            { name: "Harrison STEM Academy", status: "excellent", students: 1050, id: 91, urls: {
+            { name: "Harrison STEM Academy", status: "excellent", schoolrank: 91, id: 91, urls: {
                 report1: "reports/2026/harrison/report1.pdf",
                 report2: "reports/2026/harrison/report2.pdf",
                 midterm1: "reports/2026/harrison/midterm1.pdf",
@@ -1227,7 +1235,7 @@
                 squid_full: "logs/harrison/squid/full.log",
                 squid_7days: "logs/harrison/squid/7days.log"
             }},
-            { name: "Tyler Community School", status: "good", students: 620, id: 92, urls: {
+            { name: "Tyler Community School", status: "good", schoolrank: 92, id: 92, urls: {
                 report1: "reports/2026/tyler/report1.pdf",
                 report2: "reports/2026/tyler/report2.pdf",
                 midterm1: "reports/2026/tyler/midterm1.pdf",
@@ -1239,7 +1247,7 @@
                 squid_full: "logs/tyler/squid/full.log",
                 squid_7days: "logs/tyler/squid/7days.log"
             }},
-            { name: "Polk High School", status: "good", students: 810, id: 93, urls: {
+            { name: "Polk High School", status: "good", schoolrank: 93, id: 93, urls: {
                 report1: "reports/2026/polk/report1.pdf",
                 report2: "reports/2026/polk/report2.pdf",
                 midterm1: "reports/2026/polk/midterm1.pdf",
@@ -1251,7 +1259,7 @@
                 squid_full: "logs/polk/squid/full.log",
                 squid_7days: "logs/polk/squid/7days.log"
             }},
-            { name: "Taylor Middle School", status: "fair", students: 710, id: 94, urls: {
+            { name: "Taylor Middle School", status: "medium", schoolrank: 94, id: 94, urls: {
                 report1: "reports/2026/taylor/report1.pdf",
                 report2: "reports/2026/taylor/report2.pdf",
                 midterm1: "reports/2026/taylor/midterm1.pdf",
@@ -1263,7 +1271,7 @@
                 squid_full: "logs/taylor/squid/full.log",
                 squid_7days: "logs/taylor/squid/7days.log"
             }},
-            { name: "Fillmore Elementary", status: "good", students: 350, id: 95, urls: {
+            { name: "Fillmore Elementary", status: "good", schoolrank: 95, id: 95, urls: {
                 report1: "reports/2026/fillmore/report1.pdf",
                 report2: "reports/2026/fillmore/report2.pdf",
                 midterm1: "reports/2026/fillmore/midterm1.pdf",
@@ -1275,7 +1283,7 @@
                 squid_full: "logs/fillmore/squid/full.log",
                 squid_7days: "logs/fillmore/squid/7days.log"
             }},
-            { name: "Pierce Technical College", status: "excellent", students: 980, id: 96, urls: {
+            { name: "Pierce Technical College", status: "excellent", schoolrank: 96, id: 96, urls: {
                 report1: "reports/2026/pierce/report1.pdf",
                 report2: "reports/2026/pierce/report2.pdf",
                 midterm1: "reports/2026/pierce/midterm1.pdf",
@@ -1287,7 +1295,7 @@
                 squid_full: "logs/pierce/squid/full.log",
                 squid_7days: "logs/pierce/squid/7days.log"
             }},
-            { name: "Manyara Girls Secondary School", status: "fair", students: 710, id: 97, urls: {
+            { name: "Manyara Girls Secondary School", status: "medium", schoolrank: 97, id: 97, urls: {
                 report1: "reports/2026/manyara-girls-ss/report1.pdf",
                 report2: "reports/2026/manyara-girls-ss/report2.pdf",
                 midterm1: "reports/2026/manyara-girls-ss/midterm1.pdf",
@@ -1299,7 +1307,7 @@
                 squid_full: "logs/manyara-girls-ss/squid/full.log",
                 squid_7days: "logs/manyara-girls-ss/squid/7days.log"
             }},
-            { name: "Losinoni", status: "good", students: 350, id: 98, urls: {
+            { name: "Losinoni", status: "good", schoolrank: 98, id: 98, urls: {
                 report1: "reports/2026/losinoni/report1.pdf",
                 report2: "reports/2026/losinoni/report2.pdf",
                 midterm1: "reports/2026/losinoni/midterm1.pdf",
@@ -1322,7 +1330,12 @@
             const colors = {
                 excellent: 'bg-green-100 text-green-800',
                 good: 'bg-blue-100 text-blue-800',
-                fair: 'bg-yellow-100 text-yellow-800'
+                medium: 'bg-yellow-100 text-yellow-800',
+                low: 'bg-purple-100 text-purple-800',
+                bad: 'bg-red-100 text-red-800',
+                verybad: 'bg-red-100 text-purple-800'
+
+
             };
             return colors[status] || 'bg-gray-100 text-gray-800';
         }
@@ -1331,7 +1344,13 @@
             const borders = {
                 excellent: 'border-l-4 border-green-500',
                 good: 'border-l-4 border-blue-500',
-                fair: 'border-l-4 border-yellow-500'
+                medium: 'border-l-4 border-yellow-500',
+                low: 'border-l-4 border-pink-500',
+                bad: 'border-l-4 border-red-500',
+                verybad: 'border-l-4 border-purple-500'
+
+
+
             };
             return borders[status] || 'border-l-4 border-gray-500';
         }
@@ -1352,8 +1371,8 @@
                         
                         <div class="mb-4">
                             <div class="flex justify-between items-center">
-                                <span class="text-gray-600">Total Students:</span>
-                                <span class="font-semibold text-indigo-600">${school.students}</span>
+                                <span class="text-gray-600">School Rank (2024) :</span>
+                                <span class="font-semibold text-indigo-600">${school.schoolrank}</span>
                             </div>
                         </div>
 
@@ -1396,10 +1415,6 @@
                             <div class="bg-indigo-50 rounded-lg p-4 mt-2">
                                 <h4 class="font-semibold text-indigo-900 mb-2">Report 1</h4>
                                 <ul class="text-sm text-gray-700 space-y-1">
-                                    <li>• Generated: ${new Date().toLocaleDateString()}</li>
-                                    <li>• Status: Completed</li>
-                                    <li>• Total Entries: ${Math.floor(Math.random() * 500 + 100)}</li>
-                                    <li>• Last Updated: ${Math.floor(Math.random() * 24)} hours ago</li>
                                     <li>• <a href="${school.urls.report1}" class="text-indigo-600 hover:underline" target="_blank">Download PDF</a></li>
                                 </ul>
                             </div>
@@ -1409,10 +1424,6 @@
                             <div class="bg-purple-50 rounded-lg p-4 mt-2">
                                 <h4 class="font-semibold text-purple-900 mb-2">Report 2</h4>
                                 <ul class="text-sm text-gray-700 space-y-1">
-                                    <li>• Generated: ${new Date().toLocaleDateString()}</li>
-                                    <li>• Status: Completed</li>
-                                    <li>• Total Entries: ${Math.floor(Math.random() * 500 + 100)}</li>
-                                    <li>• Last Updated: ${Math.floor(Math.random() * 24)} hours ago</li>
                                     <li>• <a href="${school.urls.report2}" class="text-purple-600 hover:underline" target="_blank">Download PDF</a></li>
                                 </ul>
                             </div>
@@ -1422,10 +1433,6 @@
                             <div class="bg-green-50 rounded-lg p-4 mt-2">
                                 <h4 class="font-semibold text-green-900 mb-2">Mid-term 1 Results</h4>
                                 <ul class="text-sm text-gray-700 space-y-1">
-                                    <li>• Period: First Semester</li>
-                                    <li>• Participants: ${Math.floor(school.students * 0.95)}</li>
-                                    <li>• Average Score: ${Math.floor(Math.random() * 20 + 70)}%</li>
-                                    <li>• Pass Rate: ${Math.floor(Math.random() * 15 + 80)}%</li>
                                     <li>• <a href="${school.urls.midterm1}" class="text-green-600 hover:underline" target="_blank">View Details</a></li>
                                 </ul>
                             </div>
@@ -1435,10 +1442,6 @@
                             <div class="bg-blue-50 rounded-lg p-4 mt-2">
                                 <h4 class="font-semibold text-blue-900 mb-2">Terminal 1 Results</h4>
                                 <ul class="text-sm text-gray-700 space-y-1">
-                                    <li>• Period: First Semester Final</li>
-                                    <li>• Participants: ${Math.floor(school.students * 0.93)}</li>
-                                    <li>• Average Score: ${Math.floor(Math.random() * 20 + 70)}%</li>
-                                    <li>• Pass Rate: ${Math.floor(Math.random() * 15 + 80)}%</li>
                                     <li>• <a href="${school.urls.terminal1}" class="text-blue-600 hover:underline" target="_blank">View Details</a></li>
                                 </ul>
                             </div>
@@ -1448,10 +1451,6 @@
                             <div class="bg-pink-50 rounded-lg p-4 mt-2">
                                 <h4 class="font-semibold text-pink-900 mb-2">Mid-term 2 Results</h4>
                                 <ul class="text-sm text-gray-700 space-y-1">
-                                    <li>• Period: Second Semester</li>
-                                    <li>• Participants: ${Math.floor(school.students * 0.96)}</li>
-                                    <li>• Average Score: ${Math.floor(Math.random() * 20 + 70)}%</li>
-                                    <li>• Pass Rate: ${Math.floor(Math.random() * 15 + 80)}%</li>
                                     <li>• <a href="${school.urls.midterm2}" class="text-pink-600 hover:underline" target="_blank">View Details</a></li>
                                 </ul>
                             </div>
@@ -1461,10 +1460,6 @@
                             <div class="bg-cyan-50 rounded-lg p-4 mt-2">
                                 <h4 class="font-semibold text-cyan-900 mb-2">Terminal 2 Results</h4>
                                 <ul class="text-sm text-gray-700 space-y-1">
-                                    <li>• Period: Second Semester Final</li>
-                                    <li>• Participants: ${Math.floor(school.students * 0.94)}</li>
-                                    <li>• Average Score: ${Math.floor(Math.random() * 20 + 70)}%</li>
-                                    <li>• Pass Rate: ${Math.floor(Math.random() * 15 + 80)}%</li>
                                     <li>• <a href="${school.urls.terminal2}" class="text-cyan-600 hover:underline" target="_blank">View Details</a></li>
                                 </ul>
                             </div>
@@ -1474,10 +1469,6 @@
                             <div class="bg-red-50 rounded-lg p-4 mt-2">
                                 <h4 class="font-semibold text-red-900 mb-2">Apache Full Log</h4>
                                 <ul class="text-sm text-gray-700 space-y-1">
-                                    <li>• Total Requests: ${(Math.floor(Math.random() * 900 + 100) * 1000).toLocaleString()}</li>
-                                    <li>• Unique Visitors: ${Math.floor(Math.random() * 5000 + 1000).toLocaleString()}</li>
-                                    <li>• Error Rate: ${(Math.random() * 2).toFixed(2)}%</li>
-                                    <li>• Avg Response Time: ${Math.floor(Math.random() * 200 + 50)}ms</li>
                                     <li>• <a href="${school.urls.apache_full}" class="text-red-600 hover:underline" target="_blank">View Full Log</a></li>
                                 </ul>
                             </div>
@@ -1487,10 +1478,6 @@
                             <div class="bg-orange-50 rounded-lg p-4 mt-2">
                                 <h4 class="font-semibold text-orange-900 mb-2">Apache Last 7 Days</h4>
                                 <ul class="text-sm text-gray-700 space-y-1">
-                                    <li>• Total Requests: ${(Math.floor(Math.random() * 90 + 10) * 1000).toLocaleString()}</li>
-                                    <li>• Unique Visitors: ${Math.floor(Math.random() * 500 + 100).toLocaleString()}</li>
-                                    <li>• Error Rate: ${(Math.random() * 2).toFixed(2)}%</li>
-                                    <li>• Avg Response Time: ${Math.floor(Math.random() * 200 + 50)}ms</li>
                                     <li>• <a href="${school.urls.apache_7days}" class="text-orange-600 hover:underline" target="_blank">View Log</a></li>
                                 </ul>
                             </div>
@@ -1500,10 +1487,6 @@
                             <div class="bg-teal-50 rounded-lg p-4 mt-2">
                                 <h4 class="font-semibold text-teal-900 mb-2">Squid Full Log</h4>
                                 <ul class="text-sm text-gray-700 space-y-1">
-                                    <li>• Total Requests: ${(Math.floor(Math.random() * 1500 + 500) * 1000).toLocaleString()}</li>
-                                    <li>• Cache Hit Rate: ${Math.floor(Math.random() * 20 + 70)}%</li>
-                                    <li>• Bandwidth Saved: ${Math.floor(Math.random() * 500 + 100)} GB</li>
-                                    <li>• Blocked Requests: ${Math.floor(Math.random() * 10000 + 1000).toLocaleString()}</li>
                                     <li>• <a href="${school.urls.squid_full}" class="text-teal-600 hover:underline" target="_blank">View Full Log</a></li>
                                 </ul>
                             </div>
@@ -1513,10 +1496,6 @@
                             <div class="bg-emerald-50 rounded-lg p-4 mt-2">
                                 <h4 class="font-semibold text-emerald-900 mb-2">Squid Last 7 Days</h4>
                                 <ul class="text-sm text-gray-700 space-y-1">
-                                    <li>• Total Requests: ${(Math.floor(Math.random() * 150 + 50) * 1000).toLocaleString()}</li>
-                                    <li>• Cache Hit Rate: ${Math.floor(Math.random() * 20 + 70)}%</li>
-                                    <li>• Bandwidth Saved: ${Math.floor(Math.random() * 50 + 10)} GB</li>
-                                    <li>• Blocked Requests: ${Math.floor(Math.random() * 1000 + 100).toLocaleString()}</li>
                                     <li>• <a href="${school.urls.squid_7days}" class="text-emerald-600 hover:underline" target="_blank">View Log</a></li>
                                 </ul>
                             </div>
