@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +12,9 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- css -->
     <link href="/public/css/lara-p.css" rel="stylesheet">
@@ -26,7 +30,7 @@
       margin-bottom: 30px;
     }
     .filters {
-      max-width: 800px;
+      max-width: 1000px;
       margin: 0 auto 20px auto;
       display: flex;
       gap: 20px;
@@ -146,20 +150,26 @@
 
   <div class="filters smo">
     <div>
-      <label for="regionFilter">Filter by Region:</label>
-      <select id="regionFilter" class="itemFilta">
+      <label for="boxFilter" class="text-gray-700">Filter by Box:</label>
+      <select id="boxFilter" class="itemFilta px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">All Boxes</option>
+      </select>
+    </div>
+    <div>
+      <label for="regionFilter" class="text-gray-700">Filter by Region:</label>
+      <select id="regionFilter" class="itemFilta px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
         <option value="">All Regions</option>
       </select>
     </div>
     <div>
-      <label for="itemFilter">Filter by Item:</label>
-      <select id="itemFilter" class="itemFilta">
+      <label for="itemFilter" class="text-gray-700">Filter by Item:</label>
+      <select id="itemFilter" class="itemFilta px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
         <option value="">All Items</option>
       </select>
     </div>
     <div>
-      <label for="destinationFilter">Filter by Destination:</label>
-      <select id="destinationFilter" class="itemFilta">
+      <label for="destinationFilter" class="text-gray-700">Filter by Destination:</label>
+      <select id="destinationFilter" class="itemFilta px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
         <option value="">All Destinations</option>
       </select>
     </div>
@@ -202,160 +212,126 @@
     {
       "box": "D",
       "items": [
-        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Sarah Moshi", "date": "08-01-2026", "destination": "Mukwasa Day", "region": "Kilimanjaro"}
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Susan Kaaya", "date": "08-01-2026", "destination": "Mukwasa Day", "region": "Kilimanjaro"}
       ]
     },
     {
       "box": "E",
       "items": [
-        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "John Massawe", "date": "10-01-2026", "destination": "Nkuu", "region": "Kilimanjaro"},
-        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "John Massawe", "date": "10-01-2026", "destination": "Nkuu", "region": "Kilimanjaro"},
-        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "John Massawe", "date": "10-01-2026", "destination": "Nkuu", "region": "Kilimanjaro"},
-        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "John Massawe", "date": "10-01-2026", "destination": "Nkuu", "region": "Kilimanjaro"},
-        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "John Massawe", "date": "10-01-2026", "destination": "Nkuu", "region": "Kilimanjaro"}
+        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "John Mosha", "date": "09-01-2026", "destination": "Nkuu", "region": "Kilimanjaro"},
+        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "John Mosha", "date": "09-01-2026", "destination": "Nkuu", "region": "Kilimanjaro"},
+        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "John Mosha", "date": "09-01-2026", "destination": "Nkuu", "region": "Kilimanjaro"},
+        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "John Mosha", "date": "09-01-2026", "destination": "Nkuu", "region": "Kilimanjaro"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "John Mosha", "date": "09-01-2026", "destination": "Nkuu", "region": "Kilimanjaro"}
       ]
     },
     {
       "box": "F",
       "items": [
-        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Anna Lyimo", "date": "11-01-2026", "destination": "Nkuu", "region": "Kilimanjaro"}
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Agnes Kimaro", "date": "10-01-2026", "destination": "Nkuu", "region": "Kilimanjaro"}
       ]
     },
     {
       "box": "G",
       "items": [
-        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "Daniel Komba", "date": "13-01-2026", "destination": "Kikafu", "region": "Kilimanjaro"},
-        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "Daniel Komba", "date": "13-01-2026", "destination": "Kikafu", "region": "Kilimanjaro"},
-        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Daniel Komba", "date": "13-01-2026", "destination": "Kikafu", "region": "Kilimanjaro"},
-        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Daniel Komba", "date": "13-01-2026", "destination": "Kikafu", "region": "Kilimanjaro"},
-        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Daniel Komba", "date": "13-01-2026", "destination": "Kikafu", "region": "Kilimanjaro"}
+        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "Daniel Lyimo", "date": "11-01-2026", "destination": "Kikafu", "region": "Kilimanjaro"},
+        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "Daniel Lyimo", "date": "11-01-2026", "destination": "Kikafu", "region": "Kilimanjaro"},
+        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Daniel Lyimo", "date": "11-01-2026", "destination": "Kikafu", "region": "Kilimanjaro"},
+        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Daniel Lyimo", "date": "11-01-2026", "destination": "Kikafu", "region": "Kilimanjaro"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Daniel Lyimo", "date": "11-01-2026", "destination": "Kikafu", "region": "Kilimanjaro"}
       ]
     },
     {
       "box": "H",
       "items": [
-        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Elizabeth Kessy", "date": "14-01-2026", "destination": "Kikafu", "region": "Kilimanjaro"}
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Martha Mushi", "date": "12-01-2026", "destination": "Kikafu", "region": "Kilimanjaro"}
       ]
     },
     {
       "box": "I",
       "items": [
-        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "Michael Swai", "date": "15-01-2026", "destination": "Darajani", "region": "Kilimanjaro"},
-        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "Michael Swai", "date": "15-01-2026", "destination": "Darajani", "region": "Kilimanjaro"},
-        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Michael Swai", "date": "15-01-2026", "destination": "Darajani", "region": "Kilimanjaro"},
-        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Michael Swai", "date": "15-01-2026", "destination": "Darajani", "region": "Kilimanjaro"},
-        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Michael Swai", "date": "15-01-2026", "destination": "Darajani", "region": "Kilimanjaro"}
+        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "Richard Kaseka", "date": "13-01-2026", "destination": "Darajani", "region": "Kilimanjaro"},
+        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "Richard Kaseka", "date": "13-01-2026", "destination": "Darajani", "region": "Kilimanjaro"},
+        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Richard Kaseka", "date": "13-01-2026", "destination": "Darajani", "region": "Kilimanjaro"},
+        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Richard Kaseka", "date": "13-01-2026", "destination": "Darajani", "region": "Kilimanjaro"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Richard Kaseka", "date": "13-01-2026", "destination": "Darajani", "region": "Kilimanjaro"}
       ]
     },
     {
       "box": "J",
       "items": [
-        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Rebecca Minja", "date": "16-01-2026", "destination": "Darajani", "region": "Kilimanjaro"}
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Lucy Kitomari", "date": "14-01-2026", "destination": "Darajani", "region": "Kilimanjaro"}
       ]
     },
     {
       "box": "K",
       "items": [
-        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "Thomas Mlaki", "date": "18-01-2026", "destination": "Makomu", "region": "Kilimanjaro"},
-        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "Thomas Mlaki", "date": "18-01-2026", "destination": "Makomu", "region": "Kilimanjaro"},
-        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Thomas Mlaki", "date": "18-01-2026", "destination": "Makomu", "region": "Kilimanjaro"},
-        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Thomas Mlaki", "date": "18-01-2026", "destination": "Makomu", "region": "Kilimanjaro"},
-        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Thomas Mlaki", "date": "18-01-2026", "destination": "Makomu", "region": "Kilimanjaro"}
+        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "Simon Ndosi", "date": "15-01-2026", "destination": "Makomu", "region": "Kilimanjaro"},
+        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "Simon Ndosi", "date": "15-01-2026", "destination": "Makomu", "region": "Kilimanjaro"},
+        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Simon Ndosi", "date": "15-01-2026", "destination": "Makomu", "region": "Kilimanjaro"},
+        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Simon Ndosi", "date": "15-01-2026", "destination": "Makomu", "region": "Kilimanjaro"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Simon Ndosi", "date": "15-01-2026", "destination": "Makomu", "region": "Kilimanjaro"}
       ]
     },
     {
       "box": "L",
       "items": [
-        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Joyce Nkwera", "date": "19-01-2026", "destination": "Makomu", "region": "Kilimanjaro"}
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Anna Mnango", "date": "16-01-2026", "destination": "Makomu", "region": "Kilimanjaro"}
       ]
     },
     {
       "box": "M",
       "items": [
-        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "Patrick Mgaya", "date": "21-01-2026", "destination": "Mlanga", "region": "Kilimanjaro"},
-        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "Patrick Mgaya", "date": "21-01-2026", "destination": "Mlanga", "region": "Kilimanjaro"},
-        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Patrick Mgaya", "date": "21-01-2026", "destination": "Mlanga", "region": "Kilimanjaro"},
-        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Patrick Mgaya", "date": "21-01-2026", "destination": "Mlanga", "region": "Kilimanjaro"},
-        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Patrick Mgaya", "date": "21-01-2026", "destination": "Mlanga", "region": "Kilimanjaro"}
+        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "Paul Massawe", "date": "17-01-2026", "destination": "Mlanga", "region": "Kilimanjaro"},
+        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "Paul Massawe", "date": "17-01-2026", "destination": "Mlanga", "region": "Kilimanjaro"},
+        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Paul Massawe", "date": "17-01-2026", "destination": "Mlanga", "region": "Kilimanjaro"},
+        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Paul Massawe", "date": "17-01-2026", "destination": "Mlanga", "region": "Kilimanjaro"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Paul Massawe", "date": "17-01-2026", "destination": "Mlanga", "region": "Kilimanjaro"}
       ]
     },
     {
       "box": "N",
       "items": [
-        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Helen Mrema", "date": "22-01-2026", "destination": "Mlanga", "region": "Kilimanjaro"}
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Catherine Shirima", "date": "18-01-2026", "destination": "Mlanga", "region": "Kilimanjaro"}
       ]
     },
     {
       "box": "O",
       "items": [
-        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "Frank Ndunguru", "date": "24-01-2026", "destination": "Kinywamwezi", "region": "Dar es Salaam"},
-        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "Frank Ndunguru", "date": "24-01-2026", "destination": "Kinywamwezi", "region": "Dar es Salaam"},
-        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Frank Ndunguru", "date": "24-01-2026", "destination": "Kinywamwezi", "region": "Dar es Salaam"},
-        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Frank Ndunguru", "date": "24-01-2026", "destination": "Kinywamwezi", "region": "Dar es Salaam"},
-        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Frank Ndunguru", "date": "24-01-2026", "destination": "Kinywamwezi", "region": "Dar es Salaam"}
+        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "Joseph Mwakasege", "date": "19-01-2026", "destination": "Kinywamwezi", "region": "Dar es Salaam"},
+        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "Joseph Mwakasege", "date": "19-01-2026", "destination": "Kinywamwezi", "region": "Dar es Salaam"},
+        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Joseph Mwakasege", "date": "19-01-2026", "destination": "Kinywamwezi", "region": "Dar es Salaam"},
+        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Joseph Mwakasege", "date": "19-01-2026", "destination": "Kinywamwezi", "region": "Dar es Salaam"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Joseph Mwakasege", "date": "19-01-2026", "destination": "Kinywamwezi", "region": "Dar es Salaam"}
       ]
     },
     {
       "box": "P",
       "items": [
-        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Mary Mtui", "date": "25-01-2026", "destination": "Kinywamwezi", "region": "Dar es Salaam"}
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Rose Mkwizu", "date": "20-01-2026", "destination": "Kinywamwezi", "region": "Dar es Salaam"}
       ]
     },
     {
       "box": "Q",
       "items": [
-        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Allan Dowings", "date": "27-01-2026", "destination": "Spares", "region": "Warehouse"},
-        {"item": "Laptop adapter", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Allan Dowings", "date": "27-01-2026", "destination": "Spares", "region": "Warehouse"}
+        {"item": "Cable Box", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Allan Dowings", "date": "01-02-2026", "destination": "Hai", "region": "Kilimanjaro"},
+        {"item": "Cable Box", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Grace Mollel", "date": "01-02-2026", "destination": "Mukwasa Day", "region": "Kilimanjaro"},
+        {"item": "Cable Box", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "John Mosha", "date": "01-02-2026", "destination": "Nkuu", "region": "Kilimanjaro"}
       ]
     },
     {
       "box": "R",
       "items": [
-        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Peter Msangi", "date": "28-01-2026", "destination": "Spares", "region": "Warehouse"},
-        {"item": "Laptop adapter", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "Peter Msangi", "date": "28-01-2026", "destination": "Spares", "region": "Warehouse"}
+        {"item": "Cable Box", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Daniel Lyimo", "date": "02-02-2026", "destination": "Kikafu", "region": "Kilimanjaro"},
+        {"item": "Cable Box", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Richard Kaseka", "date": "02-02-2026", "destination": "Darajani", "region": "Kilimanjaro"},
+        {"item": "Cable Box", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Simon Ndosi", "date": "02-02-2026", "destination": "Makomu", "region": "Kilimanjaro"}
       ]
     },
     {
       "box": "S",
       "items": [
-        {"item": "Laptop", "quantity": 10, "provided_by": "David Nyangaka", "received_by": "Grace Mollel", "date": "29-01-2026", "destination": "Spares", "region": "Warehouse"},
-        {"item": "Laptop adapter", "quantity": 10, "provided_by": "David Nyangaka", "received_by": "Grace Mollel", "date": "29-01-2026", "destination": "Spares", "region": "Warehouse"}
-      ]
-    },
-    {
-      "box": "T",
-      "items": [
-        {"item": "Laptop", "quantity": 10, "provided_by": "David Nyangaka", "received_by": "Sarah Moshi", "date": "30-01-2026", "destination": "Spares", "region": "Warehouse"},
-        {"item": "Laptop adapter", "quantity": 22, "provided_by": "David Nyangaka", "received_by": "Sarah Moshi", "date": "30-01-2026", "destination": "Spares", "region": "Warehouse"}
-      ]
-    },
-    {
-      "box": "U",
-      "items": [
-        {"item": "Network Switches", "quantity": 8, "provided_by": "David Nyangaka", "received_by": "John Massawe", "date": "31-01-2026", "destination": "All Schools", "region": "Multiple"},
-        {"item": "Team Supplies", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Allan Dowings", "date": "31-01-2026", "destination": "Team", "region": "Team"}
-      ]
-    },
-        {
-      "box": "UU",
-      "items": [
-        {"item": "BackUp Disk", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "John Massawe", "date": "31-01-2026", "destination": "Einoti", "region": "Arusha"}
-      ]
-    },
-    {
-      "box": "V",
-      "items": [
-        {"item": "Micro desktop", "quantity": 7, "provided_by": "David Nyangaka", "received_by": "Anna Lyimo", "date": "01-02-2026", "destination": "Warehouse", "region": "Warehouse"},
-        {"item": "Micro desktop adapter", "quantity": 7, "provided_by": "David Nyangaka", "received_by": "Anna Lyimo", "date": "01-02-2026", "destination": "Warehouse", "region": "Warehouse"},
-        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Anna Lyimo", "date": "01-02-2026", "destination": "Warehouse", "region": "Warehouse"}
-      ]
-    },
-    {
-      "box": "W",
-      "items": [
-        {"item": "Micro desktop", "quantity": 8, "provided_by": "David Nyangaka", "received_by": "Daniel Komba", "date": "03-02-2026", "destination": "Warehouse", "region": "Warehouse"},
-        {"item": "Micro desktop adapter", "quantity": 8, "provided_by": "David Nyangaka", "received_by": "Daniel Komba", "date": "03-02-2026", "destination": "Warehouse", "region": "Warehouse"},
-        {"item": "System admin manual", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Daniel Komba", "date": "03-02-2026", "destination": "Warehouse", "region": "Warehouse"}
+        {"item": "Cable Box", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Paul Massawe", "date": "03-02-2026", "destination": "Mlanga", "region": "Kilimanjaro"},
+        {"item": "Cable Box", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "Joseph Mwakasege", "date": "03-02-2026", "destination": "Kinywamwezi", "region": "Dar es Salaam"}
       ]
     },
     {
@@ -414,17 +390,20 @@
   ]
 }
 
+    const boxFilter = document.getElementById('boxFilter');
     const regionFilter = document.getElementById('regionFilter');
     const itemFilter = document.getElementById('itemFilter');
     const destinationFilter = document.getElementById('destinationFilter');
     const contentDiv = document.getElementById('content');
 
-    // Extract unique items, destinations, and regions for filters
+    // Extract unique boxes, items, destinations, and regions for filters
     function getUniqueValues() {
+      const boxesSet = new Set();
       const itemsSet = new Set();
       const destSet = new Set();
       const regionSet = new Set();
       data.boxes.forEach(box => {
+        boxesSet.add(box.box);
         box.items.forEach(i => {
           itemsSet.add(i.item);
           destSet.add(i.destination);
@@ -432,6 +411,23 @@
         });
       });
       return {
+        boxes: [...boxesSet].sort((a, b) => {
+          // Custom sort to handle alphanumeric box names properly
+          const aNum = a.match(/\d+/);
+          const bNum = b.match(/\d+/);
+          const aLetter = a.match(/[A-Z]+/);
+          const bLetter = b.match(/[A-Z]+/);
+          
+          if (aLetter && bLetter) {
+            if (aLetter[0] !== bLetter[0]) {
+              return aLetter[0].localeCompare(bLetter[0]);
+            }
+          }
+          if (aNum && bNum) {
+            return parseInt(aNum[0]) - parseInt(bNum[0]);
+          }
+          return a.localeCompare(b);
+        }),
         items: [...itemsSet].sort(),
         destinations: [...destSet].sort(),
         regions: [...regionSet].sort()
@@ -440,7 +436,14 @@
 
     // Populate filter dropdowns
     function populateFilters() {
-      const { items, destinations, regions } = getUniqueValues();
+      const { boxes, items, destinations, regions } = getUniqueValues();
+
+      boxes.forEach(box => {
+        const option = document.createElement('option');
+        option.value = box;
+        option.textContent = `Box ${box}`;
+        boxFilter.appendChild(option);
+      });
 
       regions.forEach(region => {
         const option = document.createElement('option');
@@ -466,14 +469,20 @@
 
     // Render boxes and items filtered by selection
     function renderFilteredBoxes() {
+      const selectedBox = boxFilter.value;
       const selectedRegion = regionFilter.value;
       const selectedItem = itemFilter.value;
       const selectedDest = destinationFilter.value;
 
       contentDiv.innerHTML = '';
 
-      // Filter boxes to show only those with items matching filters
+      // Filter boxes to show only those matching the box filter and with items matching other filters
       data.boxes.forEach(box => {
+        // Check if this box matches the box filter
+        const matchesBox = selectedBox ? box.box === selectedBox : true;
+        
+        if (!matchesBox) return;
+
         // Filter the items in the box by the selected filters
         const filteredItems = box.items.filter(item => {
           const matchesRegion = selectedRegion ? item.region === selectedRegion : true;
@@ -556,6 +565,7 @@
     renderFilteredBoxes();
 
     // Add event listeners
+    boxFilter.addEventListener('change', renderFilteredBoxes);
     regionFilter.addEventListener('change', renderFilteredBoxes);
     itemFilter.addEventListener('change', renderFilteredBoxes);
     destinationFilter.addEventListener('change', renderFilteredBoxes);
