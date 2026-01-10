@@ -7,7 +7,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
     <script src="/public/css/script/tailwindcss3417.js"></script>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-200">
     <!-- Navbar -->
     <nav class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,7 +17,7 @@
                 </div>
                 <div class="hidden md:flex items-center space-x-6">
                     <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
-                    <a href="contacts.html" class="text-indigo-600 font-medium mr-2">Contacts</a>
+                    <a href="prod/blog" class="text-indigo-600 font-medium mr-2">Blog</a>
                     <div id="authLinks"></div>
                 </div>
                 <button id="mobileMenuBtn" class="md:hidden flex items-center">
@@ -30,7 +30,7 @@
         <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
             <div class="px-4 py-3 space-y-3">
                 <a href="/" class="block text-gray-600 hover:text-gray-900">Home</a>
-                <a href="contacts.html" class="block text-indigo-600 font-medium">Contacts</a>
+                <a href="/prod/blog" class="block text-indigo-600 font-medium">Blog</a>
                 <div id="authLinksMobile"></div>
             </div>
         </div>
@@ -43,59 +43,6 @@
             <p class="text-xl text-gray-600">We'd love to hear from you. Reach out to us anytime!</p>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-12">
-            <!-- Contact Form -->
-            <div class="bg-white rounded-xl shadow-lg p-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Send us a message</h2>
-                <form id="contactForm" class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
-                        <input 
-                            type="text" 
-                            required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                            placeholder="John Doe"
-                        >
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                        <input 
-                            type="email" 
-                            required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                            placeholder="john@example.com"
-                        >
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
-                        <input 
-                            type="text" 
-                            required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                            placeholder="How can we help?"
-                        >
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                        <textarea 
-                            required
-                            rows="4"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                            placeholder="Tell us more about your inquiry..."
-                        ></textarea>
-                    </div>
-
-                    <button 
-                        type="submit"
-                        class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-indigo-700 transition"
-                    >
-                        Send Message
-                    </button>
-                </form>
-            </div>
 
             <!-- Contact Information -->
             <div class="space-y-8">
@@ -147,11 +94,11 @@
                     <div class="space-y-2">
                         <p class="flex justify-between">
                             <span>Monday - Friday:</span>
-                            <span class="font-semibold">8:00 AM - 5:00 PM</span>
+                            <span class="font-semibold">8:00 AM - 15:00 PM</span>
                         </p>
                         <p class="flex justify-between">
                             <span>Saturday:</span>
-                            <span class="font-semibold">9:00 AM - 12:00 PM</span>
+                            <span class="font-semibold">Closed/Open</span>
                         </p>
                         <p class="flex justify-between">
                             <span>Sunday:</span>
@@ -171,7 +118,6 @@
     </footer>
 
     <!-- Load Scripts -->
-    <script src="js/bundle.js"></script>
  
 
     <script>
