@@ -126,6 +126,14 @@
                                     </div>
                                 </div>
                             </a>
+                            <a href="/" class="block group">
+                                <div class="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-200 transition">
+                                    <div class="w-2 h-2 bg-green-600 rounded-full mt-2"></div>
+                                    <div class="flex-1">
+                                        <p class="font-medium text-gray-900 group-hover:text-blue-600 transition">Home</p>
+                                    </div>
+                                </div>
+                            </a>
                      </div>
 
                     
@@ -263,9 +271,10 @@
             if (typeof Auth !== 'undefined' && Auth.check()) {
                 // User is logged in, go to dashboard
                 window.location.href = '/box/dashboard.html';
+                
             } else {
                 // User not logged in, redirect to login with return URL
-                window.location.href = '/box/login.html?returnUrl=' + encodeURIComponent('/box/dashboard.html');
+                window.location.href = '/box/login.html';
             }
         }
 
