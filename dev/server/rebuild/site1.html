@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reneal Server Rebuild Documentation Process</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f8fafc;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --code-bg: #f1f5f9;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--border);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-box {
+            margin-bottom: 1.5rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-section h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--secondary);
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+        }
+
+        .content-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .content-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .content-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .content-section h3 {
+            font-size: 1.25rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--text);
+        }
+
+        .content-section p {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .content-section ul,
+        .content-section ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .content-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            border: 1px solid var(--border);
+        }
+
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .api-table th,
+        .api-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .api-table th {
+            background-color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .api-table tr:hover {
+            background-color: var(--secondary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-required {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        .badge-optional {
+            background-color: #dbeafe;
+            color: #2563eb;
+        }
+
+        .toc {
+            background-color: var(--secondary);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .mt-5{
+            margin-top: 3rem;
+        }
+
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            text-decoration: none;
+            color: var(--text-light);
+            transition: color 0.2s;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+                </svg>
+                Reneal Server Rebuild Doc
+            </div>
+            
+            <div class="search-box">
+                <input type="text" placeholder="Search documentation...">
+            </div>
+            
+            <div class="nav-section">
+                <h3>Steps</h3>
+                <ul class="nav-links">
+                    <li><a href="#getting-started" class="active">Getting Started</a></li>
+                    <li><a href="#vpn-creation-process">VPN Creation Process</a></li>
+                    <li><a href="#vpn-creation-demo">Demo VPN Creation </a></li>
+                    <li><a href="#server-build-up">Server Build-Up Process</a></li>
+                    <li><a href="#server-build-up-demo">Demo Server Build-Up</a></li>
+                    <li><a href="#">Other</a></li>
+                </ul>
+            </div>
+
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1>Introduction</h1>
+                <p>Welcome to the Official Reneal Documentation for Reneal Server Build-Up</p>
+            </div>
+            
+            
+            <div class="content-section">
+                <h2 id="overview">Overview</h2>
+                <p>This documentation provides detailed information about Reneal server build-up procedures, VPN creation processes, command lines and related features. 
+                    This should only be done by someone very familiar with using the Linux command line.  Instructions must be followed exactly.</p>
+                
+                <p>Before rebuilding a server, it's critical to prepare VPN configuration files in advance including network settings and firewall rules. 
+                    By creating the VPN configuration files beforehand, you ensure a smooth transition and can immediately restore network connectivity after the rebuild is complete.
+                </p>
+            </div>
+            
+            <div class="content-section">
+                <h2 id="features">Some System Features</h2>
+                <ul>
+                    <li><strong>Robust set of Applications:</strong> such as (office suite, photo/video editing, webpage design, desktop publishing, CAD, programming, etc.).</li>
+                    <li><strong>Educational programs:</strong> Including (math, science, English, geography).</li>
+                    <li><strong>Extensive educational content:</strong> Consisting (books, movies, offline Wikipedia, past National Exam papers, Tanzania curriculum notes, science simulations, etc.).</li>
+                    <li><strong>Epoptes:</strong> For classroom management program so teacher can monitor student work or share.
+                    their screen to students (very convenient if school does not have a projector), shared video streaming capability.</li>
+                    <li><strong>Permission-controlled content sharing area:</strong> For TeachersShared and AllUsersShared file storage.</li>
+
+                </ul>
+            </div>
+            
+            <div class="content-section">
+                <h2 id="getting-started">Getting Started</h2>
+                <p>To begin creating VPN files, follow these steps:</p>
+                
+                <ol>
+                    <li>You must create the VPN files in the MASTER Account on a Reneal server.</li>
+                    <li>You will then install the created files onto each newly built server.</li>
+                    <li>All necessary files required in build-up process will be on the VPN flash drive.</li>
+                    
+                </ol>
+
+            <div class="content-section">
+                <h2 id="vpn-creation-process">1. VPN Creation Procedures</h2>
+                
+                <ol>
+                    <li>Boot up the server that you will be using to create the VPN files (you can use the JR Reneal server).  
+                        Sign in to the master account and insert the VPN USB flash drive.</li>
+                    <li>Copy the VPN creation files from the VPN USB drive to the JR Reneal server – 
+                        YOU SHOULD ONLY HAVE TO DO THIS ONE TIME, THE FIRST TIME YOU DO THIS PROCESS ON THE JR RENEAL SERVER.</li>
+                        <div class="code-block">
+                        // Terminal CMD <br>
+                        cd ~/CodeDevelopment/newSystemBuild <br>
+                        sudo cp -pR /media/master/RENEALVPN/makeWireguardVpnFiles . <br>
+                        cd makeWireguardVpnFiles <br>
+                        chmod 744 buildWgConf0.sh <br>
+                        chmod 744 buildWgConf1.sh
+                </div>
+                    <li>Make a file with a list of the new school names.</li>
+                    <div class="code-block">
+                        // Go to the directory <br>
+                        ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles
+
+                    </div>
+
+                    <li>Create a text file in this directory.  An example file name might be 2025Aschools_wg.(txt).
+                        In this text file, put one school per row, with new school names (“school_name”) added to “-main-server”.
+                        Make sure there is no space in the entry, and make sure there is no extra line at the end of the text file.</li>
+                    Here is an example of what each line would look like in this file:
+                    <div class="code-block">
+                        akeri-main-server <br>
+                        amsha-main-server <br>
+                        mukulat-main-server <br>
+                        sanya_juu-main-server <br>
+                    </div>
+
+                    <li>Edit the bash files that build the wg0.conf and wg1.conf files for each school.
+                        You need to edit the starting address for wireguard (you must coordinate this with Rene, to get the correct starting number). </li>
+                    While still in the ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles directory, use a text editor to edit the two programs that build the wireguard VPN files. <br>
+
+                    NOTE: YOU MUST HAND-EDIT THE STARTING ADDRESS (ADDR) FOR WIREGUARD IN THE TWO SCRIPT FILES: buildWgConf0.sh and buildWgConf1.sh (You must discuss with Rene to get the correct starting address each time!).
+                    <div class="code-block">
+                        For 2024B, the wireguard starting address was 117 [eleven servers] <br>
+                        For 2025A, the wireguard starting address was 128 [ten servers] <br>
+                        For 2025B, the wireguard addresses will start with 139 <br>
+                    </div>
+
+                    <li>Now you will run the script to build the new wg0.conf files for each school. <br>
+                        Go to the wg0 folder:
+                        <div class="code-block">
+                            cd wg0
+                        </div>
+                        Confirm that you are in the following directory:
+                        <div class="code-block">
+                            ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg0 <br>
+                            cat ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/2025Aschools_wg | ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/buildWgConf0.sh
+                        </div>
+
+                        This will create the files and put them in:
+                        <div class="code-block">
+                            ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg0
+                        </div>
+
+                    <li>Repeat this for the new wg1.conf files for each school.  <br>
+                    Go to the directory:
+                    <div class="code-block">
+                        cd ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 <br>
+                        cat ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/2025Aschools_wg | ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/buildWgConf1.sh
+                    </div>
+
+                    This will create the files and put them in:
+                    <div class="code-block">
+                        ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1
+                    </div>
+
+                    <li> Now copy the VPN files you have just created to the VPN flash drive so they can be installed on each individual new server. </li>
+                    <div class="code-block">
+                        cd /media/master/RENEALVPN/NewWireguardFiles <br>
+                        cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg0 . <br>
+                        cp -pRu ~/CodeDevelopment/newSystemBuild/makeWireguardVpnFiles/wg1 . <br>
+                    </div>
+
+                    <li> Edit the program install_info_wireguard.py with the school name information. </li>
+                    YOU MUST HAND EDIT install_info_wireguard.py WITH THE NAMES OF THE SCHOOLS.
+
+                    <div class="code-block">
+                        cd /media/master/RENEALVPN/NewWireguardFiles
+                    </div>
+
+                    Use a text editor to change the list of school names in install_info_wireguard.py
+
+                    <li>Install the files on each individual server</li>
+                    Then for each new server you are building, you will install the wireguard files.
+                    Boot the new server, sign in to the master account
+                    Insert the VPN USB drive and run the <strong> install_info_wireguard.py </strong>program
+
+                    <div class="code-block">
+                        cd /media/master/RENEALVPN/NewWireguardFiles <br>
+                        sudo python3 install_info_wireguard.py
+                    </div>
+
+                    You will be prompted to enter the name of the school for this new server when you run the program, which will be matched
+                    against the list that you hand-edited in <strong> install_info_wireguard.py </strong>
+
+                </ol>
+
+                <h3 id="vpn-creation-demo">VPN Creation Demo</h3>
+                <a href="/dev/server/rebuild/docs/terminalVpnCreation.txt">VPN Creation Demo</a>
+
+
+                <h2 id="server-build-up" class="mt-5">2. Server Build-Up Procedures</h2>
+                <p>Server build-up process comes next after you have the vpn files ready.</p>
+                
+                
+            </div>
+            </div></main></div>
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+    <title>Tanzania Training Dashboard - R.I.E.O</title>
+    <script src="/public/css/script/tailwindcss3417.js"></script>
+    <script src="/js/middleware.js"></script>
+</head>
+
+  <!-- Navigation -->
+    <!-- <nav class="bg-white shadow-sm border-b border-gray-200 mb-8"> -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-8">
+                    <span class="text-2xl font-bold text-indigo-600">Reneal Tanzania</span>
+                    <div class="hidden md:flex space-x-6">
+                        <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
+                        <a href="" class="text-indigo-600 font-medium">Trainings</a>
+                        <a href="/dashboard.html" class="text-gray-600 hover:text-gray-900">Dashboard</a>
+                        <a href="/dev/activities" data-can="view-team" class="text-gray-600 hover:text-gray-900">Team Activities</a>
+                        <a href="/dev/settings.html" data-can="view-settings" class="text-gray-600 hover:text-gray-900">Settings</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="userInfo" class="text-sm text-gray-600"></span>
+                    <button onclick="handleLogout()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    <!-- </nav> -->
+
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h1 class="text-2xl md:text-4xl font-bold text-gray-800 text-center mb-2">
+                Reneal Tanzania Training Info
+            </h1>
+            <p class="text-center text-gray-600 text-sm md:text-base">
+                Cumulative Labs/Computers/Teachers Trained/Students (by calendar year)
+            </p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-blue-500">
+                <p class="text-gray-600 text-xs md:text-sm">Total Installations</p>
+                <p class="text-2xl md:text-3xl font-bold text-gray-800">122</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-green-500">
+                <p class="text-gray-600 text-xs md:text-sm">Computers Installed</p>
+                <p class="text-2xl md:text-3xl font-bold text-gray-800">2,390</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-purple-500">
+                <p class="text-gray-600 text-xs md:text-sm">Teachers Trained</p>
+                <p class="text-2xl md:text-3xl font-bold text-gray-800">2,133</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-orange-500">
+                <p class="text-gray-600 text-xs md:text-sm">Students Reached</p>
+                <p class="text-2xl md:text-3xl font-bold text-gray-800">84,816</p>
+            </div>
+        </div>
+
+        <!-- Teacher Orientation -->
+                <div class="mt-12 mb-12 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl overflow-hidden shadow-xl">
+                    <div class="md:flex">
+                        <div class="md:w-1/3 bg-gradient-to-br from-green-600 to-emerald-700 p-8 text-white flex flex-col justify-center">
+                            <div class="bg-white bg-opacity-20 backdrop-blur-sm w-16 h-16 rounded-xl flex items-center justify-center mb-4">
+                                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-2">Teacher Orientation</h3>
+                            <p class="text-green-100">General training for all subject teachers</p>
+                        </div>
+                        <div class="md:w-2/3 p-8">
+                            <p class="text-gray-700 mb-6">
+                                Comprehensive orientation sessions for teachers across all subjects to familiarize them with the computer lab resources and how to integrate technology into their curriculum.
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="flex items-start space-x-3">
+                                    <div class="bg-green-600 rounded-full p-1 mt-1">
+                                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900">System Navigation</h4>
+                                        <p class="text-sm text-gray-600">Basic operation and navigation of the computer systems</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="bg-green-600 rounded-full p-1 mt-1">
+                                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900">Educational Software</h4>
+                                        <p class="text-sm text-gray-600">Using available teaching applications and tools</p>
+                                    </div>
+                        </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="bg-green-600 rounded-full p-1 mt-1 flex-shrink-0">
+                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Digital Resources</h4>
+                                    <p class="text-sm text-gray-600">Accessing offline educational content and materials</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="bg-green-600 rounded-full p-1 mt-1 flex-shrink-0">
+                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Lesson Integration</h4>
+                                    <p class="text-sm text-gray-600">Incorporating technology into subject-specific lessons</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="bg-green-600 rounded-full p-1 mt-1 flex-shrink-0">
+                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Student Management</h4>
+                                    <p class="text-sm text-gray-600">Managing computer lab sessions with students</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-4 text-sm mt-6">
+                            <div class="flex items-center text-gray-600">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>1-2 days</span>
+                            </div>
+                            <div class="flex items-center text-gray-600">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
+                                </svg>
+                                <span>All teaching staff</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Ongoing Support -->
+            <div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl overflow-hidden shadow-xl">
+                <div class="lg:flex">
+                    <div class="lg:w-1/3 bg-gradient-to-br from-orange-600 to-red-600 p-8 text-white flex flex-col justify-center">
+                        <div class="bg-white bg-opacity-20 backdrop-blur-sm w-16 h-16 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.802 8.249 16 9.1 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a4.002 4.002 0 01-.041-2.08l-.08.08-1.53-1.533A5.98 5.98 0 004 10c0 .954.223 1.856.619 2.657l1.54-1.54zm1.088-6.45A5.974 5.974 0 0110 4c.954 0 1.856.223 2.657.619l-1.54 1.54a4.002 4.002 0 00-2.346.033L7.246 4.668zM12 10a2 2 0 11-4 0 2 2 0 014 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Ongoing Support</h3>
+                        <p class="text-orange-100">Continuous assistance and refresher training</p>
+                    </div>
+                    <div class="lg:w-2/3 p-8">
+                        <p class="text-gray-700 mb-6">
+                            We provide continuous support to ensure the long-term success and sustainability of computer lab systems in schools, helping teachers grow their skills over time.
+                        </p>
+                        <div class="grid md:grid-cols-2 gap-4 mb-6">
+                            <div class="flex items-start space-x-3">
+                                <div class="bg-orange-600 rounded-full p-1 mt-1 flex-shrink-0">
+                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Regular Site Visits</h4>
+                                    <p class="text-sm text-gray-600">Periodic check-ins to assess systems and provide help</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="bg-orange-600 rounded-full p-1 mt-1 flex-shrink-0">
+                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Remote Assistance</h4>
+                                    <p class="text-sm text-gray-600">Phone and email support for troubleshooting</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="bg-orange-600 rounded-full p-1 mt-1 flex-shrink-0">
+                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Refresher Workshops</h4>
+                                    <p class="text-sm text-gray-600">Follow-up training sessions as needed</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="bg-orange-600 rounded-full p-1 mt-1 flex-shrink-0">
+                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Resource Updates</h4>
+                                    <p class="text-sm text-gray-600">New content and software updates as available</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="bg-orange-600 rounded-full p-1 mt-1 flex-shrink-0">
+                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Community Building</h4>
+                                    <p class="text-sm text-gray-600">Connecting teachers across schools for shared learning</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-4 text-sm">
+                            <div class="flex items-center text-gray-600">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Ongoing</span>
+                            </div>
+                            <div class="flex items-center text-gray-600">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
+                                </svg>
+                                <span>All school staff</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Training Request -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">📚</span>
+                    Training Requests
+                </h2>
+                <div class="text-center"> Schools can request specific training sessions to enhance their skills and knowledge when needed.</div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <span class="text-gray-700">School Name</span>
+                        <span class="font-bold text-green-600"></span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <span class="text-gray-700">System Training</span>
+                        <span class="font-bold text-green-600"></span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <span class="text-gray-700">Educational Software</span>
+                        <span class="font-bold text-green-600"></span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <span class="text-gray-700">Video Tutorials</span>
+                        <span class="font-bold text-green-600"></span>
+                    </div>
+                </div>
+            </div>
+
+        <!-- Main Data Table -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-6 mt-12">
+            <div class="overflow-x-auto">
+                <table class="w-full"><h2 class="text-2xl mb-4 mt-2 text-center"> Trainings Data</h2>
+                    <thead class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+                        <tr>
+                            <th class="px-3 py-3 text-left text-xs md:text-sm font-semibold">Year</th>
+                            <th class="px-3 py-3 text-center text-xs md:text-sm font-semibold">New Labs</th>
+                            <th class="px-3 py-3 text-center text-xs md:text-sm font-semibold">Computers</th>
+                            <th class="px-3 py-3 text-center text-xs md:text-sm font-semibold">Teachers</th>
+                            <th class="px-3 py-3 text-center text-xs md:text-sm font-semibold">Students</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-3 py-3 text-sm font-medium text-gray-900">2013</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">2</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">34</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">33</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">2,300</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-3 py-3 text-sm font-medium text-gray-900">2014</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">2</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">34</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">46</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">1,820</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-3 py-3 text-sm font-medium text-gray-900">2015</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">4</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">55</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">130</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">4,590</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-3 py-3 text-sm font-medium text-gray-900">2016</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">0</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">0</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">0</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">0</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-3 py-3 text-sm font-medium text-gray-900">2017</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">2</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">54</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">60</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">850</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-3 py-3 text-sm font-medium text-gray-900">2018</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">4</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">101</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">110</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">3,788</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-3 py-3 text-sm font-medium text-gray-900">2019</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">8</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">141</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">83</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">3,164</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-3 py-3 text-sm font-medium text-gray-900">2020</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">8</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">216</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">88</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">6,660</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-3 py-3 text-sm font-medium text-gray-900">2021</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">14</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">368</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">419</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">14,080</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-3 py-3 text-sm font-medium text-gray-900">2022</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">19</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">447</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">514</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">13,581</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-3 py-3 text-sm font-medium text-gray-900">2023</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">19</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">427</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">415</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">15,388</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-3 py-3 text-sm font-medium text-gray-900">2024</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">23</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">513</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">235</td>
+                            <td class="px-3 py-3 text-sm text-center text-gray-700">18,595</td>
+                        </tr>
+                        <tr class="bg-gradient-to-r from-blue-100 to-indigo-100 font-bold">
+                            <td class="px-3 py-4 text-sm font-bold text-gray-900">TOTALS</td>
+                            <td class="px-3 py-4 text-sm text-center font-bold text-gray-900">105</td>
+                            <td class="px-3 py-4 text-sm text-center font-bold text-gray-900">2,390</td>
+                            <td class="px-3 py-4 text-sm text-center font-bold text-gray-900">2,133</td>
+                            <td class="px-3 py-4 text-sm text-center font-bold text-gray-900">84,816</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        
+        </div>
+
+        </div>
+    </div>
+</section>
+
+
+        
+<!-- Footer -->
+    <div class="mt-8 text-center text-gray-600 text-sm">
+        <p>Data updated as of December 2024</p>
+    </div>
+</div>
+
+<script src="/js/bundle.js"></script>
+
+  <script>
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
+
+        // Display user info
+        function displayUserInfo() {
+            const user = Auth.user();
+            if (user) {
+                document.getElementById('userInfo').textContent = `${user.name} (${user.role})`;
+                
+                const profileInfo = document.getElementById('profileInfo');
+                profileInfo.innerHTML = `
+                    <div class="flex items-center justify-between py-2 border-b">
+                        <span class="text-gray-600">Name:</span>
+                        <span class="font-semibold text-gray-900">${user.name}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b">
+                        <span class="text-gray-600">Email:</span>
+                        <span class="font-semibold text-gray-900">${user.email}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b">
+                        <span class="text-gray-600">Position:</span>
+                        <span class="font-semibold text-gray-900">${user.position}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-gray-600">Role:</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-semibold">${user.role}</span>
+                    </div>
+                `;
+            }
+        }
+
+        // Update session timer
+        function updateSessionTimer() {
+            const remaining = Auth.getSessionTimeRemaining();
+            const minutes = Math.floor(remaining / 60);
+            const seconds = remaining % 60;
+            document.getElementById('sessionTimer').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        displayUserInfo();
+        updateSessionTimer();
+        setInterval(updateSessionTimer, 1000);
+    </script>
+
+</body>
+</html>

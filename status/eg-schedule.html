@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Project Schedule - Reneal International Education Outreach</title>
+
+         <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
+     
+  <link href="/public/css/tailwind.css" rel="stylesheet">
+
+  <link href='/public/cal/main.css' rel='stylesheet' />
+  <script src='/public/cal/main.js'></script>
+  <script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      headerToolbar: {
+        left: 'prevYear,prev,next,nextYear today',
+        center: 'title',
+        right: 'dayGridMonth,dayGridWeek,dayGridDay'
+      },
+      initialDate: '2023-10-01',
+      navLinks: true, // can click day/week names to navigate views
+      editable: true,
+      dayMaxEvents: true, // allow "more" link when too many events
+      events: [
+      // Iringa Installation
+        {
+           title: 'Iringa Schools Installation',
+          start: '2023-10-01T06:00:00',
+          end: '2023-10-09T15:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Bus Trip',
+          start: '2023-10-01T06:30:00',
+          end: '2023-10-01T18:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Selebu Installation',
+          start: '2023-10-02T08:30:00',
+          end: '2023-10-02T10:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Selebu Training',
+          start: '2023-10-03T09:00:00',
+          end: '2023-10-03T12:30:00',
+          color: 'green',
+        },
+
+         {
+          title: 'Kilolo Installation',
+          start: '2023-10-04T08:30:00',
+          end: '2023-10-04T10:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Kilolo Training',
+          start: '2023-10-05T08:30:00',
+          end: '2023-10-05T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Udzungwa Installation',
+          start: '2023-10-06T08:30:00',
+          end: '2023-10-06T10:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Udzungwa Training',
+          start: '2023-10-07T08:30:00',
+          end: '2023-10-07T12:30:00',
+          color: 'green',
+        },
+
+
+
+      // School Visits
+      {
+           title: 'School Visits',
+          start: '2023-02-01T08:00:00',
+          end: '2023-02-28T15:30:00',
+          color: 'green',
+          url:'/guidance-docs.html',
+        },
+
+        // My School Visits
+        {
+          title: 'Olmotonyi Visit',
+          start: '2023-02-07T08:02:00',
+          end: '2023-02-07T08:45:00',
+          color: 'green',
+        },
+        {
+          title: 'Kimnyaki Visit',
+          start: '2023-02-07T09:10:00',
+          end: '2023-02-07T10:35:00',
+          color: 'green',
+        },
+        {
+          title: 'Ilboru Visit',
+          start: '2022-02-07T11:00:00',
+          end: '2022-02-07T11:45:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Elerai Visit',
+          start: '2022-02-07T12:30:00',
+          end: '2022-02-07T13:55:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Mringa Visit',
+          start: '2022-02-09T10:30:00',
+          end: '2022-02-09T11:15:00',
+          color: 'green',
+        },
+
+        // Handeni Visits
+
+        {
+          title: 'Handeni Visit',
+          start: '2022-03-01T06:30:00',
+          end: '2022-03-04T15:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Bus Trip',
+          start: '2022-03-01T06:30:00',
+          end: '2022-03-01T14:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Handeni Visit',
+          start: '2022-03-01T14:45:00',
+          end: '2022-03-01T15:50:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Kisaza Visit',
+          start: '2022-03-02T07:45:00',
+          end: '2022-03-02T11:45:00',
+          color: 'green',
+        },
+        {
+          title: 'Ndolwa Visit',
+          start: '2022-03-02T12:30:00',
+          end: '2022-03-02T13:15:00',
+          color: 'green',
+        },
+        {
+          title: 'Mkata Visit',
+          start: '2022-03-02T15:00:00',
+          end: '2022-03-02T15:45:00',
+          color: 'green',
+        },
+        {
+          title: 'Komnyanganyo Visit',
+          start: '2022-03-03T08:50:00',
+          end: '2022-03-03T09:45:00',
+          color: 'green',
+        },
+        {
+          title: 'Misima Visit',
+          start: '2022-03-03T12:30:00',
+          end: '2022-03-03T13:30:00',
+          color: 'green',
+        },
+        {
+          title: 'Back to AR',
+          start: '2022-03-04T06:30:00',
+          end: '2022-03-04T14:30:00',
+          color: 'green',
+        },
+
+        // Remaining Visits
+        {
+          title: 'Oldonyosambu Visit',
+          start: '2022-03-08T08:45:00',
+          end: '2022-03-08T09:45:00',
+          color: 'green',   // an option!
+        },
+        {
+          title: 'Bangata Visit',
+          start: '2022-03-08T10:30:00',
+          end: '2022-03-08T11:15:00',
+          color: 'green',
+        },
+        {
+          title: 'Ngiresi Visit',
+          start: '2022-03-08T12:00:00',
+          end: '2022-03-08T13:45:00',
+          color: 'green',
+        },
+
+        // Installations and Trainings
+
+        {
+           title: 'Lengijave Installation',
+          start: '2022-03-22T08:30:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Engutoto Installation',
+          start: '2022-03-25T10:20:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Irkisongo Installation',
+          start: '2022-03-29T10:20:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Lengijave Training',
+          start: '2022-04-22T14:00:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Engutoto Training',
+          start: '2022-04-22T10:00:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Kikwe Installation',
+          start: '2022-04-20T10:00:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Oljoro Installation',
+          start: '2022-04-19T10:20:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Oljoro Training',
+          start: '2022-04-21T10:00:00',
+          color: 'green',
+        },
+
+
+
+      ]
+    });
+
+    calendar.render();
+  });
+
+</script>
+<style>
+
+  body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+    background-color: black;
+    color: white;
+  }
+
+  #calendar {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+</style>
+</head>
+<body>
+  <ul class="grid grid-cols-3 gap-0 text-center py-4">
+    <li><a class="text-blue-700" href="/guidance-docs.html">BACK</a></li>
+    <li><h1 class="text-center text-2xl font-bold text-blue-500">Schedule </h1></li>
+  </ul>
+  
+  <div id='calendar'></div>
+
+</body>
+</html>

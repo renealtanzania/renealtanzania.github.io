@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+    <title>Dev Calendar - Event Details View</title>
+    <script src="/public/css/script/tailwindcss3417.js"></script>
+    <script src="/js/middleware.js"></script>
+    <style>
+        @import url('/public/fonts/noto-sans.woff2');
+
+        body { 
+            background-color: #f3f2f2; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* HEY Blob */
+        .date-blob { position: relative; z-index: 10; color: white; transition: all 0.3s; }
+        .date-blob::before {
+            content: ''; position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 2.25rem; height: 2.25rem;
+            background-color: #ff4713;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            z-index: -1;
+        }
+
+        .font-hand { font-family: 'Noto Sans', sans-serif; }
+        .text-hey-orange { color: #ff4713; }
+        .fade-in { animation: fadeIn 0.25s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Modal Animation */
+        .modal-enter { animation: modalIn 0.2s ease-out forwards; }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body class="text-gray-900 min-h-screen flex flex-col relative">
+
+    <!-- Sticky Nav -->
+    <nav class="sticky top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 z-40 px-4 py-3 shadow-sm">
+        <div class="flex items-center justify-between max-w-7xl mx-auto">
+            <div class="flex items-center gap-2 md:gap-3 overflow-x-auto">
+                <div class="font-bold text-xl tracking-tight bg-black text-white px-2 py-1 rounded select-none shrink-0">EM</div>
+                <div class="hidden lg:block text-sm font-bold text-black border-b-2 border-black pb-0.5 shrink-0">Done Activities</div>
+                <div class="hidden lg:block text-gray-300 shrink-0">|</div>
+                <div class="flex items-center gap-2 text-xs md:text-sm">
+                    <a href="/prod/news/category/code" class="hover:text-blue-800 transition whitespace-nowrap hidden md:inline">Web Changes</a>
+                    <span class="hidden md:inline text-gray-300">|</span>
+                    <a href="/dashboard.html" class="hover:text-blue-800 transition whitespace-nowrap">Dashboard</a>
+                    <span class="text-gray-300">|</span>
+                    
+                    <!-- Mobile Dropdown Menu -->
+                    <div class="relative md:hidden">
+                        <button onclick="app.toggleMobileMenu()" class="flex items-center gap-1 hover:text-blue-800 transition whitespace-nowrap">
+                            <span>More</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div id="mobile-menu" class="hidden absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+                            <a href="/prod/news/category/code" class="block px-4 py-2 text-sm hover:bg-gray-50 transition">Web Changes</a>
+                            <a href="/include/projects/drive" class="block px-4 py-2 text-sm hover:bg-gray-50 transition">Project Management</a>
+                            <a href="/status" class="block px-4 py-2 text-sm hover:bg-gray-50 transition">Status</a>
+                            <a href="/project" class="block px-4 py-2 text-sm hover:bg-gray-50 transition">Project</a>
+                        </div>
+                    </div>
+                    
+                    <a href="/include/projects/drive" class="hover:text-blue-800 transition whitespace-nowrap hidden md:inline">Project Management</a>
+                    <span class="hidden md:inline text-gray-300">|</span>
+                    <a href="/status" class="hover:text-blue-800 transition whitespace-nowrap hidden lg:inline">Status</a>
+                    <span class="hidden lg:inline text-gray-300">|</span>
+                    <a href="/project" class="hover:text-blue-800 transition whitespace-nowrap hidden lg:inline">Project</a>
+                    <span class="hidden md:inline text-gray-300">|</span>
+                    <a href="/" class="hover:text-blue-800 transition whitespace-nowrap hidden lg:inline">Home</a>
+                    <span class="hidden md:inline text-gray-300">|</span>
+                    <a href="/prod/settings/todo2026.html" class="hover:text-blue-800 transition whitespace-nowrap hidden lg:inline">ToDo</a>
+
+
+                </div>
+            </div>
+            <div class="flex items-center gap-1 md:gap-2 bg-gray-100 rounded-full p-1 border border-gray-200 shrink-0 ml-2">
+                <button onclick="app.changeWeek(-1)" class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full hover:bg-white active:bg-gray-200 hover:shadow text-gray-600 transition">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button onclick="app.jumpToToday()" class="h-8 md:h-10 px-2 md:px-4 text-xs font-bold text-gray-700 hover:text-black uppercase tracking-wide select-none">Today</button>
+                <button onclick="app.changeWeek(1)" class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full hover:bg-white active:bg-gray-200 hover:shadow text-gray-600 transition">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8 flex flex-col gap-4 pb-24">
+        <div class="flex flex-col md:flex-row justify-between md:items-end gap-1 px-1">
+            <h1 id="month-title" class="text-2xl md:text-3xl font-bold tracking-tight text-gray-900 leading-tight">...</h1>
+            <span id="week-range" class="text-sm font-medium text-gray-500">...</span>
+        </div>
+        <div id="calendar-view" class="w-full border-2 border-black rounded-xl overflow-hidden shadow-sm bg-white flex flex-col"></div>
+    </main>
+
+    <!-- EVENT DETAIL MODAL (Hidden by default) -->
+    <div id="event-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" onclick="app.closeModal()"></div>
+        
+        <!-- Modal Card -->
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md relative z-10 modal-enter overflow-hidden">
+            
+            <!-- Modal Header (Color coded) -->
+            <div id="modal-header" class="h-4 w-full bg-gray-200"></div>
+
+            <div class="p-6 md:p-8">
+                <!-- Time & Status -->
+                <div class="flex justify-between items-start mb-3">
+                    <span id="modal-time" class="inline-block px-2 py-1 bg-gray-100 rounded text-xs font-bold text-gray-500 uppercase tracking-wide">
+                        09:00 AM
+                    </span>
+                    <button onclick="app.closeModal()" class="text-gray-400 hover:text-gray-800 p-1 bg-gray-50 rounded-full">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+
+                <!-- Full Event Text -->
+                <h2 id="modal-text" class="text-2xl font-bold text-gray-900 mb-6 leading-snug break-words">
+                    <!-- Text goes here -->
+                </h2>
+
+                <!-- Actions -->
+                <div class="flex gap-3 pt-6 border-t border-gray-100">
+                    <button id="btn-toggle-done" onclick="app.handleModalAction('toggle')" class="flex-1 py-2.5 rounded-lg font-semibold text-sm transition-colors border border-gray-200 hover:bg-gray-50 text-gray-700">
+                        Mark Done
+                    </button>
+                    <button onclick="app.handleModalAction('delete')" class="px-4 py-2.5 rounded-lg font-semibold text-sm text-red-600 hover:bg-red-50 border border-transparent transition-colors">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/bundle.js"></script>
+
+    <script>
+        const CALENDAR_DATA = {
+            colors: {
+                blue:   { bg: "bg-blue-100", text: "text-blue-800", border: "border-blue-200", modalHeader: "bg-blue-500" },
+                green:  { bg: "bg-green-100", text: "text-green-800", border: "border-green-200", modalHeader: "bg-green-500" },
+                yellow: { bg: "bg-yellow-100", text: "text-yellow-900", border: "border-yellow-200", modalHeader: "bg-yellow-400" },
+                purple: { bg: "bg-purple-100", text: "text-purple-900", border: "border-purple-200", modalHeader: "bg-purple-500" },
+                red:    { bg: "bg-red-100", text: "text-red-900", border: "border-red-200", modalHeader: "bg-red-500" },
+                gray:   { bg: "bg-gray-100", text: "text-gray-600", border: "border-gray-200", modalHeader: "bg-gray-400" }
+            },
+            
+            events: {
+                "2025-12-02": [
+                    { id: 1, text: "Reneal Website - First Introduction", time: "08:00", type: "blue", isDone: false  }
+                ],
+                "2025-12-04": [
+                    { id: 1, text: "Reneal Website - Fixing issue related to pages authentication", time: "08:00", type: "blue", isDone: true  },
+                    { id: 2, text: "Reneal Website - Second Introduction", time: "08:00", type: "blue", isDone: true  }
+                ],
+                "2025-12-05": [
+                    { id: 1, text: "Reneal Website - adding school stats on the dashboard", time: "05:30-09:30", type: "green"},
+                    { id: 2, text: "Reneal Website - combining js components", time: "11:30-12:30", type: "green"},
+                    { id: 3, text: "Working on calendar component", time: "17:30-22:30", type: "blue" }
+                ],
+                "2025-12-06": [
+                    { id: 5, text: "Working on calendar component", time: "04:30", type: "green", isMultiDay: "start" },
+                    { id: 6, text: "Reneal Virtual Meeting: Annual Team Meeting", time: "20:00-22:00", type: "purple" }
+                ],
+                "2025-12-07": [
+                    { id: 7, text: "Reneal Website - Various changes and debugging", time: "05:25", type: "blue", isDone: false  },
+                    { id: 8, text: "Reneal Website - ToDo Page Construction", time: "05:45-07:00", type: "blue", isDone: false  },
+                    { id: 9, text: "Reneal Website - Added Equipment and Logistics section to team members and admin dashboard", time: "20:25-21:00", type: "blue", isDone: false  }
+                ],
+                "2025-12-08": [
+                    { id: 10, text: "Reneal Website - Various changes and debugging", time: "05:25", type: "blue", isDone: false  },
+                    { id: 11, text: "Initial makeup of Trainings and Equipments page", time: "07:45", type: "blue", isDone: false  },
+                    { id: 12, text: "Reneal Server - GoAccess and Squid Application continuation makeup", time: "10:40", type: "blue", isDone: false  }
+                ],
+                "2025-12-09": [
+                    { id: 13, text: "Reneal Website - Various changes (Training, Equipments) Pages", time: "03:40", type: "blue", isDone: false  },
+                    { id: 14, text: "Reneal Website - Added Notification alert section", time: "11:40", type: "blue", isDone: false  }
+                ],
+                "2025-12-10": [
+                    { id: 15, text: "Reneal Server - Big progress on GoAccess+Squid app configuration", time: "08:04", type: "blue", isDone: false  },
+                    { id: 16, text: "Reneal Website - Notification alert section on Home & Dashboard", time: "15:46", type: "blue", isDone: false  }
+                ],
+                "2025-12-11": [
+                    { id: 16, text: "Reneal Server - Final Stages GoAccess+Squid app configuration", time: "12:14", type: "blue", isDone: false  },
+                    { id: 17, text: "Reneal Website - Added Teacher's Orientation on Home", time: "10:16", type: "blue", isDone: false  }
+                ],
+                "2025-12-12": [
+                    { id: 17, text: "Reneal Server - Final Stages GoAccess+Squid app configuration", time: "09:14", type: "blue", isDone: false  },
+                    { id: 18, text: "Reneal Website - Added Online Videos Orientation on Dashboard", time: "08:16", type: "blue", isDone: false  }
+                ],
+                "2025-12-13": [
+                    { id: 19, text: "Reneal Website - Secured status button", time: "11:16", type: "blue", isDone: false  },
+                    { id: 20, text: "Reneal Website - Made Blog Posts Page", time: "12:04", type: "blue", isDone: false  },
+                ],
+                "2025-12-14": [
+                    { id: 20, text: "Reneal Website - Introduce box directory workplace for internal workers", time: "01:56", type: "blue", isDone: false  }
+                ],
+                "2025-12-15": [
+                    { id: 20, text: "Reneal Website - Renovating box directory & Page", time: "09:03", type: "blue", isDone: false  }
+                ],
+                "2025-12-16": [
+                    { id: 21, text: "Reneal Website - Small changes in Authentication system", time: "06:14", type: "blue", isDone: false  },
+                    { id: 22, text: "ANM - Provided them with Micro-Desktop Server", time: "14:39", type: "blue", isDone: false  }
+                ],
+                "2025-12-17": [
+                    { id: 21, text: "Reneal Server - Working on fixing installation of GoAccess", time: "06:14", type: "blue", isDone: false  },
+                    { id: 22, text: "School Visit: Mwandet Laptops repairs ", time: "10:24", type: "blue", isDone: false  }
+                ],
+                "2025-12-18": [
+                    { id: 23, text: "Personal - Research and Setup of Supabase Authentication System", time: "12:14", type: "blue", isDone: false  }
+                ],
+                "2025-12-19": [
+                    { id: 24, text: "Personal - Initial Setup and Configuaration of Supabase Authentication System", time: "10:07", type: "blue", isDone: false  }
+                ],
+                "2025-12-20": [
+                    { id: 25, text: "Reneal Server - Reading and Studying about GoAccess and Reneal Server Setup", time: "09:16", type: "blue", isDone: false  }
+                ],
+                "2025-12-21": [
+                    { id: 26, text: "Reneal Server - Setting generate_reports script to show https request only on squid ", time: "02:27", type: "blue", isDone: false  },
+                    { id: 27, text: "Reneal Server - Squid Htpps only and web-dev visiblity", time: "11:16", type: "blue", isDone: false  }
+                ],
+                "2025-12-22": [
+                    { id: 28, text: "Reneal Server - How Apache html file can guide school to increase computer usage", time: "10:14", type: "blue", isDone: false  }
+                ],
+                "2025-12-23": [
+                    { id: 29, text: "Reneal Server - Creation of the template document that will help schools learn about their lab usage", time: "09:13", type: "blue", isDone: false  }
+                ],
+                "2025-12-24": [
+                    { id: 30, text: "Reneal Server - Creation of the template web page that will collect schools lab information usage data", time: "03:34", type: "blue", isDone: false  }
+                ],
+                "2025-12-26": [
+                    { id: 30, text: "Reneal Server - Adding some test data to the schools lab info page", time: "04:26", type: "blue", isDone: false  },
+                ],
+                "2025-12-27": [
+                    { id: 31, text: "Reneal Team Tanzania Trip - NgoroNgoro Trip", time: "06:00", type: "blue", isDone: false  }
+                ],
+                "2025-12-28": [
+                    { id: 32, text: "Reneal Server - Generate reports file troubleshooting", time: "07:50", type: "blue", isDone: false  }
+                ],
+                "2025-12-30": [
+                    { id: 33, text: "Reneal Server - Generate reports file troubleshooting", time: "07:40", type: "blue", isDone: false  }
+                ],
+                "2025-12-31": [
+                    { id: 34, text: "Reneal Server - Generate reports file troubleshooting", time: "08:02", type: "blue", isDone: false  }
+                ],
+                "2026-01-03": [
+                    { id: 35, text: "Reneal Website - Added 2025B Shipment Page", time: "11:40", type: "blue", isDone: false  }
+                ],
+                "2026-01-04": [
+                    { id: 36, text: "Reneal Website - Added a section inside team activities page", time: "07:40", type: "blue", isDone: false  },
+                    { id: 37, text: "Reneal Website - Make changes in 2025B Shipment Page", time: "04:15", type: "blue", isDone: false  },
+                    { id: 38, text: "Reneal Website - Creating a page for learning videos", time: "07:40", type: "blue", isDone: false  },
+                    { id: 38, text: "Reneal Website - Creating a new status page for the new year", time: "16:06", type: "blue", isDone: false  }
+
+                ],
+                "2026-01-05": [
+                    { id: 39, text: "Reneal Server - GoAccess Time interval and others", time: "07:35", type: "blue", isDone: false  }
+                ],
+                
+            },
+            tasks: {
+                "2025-12-01": [
+                    { id: 101, text: "Reneal Server: GoAccess and Squid Proxy", completed: false },
+                    { id: 102, text: "Reneal Website: Working on authentications", completed: false },
+                    { id: 103, text: "Reneal Website: Working on calendar components", completed: false }
+                ],
+                "2025-12-08": [
+                    { id: 104, text: "Reneal Server: GoAccess and Squid Proxy", completed: false },
+                    { id: 105, text: "Team Members Page: Activities Page", completed: false },
+                    { id: 106, text: "CheckUp: Website to Sync and Other Drive Files", completed: false }
+                ],
+                "2025-12-15": [
+                    { id: 107, text: "Reneal Server: GoAccess and Squid Proxy", completed: false },
+                    { id: 108, text: "Reneal Website: Working on various Pages", completed: false },
+                    { id: 109, text: "CheckUp: Website to Sync and Other Drive Files", completed: false }
+                ],
+                "2025-12-29": [
+                    { id: 110, text: "Monthly Report Submission", completed: false }
+                ],
+                "2026-01-05": [
+                    { id: 111, text: "Reneal Server: GoAccess time interval & others", completed: false }
+                ]
+            }
+        };
+
+        const app = {
+            viewDate: new Date(),
+            // Store currently opened event context
+            activeModalContext: null, 
+
+            init() { 
+                document.addEventListener('DOMContentLoaded', () => this.render());
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    const menu = document.getElementById('mobile-menu');
+                    const menuButton = e.target.closest('button[onclick*="toggleMobileMenu"]');
+                    if (menu && !menu.contains(e.target) && !menuButton) {
+                        menu.classList.add('hidden');
+                    }
+                });
+            },
+
+            toggleMobileMenu() {
+                const menu = document.getElementById('mobile-menu');
+                menu.classList.toggle('hidden');
+            },
+
+            // --- Modal Logic ---
+            openEventModal(dateKey, eventId) {
+                const eventList = CALENDAR_DATA.events[dateKey];
+                const event = eventList.find(e => e.id === eventId);
+                if(!event) return;
+
+                this.activeModalContext = { dateKey, eventId };
+
+                // Populate UI
+                const colorTheme = CALENDAR_DATA.colors[event.type] || CALENDAR_DATA.colors.gray;
+                document.getElementById('modal-header').className = `h-4 w-full ${colorTheme.modalHeader}`;
+                document.getElementById('modal-time').textContent = event.time || "All Day";
+                document.getElementById('modal-text').textContent = event.text;
+                
+                // Update Button Text based on state
+                const toggleBtn = document.getElementById('btn-toggle-done');
+                if (event.isDone) {
+                    toggleBtn.textContent = "Mark Undone";
+                    toggleBtn.className = "flex-1 py-2.5 rounded-lg font-semibold text-sm transition-colors border border-green-200 bg-green-50 text-green-700";
+                } else {
+                    toggleBtn.textContent = "Mark Done";
+                    toggleBtn.className = "flex-1 py-2.5 rounded-lg font-semibold text-sm transition-colors border border-gray-200 hover:bg-gray-50 text-gray-700";
+                }
+
+                // Show Modal
+                document.getElementById('event-modal').classList.remove('hidden');
+            },
+
+            closeModal() {
+                document.getElementById('event-modal').classList.add('hidden');
+                this.activeModalContext = null;
+            },
+
+            handleModalAction(action) {
+                if(!this.activeModalContext) return;
+                const { dateKey, eventId } = this.activeModalContext;
+                const list = CALENDAR_DATA.events[dateKey];
+                const idx = list.findIndex(e => e.id === eventId);
+
+                if (action === 'delete') {
+                    if(confirm("Delete this event?")) {
+                        list.splice(idx, 1);
+                        this.closeModal();
+                        this.render();
+                    }
+                } else if (action === 'toggle') {
+                    list[idx].isDone = !list[idx].isDone;
+                    this.closeModal();
+                    this.render();
+                }
+            },
+
+            // --- Navigation & Rendering ---
+            changeWeek(dir) {
+                const d = new Date(this.viewDate);
+                d.setDate(d.getDate() + (dir * 7));
+                this.viewDate = d;
+                this.render();
+            },
+            jumpToToday() { this.viewDate = new Date(); this.render(); },
+            
+            getStartOfWeek(date) {
+                const d = new Date(date);
+                const day = d.getDay();
+                const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+                return new Date(d.setDate(diff));
+            },
+            formatDateKey(date) {
+                const offset = date.getTimezoneOffset();
+                const local = new Date(date.getTime() - (offset * 60 * 1000));
+                return local.toISOString().split('T')[0];
+            },
+
+            toggleTask(mondayKey, taskId) {
+                const task = CALENDAR_DATA.tasks[mondayKey]?.find(t => t.id === taskId);
+                if (task) { task.completed = !task.completed; this.render(); }
+            },
+
+            promptAddEvent(dateKey) {
+                const text = prompt(`New event for ${dateKey}:`);
+                if(text) {
+                    if (!CALENDAR_DATA.events[dateKey]) CALENDAR_DATA.events[dateKey] = [];
+                    CALENDAR_DATA.events[dateKey].push({ id: Date.now(), text: text, time: "TBD", type: "gray" });
+                    this.render();
+                }
+            },
+
+            render() {
+                const container = document.getElementById('calendar-view');
+                const startOfWeek = this.getStartOfWeek(this.viewDate);
+                
+                // Header Updates
+                document.getElementById('month-title').textContent = startOfWeek.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                const endOfWeek = new Date(startOfWeek);
+                endOfWeek.setDate(endOfWeek.getDate() + 6);
+                document.getElementById('week-range').textContent = `${startOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${endOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+
+                // Build Grid
+                let html = `<div class="grid grid-cols-1 md:grid-cols-7 border-b border-gray-200 divide-y md:divide-y-0 md:divide-x divide-gray-200 fade-in">`;
+                const today = new Date();
+                let cursor = new Date(startOfWeek);
+
+                for(let i=0; i<7; i++) {
+                    const dateKey = this.formatDateKey(cursor);
+                    const isToday = cursor.toDateString() === today.toDateString();
+                    const dayEvents = CALENDAR_DATA.events[dateKey] || [];
+                    
+                    const bgClass = isToday ? 'bg-white' : 'bg-transparent md:hover:bg-gray-50';
+                    const nameColor = isToday ? 'text-hey-orange font-bold' : 'text-gray-500 font-semibold';
+                    const blobClass = isToday ? 'date-blob text-white' : 'text-gray-700 font-bold';
+                    const nowLine = isToday ? `<div class="absolute top-1/2 left-0 w-full border-t-2 border-dashed border-hey-orange opacity-40 pointer-events-none z-0"></div>` : '';
+
+                    html += `
+                    <div class="relative group min-h-[140px] md:min-h-[500px] p-4 flex flex-col gap-3 md:gap-4 transition-colors ${bgClass}">
+                        <div class="flex justify-between md:flex-col md:items-start z-10">
+                            <span class="${nameColor} text-xs md:text-sm uppercase tracking-wide">${cursor.toLocaleDateString('en-US', { weekday: 'short' })}</span>
+                            <span class="text-xl ${blobClass}">${cursor.getDate()}</span>
+                        </div>
+                        ${nowLine}
+                        <div class="flex-1 flex flex-col gap-1.5 z-10 w-full mt-1">
+                            ${dayEvents.map(ev => {
+                                const theme = CALENDAR_DATA.colors[ev.type] || CALENDAR_DATA.colors.gray;
+                                let style = `px-2.5 py-1.5 text-xs font-semibold border truncate ${theme.bg} ${theme.text} ${theme.border} cursor-pointer hover:opacity-80 transition-opacity`;
+                                
+                                // Shape Logic
+                                if(ev.isMultiDay === 'start') style += ' rounded-md md:rounded-l-md md:rounded-r-none md:border-r-0';
+                                else if(ev.isMultiDay === 'middle') style += ' rounded-md md:rounded-none md:border-x-0 opacity-80';
+                                else if(ev.isMultiDay === 'end') style += ' rounded-md md:rounded-r-md md:rounded-l-none md:border-l-0';
+                                else style += ' rounded-md shadow-sm';
+                                
+                                if(ev.isDone) style += ' line-through opacity-60 decoration-gray-700';
+
+                                return `<div onclick="event.stopPropagation(); app.openEventModal('${dateKey}', ${ev.id})" class="${style}">
+                                    ${ev.time ? `<span class="opacity-75 mr-1 font-normal">${ev.time}</span>` : ''}${ev.text}
+                                </div>`;
+                            }).join('')}
+                            <button onclick="app.promptAddEvent('${dateKey}')" class="mt-2 text-xs text-gray-400 font-medium hover:text-gray-600 md:opacity-0 md:group-hover:opacity-100 transition-opacity text-left p-1 w-max">+ Add item</button>
+                        </div>
+                    </div>`;
+                    cursor.setDate(cursor.getDate() + 1);
+                }
+                html += `</div>`;
+
+                // Sometime Section
+                const startKey = this.formatDateKey(startOfWeek);
+                const tasks = CALENDAR_DATA.tasks[startKey] || [];
+                html += `
+                <div class="bg-gray-50 p-5 md:p-6 border-t border-gray-200">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">Sometime this week</h3>
+                    <div class="flex flex-wrap gap-3">
+                        ${tasks.map(task => `
+                            <div onclick="app.toggleTask('${startKey}', ${task.id})" class="px-3 py-2.5 rounded-lg text-sm flex items-center gap-3 border cursor-pointer select-none transition w-full md:w-auto ${task.completed ? 'bg-gray-100 text-gray-400 border-gray-200' : 'bg-white text-gray-700 border-gray-300 shadow-sm'}">
+                                ${task.completed ? `<div class="w-4 h-4 bg-gray-400 rounded flex items-center justify-center shrink-0"><svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>` : `<div class="w-4 h-4 border-2 border-gray-300 rounded shrink-0"></div>`}
+                                <span class="font-hand text-lg leading-none pt-1 truncate ${task.completed ? 'line-through' : ''}">${task.text}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+
+                container.innerHTML = html;
+            }
+        };
+
+        app.init();
+    </script>
+</body>
+</html>

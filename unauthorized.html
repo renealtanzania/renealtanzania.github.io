@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unauthorized - Reneal Tanzania</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+    <script src="/public/css/script/tailwindcss3417.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-indigo-600">Reneal Tanzania</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
+                    <a href="dashboard.html" class="text-gray-600 hover:text-gray-900">Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 401 Content -->
+    <div class="flex items-center justify-center min-h-screen px-4 py-12">
+        <div class="text-center max-w-md">
+            <div class="mb-8">
+                <svg class="w-32 h-32 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+            </div>
+            
+            <h1 class="text-6xl font-bold text-gray-900 mb-4">401</h1>
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Unauthorized Access</h2>
+            <p class="text-gray-600 mb-8">
+                Sorry, you don't have permission to access this page. This area is restricted to authorized users with specific roles.
+            </p>
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-8">
+                <p class="text-sm text-yellow-800">
+                    If you believe you should have access to this page, please contact your administrator.
+                </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="dashboard.html" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">
+                    Go to Dashboard
+                </a>
+                <a href="index.html" class="border-2 border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition">
+                    Go Home
+                </a>
+            </div>
+
+            <div class="mt-8 text-sm text-gray-500">
+                <p>Your current role: <span id="userRole" class="font-semibold"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/path.js"></script>
+    <script src="js/provider.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/auth.js"></script>
+
+    <script>
+        const user = Auth.user();
+        if (user) {
+            document.getElementById('userRole').textContent = user.role;
+        } else {
+            document.getElementById('userRole').textContent = 'Not logged in';
+        }
+    </script>
+</body>
+</html>

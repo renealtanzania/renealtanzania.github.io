@@ -1,0 +1,602 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>2025B - School Boxes Delivery</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- css -->
+    <link href="/public/css/lara-p.css" rel="stylesheet">
+
+     <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 50px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .filters {
+      max-width: 1000px;
+      margin: 0 auto 20px auto;
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    label {
+      font-weight: bold;
+      margin-right: 8px;
+    }
+    select {
+      padding: 5px 8px;
+      font-size: 16px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    #printBtn {
+      display: block;
+      margin: 20px auto 30px auto;
+      padding: 10px 25px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #00539CFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    #printBtn:hover {
+      background-color: #003F7FFF;
+    }
+    .box {
+      padding: 15px;
+      margin-bottom: 25px;
+      border-radius: 8px;
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .box-header {
+      color: #007acc;
+      font-size: 1.4em;
+      margin-bottom: 12px;
+      user-select: none;
+    }
+    .senta{
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 8%;
+        margin-bottom: 1rem;
+    }
+    .mt-4{
+        margin-top: 8rem;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 14px;
+      padding-left:8rem!important;
+      padding-right:8rem!important;
+      padding:0.125rem;vertical-align:middle;
+      max-width: auto;
+    }
+    th, td {
+      border: 1px solid #bbb;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    
+    @media(max-width:668px)
+      { .smo{
+        display:grid;
+        
+      }}
+
+    .px-4{padding-left:1rem!important;padding-right:1rem!important}
+
+    th {
+      background-color: #e3e3e3;
+      user-select: none;
+    }
+    .itemFilta{
+      margin-top: 0.5rem;
+    }
+    @media print {
+      #printBtn, .filters {
+        display: none;
+      }
+      body {
+        background-color: white;
+        margin: 0;
+        padding: 0;
+      }
+      .box {
+        box-shadow: none;
+        border: 1px solid black;
+        margin: 10 15px 22px 0 !important;
+      }
+    }
+  </style>
+
+
+</head>
+
+<div class="px-4 mt-5">
+
+<ul class="flex justify-center gap-x-4 text-lg lg:flex lg:items-center lg:justify-center lg:gap-6 xl:gap-10 mb-5">
+    <li><a href="/docs/delivery">Items Delivery</a></li>
+    <li><a href="/status">Status</a></li>
+
+</ul>
+
+<body>
+    <div class="mt-5 text-3xl font-bold">
+  <h1>Boxes Inventory - 2025B</h1></div>
+
+  <div class="filters smo">
+    <div>
+      <label for="boxFilter" class="text-gray-700">Filter by Box:</label>
+      <select id="boxFilter" class="itemFilta px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">All Boxes</option>
+      </select>
+    </div>
+    <div>
+      <label for="regionFilter" class="text-gray-700">Filter by Region:</label>
+      <select id="regionFilter" class="itemFilta px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">All Regions</option>
+      </select>
+    </div>
+    <div>
+      <label for="itemFilter" class="text-gray-700">Filter by Item:</label>
+      <select id="itemFilter" class="itemFilta px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">All Items</option>
+      </select>
+    </div>
+    <div>
+      <label for="destinationFilter" class="text-gray-700">Filter by Destination:</label>
+      <select id="destinationFilter" class="itemFilta px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">All Destinations</option>
+      </select>
+    </div>
+  </div>
+  
+  <button id="printBtn" onclick="window.print()">Print</button>
+    <div class="senta"><a href="/"><img src="/public/imgs/ren.jpg" width="80" height="80" alt=""></a></div>
+
+  <div id="content"></div>
+
+  <script>
+    const data = {
+  "boxes": [
+    {
+      "box": "A",
+      "items": [
+        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Hai", "region": "Kilimanjaro"},
+        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Hai", "region": "Kilimanjaro"},
+        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Hai", "region": "Kilimanjaro"},
+        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Hai", "region": "Kilimanjaro"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Hai", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "B",
+      "items": [
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Hai", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "C",
+      "items": [
+        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mukwasa Day", "region": "Kilimanjaro"},
+        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mukwasa Day", "region": "Kilimanjaro"},
+        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mukwasa Day", "region": "Kilimanjaro"},
+        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mukwasa Day", "region": "Kilimanjaro"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mukwasa Day", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "D",
+      "items": [
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mukwasa Day", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "E",
+      "items": [
+        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Nkuu", "region": "Kilimanjaro"},
+        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Nkuu", "region": "Kilimanjaro"},
+        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Nkuu", "region": "Kilimanjaro"},
+        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Nkuu", "region": "Kilimanjaro"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Nkuu", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "F",
+      "items": [
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Nkuu", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "G",
+      "items": [
+        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kikafu", "region": "Kilimanjaro"},
+        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kikafu", "region": "Kilimanjaro"},
+        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kikafu", "region": "Kilimanjaro"},
+        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kikafu", "region": "Kilimanjaro"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kikafu", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "H",
+      "items": [
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kikafu", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "I",
+      "items": [
+        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Darajani", "region": "Kilimanjaro"},
+        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Darajani", "region": "Kilimanjaro"},
+        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Darajani", "region": "Kilimanjaro"},
+        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Darajani", "region": "Kilimanjaro"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Darajani", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "J",
+      "items": [
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Darajani", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "K",
+      "items": [
+        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Makomu", "region": "Kilimanjaro"},
+        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Makomu", "region": "Kilimanjaro"},
+        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Makomu", "region": "Kilimanjaro"},
+        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Makomu", "region": "Kilimanjaro"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Makomu", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "L",
+      "items": [
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Makomu", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "M",
+      "items": [
+        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mlanga", "region": "Kilimanjaro"},
+        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mlanga", "region": "Kilimanjaro"},
+        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mlanga", "region": "Kilimanjaro"},
+        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mlanga", "region": "Kilimanjaro"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mlanga", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "N",
+      "items": [
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mlanga", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "O",
+      "items": [
+        {"item": "Laptop", "quantity": 9, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kinywamwezi", "region": "Dar es Salaam"},
+        {"item": "Laptop adapter", "quantity": 20, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kinywamwezi", "region": "Dar es Salaam"},
+        {"item": "Mouse", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kinywamwezi", "region": "Dar es Salaam"},
+        {"item": "Keyboard", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kinywamwezi", "region": "Dar es Salaam"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kinywamwezi", "region": "Dar es Salaam"}
+      ]
+    },
+    {
+      "box": "P",
+      "items": [
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kinywamwezi", "region": "Dar es Salaam"}
+      ]
+    },
+    {
+      "box": "Q",
+      "items": [
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Spares", "region": "Warehouse"},
+        {"item": "Laptop adapter", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Spares", "region": "Warehouse"}
+      ]
+    },
+    {
+      "box": "R",
+      "items": [
+        {"item": "Laptop", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Spares", "region": "Warehouse"},
+        {"item": "Laptop adapter", "quantity": 11, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Spares", "region": "Warehouse"}
+      ]
+    },
+    {
+      "box": "S",
+      "items": [
+        {"item": "Laptop", "quantity": 10, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Spares", "region": "Warehouse"},
+        {"item": "Laptop adapter", "quantity": 10, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Spares", "region": "Warehouse"}
+      ]
+    },
+    {
+      "box": "T",
+      "items": [
+        {"item": "Laptop", "quantity": 10, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Spares", "region": "Warehouse"},
+        {"item": "Laptop adapter", "quantity": 22, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Spares", "region": "Warehouse"}
+      ]
+    },
+    {
+      "box": "U",
+      "items": [
+        {"item": "Network Switches", "quantity": 8, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "All Schools", "region": "Multiple"},
+        {"item": "Team Supplies", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Team", "region": "Team"}
+      ]
+    },
+    {
+      "box": "V",
+      "items": [
+        {"item": "Micro desktop", "quantity": 7, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Warehouse", "region": "Warehouse"},
+        {"item": "Micro desktop adapter", "quantity": 7, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Warehouse", "region": "Warehouse"},
+        {"item": "Wireless router", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Warehouse", "region": "Warehouse"}
+      ]
+    },
+    {
+      "box": "W",
+      "items": [
+        {"item": "Micro desktop", "quantity": 8, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Warehouse", "region": "Warehouse"},
+        {"item": "Micro desktop adapter", "quantity": 8, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Warehouse", "region": "Warehouse"},
+        {"item": "System admin manual", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Warehouse", "region": "Warehouse"}
+      ]
+    },
+    {
+      "box": "AA",
+      "items": [
+        {"item": "Desktop computer", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Hai", "region": "Kilimanjaro"},
+        {"item": "Desktop computer", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mukwasa Day", "region": "Kilimanjaro"},
+        {"item": "System admin manual", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Hai", "region": "Kilimanjaro"},
+        {"item": "System admin manual", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mukwasa Day", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "BB",
+      "items": [
+        {"item": "Desktop computer", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Nkuu", "region": "Kilimanjaro"},
+        {"item": "Desktop computer", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kikafu", "region": "Kilimanjaro"},
+        {"item": "System admin manual", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Nkuu", "region": "Kilimanjaro"},
+        {"item": "System admin manual", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kikafu", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "CC",
+      "items": [
+        {"item": "Desktop computer", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Darajani", "region": "Kilimanjaro"},
+        {"item": "Desktop computer", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Makomu", "region": "Kilimanjaro"},
+        {"item": "System admin manual", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Darajani", "region": "Kilimanjaro"},
+        {"item": "System admin manual", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Makomu", "region": "Kilimanjaro"}
+      ]
+    },
+    {
+      "box": "DD",
+      "items": [
+        {"item": "Desktop computer", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mlanga", "region": "Kilimanjaro"},
+        {"item": "Desktop computer", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kinywamwezi", "region": "Dar es Salaam"},
+        {"item": "System admin manual", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Mlanga", "region": "Kilimanjaro"},
+        {"item": "System admin manual", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Kinywamwezi", "region": "Dar es Salaam"}
+      ]
+    },
+    {
+      "box": "EE",
+      "items": [
+        {"item": "Monitor", "quantity": 5, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Hai, Mukwasa Day, Nkuu, Kikafu, Darajani", "region": "Kilimanjaro"},
+        {"item": "VGA cable", "quantity": 5, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Hai, Mukwasa Day, Nkuu, Kikafu, Darajani", "region": "Kilimanjaro"},
+        {"item": "Power cable", "quantity": 5, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Hai, Mukwasa Day, Nkuu, Kikafu, Darajani", "region": "Kilimanjaro"},
+        {"item": "Team Supplies", "quantity": 1, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Team", "region": "Team"}
+      ]
+    },
+    {
+      "box": "FF",
+      "items": [
+        {"item": "Monitor", "quantity": 5, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Makomu, Mlanga, Kinywamwezi, 2 Spares", "region": "Multiple"},
+        {"item": "VGA cable", "quantity": 5, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Makomu, Mlanga, Kinywamwezi, 2 Spares", "region": "Multiple"},
+        {"item": "Power cable", "quantity": 5, "provided_by": "David Nyangaka", "received_by": "", "date": "", "destination": "Makomu, Mlanga, Kinywamwezi, 2 Spares", "region": "Multiple"}
+      ]
+    }
+  ]
+}
+
+    const boxFilter = document.getElementById('boxFilter');
+    const regionFilter = document.getElementById('regionFilter');
+    const itemFilter = document.getElementById('itemFilter');
+    const destinationFilter = document.getElementById('destinationFilter');
+    const contentDiv = document.getElementById('content');
+
+    // Extract unique boxes, items, destinations, and regions for filters
+    function getUniqueValues() {
+      const boxesSet = new Set();
+      const itemsSet = new Set();
+      const destSet = new Set();
+      const regionSet = new Set();
+      data.boxes.forEach(box => {
+        boxesSet.add(box.box);
+        box.items.forEach(i => {
+          itemsSet.add(i.item);
+          destSet.add(i.destination);
+          if (i.region) regionSet.add(i.region);
+        });
+      });
+      return {
+        boxes: [...boxesSet].sort((a, b) => {
+          // Custom sort to handle alphanumeric box names properly
+          const aNum = a.match(/\d+/);
+          const bNum = b.match(/\d+/);
+          const aLetter = a.match(/[A-Z]+/);
+          const bLetter = b.match(/[A-Z]+/);
+          
+          if (aLetter && bLetter) {
+            if (aLetter[0] !== bLetter[0]) {
+              return aLetter[0].localeCompare(bLetter[0]);
+            }
+          }
+          if (aNum && bNum) {
+            return parseInt(aNum[0]) - parseInt(bNum[0]);
+          }
+          return a.localeCompare(b);
+        }),
+        items: [...itemsSet].sort(),
+        destinations: [...destSet].sort(),
+        regions: [...regionSet].sort()
+      };
+    }
+
+    // Populate filter dropdowns
+    function populateFilters() {
+      const { boxes, items, destinations, regions } = getUniqueValues();
+
+      boxes.forEach(box => {
+        const option = document.createElement('option');
+        option.value = box;
+        option.textContent = `Box ${box}`;
+        boxFilter.appendChild(option);
+      });
+
+      regions.forEach(region => {
+        const option = document.createElement('option');
+        option.value = region;
+        option.textContent = region;
+        regionFilter.appendChild(option);
+      });
+
+      items.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        option.textContent = item;
+        itemFilter.appendChild(option);
+      });
+
+      destinations.forEach(dest => {
+        const option = document.createElement('option');
+        option.value = dest;
+        option.textContent = dest;
+        destinationFilter.appendChild(option);
+      });
+    }
+
+    // Render boxes and items filtered by selection
+    function renderFilteredBoxes() {
+      const selectedBox = boxFilter.value;
+      const selectedRegion = regionFilter.value;
+      const selectedItem = itemFilter.value;
+      const selectedDest = destinationFilter.value;
+
+      contentDiv.innerHTML = '';
+
+      // Filter boxes to show only those matching the box filter and with items matching other filters
+      data.boxes.forEach(box => {
+        // Check if this box matches the box filter
+        const matchesBox = selectedBox ? box.box === selectedBox : true;
+        
+        if (!matchesBox) return;
+
+        // Filter the items in the box by the selected filters
+        const filteredItems = box.items.filter(item => {
+          const matchesRegion = selectedRegion ? item.region === selectedRegion : true;
+          const matchesItem = selectedItem ? item.item === selectedItem : true;
+          const matchesDest = selectedDest ? item.destination === selectedDest : true;
+          return matchesRegion && matchesItem && matchesDest;
+        });
+
+        if (filteredItems.length > 0) {
+          // Create box container
+          const boxDiv = document.createElement('div');
+          boxDiv.className = 'box';
+
+          // Box header
+          const header = document.createElement('div');
+          header.className = 'box-header';
+          header.textContent = `Box: ${box.box}`;
+          boxDiv.appendChild(header);
+
+          // Table
+          const table = document.createElement('table');
+          const thead = document.createElement('thead');
+          const trHead = document.createElement('tr');
+          ['Item', 'Quantity', 'Provided By', 'Received By', 'Date', 'Destination', 'Region'].forEach(heading => {
+            const th = document.createElement('th');
+            th.textContent = heading;
+            trHead.appendChild(th);
+          });
+          thead.appendChild(trHead);
+          table.appendChild(thead);
+
+          const tbody = document.createElement('tbody');
+          filteredItems.forEach(item => {
+            const tr = document.createElement('tr');
+
+            const tdItem = document.createElement('td');
+            tdItem.textContent = item.item;
+            tr.appendChild(tdItem);
+
+            const tdQty = document.createElement('td');
+            tdQty.textContent = item.quantity;
+            tr.appendChild(tdQty);
+
+            const tdProvidedBy = document.createElement('td');
+            tdProvidedBy.textContent = item.provided_by || '';
+            tr.appendChild(tdProvidedBy);
+
+            const tdReceivedBy = document.createElement('td');
+            tdReceivedBy.textContent = item.received_by || '';
+            tr.appendChild(tdReceivedBy);
+
+            const tdDate = document.createElement('td');
+            tdDate.textContent = item.date || '';
+            tr.appendChild(tdDate);
+
+            const tdDest = document.createElement('td');
+            tdDest.textContent = item.destination;
+            tr.appendChild(tdDest);
+
+            const tdRegion = document.createElement('td');
+            tdRegion.textContent = item.region || '';
+            tr.appendChild(tdRegion);
+
+            tbody.appendChild(tr);
+          });
+
+          table.appendChild(tbody);
+          boxDiv.appendChild(table);
+          contentDiv.appendChild(boxDiv);
+        }
+      });
+
+      if (contentDiv.innerHTML.trim() === '') {
+        contentDiv.innerHTML = '<p style="text-align:center; font-style: italic; color: #666;">No matching items found.</p>';
+      }
+    }
+
+    // Initialize filters and content
+    populateFilters();
+    renderFilteredBoxes();
+
+    // Add event listeners
+    boxFilter.addEventListener('change', renderFilteredBoxes);
+    regionFilter.addEventListener('change', renderFilteredBoxes);
+    itemFilter.addEventListener('change', renderFilteredBoxes);
+    destinationFilter.addEventListener('change', renderFilteredBoxes);
+  </script>
+</body></div>
+</html>

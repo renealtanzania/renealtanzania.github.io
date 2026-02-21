@@ -1,0 +1,57 @@
+"_____Project A_____"
+
+[
+"Airport"
+  {
+    "Airport Deliverance"  :  "01/06/2020 - 20:30",
+    "Team Tz Airport PickUp" : "03/06/2020 - 14:45"
+  },
+  
+  
+  "JRI Office Deliverance"
+  {
+    "Boxes Delivered"  :  "03/06/2020 - 17:30",
+    "Box Stored" : "03/06/2020 - 18:45"
+  },
+  
+  "Box Arrangements"
+  {
+    "Start arrangements in a certain order"  :  "04/06/2020 - 10:40",
+    "Finish arrangements" : "04/06/2020 - 12:45"
+  },
+  
+  "Installers"
+  {
+    "School"  :	 "School C",
+    "Installer":  "Juma R",
+    "When"  :  "08/06/2020 - 08:40 - 09:55",
+   
+  },
+  
+  {
+    "School"  :	 "School D",
+    "Installer":  "Robert",
+    "When"  :  "09/06/2020 - 10:20 - 12:10",
+   
+  },
+    
+  "Trainers"
+  {
+    "School"  :	 "School C",
+    "Trainer":  "Justin M",
+    "When"  :  "08/06/2020 - 10:30 - 12:25",
+   
+  },
+  
+  {
+    "School"  :	 "School D",
+    "Trainer":  "James N",
+    "When"  :  "09/06/2020 - 12:50 - 15:10",
+   
+  },
+  
+
+
+]
+
+

@@ -1,0 +1,241 @@
+
+[master@main-server] /media/master/RENEALVPN/NewWireguardFiles 
+❯ sudo python3 install_info_wireguard.py 
+At Install:Enter school name: emergence_server2
+
+[master@main-server] /media/master/RENEALVPN/NewWireguardFiles 
+❯ cd ~/CodeDevelopment/newSystemBuild 
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild 
+❯ sudo cp -p /media/master/RENEALVPN/configureMicroNetworkInterfaces_files_v1/configureMicroNetworkInterfaces.py
+cp: missing destination file operand after '/media/master/RENEALVPN/configureMicroNetworkInterfaces_files_v1/configureMicroNetworkInterfaces.py'
+Try 'cp --help' for more information.
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild 
+❯ sudo cp -p /media/master/RENEALVPN/configureMicroNetworkInterfaces_files_v1/configureMicroNetworkInterfaces.py .
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild 
+❯ ls -l
+total 292
+-rwxrwxr-x 1 master master  4487 Feb  5  2022 classCopyByChecksum.py
+-rwxrwxr-x 1 master master   764 Sep 11  2024 cleanupForInstall.sh
+-rw-r--r-- 1 master master 32253 Sep 17 09:00 configureMicroNetworkInterfaces.py
+-rwxr-xr-x 1 master master 31881 Oct  3  2024 configureNetworkInterfaces.py
+-rw-rw-r-- 1 master master   268 Aug 11  2018 configureWirelessInternet.py
+-rw-rw-r-- 1 master master  4061 Feb  5  2022 copyByChecksum.py
+-rw-rw-r-- 1 master master  1160 Apr 13  2024 copyToAllOS.py
+-rwxr--r-- 1 master master   146 Sep 11  2024 createAllNumberedTeacherAccounts.sh
+drwxr-xr-x 2 master master  4096 Feb  9  2022 EFI
+-rwxr-xr-- 1 master master  1812 Apr 11  2023 findNewerDisk.py
+-rwxr--r-- 1 master master  1801 Aug 24  2024 finishNewSystemBuild.sh
+-rwxrwxr-x 1 master master  1132 Sep  8  2022 finishUpdateSystemBuild.sh
+-rw-rw-r-- 1 master master     0 Feb  9  2022 __init__.py
+-rw-r----- 1 master master    94 Jul 30  2022 installs.ini
+-rw-rw-r-- 1 master master  2247 Oct  6  2017 interfaceBuildPlanning.vym
+drwxrwxr-x 2 master master  4096 Oct 11  2017 interfacesFiles
+lrwxrwxrwx 1 master master    31 Sep 13  2018 localFunctions.py -> ../systemApps/localFunctions.py
+-rwxr-xr-x 1 master master  9180 Sep  8  2022 makeServer.py
+-rw-r--r-- 1 master master     0 Jan 31  2022 multiprocessing
+drwxr-xr-x 2 master master  4096 Oct 25  2022 obsolete
+-rw-rw-r-- 1 master master   217 Sep 30  2017 persistent_net_template.txt
+-rw-r----- 1 master master   277 Jul 30  2022 profiles.ini
+-rw-rw-r-- 1 master master  2211 Aug  8  2018 programmingTips.txt
+drwxrwxr-x 2 master master  4096 Apr 11  2023 __pycache__
+-rwxrwxr-x 1 master master 39703 Dec 19  2022 rebuildServerPart1.py
+-rwxrwxr-x 1 master master 16067 Oct 19  2022 rebuildServerPart2.py
+drwxr-xr-x 2 master master  4096 Sep  6  2022 sd_only
+-rw-rw-r-- 1 master master 38109 Dec 19  2022 serverBuildLib.py
+-rwxrwxr-x 1 master master  9295 Oct 19  2022 setupForPimaryOrSecondary.py
+-rwxrwxr-x 1 master master  6163 Sep 19  2017 tester.py
+-rw-rw-r-- 1 master master   490 Sep 11  2022 ud.sh
+-rwxr-xr-- 1 master master  3606 Sep  9  2022 updateFirefox.py
+-rwxr-xr-- 1 master master  4633 Sep 14  2022 updateTeacher.py
+drwxrwxr-x 5 master master  4096 Dec 28  2021 venv
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild 
+❯ cd /etc/network   
+
+[master@main-server] /etc/network 
+❯ sudo cp -p /media/master/RENEALVPN/configureMicroNetworkInterfaces_files_v1/etc_network_file/interfaces.micro_labwifi .
+
+
+[master@main-server] /etc/shorewall 
+❯ sudo cd -p /media/master/RENEALVPN/configureMicroNetworkInterfaces_files_v1/etc_shorewall_files/interfaces.micro_labwifi .
+sudo: cd: command not found
+
+[master@main-server] /etc/shorewall 
+❯ sudo cp -p /media/master/RENEALVPN/configureMicroNetworkInterfaces_files_v1/etc_shorewall_files/interfaces.micro_labwifi .    ⏎
+
+[master@main-server] /etc/shorewall 
+❯ sudo cp -p /media/master/RENEALVPN/configureMicroNetworkInterfaces_files_v1/etc_shorewall_files/masq.micro_labwifi .      
+
+[master@main-server] /etc/shorewall 
+❯ cd ~/CodeDevelopment/newSystemBuild 
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild 
+❯ sudo python3 configureMicroNetworkInterfaces.py 
+
+    Please wait while shutting down the bond0 interface.
+
+I have found 3 network interfaces.
+    Ethernet interfaces: 3
+
+This interface was found active:  name: usb0, macaddress: a0:ce:c8:b9:60:45 
+
+
+---------------------------------------------------------------------------
+Please unplug all cables.
+    Hit enter when you have done this.
+>>>
+Try again?
+  yes / no
+
+Please type "yes" or "no"
+yes
+
+The ethernet interfaces will need to be identified by plugging each ethernet 
+interface to an ethernet cable that is connected to either an ethernet switch 
+or another computer that is turned on. 
+The test is only used to detect power on the ethernet connection port so the 
+switch does not need to be connected to anything else or the other computer 
+just needs to be turned on.
+Do you have these things available now?
+  yes / no
+yes
+
+
+---------------------------------------------------------------------------
+To identify the correct interface for the internet plug in the cable to the 
+ethernet interface on the computer motherboard. This is the one just above 
+all of the small plugs for the audio. 
+If there is more than one ethernet interface on the motherboard, just pick one.
+    Hit enter when you have done this.
+>>>
+
+No plugin found. Please plug in the ethernet cable to an interface.
+Try again?
+  yes / no
+yes
+
+
+---------------------------------------------------------------------------
+To identify the correct interface for the internet plug in the cable to the 
+ethernet interface on the computer motherboard. This is the one just above 
+all of the small plugs for the audio. 
+If there is more than one ethernet interface on the motherboard, just pick one.
+    Hit enter when you have done this.
+>>>
+
+OK, now unplug the cable.
+    Hit enter when you have done this.
+>>>
+
+
+---------------------------------------------------------------------------
+Now identify the ethernet interface that will be "lab1", the first ethernet
+that will be connected to the switch for use inside the lab. If the interface cards
+have only a single connection, use the top card. If there is a two ethernet 
+connection interface card, use the left connection.
+    Hit enter when you have done this.
+>>>
+
+No plugin found. Please plug in the ethernet cable to an interface.
+Try again?
+  yes / no
+yes
+
+
+---------------------------------------------------------------------------
+Now identify the ethernet interface that will be "lab1", the first ethernet
+that will be connected to the switch for use inside the lab. If the interface cards
+have only a single connection, use the top card. If there is a two ethernet 
+connection interface card, use the left connection.
+    Hit enter when you have done this.
+>>>
+
+The remaining interface has been automatically configured as lab2.
+
+
+---------------------------------------------------------------------------
+Please unplug all cables.
+    Hit enter when you have done this.
+>>>
+
+All interfaces are now configured.
+
+
+All interfaces are now configured.
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    Now you can connect the Reneal wireless router to the LAN connection on the USB dongle.    
+    Next, connect the cables from the LAN connection on the computer to the network switch.
+    
+    Finally, reboot the server and you will be ready to go.
+
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild 
+❯ sudo ./finishNewSystemBuild.sh 
+Initializing logs
+/home/master/CodeDevelopment/newSystemBuild/finishNewSystemBuild.sh not updated
+rm: cannot remove '/var/crash/*': No such file or directory
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Creating teachers
+
+Account created successfully for Teacher 1
+Login name: teacher1
+Password: teacher1
+Please login as this user to confirm success.
+
+
+Account created successfully for Teacher 2
+Login name: teacher2
+Password: teacher2
+Please login as this user to confirm success.
+
+
+Account created successfully for Teacher 3
+Login name: teacher3
+Password: teacher3
+Please login as this user to confirm success.
+
+
+Account created successfully for Teacher 4
+Login name: teacher4
+Password: teacher4
+Please login as this user to confirm success.
+
+
+Account created successfully for Teacher 5
+Login name: teacher5
+Password: teacher5
+Please login as this user to confirm success.
+
+Rebuilding Squid Cache
+This will take a minute. Please wait.
+
+    Everything should be good. Run systemCheck to test it, then try the internet browser.
+        
+Starting OS partition copying
+Thu Sep 25 10:03:35 EAT 2025
+/OS_Copies/MainServerD2 is a mountpoint
+Copying to  /OS_Copies/MainServerD2
+Thu Sep 25 10:04:26 EAT 2025
+/OS_Copies/MainServerD2Copy is a mountpoint
+Copying to  /OS_Copies/MainServerD2Copy
+Thu Sep 25 10:05:18 EAT 2025
+/OS_Copies/MainServerCopy is a mountpoint
+Copying to  /OS_Copies/MainServerCopy
+Performing System Backup
+
+/dev/sda:
+ setting standby to 240 (20 minutes)
+
+/dev/sda:
+ issuing standby command
+Thu Sep 25 10:08:04 EAT 2025
+All automatic actions complete.
+Reboot the server now to completely finish the build.
+
+[master@main-server] ~/CodeDevelopment/newSystemBuild 
+❯ 

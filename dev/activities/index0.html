@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+    <title>Activities - Reneal Tanzania</title>
+    <script src="/js/middleware.js"></script>
+    <script src="/public/css/script/tailwindcss3417.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        reneal: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7', // Primary Brand Color
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Smooth fade-in animation */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-300 text-slate-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                <a class="mr-2" href="/"><img src="/public/imgs/ren.jpg" width="60" height="60" alt=""></a>
+                    <a href="/" class="text-2xl font-bold text-blue-700 tracking-tight">
+                        Reneal<span class="text-green-600">Tanzania</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex md:items-center md:space-x-8">
+                    <a href="/" class="text-slate-600 hover:text-reneal-600 font-medium transition">Home</a>
+                    <a href="/team-members/team.html" class="text-slate-600 hover:text-reneal-600 font-medium transition">Team Dashboard</a>
+                    <a href="/areas-covered.html" class="text-slate-600 hover:text-reneal-600 font-medium transition">Area Covered</a>
+                    <a href="/status/previous.html" class="text-slate-600 hover:text-reneal-600 font-medium transition">Status</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center md:hidden">
+                    <button id="mobile-menu-btn" type="button" class="text-slate-600 hover:text-reneal-600 focus:outline-none p-2">
+                        <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 absolute w-full shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="/" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:bg-reneal-50 hover:text-reneal-600">Home</a>
+                <a href="/guidance-docs.html" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:bg-reneal-50 hover:text-reneal-600">Guidance Docs</a>
+                <a href="/areas-covered.html" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:bg-reneal-50 hover:text-reneal-600">Area Covered</a>
+                <a href="/status/previous.html" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:bg-reneal-50 hover:text-reneal-600">Previous Status</a>
+                <a href="/docs/2021-docs.html" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:bg-reneal-50 hover:text-reneal-600">2021 Docs</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="bg-reneal-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">Team Activities</h1>
+            <p class="text-reneal-100 text-lg">Central hub for operational tasks, logs, and checklists.</p>
+            <div class="mt-4 flex items-center text-sm text-reneal-200 bg-reneal-800 w-fit px-3 py-1 rounded-full">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Last updated: 25/11/2025 - 13:00 EAT
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 fade-in">
+        
+        <!-- Grid of Activities -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- JRI Office -->
+            <a href="/dev/activities/team.html" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-blue-50 rounded-lg group-hover:bg-reneal-50 transition">
+                        <!-- Icon: Office/Building -->
+                        <svg class="w-8 h-8 text-reneal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    </div>
+                    <svg class="w-5 h-5 text-slate-300 group-hover:text-reneal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 group-hover:text-reneal-600 transition">Actions and Meetings</h3>
+                <p class="text-slate-500 mt-2 text-sm">Manage office actions and physical meetings.</p>
+            </a>
+
+            <!-- Installations -->
+            <a href="/docs/2025-docs.html" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-green-50 rounded-lg group-hover:bg-green-100 transition">
+                        <!-- Icon: Server/Install -->
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path></svg>
+                    </div>
+                    <svg class="w-5 h-5 text-slate-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 group-hover:text-green-700 transition">Installations</h3>
+                <p class="text-slate-500 mt-2 text-sm">Donation letters and guides for server client deployments.</p>
+            </a>
+
+            <!-- Trainings -->
+            <a href="/dev/trainings/trainings.html" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-yellow-50 rounded-lg group-hover:bg-yellow-100 transition">
+                        <!-- Icon: Academic/Training -->
+                        <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path></svg>
+                    </div>
+                    <svg class="w-5 h-5 text-slate-300 group-hover:text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 group-hover:text-yellow-700 transition">Trainings</h3>
+                <p class="text-slate-500 mt-2 text-sm">Teacher and system administrator training resources.</p>
+            </a>
+
+            <!-- Equipments -->
+            <a href="/dev/equipments/tools.html" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-purple-50 rounded-lg group-hover:bg-purple-100 transition">
+                        <!-- Icon: Chip/Equipment -->
+                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+                    </div>
+                    <svg class="w-5 h-5 text-slate-300 group-hover:text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 group-hover:text-purple-700 transition">Equipments</h3>
+                <p class="text-slate-500 mt-2 text-sm">Hardware inventory, repair status, and tracking.</p>
+            </a>
+
+            Current Tasks
+            <a href="/docs/index.html" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-red-50 rounded-lg group-hover:bg-red-100 transition">
+                        <!-- Icon: Lightning/Urgent -->
+                        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <svg class="w-5 h-5 text-slate-300 group-hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 group-hover:text-red-700 transition">Noted Works</h3>
+                <p class="text-slate-500 mt-2 text-sm">Jobs done, recent works and references.</p>
+            </a>
+
+            <!-- Checklists -->
+            <a href="/dev/checklists" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-teal-50 rounded-lg group-hover:bg-teal-100 transition">
+                        <!-- Icon: Clipboard -->
+                        <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    </div>
+                    <svg class="w-5 h-5 text-slate-300 group-hover:text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 group-hover:text-teal-700 transition">Checklists</h3>
+                <p class="text-slate-500 mt-2 text-sm">Standard Operating Procedures and verification lists.</p>
+            </a>
+
+            <!-- Miscellaneous -->
+            <a href="/dev/miscelleneous/4e26574ab04cb226789681e19ef716d9c76a00f2aba2dd8c3f5c0d9affe84b0d.html" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition duration-300 md:col-span-2 lg:col-span-3">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-indigo-50 rounded-lg group-hover:bg-indigo-100 transition">
+                        <!-- Icon: Collection/Misc -->
+                        <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    </div>
+                    <svg class="w-5 h-5 text-slate-300 group-hover:text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 group-hover:text-indigo-700 transition">Miscellaneous</h3>
+                <p class="text-slate-500 mt-2 text-sm">Other resources, temporary files, and uncategorized documents.</p>
+            </a>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-center md:text-left">
+                    <span class="text-lg font-bold text-reneal-900">Reneal<span class="text-reneal-600">Tanzania</span></span>
+                    <p class="text-slate-500 text-sm">International Education Outreach</p>
+                </div>
+                <div class="text-sm text-slate-400 text-center md:text-right">
+                    &copy; <script>document.write(new Date().getFullYear())</script> Reneal Tanzania. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/config.js"></script>
+    <script src="/js/path.js"></script>
+    <script src="/js/provider.js"></script>
+    <script src="/js/routes.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/gate.js"></script>
+    <script src="/js/guard.js"></script>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Project Schedule - Reneal International Education Outreach</title>
+
+         <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
+  <link href="/public/css/tailwind.css" rel="stylesheet">
+
+  <link href='/public/cal/main.css' rel='stylesheet' />
+  <script src='/public/cal/main.js'></script>
+  <script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      headerToolbar: {
+        left: 'prevYear,prev,next,nextYear today',
+        center: 'title',
+        right: 'dayGridMonth,dayGridWeek,dayGridDay'
+      },
+      initialDate: '2024-10-01',
+      navLinks: true, // can click day/week names to navigate views
+      editable: true,
+      dayMaxEvents: true, // allow "more" link when too many events
+      events: [
+      // Chalinze Installation
+      {
+           title: 'Chalinze Schools Installations',
+          start: '2024-01-06T06:00:00',
+          end: '2024-01-14T15:30:00',
+          color: 'blue',
+          url:'/status',
+        },
+
+      {
+           title: 'Chalinze Trip',
+          start: '2024-01-06T08:00:00',
+          end: '2024-01-04T15:30:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Mboga Installation',
+          start: '2024-01-07T08:00:00',
+          end: '2024-01-07T15:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Mdaula Installation',
+          start: '2024-01-08T08:30:00',
+          end: '2024-01-08T14:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Msata Installation',
+          start: '2024-01-14T09:00:00',
+          end: '2024-01-14T12:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Mandera Girls Installation',
+          start: '2024-01-14T14:30:00',
+          end: '2024-01-14T17:30:00',
+          color: 'green',
+        },
+
+// Iringa Installation and Trainings
+         {
+          title: 'Iringa Schools Installations and Trainings',
+          start: '2024-01-25T06:00:00',
+          end: '2024-01-29T15:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Iringa Bus Trip',
+          start: '2024-01-25T06:00:00',
+          end: '2024-01-25T17:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Selebu Installation',
+          start: '2024-01-25T20:30:00',
+          end: '2024-01-25T22:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Selebu Training',
+          start: '2024-01-26T08:30:00',
+          end: '2024-01-26T10:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Nyalumbu Installation',
+          start: '2024-01-26T14:30:00',
+          end: '2024-01-26T16:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Nyalumbu Training',
+          start: '2024-01-27T08:30:00',
+          end: '2024-01-27T10:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'TEAM MEETING',
+          start: '2024-01-27T17:00:00',
+          end: '2024-01-27T18:30:00',
+          color: 'red',
+        },
+
+        {
+          title: 'Kilolo Installation',
+          start: '2024-01-28T08:30:00',
+          end: '2024-01-28T10:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Kilolo Training',
+          start: '2024-01-28T11:00:00',
+          end: '2024-01-28T13:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Udzungwa Installation',
+          start: '2024-01-28T18:00:00',
+          end: '2024-01-28T19:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Udzungwa Training',
+          start: '2024-01-29T03:30:00',
+          end: '2024-01-29T06:30:00',
+          color: 'green',
+        },
+
+        //2024 Feb Visits Runner Testing
+        {
+          title: 'Neal is Transfering Runner Update File to the External Hard drive through Habari Node Server',
+          start: '2024-02-01T09:30:00',
+          end: '2024-02-04T06:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Mringa 2024 Feb Update Tested and Done',
+          start: '2024-02-09T08:00:00',
+          end: '2024-02-09T10:00:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Neal is Updating the Runner Update File and transfering it to the External Hard drive through Habari Node Server',
+          start: '2024-02-09T09:30:00',
+          end: '2024-02-12T06:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Testing Feb 2024 Update at Arusha Day',
+          start: '2024-02-05T09:00:00',
+          end: '2024-02-05T13:40:00',
+          color: 'blue',
+        },
+
+        {
+          title: 'Testing Feb 2024 Update with old server (Mringa)',
+          start: '2024-02-06T09:00:00',
+          end: '2024-02-09T13:40:00',
+          color: 'blue',
+        },
+
+        {
+          title: 'Final runner update fixes',
+          start: '2024-02-22T09:00:00',
+          end: '2024-02-29T13:40:00',
+          color: 'green',
+        },
+
+         //2024 March Visits
+
+         {
+          title: 'March Schools Visits Runner Testing at Ilboru (old server)',
+          start: '2024-02-29T09:00:00',
+          end: '2024-03-01T13:40:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Suye 2024 March Update Tested and Done',
+          start: '2024-03-06T08:00:00',
+          end: '2024-03-06T10:00:00',
+          color: 'green',
+        },
+
+        {
+          title: '2024 March Schools Visits',
+          start: '2024-03-06T08:00:00',
+          end: '2024-05-07T15:30:00',
+          color: 'red',
+        },
+
+        {
+          title: 'Trained 2024 March Update Robert and James at Elerai',
+          start: '2024-03-07T10:00:00',
+          end: '2024-03-07T12:00:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Olmotonyi 2024 March Update Done',
+          start: '2024-03-08T08:00:00',
+          end: '2024-03-08T09:00:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Trained 2024 March Update Jastin at Osiligi',
+          start: '2024-03-08T09:00:00',
+          end: '2024-03-08T10:00:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Jastin did 2024 March Update at Bangata after trained',
+          start: '2024-03-08T12:00:00',
+          end: '2024-03-08T13:00:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Done 2024 March Update at Olmotonyi, Osiligi and Bangata',
+          start: '2024-03-09T08:00:00',
+          end: '2024-03-09T14:00:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Done 2024 FebFix at Mringa',
+          start: '2024-03-11T09:00:00',
+          end: '2024-03-11T09:15:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Done 2024 March Update at Mukulat and Kiranyi',
+          start: '2024-03-11T08:00:00',
+          end: '2024-03-11T10:00:00',
+          color: 'green',
+        },
+
+         {
+          title: 'Mkonoo SS Installation',
+          start: '2024-03-11T13:00:00',
+          end: '2024-03-11T14:00:00',
+          color: 'green',
+        },
+
+         {
+          title: 'Done 2024 FebFix at Ilboru and Arusha Day',
+          start: '2024-03-12T08:00:00',
+          end: '2024-03-12T09:15:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Mkonoo SS Training',
+          start: '2024-03-18T13:00:00',
+          end: '2024-03-18T14:00:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Banjika SS Installation',
+          start: '2024-03-20T15:00:00',
+          end: '2024-03-20T17:00:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Done 2024 March Update at Misima',
+          start: '2024-03-28T15:55:00',
+          end: '2024-03-28T16:15:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Done 2024 March Update at Mkata',
+          start: '2024-03-28T16:15:00',
+          end: '2024-03-28T16:30:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Done 2024 March Update at Ndolwa',
+          start: '2024-03-28T16:30:00',
+          end: '2024-03-28T16:45:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Done 2024 March Update at Kisaza',
+          start: '2024-03-29T07:50:00',
+          end: '2024-03-29T08:05:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Done 2024 March Update at Handeni',
+          start: '2024-03-29T08:10:00',
+          end: '2024-03-29T08:25:00',
+          color: 'green',
+        },
+
+         {
+          title: 'Done 2024 March Update at Komnyanganyo',
+          start: '2024-03-29T08:30:00',
+          end: '2024-03-29T09:15:00',
+          color: 'green',
+        },
+
+
+        // April Visits
+
+        {
+          title: '2024 March Update at Chief Dodo',
+          start: '2024-04-15T08:30:00',
+          end: '2024-04-15T09:15:00',
+          color: 'green',
+        },
+
+        {
+          title: '2024 March Update at Dareda',
+          start: '2024-04-15T11:30:00',
+          end: '2024-04-15T13:15:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Training at Gorowa',
+          start: '2024-04-16T08:30:00',
+          end: '2024-04-16T10:15:00',
+          color: 'green',
+        },
+
+        {
+          title: '2024 March Update at Gorowa',
+          start: '2024-04-16T10:30:00',
+          end: '2024-04-16T11:00:00',
+          color: 'green',
+        },
+
+        {
+          title: '2024 March Update at Nangara',
+          start: '2024-04-17T11:30:00',
+          end: '2024-04-17T13:15:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Capturing 2024 March Update images at Ilboru',
+          start: '2024-04-19T11:30:00',
+          end: '2024-04-19T12:15:00',
+          color: 'green',
+        },
+
+        {
+          title: '2024 March Update at Ayalagaya',
+          start: '2024-04-25T11:20:00',
+          end: '2024-04-25T13:05:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Kiboroloni Installation',
+          start: '2024-05-24T11:20:00',
+          end: '2024-05-24T13:05:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Ifati Installation',
+          start: '2024-06-11T10:20:00',
+          end: '2024-06-11T13:25:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Lucas Malia Installation',
+          start: '2024-07-06T12:20:00',
+          end: '2024-07-06T15:45:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Hawa Mchopa Installation',
+          start: '2024-07-07T09:20:00',
+          end: '2024-07-07T11:35:00',
+          color: 'green',
+        },
+
+        {
+          title: 'Ifati Training',
+          start: '2024-07-09T12:20:00',
+          end: '2024-07-09T15:45:00',
+          color: 'green',
+        },
+
+        // Sep 2024
+
+        // Reneal in TZ
+          {
+          title: 'Rene and Neal Arrival at JRO',
+          start: '2024-09-04T20:00:00',
+          end: '2024-09-04T20:15:00',
+          color: 'green',
+           },
+
+           {
+            title: 'Deliver Oldadai server to Lutheran',
+            start: '2024-09-05T10:00:00',
+            end: '2024-09-05T10:15:00',
+            color: 'green',     
+           },
+
+           {
+            title: 'Deliver Oldonyowas server and new disks to Lutheran',
+            start: '2024-09-05T10:40:00',
+            end: '2024-09-05T10:55:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Team meeting',
+            start: '2024-09-06T10:00:00',
+            end: '2024-09-06T13:25:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Deliver 30 extra laptops from 2023B to Lutheran, to be deployed to schools',
+            start: '2024-09-06T14:00:00',
+            end: '2024-09-06T14:25:00',
+            color: 'green',
+           },
+
+            {
+            title: 'Deliver Ilkidinga server to Lutheran',
+            start: '2024-09-09T09:05:00',
+            end: '2024-09-09T09:25:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Deliver Sambasha server to Lutheran',
+            start: '2024-09-09T10:00:00',
+            end: '2024-09-09T13:25:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Reneal Personal Talks',
+            start: '2024-09-10T10:00:00',
+            end: '2024-09-10T16:25:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Deliver Mringa server to Lutheran',
+            start: '2024-09-11T10:20:00',
+            end: '2024-09-11T10:25:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Deliver Poli server to Lutheran',
+            start: '2024-09-11T10:30:00',
+            end: '2024-09-11T11:25:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Rene talk with Habari Node',
+            start: '2024-09-12T10:00:00',
+            end: '2024-09-12T12:25:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Reneal Team Meeting',
+            start: '2024-09-13T14:00:00',
+            //end: '2024-09-12T1:25:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Meeting with JRI on transfering things to their Institute',
+            start: '2024-09-14T10:00:00',
+            end: '2024-09-14T13:25:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Matim and Mukulat Visit',
+            start: '2024-09-17T10:00:00',
+            end: '2024-09-17T14:35:00',
+            color: 'green',
+           },
+
+           {
+            title: 'TerraWatu Meeting',
+            start: '2024-09-19T09:00:00',
+            end: '2024-09-19T12:45:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Team Meeting',
+            start: '2024-09-20T14:00:00',
+            end: '2024-09-20T16:05:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Transferring things from Habari Node to JRI ',
+            start: '2024-09-23T09:00:00',
+            end: '2024-09-23T12:15:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Reneal Personal Talk ',
+            start: '2024-09-24T09:00:00',
+            end: '2024-09-24T10:15:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Arusha Day 24.04 LTSP Test ',
+            start: '2024-09-27T09:00:00',
+            end: '2024-09-27T10:15:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Team Meeting and Celebration ',
+            start: '2024-09-28T14:00:00',
+            end: '2024-09-28T18:15:00',
+            color: 'green',
+           },
+
+           {
+            title: 'JRI Office Final Setup and Bye Team US ',
+            start: '2024-09-30T09:00:00',
+            end: '2024-09-30T11:25:00',
+            color: 'green',
+           },
+
+           // October 2024
+
+           {
+            title: 'Mitesa Installation ',
+            start: '2024-10-06T09:00:00',
+            end: '2024-10-06T12:25:00',
+            color: 'green',
+           },
+
+           {
+            title: 'Mitesa Training ',
+            start: '2024-10-07T10:00:00',
+            end: '2024-10-07T14:25:00',
+            color: 'green',
+           },
+
+           
+
+           {
+            title: 'Deliver 30 extra laptops from 2023B to Lutheran, to be deployed to schools',
+            start: '2024-09-06T14:00:00',
+            end: '2024-09-06T14:25:00',
+            color: 'green',
+           },
+
+        // Remaining Visits
+        {
+          title: 'Oldonyosambu Visit',
+          start: '2022-03-08T08:45:00',
+          end: '2022-03-08T09:45:00',
+          color: 'green',   // an option!
+        },
+        {
+          title: 'Bangata Visit',
+          start: '2022-03-08T10:30:00',
+          end: '2022-03-08T11:15:00',
+          color: 'green',
+        },
+        {
+          title: 'Ngiresi Visit',
+          start: '2022-03-08T12:00:00',
+          end: '2022-03-08T13:45:00',
+          color: 'green',
+        },
+
+        // Installations and Trainings
+
+        {
+           title: 'Lengijave Installation',
+          start: '2022-03-22T08:30:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Engutoto Installation',
+          start: '2022-03-25T10:20:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Irkisongo Installation',
+          start: '2022-03-29T10:20:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Lengijave Training',
+          start: '2022-04-22T14:00:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Engutoto Training',
+          start: '2022-04-22T10:00:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Kikwe Installation',
+          start: '2022-04-20T10:00:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Oljoro Installation',
+          start: '2022-04-19T10:20:00',
+          color: 'green',
+        },
+
+        {
+           title: 'Oljoro Training',
+          start: '2022-04-21T10:00:00',
+          color: 'green',
+        },
+
+
+
+      ]
+    });
+
+    calendar.render();
+  });
+
+</script>
+<style>
+
+  body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+    background-color: black;
+    color: white;
+  }
+
+  #calendar {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+</style>
+</head>
+<body>
+  <ul class="grid grid-cols-3 gap-0 text-center py-4">
+    <li><a class="text-blue-700" href="/status">BACK</a></li>
+    <li><h1 class="text-center text-2xl font-bold text-blue-500">Project Schedule </h1></li>
+  </ul>
+  
+  <div id='calendar'></div>
+
+</body>
+</html>

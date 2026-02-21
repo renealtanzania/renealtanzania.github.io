@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+    <title>School Server OS Analysis</title>
+    <script src="/public/css/script/tailwindcss3417.js"></script>
+    <script src="/public/css/script/chart451.js"></script>
+    <script src="/js/middleware.js"></script>
+
+</head>
+  <!-- Navigation -->
+    <!-- <nav class="bg-white shadow-sm border-b border-gray-200 mb-8"> -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-8">
+                    <span class="text-2xl font-bold text-indigo-600">Reneal Tanzania</span>
+                    <div class="hidden md:flex space-x-6">
+                        <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
+                        <a href="" class="text-indigo-600 font-medium">Servers Stats</a>
+                        <a href="/dashboard.html" class="text-gray-600 hover:text-gray-900">Dashboard</a>
+                        <a href="/dev/activities" data-can="view-team" class="text-gray-600 hover:text-gray-900">Team Activities</a>
+                        <a href="/dev/equipments/tools.html" data-can="view-settings" class="text-gray-600 hover:text-gray-900">Equipments</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="userInfo" class="text-sm text-gray-600"></span>
+                    <button onclick="handleLogout()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    <!-- </nav> -->
+<body class="bg-gray-50">
+    <div class="min-h-screen py-8 px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">School Server OS Analysis Dashboard</h1>
+                <p class="text-gray-600">Analysis of operating system distributions across Reneal Tanzania school servers</p>
+            </div>
+
+            <!-- Summary Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="text-sm text-gray-600 mb-1">Total Schools</div>
+                    <div class="text-3xl font-bold text-blue-600" id="totalSchools">0</div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="text-sm text-gray-600 mb-1">OS Versions</div>
+                    <div class="text-3xl font-bold text-green-600" id="totalVersions">0</div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="text-sm text-gray-600 mb-1">Most Common</div>
+                    <div class="text-xl font-bold text-purple-600" id="mostCommon">-</div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="text-sm text-gray-600 mb-1">Latest Version</div>
+                    <div class="text-xl font-bold text-orange-600" id="latestVersion">-</div>
+                </div>
+            </div>
+
+            <!-- Charts Row 1 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Pie Chart -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">OS Version Distribution</h2>
+                    <div class="relative h-80">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Bar Chart -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Schools per OS Version</h2>
+                    <div class="relative h-80">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row 2 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Doughnut Chart -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Update Status Distribution</h2>
+                    <div class="relative h-80">
+                        <canvas id="doughnutChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Horizontal Bar Chart -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Version Categories</h2>
+                    <div class="relative h-80">
+                        <canvas id="horizontalBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Detailed School List</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">School Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">OS Version</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="bg-white divide-y divide-gray-200">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/bundle.js"></script>
+
+    <script>
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
+
+        // Display user info
+        function displayUserInfo() {
+            const user = Auth.user();
+            if (user) {
+                document.getElementById('userInfo').textContent = `${user.name} (${user.role})`;
+                
+                const profileInfo = document.getElementById('profileInfo');
+                profileInfo.innerHTML = `
+                    <div class="flex items-center justify-between py-2 border-b">
+                        <span class="text-gray-600">Name:</span>
+                        <span class="font-semibold text-gray-900">${user.name}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b">
+                        <span class="text-gray-600">Email:</span>
+                        <span class="font-semibold text-gray-900">${user.email}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b">
+                        <span class="text-gray-600">Position:</span>
+                        <span class="font-semibold text-gray-900">${user.position}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-gray-600">Role:</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-semibold">${user.role}</span>
+                    </div>
+                `;
+            }
+        }
+
+        // Update session timer
+        function updateSessionTimer() {
+            const remaining = Auth.getSessionTimeRemaining();
+            const minutes = Math.floor(remaining / 60);
+            const seconds = remaining % 60;
+            document.getElementById('sessionTimer').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        displayUserInfo();
+        updateSessionTimer();
+        setInterval(updateSessionTimer, 1000);
+    </script>
+
+
+    <script>
+        // Parse the school data
+        const rawData = `Mukulat 16.04 (UPDATED)
+Ilkiding'a 16.04 (UPDATED)
+Mwandet 16.04 (UPDATED)
+Ilboru 16.04 (UPDATED)
+Mringa 16.04 (UPDATED)
+Oldadai 16.04 (UPDATED)
+Kiranyi 16.04 (UPDATED)
+Kimnyaki 16.04 (UPDATED)
+Sokon II 16.04 (UPDATED)
+JR OFFICE SERVER 16.04+Webdev 2025A
+Olmotonyi 16.04 (UPDATED)
+Osiligi 16.04 (UPDATED)
+Bangata 16.04 (UPDATED)
+Olokii 16.04 (UPDATED)
+Olturment 16.04 (UPDATED)
+Einoti 16.04 (UPDATED)
+Sambasha 16.04 (UPDATED)
+Ngiresi 16.04 (UPDATED)
+Enduimet 16.04 (UPDATED)
+Engarenaibor 16.04 (UPDATED)
+Longido A-Level 16.04 (UPDATED)
+Namanga 16.04 (UPDATED)
+Tingatinga 16.04 (UPDATED)
+Arusha Girls' School 16.04 (v2020)
+Elerai 16.04 (UPDATED)
+Kimaseki 16.04 (UPDATED)
+Kinana 16.04 (UPDATED)
+Suye 16.04+Webdev BETA
+Arusha Day 16.04+Webdev BETA
+Handeni 16.04 (UPDATED)
+Kisaza 16.04 (UPDATED)
+Komnyang'anyo 16.04 (UPDATED)
+Misima 16.04 (UPDATED)
+Mkata 16.04 (UPDATED)
+Muungano 16.04 (UPDATED)
+Ndolwa 16.04 (UPDATED)
+Nkoanrua 16.04 (UPDATED)
+Oldonyowas 16.04+Webdev BETA
+Sing'isi 16.04 (UPDATED)
+Abeid Amani 16.04 (UPDATED)
+Engutoto 16.04 (UPDATED)
+Irkisongo 16.04 (UPDATED)
+Kikwe 16.04 (UPDATED)
+Lengijave 16.04 (UPDATED)
+Oljoro 16.04 (UPDATED)
+Themi 16.04+Webdev BETA
+Olemedeye 16.04 (UPDATED)
+Nkoarusambu 16.04 (UPDATED)
+Ula 16.04 (UPDATED)
+Babati Day 16.04 (UPDATED)
+Bagara 16.04 (UPDATED)
+Komoto 16.04 (UPDATED)
+Kwaraa 16.04 (UPDATED)
+Nakwa 16.04 (UPDATED)
+Nangara 16.04 (UPDATED)
+Bicha 2023.1
+Bukulu 2023.1
+Chief Dodo 2023.1
+Irkisale 2023.1
+Kiwalala 2023.1
+Mahiwa 2023.1
+Mtama 2023.1
+Namalenga 2023.1
+Nyengedi 2023.1
+Moshono 2023.2
+Naura 2023.2
+Oloasiti 2023.2
+Florian 2023.2
+Bihawana 2023.2
+Dareda 2023.2
+Ayagaya 2023.2
+Gorowa 2023.2
+Nkoasenga 2023.2
+Moita 2023.2
+Selebu 2024.1
+Kilolo 2024.1
+Udzungwa 2024.1
+Nyalumbu 2024.1
+Mboga 2024.1
+Mdaula 2024.1
+Msata 2024.1
+Mandera Girls 2024.1
+Mkonoo 2024.1
+Banjika 2024.1
+Lucas Malia 2024.1
+Nkowe 2024.1
+Hawa Mchopa 2024.1
+Ruangwa 2024.1
+Mbekenyera 2024.1
+Butiama 2024.1
+Butuguri 2024.1
+Kiabakari 2024.1
+Kiagata 2024.1
+Bumangi 2024.1
+Kiboriloni 2024.1
+Ifati 2024.1
+Poli 16.04+Webdev BETA
+Emergency Server #1 in Warehouse 16.04+Webdev 2025A
+Emergency Server #2 in Warehouse 16.04+Webdev BETA
+Micro Desktop Team Server in JR Office 16.04+Webdev 2025A
+Ikuti 16.04+Webdev (10.03.2024)
+Kinyala 16.04+Webdev (10.03.2024)
+Lupoto 16.04+Webdev (10.03.2024)
+Mpuguso 16.04+Webdev (10.03.2024)
+Namwai 16.04+Webdev (10.03.2024)
+Sanya Juu 16.04+Webdev (10.03.2024)
+Nuru 16.04+Webdev (10.03.2024)
+Oshara 16.04+Webdev (10.03.2024)
+Uhambingeto 16.04+Webdev (10.03.2024)
+Viwandani 16.04+Webdev (10.03.2024)
+Manyara Girls 16.04+Webdev (10.03.2024)
+Chifu Mang'Enya 16.04+Webdev 2025A
+Mwapachu 16.04+Webdev 2025A
+Mbwego 16.04+Webdev 2025A
+Semkiwa 16.04+Webdev 2025A
+Losinoni 16.04+Webdev 2025A
+Iyunga Technical 16.04+Webdev 2025A
+Songwe 16.04+Webdev 2025A
+Imezu [Malama] 16.04+Webdev 2025A
+Usongwe 16.04+Webdev 2025A
+Ilembo [Ilunga] 16.04+Webdev 2025A`;
+
+        // Parse data
+        const schools = [];
+        const lines = rawData.trim().split('\n');
+        
+        lines.forEach(line => {
+            const parts = line.trim().match(/^(.+?)\s+(16\.04.*|2023\.\d|2024\.\d.*)$/);
+            if (parts) {
+                const name = parts[1].trim();
+                const version = parts[2].trim();
+                schools.push({ name, version });
+            }
+        });
+
+        // Analyze data
+        const versionCount = {};
+        const statusCount = {};
+        const categoryCount = {
+            '16.04 (UPDATED)': 0,
+            '16.04+Webdev': 0,
+            '2023.x': 0,
+            '2024.x': 0
+        };
+
+        schools.forEach(school => {
+            // Count versions
+            versionCount[school.version] = (versionCount[school.version] || 0) + 1;
+            
+            // Count status
+            if (school.version.includes('UPDATED')) {
+                statusCount['Updated'] = (statusCount['Updated'] || 0) + 1;
+            } else if (school.version.includes('BETA')) {
+                statusCount['Beta'] = (statusCount['Beta'] || 0) + 1;
+            } else if (school.version.includes('2025A')) {
+                statusCount['2025A'] = (statusCount['2025A'] || 0) + 1;
+            } else if (school.version.includes('2024')) {
+                statusCount['2024 Version'] = (statusCount['2024 Version'] || 0) + 1;
+            } else if (school.version.includes('2023')) {
+                statusCount['2023 Version'] = (statusCount['2023 Version'] || 0) + 1;
+            } else {
+                statusCount['Other'] = (statusCount['Other'] || 0) + 1;
+            }
+            
+            // Count categories
+            if (school.version.includes('16.04') && school.version.includes('UPDATED') && !school.version.includes('Webdev')) {
+                categoryCount['16.04 (UPDATED)']++;
+            } else if (school.version.includes('16.04+Webdev')) {
+                categoryCount['16.04+Webdev']++;
+            } else if (school.version.includes('2023.')) {
+                categoryCount['2023.x']++;
+            } else if (school.version.includes('2024.')) {
+                categoryCount['2024.x']++;
+            }
+        });
+
+        // Update summary stats
+        document.getElementById('totalSchools').textContent = schools.length;
+        document.getElementById('totalVersions').textContent = Object.keys(versionCount).length;
+        
+        const mostCommonVersion = Object.entries(versionCount).sort((a, b) => b[1] - a[1])[0];
+        document.getElementById('mostCommon').textContent = mostCommonVersion[0].substring(0, 20) + '...';
+        document.getElementById('latestVersion').textContent = '16.04+Webdev 2025A';
+
+        // Color palettes
+        const colors = [
+            '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6',
+            '#EC4899', '#06B6D4', '#84CC16', '#F97316', '#6366F1'
+        ];
+
+        // Pie Chart - Top OS Versions
+        const topVersions = Object.entries(versionCount)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 8);
+        
+        new Chart(document.getElementById('pieChart'), {
+            type: 'pie',
+            data: {
+                labels: topVersions.map(v => v[0]),
+                datasets: [{
+                    data: topVersions.map(v => v[1]),
+                    backgroundColor: colors,
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 12,
+                            font: { size: 10 }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Bar Chart
+        new Chart(document.getElementById('barChart'), {
+            type: 'bar',
+            data: {
+                labels: topVersions.map(v => v[0].substring(0, 20)),
+                datasets: [{
+                    label: 'Number of Schools',
+                    data: topVersions.map(v => v[1]),
+                    backgroundColor: '#3B82F6',
+                    borderColor: '#2563EB',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 5 }
+                    }
+                }
+            }
+        });
+
+        // Doughnut Chart - Update Status
+        new Chart(document.getElementById('doughnutChart'), {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(statusCount),
+                datasets: [{
+                    data: Object.values(statusCount),
+                    backgroundColor: ['#10B981', '#F59E0B', '#3B82F6', '#8B5CF6', '#EC4899', '#EF4444'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 12,
+                            font: { size: 11 }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Horizontal Bar Chart - Categories
+        new Chart(document.getElementById('horizontalBarChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(categoryCount),
+                datasets: [{
+                    label: 'Schools',
+                    data: Object.values(categoryCount),
+                    backgroundColor: ['#10B981', '#3B82F6', '#F59E0B', '#8B5CF6'],
+                    borderWidth: 1,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 10 }
+                    }
+                }
+            }
+        });
+
+        // Populate table
+        const tbody = document.getElementById('tableBody');
+        schools.forEach(school => {
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-gray-50';
+            
+            let status = 'Standard';
+            let statusColor = 'bg-gray-100 text-gray-800';
+            if (school.version.includes('UPDATED')) {
+                status = 'Updated';
+                statusColor = 'bg-green-100 text-green-800';
+            } else if (school.version.includes('BETA')) {
+                status = 'Beta';
+                statusColor = 'bg-yellow-100 text-yellow-800';
+            } else if (school.version.includes('2025A')) {
+                status = '2025A';
+                statusColor = 'bg-blue-100 text-blue-800';
+            }
+            
+            let category = 'Other';
+            if (school.version.includes('16.04') && school.version.includes('UPDATED')) {
+                category = '16.04 Updated';
+            } else if (school.version.includes('16.04+Webdev')) {
+                category = '16.04 Webdev';
+            } else if (school.version.includes('2023.')) {
+                category = '2023 Series';
+            } else if (school.version.includes('2024.')) {
+                category = '2024 Series';
+            }
+            
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${school.name}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${school.version}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <span class="px-2 py-1 rounded-full text-xs font-semibold ${statusColor}">${status}</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${category}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    </script>
+</body>
+</html>
