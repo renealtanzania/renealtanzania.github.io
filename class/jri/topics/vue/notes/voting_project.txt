@@ -1,0 +1,35 @@
+{"subject":"django","name":"voting_project","requirements":{"python":v3.12 above,"pip", "pipenv"},
+
+1. Prepare a directory where you can save your Project. eg: /home/code/voting_project
+	- Make sure you have pip and pipenv installed.
+	- pip install pipenv to install any packages on a specific project instead of globally.
+	- Then pipenv shell command to create the virtual enviroment that will also create a pipfile that will list any packages
+	  we install.
+2. Select correct python interpreter by ctrl+shift+P, type python then select the interpreter 'voting_project':pipenv
+   You may be asked to install pylint.
+3. Inside voting_project folder run pipenv install django, to install django.
+	- database used will be sqlite by default but you can change to postgress or any by changing the settings.
+4. Run django-admin startproject pollsapp
+	- A folder called pollsapp will be generated inside voting_project directory
+	- Inside pollsapp folder there will be another pollsapp folder and manage.py
+	- Inside voting_project you will have multiple apps one among them is pollsapp
+	- Pollsapp will deal with polls and choices instances. Another app can be Pagesapp for example that will deal 
+	  landing pages and so on.
+	- manage.py is a command line tool for django, we do not edit it. 
+	- To run manage.py commands you should be inside the first pollsapp directory
+5. Startapp is the command used to create an app
+	- Run python manage.py startapp polls, this will create a polls folder inside the pollsapp 
+	  directory which it will have files such as init.py, views.py, tests.py, models.py e.t.c.
+	  it will be /voting_project/pollsapp/polls
+	- In polls folder there will be migrations folder and other files such as init.py, admin.py, apps.py e.t.c
+	- Inside models.py add two classes which are Question and Choice and their instances/objects, id will be created
+	  automatically.
+	- Inside pollsapp directory go to settings.py under installed_apps add 'polls.apps.PollsConfig', at the begining.
+6. Create the migration by running python manage.py makemigrations polls. This will check what things and classes inside
+   	  the polls models you created and then create the tables. It will create the migration folder.
+   	- Migrate the tables by running python manage.py migrate
+7. Manipulate data within the shell by running python manage.py shell to enter inside interactive shell inorder
+          to get access to the model data.
+   	- import time using django.utils import timezone
+   	- create a variable q and set it into Question(question_text='What is your name?', pub_date=timezone.now())
+	  
