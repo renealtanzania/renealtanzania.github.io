@@ -1,2 +1,6 @@
 #
+
 *.json filter=git-crypt diff=git-crypt
+
+data/middleware.json filter=git-crypt diff=git-crypt
+data/users.json filter=git-crypt diff=git-crypt
