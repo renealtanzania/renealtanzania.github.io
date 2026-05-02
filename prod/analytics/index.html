@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reneal — Analytics Suite</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #cfcfd1; }
+
+    .module-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .module-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+    }
+
+    .access-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-weight: 600; font-size: 14px;
+      transition: gap 0.15s ease;
+    }
+    .access-link:hover { gap: 9px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card-anim { opacity: 0; animation: fadeUp 0.45s ease forwards; }
+    .d1 { animation-delay: 0.05s; } .d2 { animation-delay: 0.10s; }
+    .d3 { animation-delay: 0.15s; } .d4 { animation-delay: 0.20s; }
+    .d5 { animation-delay: 0.25s; } .d6 { animation-delay: 0.30s; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-gray-100 sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#2563EB,#7C3AED);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/>
+            <rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity=".7"/>
+            <rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".7"/>
+            <rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".4"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-[12px] text-gray-400 leading-none mb-0.5 font-medium">Reneal Tanzania</p>
+          <h1 class="font-bold text-gray-900 text-[15px] leading-none">Analytics Suite</h1>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-sm text-gray-400 hidden sm:block">125 Schools &middot; 12 Regions</span>
+        <!-- <div class="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs" style="background:linear-gradient(135deg,#2563EB,#7C3AED);">EM</div> -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Page heading -->
+  <div class="max-w-6xl mx-auto px-6 pt-10 pb-6">
+    <p class="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Data </p>
+    <h2 class="text-2xl font-extrabold text-gray-900">Analytics Modules</h2>
+    <p class="text-gray-500 mt-1 text-sm">Select a module to explore school performance, usage patterns, and field data across the Reneal network.</p>
+  </div>
+
+  <!-- Cards -->
+  <main class="max-w-6xl mx-auto px-6 pb-16">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+      <!-- 1. NECTA vs Usage -->
+      <div class="module-card card-anim d1">
+        <div class="h-[5px]" style="background:linear-gradient(90deg,#2563EB,#06B6D4);"></div>
+        <div class="p-6 flex flex-col flex-1">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background:#EFF6FF;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="6"  cy="17" r="2" fill="#2563EB"/>
+                <circle cx="10" cy="11" r="2" fill="#2563EB" opacity=".65"/>
+                <circle cx="15" cy="14" r="2" fill="#06B6D4" opacity=".85"/>
+                <circle cx="18" cy="7"  r="2" fill="#2563EB" opacity=".45"/>
+                <path d="M5 19.5L19 5" stroke="#2563EB" stroke-width="1.2" stroke-dasharray="2 2" opacity=".35"/>
+              </svg>
+            </div>
+            <span class="text-[11px] font-semibold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">Correlation Analysis</span>
+          </div>
+          <h3 class="text-[17px] font-bold text-gray-900 mb-1.5">NECTA vs Usage</h3>
+          <p class="text-[13.5px] text-gray-500 leading-relaxed flex-1">Explore the relationship between lab session hours and Computer Studies exam grades. Scatter plots, quadrant analysis, and r² correlation scoring.</p>
+          <div class="mt-5 pt-4 border-t border-gray-100">
+            <a href="/prod/analytics/streams/usage-necta.html" class="access-link text-blue-600">
+              Access Analytics
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. NECTA ICT Tracker -->
+      <!-- <div class="module-card card-anim d2">
+        <div class="h-[5px]" style="background:linear-gradient(90deg,#059669,#10B981);"></div>
+        <div class="p-6 flex flex-col flex-1">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background:#ECFDF5;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect x="3"  y="13" width="3.5" height="7"  rx="1" fill="#059669"/>
+                <rect x="8"  y="9"  width="3.5" height="11" rx="1" fill="#059669" opacity=".75"/>
+                <rect x="13" y="5"  width="3.5" height="15" rx="1" fill="#10B981" opacity=".75"/>
+                <rect x="18" y="2"  width="3.5" height="18" rx="1" fill="#059669" opacity=".45"/>
+              </svg>
+            </div>
+            <span class="text-[11px] font-semibold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">2019 – 2025 Data</span>
+          </div>
+          <h3 class="text-[17px] font-bold text-gray-900 mb-1.5">NECTA ICT Tracker</h3>
+          <p class="text-[13.5px] text-gray-500 leading-relaxed flex-1">Multi-year Computer Studies performance across all 125 schools. Grade distributions, year-on-year trends, school profiles, and regional rankings.</p>
+          <div class="mt-5 pt-4 border-t border-gray-100">
+            <a href="necta_tracker.html" class="access-link text-emerald-600">
+              Access Module
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- 3. School Usage Performance -->
+      <!-- <div class="module-card card-anim d3">
+        <div class="h-[5px]" style="background:linear-gradient(90deg,#7C3AED,#A855F7);"></div>
+        <div class="p-6 flex flex-col flex-1">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background:#F5F3FF;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect x="3"  y="3"  width="8" height="8" rx="2" fill="#7C3AED" opacity=".9"/>
+                <rect x="13" y="3"  width="8" height="8" rx="2" fill="#A855F7" opacity=".55"/>
+                <rect x="3"  y="13" width="8" height="8" rx="2" fill="#A855F7" opacity=".55"/>
+                <rect x="13" y="13" width="8" height="8" rx="2" fill="#7C3AED" opacity=".25"/>
+              </svg>
+            </div>
+            <span class="text-[11px] font-semibold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">125 Schools</span>
+          </div>
+          <h3 class="text-[17px] font-bold text-gray-900 mb-1.5">School Usage Performance</h3>
+          <p class="text-[13.5px] text-gray-500 leading-relaxed flex-1">Lab session tracking — total hours, session frequency, computer-to-student ratios, and activity heatmaps. Identify high and low performing labs.</p>
+          <div class="mt-5 pt-4 border-t border-gray-100">
+            <a href="school_usage.html" class="access-link text-violet-600">
+              Access Module
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- 4. Web Stats Collections -->
+      <!-- <div class="module-card card-anim d4">
+        <div class="h-[5px]" style="background:linear-gradient(90deg,#0891B2,#06B6D4);"></div>
+        <div class="p-6 flex flex-col flex-1">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background:#ECFEFF;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="8.5" stroke="#0891B2" stroke-width="1.7"/>
+                <path d="M12 3.5S8.5 7 8.5 12s3.5 8.5 3.5 8.5" stroke="#0891B2" stroke-width="1.4" stroke-linecap="round"/>
+                <path d="M12 3.5S15.5 7 15.5 12s-3.5 8.5-3.5 8.5" stroke="#0891B2" stroke-width="1.4" stroke-linecap="round"/>
+                <path d="M3.5 12h17" stroke="#06B6D4" stroke-width="1.4" stroke-linecap="round"/>
+                <path d="M5 8.5h14M5 15.5h14" stroke="#06B6D4" stroke-width="1.1" stroke-linecap="round" opacity=".5"/>
+              </svg>
+            </div>
+            <span class="text-[11px] font-semibold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">GoAccess · Squid</span>
+          </div>
+          <h3 class="text-[17px] font-bold text-gray-900 mb-1.5">Web Stats Collections</h3>
+          <p class="text-[13.5px] text-gray-500 leading-relaxed flex-1">Proxy log analysis per school — bandwidth consumption, top domains, session counts, and browsing patterns from Apache and Squid server logs.</p>
+          <div class="mt-5 pt-4 border-t border-gray-100">
+            <a href="web_stats.html" class="access-link text-cyan-600">
+              Access Module
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- 5. Fieldwork Stats -->
+      <!-- <div class="module-card card-anim d5">
+        <div class="h-[5px]" style="background:linear-gradient(90deg,#D97706,#FBBF24);"></div>
+        <div class="p-6 flex flex-col flex-1">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background:#FFFBEB;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#D97706" opacity=".18"/>
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="#D97706" stroke-width="1.7" stroke-linejoin="round"/>
+                <circle cx="12" cy="9" r="2.5" fill="#FBBF24"/>
+              </svg>
+            </div>
+            <span class="text-[11px] font-semibold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">4-Criteria · 100 pts</span>
+          </div>
+          <h3 class="text-[17px] font-bold text-gray-900 mb-1.5">Fieldwork Stats</h3>
+          <p class="text-[13.5px] text-gray-500 leading-relaxed flex-1">Lab evaluation results using the 4-criteria scoring framework: hardware, software, usage, and support. Visit history, damage reports, and intervention logs.</p>
+          <div class="mt-5 pt-4 border-t border-gray-100">
+            <a href="fieldwork_stats.html" class="access-link text-amber-600">
+              Access Module
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- 6. Impact Reports – coming soon -->
+      <!-- <div class="module-card card-anim d6" style="opacity:0.65;">
+        <div class="h-[5px]" style="background:linear-gradient(90deg,#E11D48,#FB7185);"></div>
+        <div class="p-6 flex flex-col flex-1">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background:#FFF1F2;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#E11D48" stroke-width="1.7" stroke-linejoin="round"/>
+                <path d="M14 2v6h6" stroke="#E11D48" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 13h6M9 17h4" stroke="#FB7185" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
+              </svg>
+            </div>
+            <span class="text-[11px] font-semibold text-rose-500 bg-rose-50 px-2.5 py-1 rounded-full">Coming Soon</span>
+          </div>
+          <h3 class="text-[17px] font-bold text-gray-900 mb-1.5">Impact Reports</h3>
+          <p class="text-[13.5px] text-gray-500 leading-relaxed flex-1">Automated stakeholder reports combining NECTA results, usage data, and field evaluations into export-ready summaries for donors and district partners.</p>
+          <div class="mt-5 pt-4 border-t border-gray-100">
+            <span class="text-[13.5px] font-semibold text-gray-300 flex items-center gap-1.5 select-none cursor-not-allowed">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 11V7a4 4 0 018 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Locked
+            </span>
+          </div>
+        </div>
+      </div> -->
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center  justify-between text-xs text-gray-400">
+      <span>Reneal Tanzania &mdash; 2026</span>
+      <div class="flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span>
+        <span>Systems Active</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
