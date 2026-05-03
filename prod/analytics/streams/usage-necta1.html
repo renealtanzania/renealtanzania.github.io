@@ -112,12 +112,10 @@ select.ctrl-select:focus{border-color:var(--teal2)}
     <h1 class="hdr-title">Lab Usage vs NECTA Results</h1>
     <p class="hdr-sub">Relationship between student system usage (hours) and CSEE Computer Studies pass rates · 2023–2025</p>
     <div class="hdr-pills">
-      <span class="pill pill-muted"><a href="/prod/analytics">Back to Analytics</a></span>
       <span class="pill pill-teal">Form 2 &amp; Form 4</span>
       <span class="pill pill-amber">NECTA Exam Code 036</span>
       <span class="pill pill-muted" id="hdr-matched">— schools matched</span>
       <span class="pill pill-muted" id="hdr-pts">— data points</span>
-
     </div>
   </div>
 </header>
@@ -141,7 +139,7 @@ select.ctrl-select:focus{border-color:var(--teal2)}
     </div>
     <div class="ctrl-sep"></div>
     <span class="ctrl-label">Sort table by</span>
-    <select class="ctrl-select" id="sort-sel" onchange="syncSort(this.value)">
+    <select class="ctrl-select" id="sort-sel" onchange="renderTable()">
       <option value="usage_desc">Usage ↓</option>
       <option value="usage_asc">Usage ↑</option>
       <option value="pass_desc">Pass rate ↓</option>
@@ -264,7 +262,7 @@ select.ctrl-select:focus{border-color:var(--teal2)}
           style="padding:8px 10px 8px 32px;font-family:'Open Sans',sans-serif;font-size:13px;border:2px solid #d1d5db;border-radius:6px;outline:none;min-width:200px;color:#111827"/>
       </div>
       <!-- sort -->
-      <select id="ft-sort" onchange="syncSort(this.value)" class="ctrl-select">
+      <select id="ft-sort" onchange="renderFullTable()" class="ctrl-select">
         <option value="usage_desc">Sort: Usage ↓</option>
         <option value="usage_asc">Sort: Usage ↑</option>
         <option value="pass_desc">Sort: Pass rate ↓</option>
@@ -1014,24 +1012,15 @@ function renderFullTable() {
   }).join('') : '';
 }
 
-// ── Unified sort sync — keeps both sort dropdowns in step ──────
-function syncSort(val) {
-  // Map ft-sort values that don't exist in sort-sel (like 'year') to 'name'
-  const validForDash = ['usage_desc','usage_asc','pass_desc','pass_asc','name'];
-  const dashVal = validForDash.includes(val) ? val : 'name';
-  document.getElementById('sort-sel').value = dashVal;
-  // ft-sort has 'year' as an extra option — keep it if set there
-  const ftSortEl = document.getElementById('ft-sort');
-  if (ftSortEl) ftSortEl.value = val;
-  renderTable();
+let ftCurrentSort = 'name';
+function ftSortBy(s) {
+  document.getElementById('ft-sort').value = s;
   renderFullTable();
 }
 
-let ftCurrentSort = 'name';
-function ftSortBy(s) {
-  syncSort(s);
-}
-
+// ══════════════════════════════════════════════
+// DOWNLOAD CSV
+// ══════════════════════════════════════════════
 function downloadCSV() {
   const pts = buildFullPoints();
   const sort = document.getElementById('ft-sort').value;
