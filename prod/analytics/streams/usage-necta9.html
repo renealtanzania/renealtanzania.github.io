@@ -100,121 +100,7 @@ select.ctrl-select:focus{border-color:var(--teal2)}
 /* ── ANNOTATIONS ── */
 .anno{font-size:12px;color:var(--text-muted);font-style:italic;margin-top:10px;font-family:'Open Sans',sans-serif;line-height:1.6}
 
-/* ── CONTROLS: horizontal scroll on mobile instead of wrapping ── */
-.controls{overflow-x:auto}
-.controls-inner{min-width:max-content}
-
-/* ══════════════════════════════════════════════
-   RESPONSIVE BREAKPOINTS
-   ══════════════════════════════════════════════ */
-
-/* ── 900px: stack the two-col grids ── */
-@media(max-width:900px){
-  .main{padding:16px 16px}
-  .grid-top{grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-  .grid-main{grid-template-columns:1fr;gap:14px;margin-bottom:14px}
-  .grid-bottom{grid-template-columns:1fr;gap:14px}
-  .panel{padding:16px 16px}
-  .controls{padding:10px 16px}
-  .ctrl-sep{display:none}
-  .seg-btn{padding:6px 12px;font-size:12px}
-  select.ctrl-select{font-size:12px;padding:6px 10px}
-  .hdr{padding:20px 16px 18px}
-}
-
-/* ── 640px: compact all panels ── */
-@media(max-width:640px){
-  .main{padding:12px 10px}
-
-  /* ── Stat cards row: 2 columns ── */
-  .grid-top{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-  .s-card{padding:12px 12px}
-  .s-val{font-size:22px;margin-bottom:3px}
-  .s-label{font-size:9px;margin-bottom:5px;letter-spacing:.08em}
-  .s-sub{font-size:10px;line-height:1.4}
-
-  /* ── Panels ── */
-  .panel{padding:12px 12px;border-radius:6px}
-  .panel-title{font-size:11px}
-  .panel-sub{font-size:10px;margin-bottom:10px}
-
-  /* ── Legend ── */
-  .leg{gap:8px 12px;margin-top:6px}
-  .leg-item{font-size:10px;gap:4px}
-  .leg-dot{width:8px;height:8px}
-  .anno{font-size:10px;margin-top:6px}
-
-  /* ── QUADRANT: force 2×2 grid regardless of inline style ── */
-  .quad-grid-container{
-    display:grid!important;
-    grid-template-columns:1fr 1fr!important;
-    gap:8px!important;
-    margin-bottom:10px!important;
-    width:100%!important
-  }
-  /* Target the JS-rendered qcard divs directly */
-  #qcard-HH,#qcard-LH,#qcard-HL,#qcard-LL{
-    padding:10px 10px!important;
-    border-radius:6px!important;
-    min-width:0!important
-  }
-  /* icon + VIEW LIST row inside each card */
-  #qcard-HH>div:first-child,
-  #qcard-LH>div:first-child,
-  #qcard-HL>div:first-child,
-  #qcard-LL>div:first-child{margin-bottom:3px}
-  /* icon emoji */
-  #qcard-HH>div:first-child>span:first-child,
-  #qcard-LH>div:first-child>span:first-child,
-  #qcard-HL>div:first-child>span:first-child,
-  #qcard-LL>div:first-child>span:first-child{font-size:14px!important}
-  /* VIEW LIST badge */
-  #qcard-HH>div:first-child>span:last-child,
-  #qcard-LH>div:first-child>span:last-child,
-  #qcard-HL>div:first-child>span:last-child,
-  #qcard-LL>div:first-child>span:last-child{font-size:8px!important;padding:1px 5px!important;letter-spacing:.02em!important}
-  /* Big count number */
-  #qcard-HH>p:nth-child(2),#qcard-LH>p:nth-child(2),
-  #qcard-HL>p:nth-child(2),#qcard-LL>p:nth-child(2){font-size:22px!important;margin:2px 0 2px!important}
-  /* Title line */
-  #qcard-HH>p:nth-child(3),#qcard-LH>p:nth-child(3),
-  #qcard-HL>p:nth-child(3),#qcard-LL>p:nth-child(3){font-size:10px!important;margin-bottom:0!important}
-  /* Sub line */
-  #qcard-HH>p:nth-child(4),#qcard-LH>p:nth-child(4),
-  #qcard-HL>p:nth-child(4),#qcard-LL>p:nth-child(4){font-size:9px!important}
-
-  /* ── Drawer ── */
-  #drawer-list{max-height:260px!important}
-  #quad-drawer>div:first-child{flex-wrap:wrap;gap:6px}
-  #drawer-title{font-size:11px!important}
-  #drawer-sub{font-size:10px!important}
-
-  /* ── All matched schools header ── */
-  #tbl-header-row{flex-wrap:wrap;gap:6px}
-  #tbl-header-row button{font-size:11px!important;padding:4px 10px!important}
-
-  /* ── Mini table ── */
-  .data-table{font-size:11px}
-  .data-table th{padding:7px 6px;font-size:9px}
-  .data-table td{padding:6px 6px}
-
-  /* ── Trend/movers ── */
-  #movers-list>div{padding:5px 0;font-size:11px}
-}
-
-/* ── 400px: extra-small phones ── */
-@media(max-width:400px){
-  .main{padding:8px 8px}
-  .grid-top{gap:6px}
-  .s-card{padding:10px 10px}
-  .s-val{font-size:20px}
-  .hdr{padding:16px 12px 14px}
-  .hdr-title{font-size:20px}
-  .hdr-sub{font-size:11px}
-  .panel{padding:10px 10px}
-  #qcard-HH>p:nth-child(2),#qcard-LH>p:nth-child(2),
-  #qcard-HL>p:nth-child(2),#qcard-LL>p:nth-child(2){font-size:20px!important}
-}
+@media(max-width:900px){.grid-main{grid-template-columns:1fr}.grid-bottom{grid-template-columns:1fr}.grid-top{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -280,7 +166,7 @@ select.ctrl-select:focus{border-color:var(--teal2)}
     <div class="panel">
       <p class="panel-title">Usage (hours) vs pass rate (%)</p>
       <p class="panel-sub" id="scatter-sub">Each point = one school-year record · size = students sat · hover for details</p>
-      <div style="position:relative;height:min(380px,60vw);min-height:220px">
+      <div style="position:relative;height:380px">
         <canvas id="scatterChart" role="img" aria-label="Scatter chart of usage hours vs NECTA pass rate">Scatter chart.</canvas>
       </div>
       <div class="leg" id="scatter-leg">
@@ -295,7 +181,7 @@ select.ctrl-select:focus{border-color:var(--teal2)}
     <div class="panel" style="display:flex;flex-direction:column">
       <p class="panel-title">Quadrant analysis</p>
       <p class="panel-sub">Click any quadrant to see the schools in that group</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px" id="quad-grid" class="quad-grid-container"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px" id="quad-grid"></div>
 
       <div id="quad-drawer" style="display:none;flex:1;flex-direction:column">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
@@ -307,7 +193,7 @@ select.ctrl-select:focus{border-color:var(--teal2)}
             <span style="font-size:15px;line-height:1">×</span> Close
           </button>
         </div>
-        <div style="overflow-y:auto;flex:1;max-height:min(340px,70vw);border:1.5px solid #e5e7eb;border-radius:6px;background:#fafafa" id="drawer-list"></div>
+        <div style="overflow-y:auto;flex:1;max-height:340px;border:1.5px solid #e5e7eb;border-radius:6px;background:#fafafa" id="drawer-list"></div>
       </div>
 
       <div id="quad-hint" style="flex:1;display:flex;align-items:center;justify-content:center;padding:20px 0">
@@ -321,11 +207,11 @@ select.ctrl-select:focus{border-color:var(--teal2)}
   <!-- COMPACT TABLE + TREND CHART -->
   <div class="grid-bottom">
     <div class="panel">
-      <div id="tbl-header-row" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:4px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
         <p class="panel-title">All matched schools</p>
-        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:10px">
           <span style="font-family:'Lato',sans-serif;font-size:12px;color:var(--text-muted)" id="table-count"></span>
-          <button onclick="switchView('datatable')" style="font-family:'Lato',sans-serif;font-size:12px;font-weight:700;background:#0a5c3a;color:white;border:none;border-radius:5px;padding:5px 12px;cursor:pointer;letter-spacing:.03em;white-space:nowrap">View full table →</button>
+          <button onclick="switchView('datatable')" style="font-family:'Lato',sans-serif;font-size:12px;font-weight:700;background:#0a5c3a;color:white;border:none;border-radius:5px;padding:5px 12px;cursor:pointer;letter-spacing:.03em">View full table →</button>
         </div>
       </div>
       <p class="panel-sub">Usage hours · NECTA pass % · grade · students sat</p>
@@ -349,7 +235,7 @@ select.ctrl-select:focus{border-color:var(--teal2)}
     <div class="panel">
       <p class="panel-title">Year-on-year: usage vs pass rate</p>
       <p class="panel-sub">Average across all matched schools per year</p>
-      <div style="position:relative;height:min(220px,55vw);min-height:160px;margin-bottom:20px">
+      <div style="position:relative;height:220px;margin-bottom:20px">
         <canvas id="trendChart" role="img" aria-label="Year on year trend chart">Trend chart.</canvas>
       </div>
       <p class="panel-title" style="margin-bottom:8px">Notable movers (2023 → 2025)</p>
@@ -400,7 +286,7 @@ select.ctrl-select:focus{border-color:var(--teal2)}
   </div>
 
   <!-- summary stat strip -->
-  <div id="ft-stats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:18px"></div>
+  <div id="ft-stats" style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px"></div>
 
   <!-- full table -->
   <div class="panel" style="padding:0;overflow:hidden">
