@@ -6,24 +6,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Reneal — Analytics Suite</title>
   <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+  <script src="/js/middleware.js"></script>
+  
+
   <script src="/public/css/script/tailwindcss3417.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="/public/fonts/noto-sans.woff2" rel="stylesheet" />
+
+
+
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+          fontFamily: { sans: ['Noto Sans', 'noto-sans.woff2'] },
         }
       }
     }
   </script>
 
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #cfcfd1; }
+    body { font-family: 'Noto Sans', sans-serif; background: #cfcfd1; }
 
     .module-card {
       background: #fff;
@@ -265,6 +271,8 @@
       </div>
     </div>
   </footer>
+
+<script src="/js/bundle.js"></script>
 
 </body>
 </html>

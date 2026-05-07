@@ -155,5 +155,17 @@
     "url": "/include/projects/drive/index.html",
     "viewer": "admin, super-admin",
     "type": "protected"
+  },
+  {
+    "page name": "Analytics Page",
+    "url": "/prod/analytics",
+    "viewer": "admin, super-admin",
+    "type": "protected"
+  },
+  {
+    "page name": "Labusage vs Necta",
+    "url": "/prod/analytics/streams/usage-necta.html",
+    "viewer": "admin, super-admin",
+    "type": "protected"
   }
 ]
