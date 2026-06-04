@@ -167,5 +167,11 @@
     "url": "/prod/analytics/streams/usage-necta.html",
     "viewer": "admin, super-admin",
     "type": "protected"
+  },
+  {
+    "page name": "School Lag Tracking",
+    "url": "/prod/analytics/streams/school-lag-tracking.html",
+    "viewer": "admin, super-admin",
+    "type": "protected"
   }
 ]
