@@ -7,59 +7,88 @@
   <title>Reneal — Analytics Suite</title>
   <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
   <script src="/js/middleware.js"></script>
-  
 
   <script src="/public/css/script/tailwindcss3417.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="/public/fonts/noto-sans.woff2" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['Noto Sans', 'noto-sans.woff2'] },
+          fontFamily: {
+            display: ['Lato', 'sans-serif'],
+            sans: ['Open Sans', 'sans-serif'],
+          },
         }
       }
     }
   </script>
 
   <style>
-    body { font-family: 'Noto Sans', sans-serif; background: #cfcfd1; }
+    body { font-family: 'Open Sans', sans-serif; background: #c3d6d5; }
+    h1, h2, h3, .font-display { font-family: 'Lato', sans-serif; }
 
-    .module-card {
-      background: #fff;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      display: flex;
-      flex-direction: column;
+    .row-anim { opacity: 0; animation: fadeUp 0.35s ease forwards; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    .module-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+    .r1 { animation-delay: 0.03s; }
+    .r2 { animation-delay: 0.06s; }
+    .r3 { animation-delay: 0.09s; }
+    .r4 { animation-delay: 0.12s; }
+    .r5 { animation-delay: 0.15s; }
+    .r6 { animation-delay: 0.18s; }
+
+    table.analytics-table tr.data-row {
+      border-bottom: 1px solid #d1d5db;
+    }
+    table.analytics-table tr.data-row:hover {
+      background-color: #F5F2EC;
     }
 
     .access-link {
       display: inline-flex; align-items: center; gap: 5px;
       font-weight: 600; font-size: 14px;
       transition: gap 0.15s ease;
+      color: #2563EB;
     }
     .access-link:hover { gap: 9px; }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .more-link {
+      font-weight: 500; font-size: 13px;
+      color: #2563EB;
     }
-    .card-anim { opacity: 0; animation: fadeUp 0.45s ease forwards; }
-    .d1 { animation-delay: 0.05s; } .d2 { animation-delay: 0.10s; }
-    .d3 { animation-delay: 0.15s; } .d4 { animation-delay: 0.20s; }
-    .d5 { animation-delay: 0.25s; } .d6 { animation-delay: 0.30s; }
+    .more-link:hover { text-decoration: underline; }
+
+    .category-pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .cat-correlation {
+      background: #E0EDFF;
+      color: #2563EB;
+    }
+    .cat-tracking {
+      background: #FEF9C3;
+      color: #854D0E;
+    }
+    .cat-general {
+      background: #E5E7EB;
+      color: #374151;
+    }
+
+    .no-results { display: none; }
   </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen text-gray-900">
 
   <!-- Header -->
   <header class="bg-white border-b border-gray-100 sticky top-0 z-20">
@@ -75,109 +104,204 @@
         </div>
         <div>
           <p class="text-[12px] text-gray-400 leading-none mb-0.5 font-medium">Reneal Tanzania</p>
-          <h1 class="font-bold text-gray-900 text-[15px] leading-none">Analytics Suite</h1>
+          <h1 class="font-display font-bold text-gray-900 text-[15px] leading-none">Analytics Suite</h1>
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <!-- <span class="text-sm text-gray-400 hidden sm:block">125 Schools &middot; 12 Regions</span> -->
         <span class="text-sm text-blue-600 hidden sm:block"><a href="/project">Project Dashboard</a></span>
         <span class="text-sm text-blue-600 hidden sm:block"><a href="/box/dashboard.html">Main Dashboard</a></span>
-
-        <!-- <div class="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs" style="background:linear-gradient(135deg,#2563EB,#7C3AED);">EM</div> -->
       </div>
     </div>
   </header>
 
   <!-- Page heading -->
   <div class="max-w-6xl mx-auto px-6 pt-10 pb-6">
-    <p class="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Data </p>
-    <h2 class="text-2xl font-extrabold text-gray-900">Analytics Sites</h2>
-    <p class="text-gray-700 mt-1 text-sm">Select a module to explore school performance, usage patterns and field data across the Reneal network.</p>
+    <div>
+      <p class="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Data</p>
+      <h2 class="font-display text-3xl font-extrabold text-gray-900">Reneal Analytics</h2>
+      <p class="text-gray-700 mt-1 text-sm max-w-3xl">Select a module to explore school performance, usage patterns and field data across the Reneal's network.</p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2 mt-5">
+      <div class="relative w-full sm:w-auto">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+          <path d="M20 20l-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Search" class="pl-9 pr-4 py-2 rounded-full border border-gray-200 bg-white text-sm w-full sm:w-56 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+      </div>
+      <div class="flex gap-2">
+        <div class="relative flex-1 sm:flex-none">
+          <select id="dateFilter" class="appearance-none pl-4 pr-9 py-2 rounded-full border border-gray-200 bg-white text-sm text-gray-700 w-full focus:outline-none focus:ring-2 focus:ring-blue-200">
+            <option>All dates</option>
+            <option>Last 7 days</option>
+            <option>Last 30 days</option>
+            <option>This year</option>
+          </select>
+          <svg class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="relative flex-1 sm:flex-none">
+          <select id="categoryFilter" class="appearance-none pl-4 pr-9 py-2 rounded-full border border-gray-200 bg-white text-sm text-gray-700 w-full focus:outline-none focus:ring-2 focus:ring-blue-200">
+            <option>All categories</option>
+            <option>Correlation Analysis</option>
+            <option>Lag Tracking</option>
+          </select>
+          <svg class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Cards -->
+  <!-- Table -->
   <main class="max-w-6xl mx-auto px-6 pb-16">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-400 overflow-hidden">
+      <table class="analytics-table w-full text-left border-collapse">
+        <thead class="hidden md:table-header-group">
+          <tr class="border-b border-gray-400">
+            <th class="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide w-[8%] text-center">No</th>
+            <th class="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide w-[12%] text-center">Date</th>
+            <th class="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide w-[10%] text-center">More</th>
+            <th class="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide w-[20%] text-center">Title</th>
+            <th class="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide w-[34%] text-center">Description</th>
+            <th class="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide w-[16%] text-center">Category</th>
+          </tr>
+        </thead>
+        <tbody id="analyticsBody" class="block md:table-row-group">
 
-      <!-- 1. ICT NECTA vs Usage -->
-      <div class="module-card card-anim d1">
-        <div class="h-[5px]" style="background:linear-gradient(90deg,#2563EB,#06B6D4);"></div>
-        <div class="p-6 flex flex-col flex-1">
-          <div class="flex items-start justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background:#cfcfd1;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <circle cx="6"  cy="17" r="2" fill="#2563EB"/>
-                <circle cx="10" cy="11" r="2" fill="#2563EB" opacity=".65"/>
-                <circle cx="15" cy="14" r="2" fill="#06B6D4" opacity=".85"/>
-                <circle cx="18" cy="7"  r="2" fill="#2563EB" opacity=".45"/>
-                <path d="M5 19.5L19 5" stroke="#2563EB" stroke-width="1.2" stroke-dasharray="2 2" opacity=".35"/>
-              </svg>
-            </div>
-            <span class="text-[11px] font-semibold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">Correlation Analysis</span>
-          </div>
-          <h3 class="text-[17px] font-bold text-gray-900 mb-1.5">ICT NECTA vs Computer Lab Usage</h3>
-          <p class="text-[13.5px] text-gray-700 leading-relaxed flex-1">
-            Does the amount of time students spend using the Reneal computer lab system have a measurable relationship 
-            with how well they perform in the national ICT examination?   
-          </p>
-          <div class="text-[13.5px] text-blue-600 mt-1">
-            <a href="/prod/analytics/docs/reneal-usage-analytics-description-may-2026.pdf" target="_blank">More info</a>
-          </div>
-          <div class="mt-5 pt-4 border-t border-gray-100 flex">
-            <a href="/prod/analytics/streams/usage-necta.html" class="access-link text-blue-600">
-              Access Analytics
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-        </div>
-      </div></div>
+          <!-- 1. Schools Lab Lag (04/06/2026 - newest) -->
+          <tr class="data-row row-anim r1 align-top flex flex-col md:table-row p-5 md:p-0 gap-2 md:gap-0"
+              data-title="Schools Lab Lag"
+              data-description="How is each school's lab behaving in terms of utilization, tracking usage trends and exam outcomes over time?"
+              data-category="Lag Tracking"
+              data-date="2026-06-04">
+            <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
+              1
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
+              <svg class="md:hidden" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              04/06/2026
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-4 md:order-none md:text-center">
+              <a href="/prod/analytics/docs/Reneal-School-Lag-Info.pdf" target="_blank" class="more-link">More info</a>
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-1 md:order-none md:text-center">
+              <a href="/prod/analytics/streams/school-lag-tracking.html" class="access-link font-display text-base font-bold text-gray-900 hover:text-blue-600 md:justify-center">
+                Schools Lab Lag
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-3 md:order-none text-[13.5px] text-gray-600 leading-relaxed md:text-center">
+              How is each school's lab behaving in terms of utilization, tracking usage trends and exam outcomes over time?
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-4 md:order-none md:text-center">
+              <span class="category-pill cat-tracking">Lag Tracking</span>
+            </td>
+          </tr>
 
-      <!-- 2. Reneal Schools Lag Info -->
-      <div class="module-card card-anim d1">
-        <div class="h-[5px]" style="background:linear-gradient(90deg,hsl(59, 97%, 50%),#81fc51);"></div>
-        <div class="p-6 flex flex-col flex-1">
-          <div class="flex items-start justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background:#cfcfd1;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <circle cx="6"  cy="17" r="2" fill="#2563EB"/>
-                <circle cx="10" cy="11" r="2" fill="#2563EB" opacity=".65"/>
-                <circle cx="15" cy="14" r="2" fill="#06B6D4" opacity=".85"/>
-                <circle cx="18" cy="7"  r="2" fill="#2563EB" opacity=".45"/>
-                <path d="M5 19.5L19 5" stroke="#2563EB" stroke-width="1.2" stroke-dasharray="2 2" opacity=".35"/>
-              </svg>
-            </div>
-            <span class="text-[11px] font-semibold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">Correlation Analysis</span>
-          </div>
-          <h3 class="text-[17px] font-bold text-gray-900 mb-1.5">Schools Lab Lag</h3>
-          <p class="text-[13.5px] text-gray-700 leading-relaxed flex-1">
-            How much schools lab is beahaving interms of utilization in usage and exams?   
-          </p>
-          <div class="text-[13.5px] text-blue-600 mt-1">
-            <a href="/prod/analytics/docs/Reneal-School-Lag-Info.pdf" target="_blank">More info</a>
-          </div>
-          <div class="mt-5 pt-4 border-t border-gray-100 flex">
-            <a href="/prod/analytics/streams/school-lag-tracking.html" class="access-link text-blue-600">
-              Access Analytics
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-        </div>
-      </div></div>
+          <!-- 2. ICT NECTA vs Usage (02/05/2026) -->
+          <tr class="data-row row-anim r2 align-top flex flex-col md:table-row p-5 md:p-0 gap-2 md:gap-0"
+              data-title="ICT NECTA vs Computer Lab Usage"
+              data-description="Does the amount of time students spend using the Reneal computer lab system have a measurable relationship with how well they perform in the national ICT examination?"
+              data-category="Correlation Analysis"
+              data-date="2026-05-02">
+            <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
+              2
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
+              <svg class="md:hidden" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              02/05/2026
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-4 md:order-none md:text-center">
+              <a href="/prod/analytics/docs/reneal-usage-analytics-description-may-2026.pdf" target="_blank" class="more-link">More info</a>
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-1 md:order-none md:text-center">
+              <a href="/prod/analytics/streams/usage-necta.html" class="access-link font-display text-base font-bold text-gray-900 hover:text-blue-600 md:justify-center">
+                ICT NECTA vs Computer Lab Usage
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-3 md:order-none text-[13.5px] text-gray-600 leading-relaxed md:text-center">
+              Does the amount of time students spend using the Reneal computer lab system have a measurable relationship with how well they perform in the national ICT examination?
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-4 md:order-none md:text-center">
+              <span class="category-pill cat-correlation">Correlation Analysis</span>
+            </td>
+          </tr>
 
+        </tbody>
+      </table>
+      <p id="noResults" class="no-results text-center text-sm text-gray-500 py-8">No analytics match your search.</p>
+    </div>
 
+    <div class="mt-4 flex justify-center">
+      <button class="px-5 py-2.5 rounded-full bg-white border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+        See more
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
   </main>
 
   <!-- Footer -->
-  <footer class="border-t border-gray-100 bg-white">
+  <footer class="border-t border-gray-400 bg-white">
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center text-gray-600 justify-between text-xs text-gray-400">
       <span>Reneal Tanzania &mdash; 2026</span>
       <div class="flex items-center gap-1.5 text-gray-600">
         <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span>
-        <span>Systems Active</span>
+        <span>Stats Active</span>
       </div>
     </div>
   </footer>
 
 <script src="/js/bundle.js"></script>
+
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const categoryFilter = document.getElementById('categoryFilter');
+  const dateFilter = document.getElementById('dateFilter');
+  const rows = Array.from(document.querySelectorAll('#analyticsBody tr.data-row'));
+  const noResults = document.getElementById('noResults');
+
+  function applyFilters() {
+    const query = searchInput.value.trim().toLowerCase();
+    const category = categoryFilter.value;
+    const dateRange = dateFilter.value;
+    const now = new Date();
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+      const title = row.dataset.title.toLowerCase();
+      const description = row.dataset.description.toLowerCase();
+      const rowCategory = row.dataset.category;
+      const rowDate = new Date(row.dataset.date);
+
+      const matchesQuery = !query || title.includes(query) || description.includes(query);
+      const matchesCategory = category === 'All categories' || rowCategory === category;
+
+      let matchesDate = true;
+      if (dateRange === 'Last 7 days') {
+        matchesDate = (now - rowDate) <= 7 * 24 * 60 * 60 * 1000;
+      } else if (dateRange === 'Last 30 days') {
+        matchesDate = (now - rowDate) <= 30 * 24 * 60 * 60 * 1000;
+      } else if (dateRange === 'This year') {
+        matchesDate = rowDate.getFullYear() === now.getFullYear();
+      }
+
+      const visible = matchesQuery && matchesCategory && matchesDate;
+      row.style.display = visible ? '' : 'none';
+      if (visible) visibleCount++;
+    });
+
+    noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+
+  searchInput.addEventListener('input', applyFilters);
+  categoryFilter.addEventListener('change', applyFilters);
+  dateFilter.addEventListener('change', applyFilters);
+</script>
 
 </body>
 </html>
