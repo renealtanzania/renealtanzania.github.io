@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Lagged Schools Remediation Console — Reneal Tanzania</title>
+<link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+
+<!-- Fonts: Lato (primary/body), Eina-substitute (Outfit, used as display face), Nunito (UI labels/numerics) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&family=Nunito:wght@400;600;700;800;900&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        lato: ['Lato','sans-serif'],
+        eina: ['Outfit','sans-serif'],
+        nunito: ['Nunito','sans-serif'],
+      },
+      colors: {
+        rust:   { 50:'#FDF4F0', 100:'#FCE8DF', 200:'#F6C7B0', 300:'#EEA17C', 400:'#DD7A4E', 500:'#C2532A', 600:'#A0401E', 700:'#7C2D12', 800:'#5C2110', 900:'#3F170C' },
+        teal:   { 50:'#EFFCFA', 100:'#CCF5EE', 200:'#99EBDD', 300:'#5CD7C4', 400:'#2BB8A6', 500:'#0D9488', 600:'#0A776E', 700:'#085C56', 800:'#06433F', 900:'#042E2B' },
+        forest: { 50:'#F1F8F3', 100:'#DCEEE1', 200:'#B3DCBE', 300:'#7FC290', 400:'#4DA465', 500:'#2D7A45', 600:'#1A6B3C', 700:'#155530', 800:'#103F24', 900:'#0A2A18' },
+        sand:   { 25:'#FDFCFA', 50:'#FAF8F4', 100:'#F4F0E8', 200:'#E8E1D3', 300:'#D6CBB3' },
+        ink:    { 700:'#3A3530', 800:'#27231F', 900:'#1B1815' },
+      },
+      boxShadow: {
+        card: '0 1px 2px rgba(27,24,21,0.04), 0 4px 14px -4px rgba(27,24,21,0.08)',
+        pop:  '0 8px 28px -6px rgba(27,24,21,0.18)',
+      },
+    }
+  }
+}
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Lato', sans-serif; background: #b1b0ae; color: #27231F; }
+  .font-eina { font-family: 'Outfit', sans-serif; }
+  .font-nunito { font-family: 'Nunito', sans-serif; }
+  ::-webkit-scrollbar { height: 8px; width: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #D6CBB3; border-radius: 8px; }
+  ::-webkit-scrollbar-thumb:hover { background: #C2532A; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadein .25s ease; }
+  @keyframes fadein { from { opacity:0; transform: translateY(4px);} to {opacity:1; transform:none;} }
+
+  .nav-btn { position: relative; transition: all .15s ease; }
+  .nav-btn.active { color: #7C2D12; }
+  .nav-btn.active::after {
+    content:''; position:absolute; left:10%; right:10%; bottom:-1px; height:3px;
+    background: linear-gradient(90deg,#C2532A,#7C2D12); border-radius: 3px 3px 0 0;
+  }
+
+  table.data-tbl { border-collapse: separate; border-spacing: 0; }
+  table.data-tbl thead th {
+    position: sticky; top: 0; z-index: 5; background: #1B1815; color: #F4F0E8;
+    font-family: 'Nunito',sans-serif; font-weight: 700; letter-spacing: .02em;
+  }
+  table.data-tbl tbody tr { border-bottom: 1px solid #EFEAE0; }
+  table.data-tbl tbody tr:hover { background: #FCE8DF; cursor: pointer; }
+  table.data-tbl tbody tr.row-open { background: #FDF4F0; }
+
+  .tier-chip { font-family:'Nunito',sans-serif; font-weight:800; font-size:.68rem; letter-spacing:.03em; padding:.15rem .55rem; border-radius:999px; white-space:nowrap; }
+  .tier-P1 { background:#FCE2DC; color:#9A2A12; }
+  .tier-P2 { background:#FCEAD2; color:#8A5A0A; }
+  .tier-P3 { background:#FCF6D2; color:#7A6B0A; }
+  .tier-P4 { background:#E3F0E6; color:#1A6B3C; }
+  .tier-MODEL { background:#DDF3EF; color:#0A776E; }
+
+  .ul-chip { font-family:'Nunito',sans-serif; font-weight:700; font-size:.68rem; padding:.15rem .5rem; border-radius:6px; }
+  .ul-Good { background:#E3F0E6; color:#1A6B3C; }
+  .ul-Moderate { background:#FCEAD2; color:#8A5A0A; }
+  .ul-Poor { background:#FCE2DC; color:#9A2A12; }
+
+  .sort-arrow { opacity:.35; font-size:.65rem; }
+  th.sortable { cursor:pointer; user-select:none; }
+  th.sortable:hover { background:#27231F; }
+  th.sort-active .sort-arrow { opacity:1; color:#EEA17C; }
+
+  .expand-row { background:#FFFDF9; }
+  .spark { display:inline-block; vertical-align:middle; }
+
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .scrollx::-webkit-scrollbar { height: 6px; }
+
+  input[type=range].slider { -webkit-appearance:none; appearance:none; height:6px; border-radius:999px; background:#E8E1D3; outline:none; }
+  input[type=range].slider::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:20px; height:20px; border-radius:50%; background:#C2532A; border:3px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.3); cursor:pointer; margin-top:-7px; }
+  input[type=range].slider::-moz-range-thumb { width:20px; height:20px; border-radius:50%; background:#C2532A; border:3px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.3); cursor:pointer; }
+  input[type=range].slider::-webkit-slider-runnable-track { height:6px; border-radius:999px; }
+
+  .chip-btn { transition: all .15s ease; }
+  .chip-btn.on { background:#7C2D12; color:#fff; border-color:#7C2D12; }
+
+  .skeleton { background: linear-gradient(90deg,#F4F0E8 25%,#E8E1D3 37%,#F4F0E8 63%); background-size:400% 100%; animation:shimmer 1.4s ease infinite; }
+  @keyframes shimmer { 0%{background-position:100% 50%} 100%{background-position:0 50%} }
+
+  @media print {
+    .no-print { display:none !important; }
+    body { background:#fff; }
+  }
+</style>
+</head>
+<body class="font-lato text-ink-900 antialiased">
+
+<div id="app" class="min-h-screen flex flex-col">
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="sticky top-0 z-40 bg-ink-900 text-sand-50 no-print">
+    <div class="max-w-[1600px] mx-auto px-3 sm:px-5">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9">
+            <a href="/">
+              <img src="/public/imgs/ren.jpg" width="80" height="80" alt="">
+           </a>
+           </div>
+          <div class="min-w-0">
+            <h1 class="font-eina font-semibold text-[15px] sm:text-lg leading-tight truncate">Lagged Schools Remediation Console</h1>
+            <p class="font-nunito text-[11px] text-sand-200/70 hidden sm:block">Reneal Tanzania &middot; Diagnosis-to-Action for Non-NECTA Schools</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <div class="gap-1.5 font-nunito text-xs text-sand-200/80 bg-white/5 rounded-full px-3 py-1.5">
+            <a href="/prod/analytics">
+              <span>Back</span>
+            </a>
+          </div>
+          <div class="hidden md:flex items-center gap-1.5 font-nunito text-xs text-sand-200/80 bg-white/5 rounded-full px-3 py-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span>
+            <span id="hdr-meta">76 lagged of 115 schools</span>
+          </div>
+          <button onclick="window.print()" class="hidden sm:flex items-center gap-1.5 text-xs font-nunito font-bold bg-rust-600 hover:bg-rust-500 text-white px-3 py-2 rounded-lg transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
+            Print
+          </button>
+        </div>
+      </div>
+      <!-- Tab nav -->
+      <nav class="flex gap-1 overflow-x-auto scrollx -mb-px font-nunito text-[12.5px] sm:text-[13px] font-bold">
+        <button data-tab="t1" class="nav-btn active px-3 sm:px-4 py-3 whitespace-nowrap text-sand-200/80 hover:text-white">1&nbsp; Priority Queue</button>
+        <button data-tab="t2" class="nav-btn px-3 sm:px-4 py-3 whitespace-nowrap text-sand-200/80 hover:text-white">2&nbsp; Gap &amp; Neighbours</button>
+        <button data-tab="t3" class="nav-btn px-3 sm:px-4 py-3 whitespace-nowrap text-sand-200/80 hover:text-white">3&nbsp; Trajectory</button>
+        <button data-tab="t5" class="nav-btn px-3 sm:px-4 py-3 whitespace-nowrap text-sand-200/80 hover:text-white">4&nbsp; Target Simulator</button>
+        <button data-tab="t6" class="nav-btn px-3 sm:px-4 py-3 whitespace-nowrap text-sand-200/80 hover:text-white">5&nbsp; Case File</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- mobile scroll hint -->
+  <div class="md:hidden bg-rust-50 text-rust-700 text-[11px] font-nunito font-semibold text-center py-1.5 no-print">
+    &larr; Scroll tables sideways for more columns &rarr;
+  </div>
+
+  <main class="flex-1 max-w-[1600px] w-full mx-auto px-3 sm:px-5 py-4 sm:py-6">
+
+    <!-- ===================== TAB 1: PRIORITY QUEUE ===================== -->
+    <section id="t1" class="tab-panel active"></section>
+
+    <!-- ===================== TAB 2: GAP & NEIGHBOUR BENCHMARK ===================== -->
+    <section id="t2" class="tab-panel"></section>
+
+    <!-- ===================== TAB 3: TRAJECTORY & DECLINE WATCH ===================== -->
+    <section id="t3" class="tab-panel"></section>
+
+    <!-- ===================== TAB 4: TEAM & REGIONAL WORKLOAD ===================== -->
+
+    <!-- ===================== TAB 5: TARGET & SIMULATION ===================== -->
+    <section id="t5" class="tab-panel"></section>
+
+    <!-- ===================== TAB 6: SCHOOL CASE FILE ===================== -->
+    <section id="t6" class="tab-panel"></section>
+
+  </main>
+
+  <footer class="no-print border-t border-sand-200 bg-white py-4">
+    <div class="max-w-[1600px] mx-auto px-5 flex flex-col sm:flex-row gap-1 sm:gap-4 items-center justify-between text-[11px] font-nunito text-black">
+      <span>Reneal Tanzania &middot; Lagged Schools Remediation Console &middot; Data: Full Network Usage 2019&ndash;2025, Lagged Schools Expected Usage, GPS Coordinates</span>
+      <span>Thresholds: Good &ge;2,000h &middot; Moderate 500&ndash;2,000h &middot; Poor &lt;500h /yr</span>
+    </div>
+  </footer>
+</div>
+
+<script id="data-script">
+const DATA = 
+{"schools":[{"id":"einoti-secondary-school","name":"Einoti Secondary School","short":"Einoti","district":"Arusha DC","region":"Arusha","team":"Danny","lat":-3.371739,"lng":36.546412,"hy":{"2019":3353.8,"2020":5830.5,"2021":12960.4,"2022":14111.8,"2023":31767.8,"2024":28899.8,"2025":21162.3},"avg":27276.7,"necta":true,"ul":"Good","isLagged":false},{"id":"namanga-ss","name":"Namanga SS","short":"Namanga","district":"Longido DC","region":"Arusha","team":"Erick","lat":-2.563854,"lng":36.79376,"hy":{"2020":2170.2,"2021":8964.7,"2022":14647.5,"2023":14916.2,"2024":11072.1},"avg":12994.1,"necta":true,"ul":"Good","isLagged":false},{"id":"mlangarini-ss-a-level","name":"Mlangarini SS A-Level","short":"Mlangarini","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.447376,"lng":36.786076,"hy":{"2019":5846.1,"2020":3178.5,"2021":7099.1,"2022":5496.3,"2023":8500.3,"2024":13803.4},"avg":11151.9,"necta":true,"ul":"Good","isLagged":false},{"id":"tingatinga-ss","name":"Tingatinga SS","short":"Tingatinga","district":"Longido DC","region":"Arusha","team":"Erick","lat":-2.971489,"lng":36.936318,"hy":{"2020":0.2,"2021":71.1,"2022":1727.9,"2023":8329.6,"2024":8233.4},"avg":8281.5,"necta":true,"ul":"Good","isLagged":false},{"id":"longido-ss-o-level","name":"Longido SS O-Level","short":"LongidoA","district":"Longido DC","region":"Arusha","team":"Erick","lat":-2.734231,"lng":36.706106,"hy":{"2020":2259.5,"2021":8984.5,"2022":3740.1,"2023":5005.4,"2024":3762.6},"avg":4384.0,"necta":true,"ul":"Good","isLagged":false},{"id":"themi-secondary-school","name":"Themi Secondary School","short":"Themi","district":"Arusha CC","region":"Arusha","team":"Jastin","lat":-3.381443,"lng":36.693562,"hy":{"2022":873.6,"2023":3009.9,"2024":2551.8,"2025":2474.8},"avg":2678.8,"necta":true,"ul":"Good","isLagged":false},{"id":"kinana-ss","name":"Kinana SS","short":"Kinana","district":"Arusha CC","region":"Arusha","team":"Jastin","lat":-3.49501,"lng":36.683915,"hy":{"2021":1613.6,"2022":711.2,"2023":2900.3,"2024":2031.2,"2025":2210.2},"avg":2380.6,"necta":true,"ul":"Good","isLagged":false},{"id":"lengijave-secondary-school","name":"Lengijave Secondary School","short":"Lengijave","district":"Arusha DC","region":"Arusha","team":"Janeth","lat":-3.2326,"lng":36.6086,"hy":{"2022":1135.5,"2023":3570.9,"2024":2680.7,"2025":300.4},"avg":2184.0,"necta":true,"ul":"Good","isLagged":false},{"id":"mwandet-ss-a-level","name":"Mwandet SS A-Level","short":"Mwandet","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.266919,"lng":36.566752,"hy":{"2019":4535.5,"2020":2640.5,"2021":754.6,"2022":2284.3,"2023":4423.2,"2024":882.0,"2025":1027.0},"avg":2110.7,"necta":true,"ul":"Good","isLagged":false},{"id":"kiranyi-secondary-school","name":"Kiranyi Secondary School","short":"Kiranyi","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.344319,"lng":36.650516,"hy":{"2019":5124.8,"2020":2869.6,"2021":2421.4,"2022":870.3,"2023":646.1,"2024":1846.9,"2025":3554.9},"avg":2016.0,"necta":true,"ul":"Good","isLagged":false},{"id":"moshono-secondary-school","name":"Moshono Secondary School","short":"Moshono","district":"Arusha CC","region":"Arusha","team":"Janeth","lat":-3.389898,"lng":36.729918,"hy":{"2023":3266.2,"2024":1621.4,"2025":796.3},"avg":1894.6,"necta":true,"ul":"Moderate","isLagged":false},{"id":"naura-secondary-school","name":"Naura Secondary School","short":"Naura","district":"Arusha CC","region":"Arusha","team":"Jastin","lat":-3.444206,"lng":36.706339,"hy":{"2023":1276.7,"2024":1797.8,"2025":1962.8},"avg":1679.1,"necta":true,"ul":"Moderate","isLagged":false},{"id":"enyoito-secondary-school","name":"Enyoito Secondary School","short":"Enyoito","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.346801,"lng":36.7029,"hy":{"2019":3999.7,"2020":2937.0,"2021":3262.4,"2022":1725.2,"2023":2621.0,"2024":526.9},"avg":1574.0,"necta":true,"ul":"Moderate","isLagged":false},{"id":"kimaseki-ss","name":"Kimaseki SS","short":"Kimaseki","district":"Arusha CC","region":"Arusha","team":"Jastin","lat":-3.371211,"lng":36.717053,"hy":{"2021":1705.2,"2022":1069.6,"2023":2095.3,"2024":337.6,"2025":2193.3},"avg":1542.1,"necta":true,"ul":"Moderate","isLagged":false},{"id":"osiligi-secondary-school","name":"Osiligi Secondary School","short":"Osiligi","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.295763,"lng":36.620196,"hy":{"2019":2675.7,"2020":2056.3,"2021":1386.8,"2022":2011.2,"2023":1622.9,"2024":2446.0,"2025":439.7},"avg":1502.9,"necta":true,"ul":"Moderate","isLagged":false},{"id":"elerai-ss","name":"Elerai SS","short":"Elerai","district":"Arusha CC","region":"Arusha","team":"Jastin","lat":-3.363731,"lng":36.661471,"hy":{"2021":3160.9,"2022":4479.2,"2023":2421.8},"avg":1210.9,"necta":true,"ul":"Moderate","isLagged":false},{"id":"nkoasenga-secondary-school","name":"Nkoasenga Secondary School","short":"Nkoasenga","district":"Meru DC","region":"Arusha","team":"James","lat":-3.251557,"lng":36.913492,"hy":{"2023":1052.6,"2024":1174.5,"2025":214.9},"avg":814.0,"necta":true,"ul":"Moderate","isLagged":false},{"id":"ngiresi-secondary-school","name":"Ngiresi Secondary School","short":"Ngiresi","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.337094,"lng":36.734764,"hy":{"2020":1264.2,"2021":1590.4,"2022":1081.1,"2023":1074.6,"2024":487.4},"avg":781.0,"necta":true,"ul":"Moderate","isLagged":false},{"id":"suye-ss","name":"Suye SS","short":"Suye","district":"Arusha CC","region":"Arusha","team":"Jastin","lat":-3.384296,"lng":36.720096,"hy":{"2021":1606.0,"2022":1509.0,"2023":2109.5,"2024":14.2,"2025":35.8},"avg":719.9,"necta":true,"ul":"Moderate","isLagged":false},{"id":"engarenaibor-ss","name":"Engarenaibor SS","short":"Engarenaibor","district":"Longido DC","region":"Arusha","team":"Erick","lat":-2.533558,"lng":36.49281,"hy":{"2020":354.8,"2021":4082.6,"2022":2359.8,"2023":1957.9,"2024":115.4,"2025":0.3},"avg":691.2,"necta":true,"ul":"Moderate","isLagged":false},{"id":"mwandet-ss-a-level","name":"Mwandet SS A-Level","short":"MwandetA","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.266919,"lng":36.566752,"hy":{"2020":406.8,"2022":1646.5,"2023":559.1},"avg":279.5,"necta":true,"ul":"Poor","isLagged":false},{"id":"mateves-secondary-school","name":"Mateves Secondary School","short":"Mateves","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.377822,"lng":36.58005,"hy":{"2019":3547.0,"2020":2736.7,"2021":1958.8,"2022":312.1,"2023":459.1},"avg":229.6,"necta":true,"ul":"Poor","isLagged":false},{"id":"florian-secondary-school","name":"Florian Secondary School","short":"Florian","district":"Karatu DC","region":"Arusha","team":"Jastin","lat":-3.491407,"lng":35.655484,"hy":{"2023":15354.5,"2024":20300.5,"2025":16359.5},"avg":17338.2,"necta":false,"ul":"Good","isLagged":true,"exp":1388.2,"gap":-15950.0,"gapPct":-0.9,"nbQuick":[{"name":"Manyara Girls Secondary School","avg":942.0},{"name":"Komoto Secondary School","avg":2637.0},{"name":"Kwaraa Secondary School","avg":585.0}],"ng":[{"name":"Manyara Girls Secondary School","region":"Manyara","dist_km":69.7,"avg":941.9,"necta":true},{"name":"Komoto Secondary School","region":"Manyara","dist_km":79.4,"avg":2637.4,"necta":true},{"name":"Kwaraa Secondary School","region":"Manyara","dist_km":80.7,"avg":585.3,"necta":true}]},{"id":"mkonoo-secondary-school","name":"Mkonoo Secondary School","short":"Mkonoo","district":"Arusha CC","region":"Arusha","team":"Danny","lat":-3.474724,"lng":36.704234,"hy":{"2024":14362.8,"2025":6783.8},"avg":10573.3,"necta":false,"ul":"Good","isLagged":true,"exp":5070.5,"gap":-5502.8,"gapPct":-0.5,"nbQuick":[{"name":"Kinana SS","avg":2381.0},{"name":"Naura Secondary School","avg":1679.0},{"name":"Mlangarini SS A-Level","avg":11152.0}],"ng":[{"name":"Kinana SS","region":"Arusha","dist_km":3.2,"avg":2380.6,"necta":true},{"name":"Naura Secondary School","region":"Arusha","dist_km":3.4,"avg":1679.1,"necta":true},{"name":"Mlangarini SS A-Level","region":"Arusha","dist_km":9.6,"avg":11151.9,"necta":true}]},{"id":"losinoni-secondary-school","name":"Losinoni Secondary School","short":"Losinoni","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.12813,"lng":36.784459,"hy":{"2025":10179.8},"avg":10179.8,"necta":false,"ul":"Good","isLagged":true,"exp":1259.7,"gap":-8920.1,"gapPct":-0.9,"nbQuick":[{"name":"Nkoasenga Secondary School","avg":814.0},{"name":"Lengijave Secondary School","avg":2184.0},{"name":"Ngiresi Secondary School","avg":781.0}],"ng":[{"name":"Nkoasenga Secondary School","region":"Arusha","dist_km":19.8,"avg":814.0,"necta":true},{"name":"Lengijave Secondary School","region":"Arusha","dist_km":22.7,"avg":2184.0,"necta":true},{"name":"Ngiresi Secondary School","region":"Arusha","dist_km":23.9,"avg":781.0,"necta":true}]},{"id":"nkoarusambu-secondary-school","name":"Nkoarusambu Secondary School","short":"Nkoarusambu","district":"Meru DC","region":"Arusha","team":"James","lat":-3.33379,"lng":36.77154,"hy":{"2022":721.9,"2023":5371.8,"2024":6024.3,"2025":6104.8},"avg":5833.6,"necta":false,"ul":"Good","isLagged":true,"exp":1405.9,"gap":-4427.7,"gapPct":-0.8,"nbQuick":[{"name":"Ngiresi Secondary School","avg":781.0},{"name":"Kimaseki SS","avg":1542.0},{"name":"Moshono Secondary School","avg":1895.0}],"ng":[{"name":"Ngiresi Secondary School","region":"Arusha","dist_km":4.1,"avg":781.0,"necta":true},{"name":"Kimaseki SS","region":"Arusha","dist_km":7.3,"avg":1542.1,"necta":true},{"name":"Moshono Secondary School","region":"Arusha","dist_km":7.8,"avg":1894.6,"necta":true}]},{"id":"irkisongo-secondary-school","name":"Irkisongo Secondary School","short":"Irkisongo","district":"Monduli DC","region":"Arusha","team":"Janeth","lat":-3.29828,"lng":36.448268,"hy":{"2022":4761.7,"2023":7918.7,"2024":5918.6,"2025":1865.0},"avg":5234.1,"necta":false,"ul":"Good","isLagged":true,"exp":9889.0,"gap":4654.9,"gapPct":0.9,"nbQuick":[{"name":"Mwandet SS A-Level","avg":2111.0},{"name":"Mwandet SS A-Level","avg":280.0},{"name":"Einoti Secondary School","avg":27277.0}],"ng":[{"name":"Mwandet SS A-Level","region":"Arusha","dist_km":13.6,"avg":2110.7,"necta":true},{"name":"Mwandet SS A-Level","region":"Arusha","dist_km":13.6,"avg":279.5,"necta":true},{"name":"Einoti Secondary School","region":"Arusha","dist_km":13.6,"avg":27276.7,"necta":true}],"tei":{"score":20.0,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Critical","projectedHrsClosed":167.0,"newProjectedAvg":5401.1,"residualGap":4488.0,"levers":[{"code":"L1","score":1.0,"hrs":54.0},{"code":"L2","score":1.0,"hrs":35.0},{"code":"L3","score":1.0,"hrs":18.0},{"code":"L4","score":1.0,"hrs":31.0},{"code":"L5","score":1.0,"hrs":3.0},{"code":"L6","score":1.0,"hrs":8.0},{"code":"L7","score":1.0,"hrs":3.0},{"code":"L8","score":1.0,"hrs":2.0},{"code":"L9","score":1.0,"hrs":12.0},{"code":"L10","score":1.0,"hrs":1.0}]}},{"id":"engutoto-secondary-school","name":"Engutoto Secondary School","short":"Engutoto","district":"Monduli DC","region":"Arusha","team":"Danny","lat":-3.311361,"lng":36.449928,"hy":{"2022":1723.5,"2023":4807.6,"2024":3326.9,"2025":3432.9},"avg":3855.8,"necta":false,"ul":"Good","isLagged":true,"exp":9889.0,"gap":6033.2,"gapPct":1.6,"nbQuick":[{"name":"Einoti Secondary School","avg":27277.0},{"name":"Mwandet SS A-Level","avg":2111.0},{"name":"Mwandet SS A-Level","avg":280.0}],"ng":[{"name":"Einoti Secondary School","region":"Arusha","dist_km":12.6,"avg":27276.7,"necta":true},{"name":"Mwandet SS A-Level","region":"Arusha","dist_km":13.9,"avg":2110.7,"necta":true},{"name":"Mwandet SS A-Level","region":"Arusha","dist_km":13.9,"avg":279.5,"necta":true}],"tei":{"score":25.9,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Critical","projectedHrsClosed":189.0,"newProjectedAvg":4044.8,"residualGap":5844.0,"levers":[{"code":"L1","score":1.0,"hrs":61.0},{"code":"L2","score":1.0,"hrs":40.0},{"code":"L3","score":1.0,"hrs":21.0},{"code":"L4","score":1.0,"hrs":35.0},{"code":"L5","score":1.0,"hrs":3.0},{"code":"L6","score":1.0,"hrs":9.0},{"code":"L7","score":1.0,"hrs":3.0},{"code":"L8","score":1.0,"hrs":2.0},{"code":"L9","score":1.0,"hrs":14.0},{"code":"L10","score":1.0,"hrs":1.0}]}},{"id":"kikwe-secondary-school","name":"Kikwe Secondary School","short":"Kikwe","district":"Meru DC","region":"Arusha","team":"James","lat":-3.426586,"lng":36.830218,"hy":{"2022":433.6,"2023":2332.5,"2024":3454.9,"2025":2520.7},"avg":2769.3,"necta":false,"ul":"Good","isLagged":true,"exp":4588.8,"gap":1819.5,"gapPct":0.7,"nbQuick":[{"name":"Mlangarini SS A-Level","avg":11152.0},{"name":"Moshono Secondary School","avg":1895.0},{"name":"Suye SS","avg":720.0}],"ng":[{"name":"Mlangarini SS A-Level","region":"Arusha","dist_km":5.4,"avg":11151.9,"necta":true},{"name":"Moshono Secondary School","region":"Arusha","dist_km":11.9,"avg":1894.6,"necta":true},{"name":"Suye SS","region":"Arusha","dist_km":13.1,"avg":719.9,"necta":true}],"tei":{"score":12.9,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"High","projectedHrsClosed":80.0,"newProjectedAvg":2849.3,"residualGap":1740.0,"levers":[{"code":"L1","score":1.0,"hrs":26.0},{"code":"L2","score":1.0,"hrs":17.0},{"code":"L3","score":1.0,"hrs":9.0},{"code":"L4","score":1.0,"hrs":15.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":4.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":6.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"muungano-secondary-school","name":"Muungano Secondary School","short":"Muungano","district":"Meru DC","region":"Arusha","team":"James","lat":-3.36627,"lng":36.854539,"hy":{"2021":1098.6,"2022":1963.5,"2023":1806.4,"2024":2052.0,"2025":2693.7},"avg":2184.1,"necta":false,"ul":"Good","isLagged":true,"exp":4609.2,"gap":2425.1,"gapPct":1.1,"nbQuick":[{"name":"Mlangarini SS A-Level","avg":11152.0},{"name":"Ngiresi Secondary School","avg":781.0},{"name":"Moshono Secondary School","avg":1895.0}],"ng":[{"name":"Mlangarini SS A-Level","region":"Arusha","dist_km":11.8,"avg":11151.9,"necta":true},{"name":"Ngiresi Secondary School","region":"Arusha","dist_km":13.7,"avg":781.0,"necta":true},{"name":"Moshono Secondary School","region":"Arusha","dist_km":14.1,"avg":1894.6,"necta":true}],"tei":{"score":17.1,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"High","projectedHrsClosed":93.0,"newProjectedAvg":2277.1,"residualGap":2332.0,"levers":[{"code":"L1","score":1.0,"hrs":30.0},{"code":"L2","score":1.0,"hrs":19.0},{"code":"L3","score":1.0,"hrs":10.0},{"code":"L4","score":1.0,"hrs":17.0},{"code":"L5","score":1.0,"hrs":2.0},{"code":"L6","score":1.0,"hrs":4.0},{"code":"L7","score":1.0,"hrs":2.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":7.0},{"code":"L10","score":1.0,"hrs":1.0}]}},{"id":"moita-secondary-school","name":"Moita Secondary School","short":"Moita","district":"Monduli DC","region":"Arusha","team":"Janeth","lat":-3.560403,"lng":36.603365,"hy":{"2023":1230.4,"2024":2807.9,"2025":1983.8},"avg":2007.4,"necta":false,"ul":"Good","isLagged":true,"exp":1429.8,"gap":-577.6,"gapPct":-0.3,"nbQuick":[{"name":"Kinana SS","avg":2381.0},{"name":"Naura Secondary School","avg":1679.0},{"name":"Mateves Secondary School","avg":230.0}],"ng":[{"name":"Kinana SS","region":"Arusha","dist_km":11.5,"avg":2380.6,"necta":true},{"name":"Naura Secondary School","region":"Arusha","dist_km":17.2,"avg":1679.1,"necta":true},{"name":"Mateves Secondary School","region":"Arusha","dist_km":20.5,"avg":229.6,"necta":true}]},{"id":"sambasha-secondary-school","name":"Sambasha Secondary School","short":"Sambasha","district":"Arusha DC","region":"Arusha","team":"Janeth","lat":-3.292778,"lng":36.672707,"hy":{"2020":1113.1,"2021":874.6,"2022":133.4,"2023":3431.0,"2024":807.1,"2025":1677.8},"avg":1971.9,"necta":false,"ul":"Moderate","isLagged":true,"exp":1697.6,"gap":-274.3,"gapPct":-0.1,"nbQuick":[{"name":"Osiligi Secondary School","avg":1503.0},{"name":"Kiranyi Secondary School","avg":2016.0},{"name":"Enyoito Secondary School","avg":1574.0}],"ng":[{"name":"Osiligi Secondary School","region":"Arusha","dist_km":5.8,"avg":1502.9,"necta":true},{"name":"Kiranyi Secondary School","region":"Arusha","dist_km":6.2,"avg":2016.0,"necta":true},{"name":"Enyoito Secondary School","region":"Arusha","dist_km":6.9,"avg":1574.0,"necta":true}]},{"id":"oljoro-secondary-school","name":"Oljoro Secondary School","short":"Oljoro","district":"Arusha DC","region":"Arusha","team":"Janeth","lat":-3.471507,"lng":36.624111,"hy":{"2022":717.9,"2023":1270.4,"2024":1089.5,"2025":3186.9},"avg":1848.9,"necta":false,"ul":"Moderate","isLagged":true,"exp":1429.8,"gap":-419.1,"gapPct":-0.2,"nbQuick":[{"name":"Kinana SS","avg":2381.0},{"name":"Naura Secondary School","avg":1679.0},{"name":"Mateves Secondary School","avg":230.0}],"ng":[{"name":"Kinana SS","region":"Arusha","dist_km":7.1,"avg":2380.6,"necta":true},{"name":"Naura Secondary School","region":"Arusha","dist_km":9.6,"avg":1679.1,"necta":true},{"name":"Mateves Secondary School","region":"Arusha","dist_km":11.5,"avg":229.6,"necta":true}]},{"id":"enduimet-ss","name":"Enduimet SS","short":"Enduimet","district":"Longido DC","region":"Arusha","team":"Erick","lat":-2.859053,"lng":37.204694,"hy":{"2020":0.5,"2021":17.1,"2022":4.0,"2023":3414.3,"2024":147.7},"avg":1781.0,"necta":false,"ul":"Moderate","isLagged":true,"exp":4197.2,"gap":2416.2,"gapPct":1.4,"nbQuick":[{"name":"Tingatinga SS","avg":8282.0},{"name":"Nkoasenga Secondary School","avg":814.0},{"name":"Kiboriloni Secondary School","avg":3496.0}],"ng":[{"name":"Tingatinga SS","region":"Arusha","dist_km":32.3,"avg":8281.5,"necta":true},{"name":"Nkoasenga Secondary School","region":"Arusha","dist_km":54.3,"avg":814.0,"necta":true},{"name":"Kiboriloni Secondary School","region":"Kilimanjaro","dist_km":56.0,"avg":3496.0,"necta":true}],"tei":{"score":26.9,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"High","projectedHrsClosed":132.0,"newProjectedAvg":1913.0,"residualGap":2284.0,"levers":[{"code":"L1","score":1.0,"hrs":43.0},{"code":"L2","score":1.0,"hrs":28.0},{"code":"L3","score":1.0,"hrs":15.0},{"code":"L4","score":1.0,"hrs":24.0},{"code":"L5","score":1.0,"hrs":2.0},{"code":"L6","score":1.0,"hrs":6.0},{"code":"L7","score":1.0,"hrs":2.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":10.0},{"code":"L10","score":1.0,"hrs":1.0}]}},{"id":"irkisale-secondary-school","name":"Irkisale Secondary School","short":"Irkisale","district":"Monduli DC","region":"Arusha","team":"Janeth","lat":-3.764527,"lng":36.419141,"hy":{"2023":2446.9,"2024":2061.6,"2025":677.4},"avg":1728.7,"necta":false,"ul":"Moderate","isLagged":true,"exp":9962.3,"gap":8233.6,"gapPct":4.8,"nbQuick":[{"name":"Kinana SS","avg":2381.0},{"name":"Einoti Secondary School","avg":27277.0},{"name":"Mateves Secondary School","avg":230.0}],"ng":[{"name":"Kinana SS","region":"Arusha","dist_km":42.0,"avg":2380.6,"necta":true},{"name":"Einoti Secondary School","region":"Arusha","dist_km":45.9,"avg":27276.7,"necta":true},{"name":"Mateves Secondary School","region":"Arusha","dist_km":46.6,"avg":229.6,"necta":true}],"tei":{"score":59.5,"tier":"P2 \u2013 High","timeline":"6\u201312 months","gapBand":"Severe","projectedHrsClosed":374.0,"newProjectedAvg":2102.7,"residualGap":7860.0,"levers":[{"code":"L1","score":1.5,"hrs":121.0},{"code":"L2","score":1.0,"hrs":79.0},{"code":"L3","score":1.0,"hrs":41.0},{"code":"L4","score":1.0,"hrs":69.0},{"code":"L5","score":1.0,"hrs":6.0},{"code":"L6","score":1.0,"hrs":17.0},{"code":"L7","score":1.0,"hrs":7.0},{"code":"L8","score":1.0,"hrs":4.0},{"code":"L9","score":1.0,"hrs":28.0},{"code":"L10","score":1.0,"hrs":2.0}]}},{"id":"olturment-secondary-school","name":"Olturment Secondary School","short":"Olturmet","district":"Arusha DC","region":"Arusha","team":"Janeth","lat":-3.313913,"lng":36.608297,"hy":{"2019":1178.9,"2020":2142.9,"2021":660.0,"2022":68.4,"2023":3105.2,"2024":508.9,"2025":452.9},"avg":1355.6,"necta":false,"ul":"Moderate","isLagged":true,"exp":1876.5,"gap":520.9,"gapPct":0.4,"nbQuick":[{"name":"Osiligi Secondary School","avg":1503.0},{"name":"Kiranyi Secondary School","avg":2016.0},{"name":"Mwandet SS A-Level","avg":2111.0}],"ng":[{"name":"Osiligi Secondary School","region":"Arusha","dist_km":2.4,"avg":1502.9,"necta":true},{"name":"Kiranyi Secondary School","region":"Arusha","dist_km":5.8,"avg":2016.0,"necta":true},{"name":"Mwandet SS A-Level","region":"Arusha","dist_km":7.0,"avg":2110.7,"necta":true}],"tei":{"score":8.0,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Medium","projectedHrsClosed":38.0,"newProjectedAvg":1393.6,"residualGap":483.0,"levers":[{"code":"L1","score":1.0,"hrs":12.0},{"code":"L2","score":1.0,"hrs":8.0},{"code":"L3","score":1.0,"hrs":4.0},{"code":"L4","score":1.0,"hrs":7.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":2.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":0.0},{"code":"L9","score":1.0,"hrs":3.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"oloasiti-secondary-school","name":"Oloasiti Secondary School","short":"Oloasiti","district":"Arusha CC","region":"Arusha","team":"Janeth","lat":-3.40074,"lng":36.643084,"hy":{"2023":1474.4,"2024":26.1,"2025":2433.4},"avg":1311.3,"necta":false,"ul":"Moderate","isLagged":true,"exp":1968.6,"gap":657.3,"gapPct":0.5,"nbQuick":[{"name":"Elerai SS","avg":1211.0},{"name":"Themi Secondary School","avg":2679.0},{"name":"Kiranyi Secondary School","avg":2016.0}],"ng":[{"name":"Elerai SS","region":"Arusha","dist_km":4.6,"avg":1210.9,"necta":true},{"name":"Themi Secondary School","region":"Arusha","dist_km":6.0,"avg":2678.8,"necta":true},{"name":"Kiranyi Secondary School","region":"Arusha","dist_km":6.3,"avg":2016.0,"necta":true}],"tei":{"score":9.6,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Medium","projectedHrsClosed":43.0,"newProjectedAvg":1354.3,"residualGap":614.0,"levers":[{"code":"L1","score":1.0,"hrs":14.0},{"code":"L2","score":1.0,"hrs":9.0},{"code":"L3","score":1.0,"hrs":5.0},{"code":"L4","score":1.0,"hrs":8.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":2.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":0.0},{"code":"L9","score":1.0,"hrs":3.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"nkoanrua-secondary-school","name":"Nkoanrua Secondary School","short":"Nkoanrua","district":"Meru DC","region":"Arusha","team":"James","lat":-3.355738,"lng":36.760734,"hy":{"2022":1555.5,"2023":1653.3,"2024":976.6,"2025":1106.5},"avg":1245.4,"necta":false,"ul":"Moderate","isLagged":true,"exp":1405.9,"gap":160.5,"gapPct":0.1,"nbQuick":[{"name":"Ngiresi Secondary School","avg":781.0},{"name":"Moshono Secondary School","avg":1895.0},{"name":"Kimaseki SS","avg":1542.0}],"ng":[{"name":"Ngiresi Secondary School","region":"Arusha","dist_km":3.5,"avg":781.0,"necta":true},{"name":"Moshono Secondary School","region":"Arusha","dist_km":5.1,"avg":1894.6,"necta":true},{"name":"Kimaseki SS","region":"Arusha","dist_km":5.2,"avg":1542.1,"necta":true}],"tei":{"score":5.0,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Low","projectedHrsClosed":9.0,"newProjectedAvg":1254.4,"residualGap":152.0,"levers":[{"code":"L1","score":1.0,"hrs":3.0},{"code":"L2","score":1.0,"hrs":2.0},{"code":"L3","score":1.0,"hrs":1.0},{"code":"L4","score":1.0,"hrs":2.0},{"code":"L5","score":1.0,"hrs":0.0},{"code":"L6","score":1.0,"hrs":0.0},{"code":"L7","score":1.0,"hrs":0.0},{"code":"L8","score":1.0,"hrs":0.0},{"code":"L9","score":1.0,"hrs":1.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"bangata-secondary-school","name":"Bangata Secondary School","short":"Bangata","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.330839,"lng":36.748572,"hy":{"2019":1937.6,"2020":1786.9,"2021":1691.4,"2022":710.8,"2023":1765.9,"2024":1307.5,"2025":50.5},"avg":1041.3,"necta":false,"ul":"Moderate","isLagged":true,"exp":1299.0,"gap":257.7,"gapPct":0.2,"nbQuick":[{"name":"Ngiresi Secondary School","avg":781.0},{"name":"Enyoito Secondary School","avg":1574.0},{"name":"Kimaseki SS","avg":1542.0}],"ng":[{"name":"Ngiresi Secondary School","region":"Arusha","dist_km":1.7,"avg":781.0,"necta":true},{"name":"Enyoito Secondary School","region":"Arusha","dist_km":5.4,"avg":1574.0,"necta":true},{"name":"Kimaseki SS","region":"Arusha","dist_km":5.7,"avg":1542.1,"necta":true}],"tei":{"score":5.0,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Low","projectedHrsClosed":12.0,"newProjectedAvg":1053.3,"residualGap":246.0,"levers":[{"code":"L1","score":1.0,"hrs":4.0},{"code":"L2","score":1.0,"hrs":3.0},{"code":"L3","score":1.0,"hrs":1.0},{"code":"L4","score":1.0,"hrs":2.0},{"code":"L5","score":1.0,"hrs":0.0},{"code":"L6","score":1.0,"hrs":1.0},{"code":"L7","score":1.0,"hrs":0.0},{"code":"L8","score":1.0,"hrs":0.0},{"code":"L9","score":1.0,"hrs":1.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"mringa-secondary-school","name":"Mringa Secondary School","short":"Mringa","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.32316,"lng":36.62937,"hy":{"2019":3299.3,"2020":2960.8,"2021":3287.4,"2022":802.6,"2023":2809.5,"2024":144.2,"2025":10.5},"avg":988.1,"necta":false,"ul":"Moderate","isLagged":true,"exp":1576.6,"gap":588.5,"gapPct":0.6,"nbQuick":[{"name":"Osiligi Secondary School","avg":1503.0},{"name":"Kiranyi Secondary School","avg":2016.0},{"name":"Elerai SS","avg":1211.0}],"ng":[{"name":"Osiligi Secondary School","region":"Arusha","dist_km":3.2,"avg":1502.9,"necta":true},{"name":"Kiranyi Secondary School","region":"Arusha","dist_km":3.3,"avg":2016.0,"necta":true},{"name":"Elerai SS","region":"Arusha","dist_km":5.8,"avg":1210.9,"necta":true}],"tei":{"score":10.8,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Medium","projectedHrsClosed":39.0,"newProjectedAvg":1027.1,"residualGap":550.0,"levers":[{"code":"L1","score":1.0,"hrs":13.0},{"code":"L2","score":1.0,"hrs":8.0},{"code":"L3","score":1.0,"hrs":4.0},{"code":"L4","score":1.0,"hrs":7.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":2.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":0.0},{"code":"L9","score":1.0,"hrs":3.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"ilkiding-a-secondary-school","name":"Ilkiding'a Secondary School","short":"Ilkidinga","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.322391,"lng":36.683232,"hy":{"2019":701.5,"2021":251.7,"2022":55.7,"2023":1412.6,"2024":272.3},"avg":842.4,"necta":false,"ul":"Moderate","isLagged":true,"exp":1600.3,"gap":757.9,"gapPct":0.9,"nbQuick":[{"name":"Enyoito Secondary School","avg":1574.0},{"name":"Kiranyi Secondary School","avg":2016.0},{"name":"Elerai SS","avg":1211.0}],"ng":[{"name":"Enyoito Secondary School","region":"Arusha","dist_km":3.5,"avg":1574.0,"necta":true},{"name":"Kiranyi Secondary School","region":"Arusha","dist_km":4.4,"avg":2016.0,"necta":true},{"name":"Elerai SS","region":"Arusha","dist_km":5.2,"avg":1210.9,"necta":true}],"tei":{"score":13.6,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Medium","projectedHrsClosed":45.0,"newProjectedAvg":887.4,"residualGap":713.0,"levers":[{"code":"L1","score":1.0,"hrs":15.0},{"code":"L2","score":1.0,"hrs":10.0},{"code":"L3","score":1.0,"hrs":5.0},{"code":"L4","score":1.0,"hrs":8.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":2.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":0.0},{"code":"L9","score":1.0,"hrs":3.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"oldadai-secondary-school","name":"Oldadai Secondary School","short":"Oldadai","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.36347,"lng":36.74031,"hy":{"2019":891.5,"2020":347.1,"2021":846.3,"2022":244.0,"2023":965.9,"2024":362.6,"2025":513.0},"avg":613.8,"necta":false,"ul":"Moderate","isLagged":true,"exp":1405.9,"gap":792.1,"gapPct":1.3,"nbQuick":[{"name":"Kimaseki SS","avg":1542.0},{"name":"Ngiresi Secondary School","avg":781.0},{"name":"Moshono Secondary School","avg":1895.0}],"ng":[{"name":"Kimaseki SS","region":"Arusha","dist_km":2.7,"avg":1542.1,"necta":true},{"name":"Ngiresi Secondary School","region":"Arusha","dist_km":3.0,"avg":781.0,"necta":true},{"name":"Moshono Secondary School","region":"Arusha","dist_km":3.2,"avg":1894.6,"necta":true}],"tei":{"score":16.2,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Medium","projectedHrsClosed":46.0,"newProjectedAvg":659.8,"residualGap":746.0,"levers":[{"code":"L1","score":1.0,"hrs":15.0},{"code":"L2","score":1.0,"hrs":10.0},{"code":"L3","score":1.0,"hrs":5.0},{"code":"L4","score":1.0,"hrs":9.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":2.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":0.0},{"code":"L9","score":1.0,"hrs":3.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"mukulat-secondary-school","name":"Mukulat Secondary School","short":"Mukulat","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.264408,"lng":36.617579,"hy":{"2019":2978.1,"2020":2847.1,"2021":2139.5,"2022":1014.9,"2023":1314.6,"2024":447.1,"2025":33.3},"avg":598.3,"necta":false,"ul":"Moderate","isLagged":true,"exp":1932.5,"gap":1334.2,"gapPct":2.2,"nbQuick":[{"name":"Osiligi Secondary School","avg":1503.0},{"name":"Lengijave Secondary School","avg":2184.0},{"name":"Mwandet SS A-Level","avg":2111.0}],"ng":[{"name":"Osiligi Secondary School","region":"Arusha","dist_km":3.5,"avg":1502.9,"necta":true},{"name":"Lengijave Secondary School","region":"Arusha","dist_km":3.7,"avg":2184.0,"necta":true},{"name":"Mwandet SS A-Level","region":"Arusha","dist_km":5.7,"avg":2110.7,"necta":true}],"tei":{"score":19.9,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Medium","projectedHrsClosed":61.0,"newProjectedAvg":659.3,"residualGap":1273.0,"levers":[{"code":"L1","score":1.0,"hrs":19.0},{"code":"L2","score":1.0,"hrs":13.0},{"code":"L3","score":1.0,"hrs":7.0},{"code":"L4","score":1.0,"hrs":11.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":3.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":5.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"sing-isi-secondary-school","name":"Sing'isi Secondary School","short":"Singisi","district":"Meru DC","region":"Arusha","team":"James","lat":-3.36489,"lng":36.80148,"hy":{"2021":4.0,"2022":1320.0,"2023":1097.3,"2024":266.1,"2025":304.7},"avg":556.0,"necta":false,"ul":"Moderate","isLagged":true,"exp":1131.8,"gap":575.8,"gapPct":1.0,"nbQuick":[{"name":"Ngiresi Secondary School","avg":781.0},{"name":"Moshono Secondary School","avg":1895.0},{"name":"Suye SS","avg":720.0}],"ng":[{"name":"Ngiresi Secondary School","region":"Arusha","dist_km":8.0,"avg":781.0,"necta":true},{"name":"Moshono Secondary School","region":"Arusha","dist_km":8.4,"avg":1894.6,"necta":true},{"name":"Suye SS","region":"Arusha","dist_km":9.3,"avg":719.9,"necta":true}],"tei":{"score":14.7,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Medium","projectedHrsClosed":39.0,"newProjectedAvg":595.0,"residualGap":537.0,"levers":[{"code":"L1","score":1.0,"hrs":13.0},{"code":"L2","score":1.0,"hrs":8.0},{"code":"L3","score":1.0,"hrs":4.0},{"code":"L4","score":1.0,"hrs":7.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":2.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":0.0},{"code":"L9","score":1.0,"hrs":3.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"olmotoni-secondary-school","name":"Olmotoni Secondary School","short":"Olmotonyi","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.301652,"lng":36.651083,"hy":{"2019":311.0,"2020":775.5,"2021":845.9,"2022":270.6,"2023":923.5,"2024":255.4,"2025":43.7},"avg":407.6,"necta":false,"ul":"Poor","isLagged":true,"exp":1576.6,"gap":1169.0,"gapPct":2.9,"nbQuick":[{"name":"Osiligi Secondary School","avg":1503.0},{"name":"Kiranyi Secondary School","avg":2016.0},{"name":"Elerai SS","avg":1211.0}],"ng":[{"name":"Osiligi Secondary School","region":"Arusha","dist_km":3.5,"avg":1502.9,"necta":true},{"name":"Kiranyi Secondary School","region":"Arusha","dist_km":4.7,"avg":2016.0,"necta":true},{"name":"Elerai SS","region":"Arusha","dist_km":7.0,"avg":1210.9,"necta":true}],"tei":{"score":29.7,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Medium","projectedHrsClosed":78.0,"newProjectedAvg":485.6,"residualGap":1091.0,"levers":[{"code":"L1","score":1.0,"hrs":25.0},{"code":"L2","score":1.0,"hrs":17.0},{"code":"L3","score":1.0,"hrs":9.0},{"code":"L4","score":1.0,"hrs":14.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":4.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":6.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"kimnyaki-secondary-school","name":"Kimnyaki Secondary School","short":"Kimnyaki","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.309715,"lng":36.658016,"hy":{"2019":2555.9,"2020":3447.2,"2021":1291.2,"2022":335.9,"2023":260.5,"2024":446.7,"2025":423.3},"avg":376.8,"necta":false,"ul":"Poor","isLagged":true,"exp":1576.6,"gap":1199.8,"gapPct":3.2,"nbQuick":[{"name":"Kiranyi Secondary School","avg":2016.0},{"name":"Osiligi Secondary School","avg":1503.0},{"name":"Elerai SS","avg":1211.0}],"ng":[{"name":"Kiranyi Secondary School","region":"Arusha","dist_km":3.9,"avg":2016.0,"necta":true},{"name":"Osiligi Secondary School","region":"Arusha","dist_km":4.5,"avg":1502.9,"necta":true},{"name":"Elerai SS","region":"Arusha","dist_km":6.0,"avg":1210.9,"necta":true}],"tei":{"score":30.4,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Medium","projectedHrsClosed":80.0,"newProjectedAvg":456.8,"residualGap":1120.0,"levers":[{"code":"L1","score":1.0,"hrs":26.0},{"code":"L2","score":1.0,"hrs":17.0},{"code":"L3","score":1.0,"hrs":9.0},{"code":"L4","score":1.0,"hrs":15.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":4.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":6.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"poli-secondary-school","name":"Poli Secondary School","short":"Poli","district":"Meru DC","region":"Arusha","team":"James","lat":-3.362325,"lng":36.802933,"hy":{"2022":886.8,"2023":857.0,"2024":0.5,"2025":117.3},"avg":325.0,"necta":false,"ul":"Poor","isLagged":true,"exp":1131.8,"gap":806.8,"gapPct":2.5,"nbQuick":[{"name":"Ngiresi Secondary School","avg":781.0},{"name":"Moshono Secondary School","avg":1895.0},{"name":"Suye SS","avg":720.0}],"ng":[{"name":"Ngiresi Secondary School","region":"Arusha","dist_km":8.1,"avg":781.0,"necta":true},{"name":"Moshono Secondary School","region":"Arusha","dist_km":8.7,"avg":1894.6,"necta":true},{"name":"Suye SS","region":"Arusha","dist_km":9.5,"avg":719.9,"necta":true}],"tei":{"score":28.5,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Medium","projectedHrsClosed":65.0,"newProjectedAvg":390.0,"residualGap":742.0,"levers":[{"code":"L1","score":1.0,"hrs":21.0},{"code":"L2","score":1.0,"hrs":14.0},{"code":"L3","score":1.0,"hrs":7.0},{"code":"L4","score":1.0,"hrs":12.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":3.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":5.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"sokon-ii-secondary-school","name":"Sokon II Secondary School","short":"SokonII","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.354396,"lng":36.723399,"hy":{"2019":477.0,"2020":1099.8,"2021":771.2,"2022":14.5,"2023":560.5,"2024":181.8,"2025":9.8},"avg":250.7,"necta":false,"ul":"Poor","isLagged":true,"exp":1299.0,"gap":1048.3,"gapPct":4.2,"nbQuick":[{"name":"Kimaseki SS","avg":1542.0},{"name":"Ngiresi Secondary School","avg":781.0},{"name":"Enyoito Secondary School","avg":1574.0}],"ng":[{"name":"Kimaseki SS","region":"Arusha","dist_km":2.0,"avg":1542.1,"necta":true},{"name":"Ngiresi Secondary School","region":"Arusha","dist_km":2.3,"avg":781.0,"necta":true},{"name":"Enyoito Secondary School","region":"Arusha","dist_km":2.4,"avg":1574.0,"necta":true}],"tei":{"score":32.3,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Medium","projectedHrsClosed":74.0,"newProjectedAvg":324.7,"residualGap":974.0,"levers":[{"code":"L1","score":1.0,"hrs":24.0},{"code":"L2","score":1.0,"hrs":16.0},{"code":"L3","score":1.0,"hrs":8.0},{"code":"L4","score":1.0,"hrs":14.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":3.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":6.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"oldonyowas-secondary-school","name":"Oldonyowas Secondary School","short":"Oldonyowas","district":"Arusha DC","region":"Arusha","team":"Janeth","lat":-3.156514,"lng":36.69348,"hy":{"2022":1322.1,"2024":426.4,"2025":248.4},"avg":224.9,"necta":false,"ul":"Poor","isLagged":true,"exp":1932.5,"gap":1707.6,"gapPct":7.6,"nbQuick":[{"name":"Lengijave Secondary School","avg":2184.0},{"name":"Osiligi Secondary School","avg":1503.0},{"name":"Mwandet SS A-Level","avg":2111.0}],"ng":[{"name":"Lengijave Secondary School","region":"Arusha","dist_km":12.7,"avg":2184.0,"necta":true},{"name":"Osiligi Secondary School","region":"Arusha","dist_km":17.5,"avg":1502.9,"necta":true},{"name":"Mwandet SS A-Level","region":"Arusha","dist_km":18.7,"avg":2110.7,"necta":true}],"tei":{"score":57.4,"tier":"P2 \u2013 High","timeline":"6\u201312 months","gapBand":"High","projectedHrsClosed":155.0,"newProjectedAvg":379.9,"residualGap":1553.0,"levers":[{"code":"L1","score":1.5,"hrs":50.0},{"code":"L2","score":1.0,"hrs":33.0},{"code":"L3","score":1.0,"hrs":17.0},{"code":"L4","score":1.0,"hrs":28.0},{"code":"L5","score":1.0,"hrs":3.0},{"code":"L6","score":1.0,"hrs":7.0},{"code":"L7","score":1.0,"hrs":3.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":12.0},{"code":"L10","score":1.0,"hrs":1.0}]}},{"id":"olokii-secondary-school","name":"Olokii Secondary School","short":"Olokii","district":"Arusha DC","region":"Arusha","team":"James","lat":-3.57061,"lng":36.810032,"hy":{"2019":1205.1,"2020":1170.4,"2021":39.0,"2022":54.9,"2023":310.4,"2024":155.6,"2025":146.8},"avg":204.3,"necta":false,"ul":"Poor","isLagged":true,"exp":5070.5,"gap":4866.2,"gapPct":23.8,"nbQuick":[{"name":"Mlangarini SS A-Level","avg":11152.0},{"name":"Kinana SS","avg":2381.0},{"name":"Naura Secondary School","avg":1679.0}],"ng":[{"name":"Mlangarini SS A-Level","region":"Arusha","dist_km":14.0,"avg":11151.9,"necta":true},{"name":"Kinana SS","region":"Arusha","dist_km":16.3,"avg":2380.6,"necta":true},{"name":"Naura Secondary School","region":"Arusha","dist_km":18.2,"avg":1679.1,"necta":true}],"tei":{"score":81.6,"tier":"P1 \u2013 Urgent","timeline":"0\u20136 months","gapBand":"Critical","projectedHrsClosed":341.0,"newProjectedAvg":545.3,"residualGap":4525.0,"levers":[{"code":"L1","score":2.0,"hrs":110.0},{"code":"L2","score":1.5,"hrs":72.0},{"code":"L3","score":1.5,"hrs":38.0},{"code":"L4","score":1.5,"hrs":63.0},{"code":"L5","score":1.0,"hrs":6.0},{"code":"L6","score":1.0,"hrs":16.0},{"code":"L7","score":1.0,"hrs":6.0},{"code":"L8","score":1.0,"hrs":3.0},{"code":"L9","score":1.0,"hrs":25.0},{"code":"L10","score":1.0,"hrs":2.0}]}},{"id":"ilboru-secondary-school","name":"Ilboru Secondary School","short":"Ilboru","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.348026,"lng":36.687645,"hy":{"2019":2321.5,"2020":2586.4,"2021":1726.8,"2022":441.7,"2024":3.2},"avg":1.6,"necta":false,"ul":"Poor","isLagged":true,"exp":1821.2,"gap":1819.6,"gapPct":1137.2,"nbQuick":[{"name":"Enyoito Secondary School","avg":1574.0},{"name":"Elerai SS","avg":1211.0},{"name":"Themi Secondary School","avg":2679.0}],"ng":[{"name":"Enyoito Secondary School","region":"Arusha","dist_km":1.7,"avg":1574.0,"necta":true},{"name":"Elerai SS","region":"Arusha","dist_km":3.4,"avg":1210.9,"necta":true},{"name":"Themi Secondary School","region":"Arusha","dist_km":3.8,"avg":2678.8,"necta":true}],"tei":{"score":64.9,"tier":"P2 \u2013 High","timeline":"6\u201312 months","gapBand":"High","projectedHrsClosed":160.0,"newProjectedAvg":161.6,"residualGap":1660.0,"levers":[{"code":"L1","score":1.5,"hrs":51.0},{"code":"L2","score":1.5,"hrs":34.0},{"code":"L3","score":1.0,"hrs":18.0},{"code":"L4","score":1.0,"hrs":29.0},{"code":"L5","score":1.0,"hrs":3.0},{"code":"L6","score":1.0,"hrs":7.0},{"code":"L7","score":1.0,"hrs":3.0},{"code":"L8","score":1.0,"hrs":2.0},{"code":"L9","score":1.0,"hrs":12.0},{"code":"L10","score":1.0,"hrs":1.0}]}},{"id":"amani-abeid-karume-secondary-school","name":"Amani Abeid Karume Secondary School","short":"AmaniAbeidKarume","district":"Kondoa DC","region":"Dodoma","team":"Juma","lat":-4.723431,"lng":35.918123,"hy":{"2022":23942.4,"2023":32095.1,"2024":37428.2,"2025":47932.8},"avg":39152.1,"necta":true,"ul":"Good","isLagged":false},{"id":"bukulu-secondary-school","name":"Bukulu Secondary School","short":"Bukulu","district":"Kondoa DC","region":"Dodoma","team":"Juma","lat":-4.622125,"lng":35.757465,"hy":{"2023":15.4,"2024":6026.5,"2025":15001.1},"avg":7014.3,"necta":false,"ul":"Good","isLagged":true,"exp":15339.5,"gap":8325.2,"gapPct":1.2,"nbQuick":[{"name":"Amani Abeid Karume Secondary School","avg":39152.0},{"name":"Nangara Secondary School","avg":1462.0},{"name":"Nakwa Secondary School","avg":5405.0}],"ng":[{"name":"Amani Abeid Karume Secondary School","region":"Dodoma","dist_km":21.1,"avg":39152.1,"necta":true},{"name":"Nangara Secondary School","region":"Manyara","dist_km":40.9,"avg":1461.6,"necta":true},{"name":"Nakwa Secondary School","region":"Manyara","dist_km":41.3,"avg":5404.9,"necta":true}],"tei":{"score":27.1,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Severe","projectedHrsClosed":263.0,"newProjectedAvg":7277.3,"residualGap":8062.0,"levers":[{"code":"L1","score":1.0,"hrs":84.0},{"code":"L2","score":1.0,"hrs":55.0},{"code":"L3","score":1.0,"hrs":29.0},{"code":"L4","score":1.0,"hrs":48.0},{"code":"L5","score":1.0,"hrs":5.0},{"code":"L6","score":1.0,"hrs":12.0},{"code":"L7","score":1.0,"hrs":5.0},{"code":"L8","score":1.0,"hrs":3.0},{"code":"L9","score":1.0,"hrs":20.0},{"code":"L10","score":1.0,"hrs":2.0}]}},{"id":"ula-secondary-school","name":"Ula Secondary School","short":"Ula","district":"Kondoa DC","region":"Dodoma","team":"Juma","lat":-4.897931,"lng":35.762116,"hy":{"2022":3132.5,"2023":5898.3,"2024":4954.0,"2025":1778.6},"avg":4210.3,"necta":false,"ul":"Good","isLagged":true,"exp":15339.5,"gap":11129.2,"gapPct":2.6,"nbQuick":[{"name":"Amani Abeid Karume Secondary School","avg":39152.0},{"name":"Nangara Secondary School","avg":1462.0},{"name":"Nakwa Secondary School","avg":5405.0}],"ng":[{"name":"Amani Abeid Karume Secondary School","region":"Dodoma","dist_km":26.0,"avg":39152.1,"necta":true},{"name":"Nangara Secondary School","region":"Manyara","dist_km":71.5,"avg":1461.6,"necta":true},{"name":"Nakwa Secondary School","region":"Manyara","dist_km":71.8,"avg":5404.9,"necta":true}],"tei":{"score":36.3,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Severe","projectedHrsClosed":304.0,"newProjectedAvg":4514.3,"residualGap":10825.0,"levers":[{"code":"L1","score":1.0,"hrs":98.0},{"code":"L2","score":1.0,"hrs":64.0},{"code":"L3","score":1.0,"hrs":33.0},{"code":"L4","score":1.0,"hrs":56.0},{"code":"L5","score":1.0,"hrs":5.0},{"code":"L6","score":1.0,"hrs":14.0},{"code":"L7","score":1.0,"hrs":6.0},{"code":"L8","score":1.0,"hrs":3.0},{"code":"L9","score":1.0,"hrs":23.0},{"code":"L10","score":1.0,"hrs":2.0}]}},{"id":"bicha-secondary-school","name":"Bicha Secondary School","short":"Bicha","district":"Kondoa DC","region":"Dodoma","team":"Juma","lat":-4.921112,"lng":35.803211,"hy":{"2023":4612.0,"2024":2935.5,"2025":1974.8},"avg":3174.1,"necta":false,"ul":"Good","isLagged":true,"exp":15339.5,"gap":12165.4,"gapPct":3.8,"nbQuick":[{"name":"Amani Abeid Karume Secondary School","avg":39152.0},{"name":"Nangara Secondary School","avg":1462.0},{"name":"Nakwa Secondary School","avg":5405.0}],"ng":[{"name":"Amani Abeid Karume Secondary School","region":"Dodoma","dist_km":25.4,"avg":39152.1,"necta":true},{"name":"Nangara Secondary School","region":"Manyara","dist_km":74.2,"avg":1461.6,"necta":true},{"name":"Nakwa Secondary School","region":"Manyara","dist_km":74.9,"avg":5404.9,"necta":true}],"tei":{"score":39.7,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Severe","projectedHrsClosed":317.0,"newProjectedAvg":3491.1,"residualGap":11848.0,"levers":[{"code":"L1","score":1.0,"hrs":102.0},{"code":"L2","score":1.0,"hrs":67.0},{"code":"L3","score":1.0,"hrs":35.0},{"code":"L4","score":1.0,"hrs":58.0},{"code":"L5","score":1.0,"hrs":5.0},{"code":"L6","score":1.0,"hrs":15.0},{"code":"L7","score":1.0,"hrs":6.0},{"code":"L8","score":1.0,"hrs":3.0},{"code":"L9","score":1.0,"hrs":24.0},{"code":"L10","score":1.0,"hrs":2.0}]}},{"id":"bihawana-secondary-school","name":"Bihawana Secondary School","short":"Bihawana","district":"Dodoma CC","region":"Dodoma","team":"Juma","lat":-6.190152,"lng":35.740102,"hy":{"2023":4549.9,"2024":2994.1,"2025":1040.3},"avg":2861.5,"necta":false,"ul":"Good","isLagged":true,"exp":15339.5,"gap":12478.0,"gapPct":4.4,"nbQuick":[{"name":"Amani Abeid Karume Secondary School","avg":39152.0},{"name":"Nakwa Secondary School","avg":5405.0},{"name":"Nangara Secondary School","avg":1462.0}],"ng":[{"name":"Amani Abeid Karume Secondary School","region":"Dodoma","dist_km":164.3,"avg":39152.1,"necta":true},{"name":"Nakwa Secondary School","region":"Manyara","dist_km":215.1,"avg":5404.9,"necta":true},{"name":"Nangara Secondary School","region":"Manyara","dist_km":215.2,"avg":1461.6,"necta":true}],"tei":{"score":40.7,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Severe","projectedHrsClosed":321.0,"newProjectedAvg":3182.5,"residualGap":12157.0,"levers":[{"code":"L1","score":1.0,"hrs":103.0},{"code":"L2","score":1.0,"hrs":68.0},{"code":"L3","score":1.0,"hrs":35.0},{"code":"L4","score":1.0,"hrs":59.0},{"code":"L5","score":1.0,"hrs":6.0},{"code":"L6","score":1.0,"hrs":15.0},{"code":"L7","score":1.0,"hrs":6.0},{"code":"L8","score":1.0,"hrs":3.0},{"code":"L9","score":1.0,"hrs":24.0},{"code":"L10","score":1.0,"hrs":2.0}]}},{"id":"viwandani-secondary-school","name":"Viwandani Secondary School","short":"Viwandani","district":"Dodoma CC","region":"Dodoma","team":"Juma","lat":-6.179097,"lng":35.753619,"hy":{"2025":1534.6},"avg":1534.6,"necta":false,"ul":"Moderate","isLagged":true,"exp":15339.5,"gap":13804.9,"gapPct":9.0,"nbQuick":[{"name":"Amani Abeid Karume Secondary School","avg":39152.0},{"name":"Nakwa Secondary School","avg":5405.0},{"name":"Nangara Secondary School","avg":1462.0}],"ng":[{"name":"Amani Abeid Karume Secondary School","region":"Dodoma","dist_km":162.9,"avg":39152.1,"necta":true},{"name":"Nakwa Secondary School","region":"Manyara","dist_km":213.9,"avg":5404.9,"necta":true},{"name":"Nangara Secondary School","region":"Manyara","dist_km":214.0,"avg":1461.6,"necta":true}],"tei":{"score":64.8,"tier":"P2 \u2013 High","timeline":"6\u201312 months","gapBand":"Severe","projectedHrsClosed":485.0,"newProjectedAvg":2019.6,"residualGap":13320.0,"levers":[{"code":"L1","score":1.5,"hrs":157.0},{"code":"L2","score":1.5,"hrs":102.0},{"code":"L3","score":1.0,"hrs":54.0},{"code":"L4","score":1.0,"hrs":89.0},{"code":"L5","score":1.0,"hrs":8.0},{"code":"L6","score":1.0,"hrs":22.0},{"code":"L7","score":1.0,"hrs":9.0},{"code":"L8","score":1.0,"hrs":5.0},{"code":"L9","score":1.0,"hrs":36.0},{"code":"L10","score":1.0,"hrs":3.0}]}},{"id":"kilolo-secondary-school","name":"Kilolo Secondary School","short":"Kilolo","district":"Kilolo DC","region":"Iringa","team":"Juma","lat":-7.97798,"lng":35.82313,"hy":{"2024":4613.4,"2025":7637.1},"avg":6125.2,"necta":false,"ul":"Good","isLagged":true,"exp":2254.0,"gap":-3871.2,"gapPct":-0.6,"nbQuick":[{"name":"Mpuguso Secondary School","avg":1881.0},{"name":"Iyunga Technical Secondary School","avg":1733.0},{"name":"Mandera Girls Secondary School","avg":3147.0}],"ng":[{"name":"Mpuguso Secondary School","region":"Mbeya","dist_km":280.3,"avg":1881.4,"necta":true},{"name":"Iyunga Technical Secondary School","region":"Mbeya","dist_km":285.3,"avg":1733.2,"necta":true},{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":346.1,"avg":3147.3,"necta":true}]},{"id":"udzungwa-secondary-school","name":"Udzungwa Secondary School","short":"Udzungwa","district":"Kilolo DC","region":"Iringa","team":"Juma","lat":-8.0887,"lng":35.87717,"hy":{"2024":3912.6,"2025":6441.7},"avg":5177.1,"necta":false,"ul":"Good","isLagged":true,"exp":2254.0,"gap":-2923.1,"gapPct":-0.6,"nbQuick":[{"name":"Mpuguso Secondary School","avg":1881.0},{"name":"Iyunga Technical Secondary School","avg":1733.0},{"name":"Mandera Girls Secondary School","avg":3147.0}],"ng":[{"name":"Mpuguso Secondary School","region":"Mbeya","dist_km":279.1,"avg":1881.4,"necta":true},{"name":"Iyunga Technical Secondary School","region":"Mbeya","dist_km":286.6,"avg":1733.2,"necta":true},{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":348.4,"avg":3147.3,"necta":true}]},{"id":"selebu-secondary-school","name":"Selebu Secondary School","short":"Selebu","district":"Kilolo DC","region":"Iringa","team":"Juma","lat":-7.5369,"lng":36.1012,"hy":{"2024":971.3,"2025":7719.8},"avg":4345.6,"necta":false,"ul":"Good","isLagged":true,"exp":14726.9,"gap":10381.3,"gapPct":2.4,"nbQuick":[{"name":"Mandera Girls Secondary School","avg":3147.0},{"name":"Amani Abeid Karume Secondary School","avg":39152.0},{"name":"Mpuguso Secondary School","avg":1881.0}],"ng":[{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":294.1,"avg":3147.3,"necta":true},{"name":"Amani Abeid Karume Secondary School","region":"Dodoma","dist_km":313.5,"avg":39152.1,"necta":true},{"name":"Mpuguso Secondary School","region":"Mbeya","dist_km":333.3,"avg":1881.4,"necta":true}],"tei":{"score":35.2,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Severe","projectedHrsClosed":292.0,"newProjectedAvg":4637.6,"residualGap":10089.0,"levers":[{"code":"L1","score":1.0,"hrs":94.0},{"code":"L2","score":1.0,"hrs":62.0},{"code":"L3","score":1.0,"hrs":32.0},{"code":"L4","score":1.0,"hrs":54.0},{"code":"L5","score":1.0,"hrs":5.0},{"code":"L6","score":1.0,"hrs":13.0},{"code":"L7","score":1.0,"hrs":5.0},{"code":"L8","score":1.0,"hrs":3.0},{"code":"L9","score":1.0,"hrs":22.0},{"code":"L10","score":1.0,"hrs":2.0}]}},{"id":"uhambingeto-secondary-school","name":"Uhambingeto Secondary School","short":"Uhambingeto","district":"Kilolo DC","region":"Iringa","team":"Juma","lat":-7.56191,"lng":35.9613,"hy":{"2025":2555.8},"avg":2555.8,"necta":false,"ul":"Good","isLagged":true,"exp":14677.5,"gap":12121.7,"gapPct":4.7,"nbQuick":[{"name":"Mandera Girls Secondary School","avg":3147.0},{"name":"Amani Abeid Karume Secondary School","avg":39152.0},{"name":"Iyunga Technical Secondary School","avg":1733.0}],"ng":[{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":308.9,"avg":3147.3,"necta":true},{"name":"Amani Abeid Karume Secondary School","region":"Dodoma","dist_km":315.7,"avg":39152.1,"necta":true},{"name":"Iyunga Technical Secondary School","region":"Mbeya","dist_km":318.8,"avg":1733.2,"necta":true}],"tei":{"score":41.3,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Severe","projectedHrsClosed":317.0,"newProjectedAvg":2872.8,"residualGap":11805.0,"levers":[{"code":"L1","score":1.0,"hrs":102.0},{"code":"L2","score":1.0,"hrs":67.0},{"code":"L3","score":1.0,"hrs":35.0},{"code":"L4","score":1.0,"hrs":58.0},{"code":"L5","score":1.0,"hrs":5.0},{"code":"L6","score":1.0,"hrs":15.0},{"code":"L7","score":1.0,"hrs":6.0},{"code":"L8","score":1.0,"hrs":3.0},{"code":"L9","score":1.0,"hrs":24.0},{"code":"L10","score":1.0,"hrs":2.0}]}},{"id":"nyalumbu-secondary-school","name":"Nyalumbu Secondary School","short":"Nyalumbu","district":"Kilolo DC","region":"Iringa","team":"Juma","lat":-7.69032,"lng":36.02145,"hy":{"2024":2909.3,"2025":977.9},"avg":1943.6,"necta":false,"ul":"Moderate","isLagged":true,"exp":2254.0,"gap":310.4,"gapPct":0.2,"nbQuick":[{"name":"Mandera Girls Secondary School","avg":3147.0},{"name":"Mpuguso Secondary School","avg":1881.0},{"name":"Iyunga Technical Secondary School","avg":1733.0}],"ng":[{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":310.4,"avg":3147.3,"necta":true},{"name":"Mpuguso Secondary School","region":"Mbeya","dist_km":316.2,"avg":1881.4,"necta":true},{"name":"Iyunga Technical Secondary School","region":"Mbeya","dist_km":318.2,"avg":1733.2,"necta":true}],"tei":{"score":5.0,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Low","projectedHrsClosed":15.0,"newProjectedAvg":1958.6,"residualGap":295.0,"levers":[{"code":"L1","score":1.0,"hrs":5.0},{"code":"L2","score":1.0,"hrs":3.0},{"code":"L3","score":1.0,"hrs":2.0},{"code":"L4","score":1.0,"hrs":3.0},{"code":"L5","score":1.0,"hrs":0.0},{"code":"L6","score":1.0,"hrs":1.0},{"code":"L7","score":1.0,"hrs":0.0},{"code":"L8","score":1.0,"hrs":0.0},{"code":"L9","score":1.0,"hrs":1.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"kiboriloni-secondary-school","name":"Kiboriloni Secondary School","short":"Kiboriloni","district":"Moshi CC","region":"Kilimanjaro","team":"James","lat":-3.334249,"lng":37.372825,"hy":{"2024":3617.4,"2025":3374.7},"avg":3496.0,"necta":true,"ul":"Good","isLagged":false},{"id":"nuru-secondary-school","name":"Nuru Secondary School","short":"Nuru","district":"Siha DC","region":"Kilimanjaro","team":"James","lat":-3.2353,"lng":37.0439,"hy":{"2025":17429.5},"avg":17429.5,"necta":false,"ul":"Good","isLagged":true,"exp":3292.2,"gap":-14137.3,"gapPct":-0.8,"nbQuick":[{"name":"Nkoasenga Secondary School","avg":814.0},{"name":"Tingatinga SS","avg":8282.0},{"name":"Ngiresi Secondary School","avg":781.0}],"ng":[{"name":"Nkoasenga Secondary School","region":"Arusha","dist_km":14.6,"avg":814.0,"necta":true},{"name":"Tingatinga SS","region":"Arusha","dist_km":31.7,"avg":8281.5,"necta":true},{"name":"Ngiresi Secondary School","region":"Arusha","dist_km":36.1,"avg":781.0,"necta":true}]},{"id":"oshara-secondary-school","name":"Oshara Secondary School","short":"Oshara","district":"Siha DC","region":"Kilimanjaro","team":"James","lat":-3.19684,"lng":37.1083,"hy":{"2025":8793.0},"avg":8793.0,"necta":false,"ul":"Good","isLagged":true,"exp":4197.2,"gap":-4595.8,"gapPct":-0.5,"nbQuick":[{"name":"Nkoasenga Secondary School","avg":814.0},{"name":"Tingatinga SS","avg":8282.0},{"name":"Kiboriloni Secondary School","avg":3496.0}],"ng":[{"name":"Nkoasenga Secondary School","region":"Arusha","dist_km":22.5,"avg":814.0,"necta":true},{"name":"Tingatinga SS","region":"Arusha","dist_km":31.5,"avg":8281.5,"necta":true},{"name":"Kiboriloni Secondary School","region":"Kilimanjaro","dist_km":33.1,"avg":3496.0,"necta":true}]},{"id":"namwai-secondary-school","name":"Namwai Secondary School","short":"Namwai","district":"Siha DC","region":"Kilimanjaro","team":"James","lat":-3.05311,"lng":37.0439,"hy":{"2025":6893.6},"avg":6893.6,"necta":false,"ul":"Good","isLagged":true,"exp":3292.2,"gap":-3601.4,"gapPct":-0.5,"nbQuick":[{"name":"Tingatinga SS","avg":8282.0},{"name":"Nkoasenga Secondary School","avg":814.0},{"name":"Ngiresi Secondary School","avg":781.0}],"ng":[{"name":"Tingatinga SS","region":"Arusha","dist_km":15.0,"avg":8281.5,"necta":true},{"name":"Nkoasenga Secondary School","region":"Arusha","dist_km":26.4,"avg":814.0,"necta":true},{"name":"Ngiresi Secondary School","region":"Arusha","dist_km":46.6,"avg":781.0,"necta":true}]},{"id":"sanya-juu-secondary-school","name":"Sanya Juu Secondary School","short":"SanyaJuu","district":"Siha DC","region":"Kilimanjaro","team":"James","lat":-3.19561,"lng":37.08618,"hy":{"2025":5239.6},"avg":5239.6,"necta":false,"ul":"Good","isLagged":true,"exp":4197.2,"gap":-1042.4,"gapPct":-0.2,"nbQuick":[{"name":"Nkoasenga Secondary School","avg":814.0},{"name":"Tingatinga SS","avg":8282.0},{"name":"Kiboriloni Secondary School","avg":3496.0}],"ng":[{"name":"Nkoasenga Secondary School","region":"Arusha","dist_km":20.2,"avg":814.0,"necta":true},{"name":"Tingatinga SS","region":"Arusha","dist_km":30.0,"avg":8281.5,"necta":true},{"name":"Kiboriloni Secondary School","region":"Kilimanjaro","dist_km":35.4,"avg":3496.0,"necta":true}]},{"id":"ifati-secondary-school","name":"Ifati Secondary School","short":"Ifati","district":"Moshi DC","region":"Kilimanjaro","team":"James","lat":-3.277696,"lng":37.469256,"hy":{"2024":1280.2,"2025":2043.2},"avg":1661.7,"necta":false,"ul":"Moderate","isLagged":true,"exp":4197.2,"gap":2535.5,"gapPct":1.5,"nbQuick":[{"name":"Kiboriloni Secondary School","avg":3496.0},{"name":"Nkoasenga Secondary School","avg":814.0},{"name":"Tingatinga SS","avg":8282.0}],"ng":[{"name":"Kiboriloni Secondary School","region":"Kilimanjaro","dist_km":12.4,"avg":3496.0,"necta":true},{"name":"Nkoasenga Secondary School","region":"Arusha","dist_km":61.8,"avg":814.0,"necta":true},{"name":"Tingatinga SS","region":"Arusha","dist_km":68.3,"avg":8281.5,"necta":true}],"tei":{"score":28.3,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"High","projectedHrsClosed":135.0,"newProjectedAvg":1796.7,"residualGap":2400.0,"levers":[{"code":"L1","score":1.0,"hrs":44.0},{"code":"L2","score":1.0,"hrs":29.0},{"code":"L3","score":1.0,"hrs":15.0},{"code":"L4","score":1.0,"hrs":25.0},{"code":"L5","score":1.0,"hrs":2.0},{"code":"L6","score":1.0,"hrs":6.0},{"code":"L7","score":1.0,"hrs":2.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":10.0},{"code":"L10","score":1.0,"hrs":1.0}]}},{"id":"mtama-secondary-school","name":"Mtama Secondary School","short":"Mtama","district":"Lindi DC","region":"Lindi","team":"Danny","lat":-10.2946,"lng":39.3758,"hy":{"2023":10492.4,"2024":6990.1,"2025":2693.9},"avg":6725.5,"necta":true,"ul":"Good","isLagged":false},{"id":"nkowe-secondary-school","name":"Nkowe Secondary School","short":"Nkowe","district":"Ruangwa DC","region":"Lindi","team":"Danny","lat":-10.1984,"lng":38.944,"hy":{"2024":2903.6,"2025":5371.9},"avg":4137.8,"necta":true,"ul":"Good","isLagged":false},{"id":"hawa-mchopa-secondary-school","name":"Hawa Mchopa Secondary School","short":"HawaMchopa","district":"Ruangwa DC","region":"Lindi","team":"Danny","lat":-10.367786,"lng":39.053688,"hy":{"2024":2890.3,"2025":5089.0},"avg":3989.6,"necta":true,"ul":"Good","isLagged":false},{"id":"lucas-malia-secondary-school","name":"Lucas Malia Secondary School","short":"LucasMalia","district":"Ruangwa DC","region":"Lindi","team":"Danny","lat":-10.2585,"lng":38.9967,"hy":{"2024":11933.3,"2025":26869.1},"avg":19401.2,"necta":false,"ul":"Good","isLagged":true,"exp":4951.0,"gap":-14450.2,"gapPct":-0.7,"nbQuick":[{"name":"Nkowe Secondary School","avg":4138.0},{"name":"Hawa Mchopa Secondary School","avg":3990.0},{"name":"Mtama Secondary School","avg":6726.0}],"ng":[{"name":"Nkowe Secondary School","region":"Lindi","dist_km":8.8,"avg":4137.8,"necta":true},{"name":"Hawa Mchopa Secondary School","region":"Lindi","dist_km":13.7,"avg":3989.6,"necta":true},{"name":"Mtama Secondary School","region":"Lindi","dist_km":41.7,"avg":6725.5,"necta":true}]},{"id":"mbekenyera-secondary-school","name":"Mbekenyera Secondary School","short":"Mbekenyera","district":"Ruangwa DC","region":"Lindi","team":"Danny","lat":-9.99,"lng":38.957,"hy":{"2024":3700.1,"2025":5304.0},"avg":4502.1,"necta":false,"ul":"Good","isLagged":true,"exp":4951.0,"gap":448.9,"gapPct":0.1,"nbQuick":[{"name":"Nkowe Secondary School","avg":4138.0},{"name":"Hawa Mchopa Secondary School","avg":3990.0},{"name":"Mtama Secondary School","avg":6726.0}],"ng":[{"name":"Nkowe Secondary School","region":"Lindi","dist_km":23.2,"avg":4137.8,"necta":true},{"name":"Hawa Mchopa Secondary School","region":"Lindi","dist_km":43.3,"avg":3989.6,"necta":true},{"name":"Mtama Secondary School","region":"Lindi","dist_km":57.0,"avg":6725.5,"necta":true}],"tei":{"score":5.0,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Low","projectedHrsClosed":12.0,"newProjectedAvg":4514.1,"residualGap":437.0,"levers":[{"code":"L1","score":1.0,"hrs":4.0},{"code":"L2","score":1.0,"hrs":3.0},{"code":"L3","score":1.0,"hrs":1.0},{"code":"L4","score":1.0,"hrs":2.0},{"code":"L5","score":1.0,"hrs":0.0},{"code":"L6","score":1.0,"hrs":1.0},{"code":"L7","score":1.0,"hrs":0.0},{"code":"L8","score":1.0,"hrs":0.0},{"code":"L9","score":1.0,"hrs":1.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"nyegendi-secondary-school","name":"Nyegendi Secondary School","short":"Nyegendi","district":"Lindi DC","region":"Lindi","team":"Danny","lat":-10.248,"lng":39.443,"hy":{"2023":3202.2,"2024":3640.5,"2025":1236.1},"avg":2692.9,"necta":false,"ul":"Good","isLagged":true,"exp":4951.0,"gap":2258.1,"gapPct":0.8,"nbQuick":[{"name":"Mtama Secondary School","avg":6726.0},{"name":"Hawa Mchopa Secondary School","avg":3990.0},{"name":"Nkowe Secondary School","avg":4138.0}],"ng":[{"name":"Mtama Secondary School","region":"Lindi","dist_km":9.0,"avg":6725.5,"necta":true},{"name":"Hawa Mchopa Secondary School","region":"Lindi","dist_km":44.6,"avg":3989.6,"necta":true},{"name":"Nkowe Secondary School","region":"Lindi","dist_km":54.9,"avg":4137.8,"necta":true}],"tei":{"score":14.8,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"High","projectedHrsClosed":91.0,"newProjectedAvg":2783.9,"residualGap":2167.0,"levers":[{"code":"L1","score":1.0,"hrs":29.0},{"code":"L2","score":1.0,"hrs":19.0},{"code":"L3","score":1.0,"hrs":10.0},{"code":"L4","score":1.0,"hrs":16.0},{"code":"L5","score":1.0,"hrs":2.0},{"code":"L6","score":1.0,"hrs":4.0},{"code":"L7","score":1.0,"hrs":2.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":7.0},{"code":"L10","score":1.0,"hrs":1.0}]}},{"id":"mahiwa-secondary-school","name":"Mahiwa Secondary School","short":"Mahiwa","district":"Lindi DC","region":"Lindi","team":"Danny","lat":-10.3438,"lng":39.2675,"hy":{"2023":1297.1,"2024":451.3,"2025":2572.6},"avg":1440.4,"necta":false,"ul":"Moderate","isLagged":true,"exp":4951.0,"gap":3510.6,"gapPct":2.4,"nbQuick":[{"name":"Mtama Secondary School","avg":6726.0},{"name":"Hawa Mchopa Secondary School","avg":3990.0},{"name":"Nkowe Secondary School","avg":4138.0}],"ng":[{"name":"Mtama Secondary School","region":"Lindi","dist_km":13.1,"avg":6725.5,"necta":true},{"name":"Hawa Mchopa Secondary School","region":"Lindi","dist_km":23.5,"avg":3989.6,"necta":true},{"name":"Nkowe Secondary School","region":"Lindi","dist_km":38.9,"avg":4137.8,"necta":true}],"tei":{"score":33.2,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"High","projectedHrsClosed":160.0,"newProjectedAvg":1600.4,"residualGap":3351.0,"levers":[{"code":"L1","score":1.0,"hrs":51.0},{"code":"L2","score":1.0,"hrs":34.0},{"code":"L3","score":1.0,"hrs":18.0},{"code":"L4","score":1.0,"hrs":29.0},{"code":"L5","score":1.0,"hrs":3.0},{"code":"L6","score":1.0,"hrs":7.0},{"code":"L7","score":1.0,"hrs":3.0},{"code":"L8","score":1.0,"hrs":2.0},{"code":"L9","score":1.0,"hrs":12.0},{"code":"L10","score":1.0,"hrs":1.0}]}},{"id":"ruangwa-secondary-school","name":"Ruangwa Secondary School","short":"Ruangwa","district":"Ruangwa DC","region":"Lindi","team":"Danny","lat":-10.0524,"lng":38.9399,"hy":{"2024":524.9,"2025":1962.2},"avg":1243.5,"necta":false,"ul":"Moderate","isLagged":true,"exp":4951.0,"gap":3707.5,"gapPct":3.0,"nbQuick":[{"name":"Nkowe Secondary School","avg":4138.0},{"name":"Hawa Mchopa Secondary School","avg":3990.0},{"name":"Mtama Secondary School","avg":6726.0}],"ng":[{"name":"Nkowe Secondary School","region":"Lindi","dist_km":16.2,"avg":4137.8,"necta":true},{"name":"Hawa Mchopa Secondary School","region":"Lindi","dist_km":37.2,"avg":3989.6,"necta":true},{"name":"Mtama Secondary School","region":"Lindi","dist_km":54.8,"avg":6725.5,"necta":true}],"tei":{"score":35.0,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"High","projectedHrsClosed":165.0,"newProjectedAvg":1408.5,"residualGap":3542.0,"levers":[{"code":"L1","score":1.0,"hrs":53.0},{"code":"L2","score":1.0,"hrs":35.0},{"code":"L3","score":1.0,"hrs":18.0},{"code":"L4","score":1.0,"hrs":30.0},{"code":"L5","score":1.0,"hrs":3.0},{"code":"L6","score":1.0,"hrs":8.0},{"code":"L7","score":1.0,"hrs":3.0},{"code":"L8","score":1.0,"hrs":2.0},{"code":"L9","score":1.0,"hrs":12.0},{"code":"L10","score":1.0,"hrs":1.0}]}},{"id":"kiwalala-secondary-school","name":"Kiwalala Secondary School","short":"Kiwalala","district":"Lindi DC","region":"Lindi","team":"Danny","lat":-10.1892,"lng":39.531,"hy":{"2023":1926.8,"2024":1086.3,"2025":514.0},"avg":1175.7,"necta":false,"ul":"Moderate","isLagged":true,"exp":4951.0,"gap":3775.3,"gapPct":3.2,"nbQuick":[{"name":"Mtama Secondary School","avg":6726.0},{"name":"Hawa Mchopa Secondary School","avg":3990.0},{"name":"Nkowe Secondary School","avg":4138.0}],"ng":[{"name":"Mtama Secondary School","region":"Lindi","dist_km":20.6,"avg":6725.5,"necta":true},{"name":"Hawa Mchopa Secondary School","region":"Lindi","dist_km":55.9,"avg":3989.6,"necta":true},{"name":"Nkowe Secondary School","region":"Lindi","dist_km":64.2,"avg":4137.8,"necta":true}],"tei":{"score":35.7,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"High","projectedHrsClosed":165.0,"newProjectedAvg":1340.7,"residualGap":3610.0,"levers":[{"code":"L1","score":1.0,"hrs":53.0},{"code":"L2","score":1.0,"hrs":35.0},{"code":"L3","score":1.0,"hrs":18.0},{"code":"L4","score":1.0,"hrs":30.0},{"code":"L5","score":1.0,"hrs":3.0},{"code":"L6","score":1.0,"hrs":8.0},{"code":"L7","score":1.0,"hrs":3.0},{"code":"L8","score":1.0,"hrs":2.0},{"code":"L9","score":1.0,"hrs":12.0},{"code":"L10","score":1.0,"hrs":1.0}]}},{"id":"dareda-secondary-school","name":"Dareda Secondary School","short":"Dareda","district":"Babati DC","region":"Manyara","team":"Abubakar","lat":-4.244151,"lng":35.49518,"hy":{"2023":11008.4,"2024":5569.9,"2025":3959.2},"avg":6845.9,"necta":true,"ul":"Good","isLagged":false},{"id":"nakwa-secondary-school","name":"Nakwa Secondary School","short":"Nakwa","district":"Babati TC","region":"Manyara","team":"Abubakar","lat":-4.255943,"lng":35.694991,"hy":{"2022":1774.3,"2023":8746.4,"2024":2923.4,"2025":4544.9},"avg":5404.9,"necta":true,"ul":"Good","isLagged":false},{"id":"komoto-secondary-school","name":"Komoto Secondary School","short":"Komoto","district":"Babati TC","region":"Manyara","team":"Abubakar","lat":-4.202869,"lng":35.720825,"hy":{"2022":411.4,"2023":2687.4,"2024":3533.1,"2025":1691.7},"avg":2637.4,"necta":true,"ul":"Good","isLagged":false},{"id":"nangara-secondary-school","name":"Nangara Secondary School","short":"Nangara","district":"Babati TC","region":"Manyara","team":"Abubakar","lat":-4.254785,"lng":35.775047,"hy":{"2022":1518.9,"2023":1538.5,"2024":909.8,"2025":1936.5},"avg":1461.6,"necta":true,"ul":"Moderate","isLagged":false},{"id":"manyara-girls-secondary-school","name":"Manyara Girls Secondary School","short":"ManyaraGirls","district":"Babati TC","region":"Manyara","team":"Abubakar","lat":-4.10195,"lng":35.79925,"hy":{"2025":941.9},"avg":941.9,"necta":true,"ul":"Moderate","isLagged":false},{"id":"kwaraa-secondary-school","name":"Kwaraa Secondary School","short":"Kwaraa","district":"Babati TC","region":"Manyara","team":"Abubakar","lat":-4.20953,"lng":35.76245,"hy":{"2022":1523.9,"2023":1022.6,"2024":393.1,"2025":340.3},"avg":585.3,"necta":true,"ul":"Moderate","isLagged":false},{"id":"chief-dodo-secondary-school","name":"Chief Dodo Secondary School","short":"ChiefDodo","district":"Babati DC","region":"Manyara","team":"Abubakar","lat":-4.3,"lng":35.6501,"hy":{"2023":2678.4,"2024":1031.0},"avg":1854.7,"necta":false,"ul":"Moderate","isLagged":true,"exp":3168.0,"gap":1313.3,"gapPct":0.7,"nbQuick":[{"name":"Nakwa Secondary School","avg":5405.0},{"name":"Komoto Secondary School","avg":2637.0},{"name":"Nangara Secondary School","avg":1462.0}],"ng":[{"name":"Nakwa Secondary School","region":"Manyara","dist_km":7.0,"avg":5404.9,"necta":true},{"name":"Komoto Secondary School","region":"Manyara","dist_km":13.3,"avg":2637.4,"necta":true},{"name":"Nangara Secondary School","region":"Manyara","dist_km":14.7,"avg":1461.6,"necta":true}],"tei":{"score":11.9,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Medium","projectedHrsClosed":60.0,"newProjectedAvg":1914.7,"residualGap":1253.0,"levers":[{"code":"L1","score":1.0,"hrs":19.0},{"code":"L2","score":1.0,"hrs":13.0},{"code":"L3","score":1.0,"hrs":7.0},{"code":"L4","score":1.0,"hrs":11.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":3.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":4.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"babati-day-secondary-school","name":"Babati Day Secondary School","short":"BabatiDay","district":"Babati TC","region":"Manyara","team":"Abubakar","lat":-4.203511,"lng":35.738845,"hy":{"2022":30.1,"2023":1500.8,"2024":1638.8,"2025":17.6},"avg":1052.4,"necta":false,"ul":"Moderate","isLagged":true,"exp":1561.4,"gap":509.0,"gapPct":0.5,"nbQuick":[{"name":"Komoto Secondary School","avg":2637.0},{"name":"Kwaraa Secondary School","avg":585.0},{"name":"Nangara Secondary School","avg":1462.0}],"ng":[{"name":"Komoto Secondary School","region":"Manyara","dist_km":2.0,"avg":2637.4,"necta":true},{"name":"Kwaraa Secondary School","region":"Manyara","dist_km":2.7,"avg":585.3,"necta":true},{"name":"Nangara Secondary School","region":"Manyara","dist_km":7.0,"avg":1461.6,"necta":true}],"tei":{"score":9.4,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Medium","projectedHrsClosed":38.0,"newProjectedAvg":1090.4,"residualGap":471.0,"levers":[{"code":"L1","score":1.0,"hrs":12.0},{"code":"L2","score":1.0,"hrs":8.0},{"code":"L3","score":1.0,"hrs":4.0},{"code":"L4","score":1.0,"hrs":7.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":2.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":0.0},{"code":"L9","score":1.0,"hrs":3.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"bagara-secondary-school","name":"Bagara Secondary School","short":"Bagara","district":"Babati TC","region":"Manyara","team":"Abubakar","lat":-4.219473,"lng":35.714064,"hy":{"2022":6.1,"2023":2866.3,"2024":13.7,"2025":2.2},"avg":960.7,"necta":false,"ul":"Moderate","isLagged":true,"exp":2875.9,"gap":1915.2,"gapPct":2.0,"nbQuick":[{"name":"Komoto Secondary School","avg":2637.0},{"name":"Nakwa Secondary School","avg":5405.0},{"name":"Kwaraa Secondary School","avg":585.0}],"ng":[{"name":"Komoto Secondary School","region":"Manyara","dist_km":2.0,"avg":2637.4,"necta":true},{"name":"Nakwa Secondary School","region":"Manyara","dist_km":4.6,"avg":5404.9,"necta":true},{"name":"Kwaraa Secondary School","region":"Manyara","dist_km":5.5,"avg":585.3,"necta":true}],"tei":{"score":31.2,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"High","projectedHrsClosed":118.0,"newProjectedAvg":1078.7,"residualGap":1797.0,"levers":[{"code":"L1","score":1.0,"hrs":38.0},{"code":"L2","score":1.0,"hrs":25.0},{"code":"L3","score":1.0,"hrs":13.0},{"code":"L4","score":1.0,"hrs":22.0},{"code":"L5","score":1.0,"hrs":2.0},{"code":"L6","score":1.0,"hrs":5.0},{"code":"L7","score":1.0,"hrs":2.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":9.0},{"code":"L10","score":1.0,"hrs":1.0}]}},{"id":"kiabakari-secondary-school","name":"Kiabakari Secondary School","short":"Kiabakari","district":"Butiama DC","region":"Mara","team":"Danny","lat":-1.755752,"lng":33.870821,"hy":{"2024":988.7,"2025":6575.1},"avg":3781.9,"necta":true,"ul":"Good","isLagged":false},{"id":"kiagata-secondary-school","name":"Kiagata Secondary School","short":"Kiagata","district":"Butiama DC","region":"Mara","team":"Danny","lat":-1.663586,"lng":34.125618,"hy":{"2024":3435.8,"2025":10362.3},"avg":6899.0,"necta":false,"ul":"Good","isLagged":true,"exp":2952.4,"gap":-3946.6,"gapPct":-0.6,"nbQuick":[{"name":"Kiabakari Secondary School","avg":3782.0},{"name":"Engarenaibor SS","avg":691.0},{"name":"Longido SS O-Level","avg":4384.0}],"ng":[{"name":"Kiabakari Secondary School","region":"Mara","dist_km":30.1,"avg":3781.9,"necta":true},{"name":"Engarenaibor SS","region":"Arusha","dist_km":280.3,"avg":691.2,"necta":true},{"name":"Longido SS O-Level","region":"Arusha","dist_km":310.4,"avg":4384.0,"necta":true}]},{"id":"bumangi-secondary-school","name":"Bumangi Secondary School","short":"Bumangi","district":"Butiama DC","region":"Mara","team":"Danny","lat":-1.730158,"lng":34.009563,"hy":{"2024":1552.9,"2025":5291.9},"avg":3422.4,"necta":false,"ul":"Good","isLagged":true,"exp":2952.4,"gap":-470.0,"gapPct":-0.1,"nbQuick":[{"name":"Kiabakari Secondary School","avg":3782.0},{"name":"Engarenaibor SS","avg":691.0},{"name":"Longido SS O-Level","avg":4384.0}],"ng":[{"name":"Kiabakari Secondary School","region":"Mara","dist_km":15.7,"avg":3781.9,"necta":true},{"name":"Engarenaibor SS","region":"Arusha","dist_km":290.0,"avg":691.2,"necta":true},{"name":"Longido SS O-Level","region":"Arusha","dist_km":319.7,"avg":4384.0,"necta":true}]},{"id":"butuguri-secondary-school","name":"Butuguri Secondary School","short":"Butuguri","district":"Butiama DC","region":"Mara","team":"Danny","lat":-1.675699,"lng":33.929054,"hy":{"2024":504.3,"2025":1228.4},"avg":866.3,"necta":false,"ul":"Moderate","isLagged":true,"exp":2952.4,"gap":2086.1,"gapPct":2.4,"nbQuick":[{"name":"Kiabakari Secondary School","avg":3782.0},{"name":"Engarenaibor SS","avg":691.0},{"name":"Longido SS O-Level","avg":4384.0}],"ng":[{"name":"Kiabakari Secondary School","region":"Mara","dist_km":11.0,"avg":3781.9,"necta":true},{"name":"Engarenaibor SS","region":"Arusha","dist_km":300.4,"avg":691.2,"necta":true},{"name":"Longido SS O-Level","region":"Arusha","dist_km":330.2,"avg":4384.0,"necta":true}],"tei":{"score":33.1,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"High","projectedHrsClosed":124.0,"newProjectedAvg":990.3,"residualGap":1962.0,"levers":[{"code":"L1","score":1.0,"hrs":40.0},{"code":"L2","score":1.0,"hrs":26.0},{"code":"L3","score":1.0,"hrs":14.0},{"code":"L4","score":1.0,"hrs":23.0},{"code":"L5","score":1.0,"hrs":2.0},{"code":"L6","score":1.0,"hrs":6.0},{"code":"L7","score":1.0,"hrs":2.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":9.0},{"code":"L10","score":1.0,"hrs":1.0}]}},{"id":"mpuguso-secondary-school","name":"Mpuguso Secondary School","short":"Mpuguso","district":"Rungwe DC","region":"Mbeya","team":"Juma","lat":-9.31448,"lng":33.661,"hy":{"2025":1881.4},"avg":1881.4,"necta":true,"ul":"Moderate","isLagged":false},{"id":"iyunga-technical-secondary-school","name":"Iyunga Technical Secondary School","short":"IyungaTechnical","district":"Mbeya DC","region":"Mbeya","team":"Juma","lat":-8.92504,"lng":33.41226,"hy":{"2025":1733.2},"avg":1733.2,"necta":true,"ul":"Moderate","isLagged":false},{"id":"ikuti-secondary-school","name":"Ikuti Secondary School","short":"Ikuti","district":"Rungwe DC","region":"Mbeya","team":"Juma","lat":-9.313459,"lng":33.545538,"hy":{"2025":14379.7},"avg":14379.7,"necta":false,"ul":"Good","isLagged":true,"exp":14255.6,"gap":-124.1,"gapPct":-0.0,"nbQuick":[{"name":"Mpuguso Secondary School","avg":1881.0},{"name":"Iyunga Technical Secondary School","avg":1733.0},{"name":"Amani Abeid Karume Secondary School","avg":39152.0}],"ng":[{"name":"Mpuguso Secondary School","region":"Mbeya","dist_km":12.7,"avg":1881.4,"necta":true},{"name":"Iyunga Technical Secondary School","region":"Mbeya","dist_km":45.6,"avg":1733.2,"necta":true},{"name":"Amani Abeid Karume Secondary School","region":"Dodoma","dist_km":573.6,"avg":39152.1,"necta":true}]},{"id":"kinyala-secondary-school","name":"Kinyala Secondary School","short":"Kinyala","district":"Rungwe DC","region":"Mbeya","team":"Juma","lat":-9.12008,"lng":33.4947,"hy":{"2025":6183.2},"avg":6183.2,"necta":false,"ul":"Good","isLagged":true,"exp":14255.6,"gap":8072.4,"gapPct":1.3,"nbQuick":[{"name":"Iyunga Technical Secondary School","avg":1733.0},{"name":"Mpuguso Secondary School","avg":1881.0},{"name":"Amani Abeid Karume Secondary School","avg":39152.0}],"ng":[{"name":"Iyunga Technical Secondary School","region":"Mbeya","dist_km":23.5,"avg":1733.2,"necta":true},{"name":"Mpuguso Secondary School","region":"Mbeya","dist_km":28.3,"avg":1881.4,"necta":true},{"name":"Amani Abeid Karume Secondary School","region":"Dodoma","dist_km":557.2,"avg":39152.1,"necta":true}],"tei":{"score":28.3,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Severe","projectedHrsClosed":258.0,"newProjectedAvg":6441.2,"residualGap":7814.0,"levers":[{"code":"L1","score":1.0,"hrs":83.0},{"code":"L2","score":1.0,"hrs":54.0},{"code":"L3","score":1.0,"hrs":29.0},{"code":"L4","score":1.0,"hrs":48.0},{"code":"L5","score":1.0,"hrs":4.0},{"code":"L6","score":1.0,"hrs":12.0},{"code":"L7","score":1.0,"hrs":5.0},{"code":"L8","score":1.0,"hrs":2.0},{"code":"L9","score":1.0,"hrs":19.0},{"code":"L10","score":1.0,"hrs":2.0}]}},{"id":"lupoto-secondary-school","name":"Lupoto Secondary School","short":"Lupoto","district":"Rungwe DC","region":"Mbeya","team":"Juma","lat":-9.20732,"lng":33.6509,"hy":{"2025":4409.4},"avg":4409.4,"necta":false,"ul":"Good","isLagged":true,"exp":14255.6,"gap":9846.2,"gapPct":2.2,"nbQuick":[{"name":"Mpuguso Secondary School","avg":1881.0},{"name":"Iyunga Technical Secondary School","avg":1733.0},{"name":"Amani Abeid Karume Secondary School","avg":39152.0}],"ng":[{"name":"Mpuguso Secondary School","region":"Mbeya","dist_km":12.0,"avg":1881.4,"necta":true},{"name":"Iyunga Technical Secondary School","region":"Mbeya","dist_km":40.9,"avg":1733.2,"necta":true},{"name":"Amani Abeid Karume Secondary School","region":"Dodoma","dist_km":557.8,"avg":39152.1,"necta":true}],"tei":{"score":34.5,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Severe","projectedHrsClosed":284.0,"newProjectedAvg":4693.4,"residualGap":9562.0,"levers":[{"code":"L1","score":1.0,"hrs":92.0},{"code":"L2","score":1.0,"hrs":60.0},{"code":"L3","score":1.0,"hrs":31.0},{"code":"L4","score":1.0,"hrs":52.0},{"code":"L5","score":1.0,"hrs":5.0},{"code":"L6","score":1.0,"hrs":13.0},{"code":"L7","score":1.0,"hrs":5.0},{"code":"L8","score":1.0,"hrs":3.0},{"code":"L9","score":1.0,"hrs":21.0},{"code":"L10","score":1.0,"hrs":2.0}]}},{"id":"ilembo-secondary-school","name":"Ilembo Secondary School (Ilunga)","short":"Ilembo","district":"Mbeya DC","region":"Mbeya","team":"Juma","lat":-9.20766,"lng":33.34844,"hy":{"2025":3003.0},"avg":3003.0,"necta":false,"ul":"Good","isLagged":true,"exp":14255.6,"gap":11252.6,"gapPct":3.7,"nbQuick":[{"name":"Iyunga Technical Secondary School","avg":1733.0},{"name":"Mpuguso Secondary School","avg":1881.0},{"name":"Amani Abeid Karume Secondary School","avg":39152.0}],"ng":[{"name":"Iyunga Technical Secondary School","region":"Mbeya","dist_km":32.2,"avg":1733.2,"necta":true},{"name":"Mpuguso Secondary School","region":"Mbeya","dist_km":36.3,"avg":1881.4,"necta":true},{"name":"Amani Abeid Karume Secondary School","region":"Dodoma","dist_km":573.6,"avg":39152.1,"necta":true}],"tei":{"score":39.5,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Severe","projectedHrsClosed":305.0,"newProjectedAvg":3308.0,"residualGap":10948.0,"levers":[{"code":"L1","score":1.0,"hrs":98.0},{"code":"L2","score":1.0,"hrs":64.0},{"code":"L3","score":1.0,"hrs":34.0},{"code":"L4","score":1.0,"hrs":56.0},{"code":"L5","score":1.0,"hrs":5.0},{"code":"L6","score":1.0,"hrs":14.0},{"code":"L7","score":1.0,"hrs":6.0},{"code":"L8","score":1.0,"hrs":3.0},{"code":"L9","score":1.0,"hrs":23.0},{"code":"L10","score":1.0,"hrs":2.0}]}},{"id":"imezu-secondary-school","name":"Imezu Secondary School (Malama)","short":"Imezu","district":"Mbeya DC","region":"Mbeya","team":"Juma","lat":-8.86682,"lng":33.62768,"hy":{"2025":2435.8},"avg":2435.8,"necta":false,"ul":"Good","isLagged":true,"exp":14255.6,"gap":11819.8,"gapPct":4.9,"nbQuick":[{"name":"Iyunga Technical Secondary School","avg":1733.0},{"name":"Mpuguso Secondary School","avg":1881.0},{"name":"Amani Abeid Karume Secondary School","avg":39152.0}],"ng":[{"name":"Iyunga Technical Secondary School","region":"Mbeya","dist_km":24.5,"avg":1733.2,"necta":true},{"name":"Mpuguso Secondary School","region":"Mbeya","dist_km":49.9,"avg":1881.4,"necta":true},{"name":"Amani Abeid Karume Secondary School","region":"Dodoma","dist_km":525.5,"avg":39152.1,"necta":true}],"tei":{"score":41.5,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Severe","projectedHrsClosed":311.0,"newProjectedAvg":2746.8,"residualGap":11509.0,"levers":[{"code":"L1","score":1.0,"hrs":101.0},{"code":"L2","score":1.0,"hrs":66.0},{"code":"L3","score":1.0,"hrs":34.0},{"code":"L4","score":1.0,"hrs":57.0},{"code":"L5","score":1.0,"hrs":5.0},{"code":"L6","score":1.0,"hrs":14.0},{"code":"L7","score":1.0,"hrs":6.0},{"code":"L8","score":1.0,"hrs":3.0},{"code":"L9","score":1.0,"hrs":23.0},{"code":"L10","score":1.0,"hrs":2.0}]}},{"id":"songwe-secondary-school","name":"Songwe Secondary School","short":"Songwe","district":"Mbeya DC","region":"Mbeya","team":"Juma","lat":-8.94999,"lng":33.24224,"hy":{"2025":1386.2},"avg":1386.2,"necta":false,"ul":"Moderate","isLagged":true,"exp":14255.6,"gap":12869.4,"gapPct":9.3,"nbQuick":[{"name":"Iyunga Technical Secondary School","avg":1733.0},{"name":"Mpuguso Secondary School","avg":1881.0},{"name":"Amani Abeid Karume Secondary School","avg":39152.0}],"ng":[{"name":"Iyunga Technical Secondary School","region":"Mbeya","dist_km":18.9,"avg":1733.2,"necta":true},{"name":"Mpuguso Secondary School","region":"Mbeya","dist_km":61.3,"avg":1881.4,"necta":true},{"name":"Amani Abeid Karume Secondary School","region":"Dodoma","dist_km":555.1,"avg":39152.1,"necta":true}],"tei":{"score":65.0,"tier":"P2 \u2013 High","timeline":"6\u201312 months","gapBand":"Severe","projectedHrsClosed":469.0,"newProjectedAvg":1855.2,"residualGap":12400.0,"levers":[{"code":"L1","score":1.5,"hrs":151.0},{"code":"L2","score":1.5,"hrs":99.0},{"code":"L3","score":1.0,"hrs":52.0},{"code":"L4","score":1.0,"hrs":86.0},{"code":"L5","score":1.0,"hrs":8.0},{"code":"L6","score":1.0,"hrs":22.0},{"code":"L7","score":1.0,"hrs":9.0},{"code":"L8","score":1.0,"hrs":4.0},{"code":"L9","score":1.0,"hrs":35.0},{"code":"L10","score":1.0,"hrs":3.0}]}},{"id":"usongwe-secondary-school","name":"Usongwe Secondary School","short":"Usongwe","district":"Mbeya DC","region":"Mbeya","team":"Juma","lat":-8.94006,"lng":33.34318,"hy":{"2025":319.2},"avg":319.2,"necta":false,"ul":"Poor","isLagged":true,"exp":14255.6,"gap":13936.4,"gapPct":43.7,"nbQuick":[{"name":"Iyunga Technical Secondary School","avg":1733.0},{"name":"Mpuguso Secondary School","avg":1881.0},{"name":"Amani Abeid Karume Secondary School","avg":39152.0}],"ng":[{"name":"Iyunga Technical Secondary School","region":"Mbeya","dist_km":7.8,"avg":1733.2,"necta":true},{"name":"Mpuguso Secondary School","region":"Mbeya","dist_km":54.3,"avg":1881.4,"necta":true},{"name":"Amani Abeid Karume Secondary School","region":"Dodoma","dist_km":548.3,"avg":39152.1,"necta":true}],"tei":{"score":97.8,"tier":"P1 \u2013 Urgent","timeline":"0\u20136 months","gapBand":"Severe","projectedHrsClosed":678.0,"newProjectedAvg":997.2,"residualGap":13258.0,"levers":[{"code":"L1","score":2.5,"hrs":218.0},{"code":"L2","score":2.0,"hrs":143.0},{"code":"L3","score":1.5,"hrs":75.0},{"code":"L4","score":2.0,"hrs":125.0},{"code":"L5","score":1.0,"hrs":12.0},{"code":"L6","score":1.0,"hrs":31.0},{"code":"L7","score":1.0,"hrs":12.0},{"code":"L8","score":1.0,"hrs":7.0},{"code":"L9","score":1.5,"hrs":51.0},{"code":"L10","score":1.0,"hrs":4.0}]}},{"id":"namalenga-secondary-school","name":"Namalenga Secondary School","short":"Namalenga","district":"Masasi DC","region":"Mtwara","team":"Danny","lat":-10.917888,"lng":39.113176,"hy":{"2023":5039.4,"2024":391.1,"2025":4557.3},"avg":3329.3,"necta":false,"ul":"Good","isLagged":true,"exp":4951.0,"gap":1621.7,"gapPct":0.5,"nbQuick":[{"name":"Hawa Mchopa Secondary School","avg":3990.0},{"name":"Mtama Secondary School","avg":6726.0},{"name":"Nkowe Secondary School","avg":4138.0}],"ng":[{"name":"Hawa Mchopa Secondary School","region":"Lindi","dist_km":61.5,"avg":3989.6,"necta":true},{"name":"Mtama Secondary School","region":"Lindi","dist_km":75.0,"avg":6725.5,"necta":true},{"name":"Nkowe Secondary School","region":"Lindi","dist_km":82.1,"avg":4137.8,"necta":true}],"tei":{"score":10.6,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"High","projectedHrsClosed":74.0,"newProjectedAvg":3403.3,"residualGap":1548.0,"levers":[{"code":"L1","score":1.0,"hrs":24.0},{"code":"L2","score":1.0,"hrs":16.0},{"code":"L3","score":1.0,"hrs":8.0},{"code":"L4","score":1.0,"hrs":14.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":3.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":6.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"mitesa-secondary-school","name":"Mitesa Secondary School","short":"Mitesa","district":"Masasi DC","region":"Mtwara","team":"Danny","lat":-10.8514,"lng":39.1207,"hy":{"2024":6.9,"2025":4842.5},"avg":2424.7,"necta":false,"ul":"Good","isLagged":true,"exp":4951.0,"gap":2526.3,"gapPct":1.0,"nbQuick":[{"name":"Hawa Mchopa Secondary School","avg":3990.0},{"name":"Mtama Secondary School","avg":6726.0},{"name":"Nkowe Secondary School","avg":4138.0}],"ng":[{"name":"Hawa Mchopa Secondary School","region":"Lindi","dist_km":54.3,"avg":3989.6,"necta":true},{"name":"Mtama Secondary School","region":"Lindi","dist_km":67.9,"avg":6725.5,"necta":true},{"name":"Nkowe Secondary School","region":"Lindi","dist_km":75.1,"avg":4137.8,"necta":true}],"tei":{"score":16.6,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"High","projectedHrsClosed":94.0,"newProjectedAvg":2518.7,"residualGap":2432.0,"levers":[{"code":"L1","score":1.0,"hrs":30.0},{"code":"L2","score":1.0,"hrs":20.0},{"code":"L3","score":1.0,"hrs":10.0},{"code":"L4","score":1.0,"hrs":17.0},{"code":"L5","score":1.0,"hrs":2.0},{"code":"L6","score":1.0,"hrs":4.0},{"code":"L7","score":1.0,"hrs":2.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":7.0},{"code":"L10","score":1.0,"hrs":1.0}]}},{"id":"mandera-girls-secondary-school","name":"Mandera Girls Secondary School","short":"ManderaGirls","district":"Chalinze DC","region":"Pwani","team":"Ashura","lat":-6.21323,"lng":38.407382,"hy":{"2024":4157.7,"2025":2136.9},"avg":3147.3,"necta":true,"ul":"Good","isLagged":false},{"id":"mboga-secondary-school","name":"Mboga Secondary School","short":"Mboga","district":"Chalinze DC","region":"Pwani","team":"Ashura","lat":-6.51273,"lng":38.31298,"hy":{"2024":3421.6,"2025":4966.6},"avg":4194.1,"necta":false,"ul":"Good","isLagged":true,"exp":1167.6,"gap":-3026.5,"gapPct":-0.7,"nbQuick":[{"name":"Mandera Girls Secondary School","avg":3147.0},{"name":"Semkiwa Secondary School","avg":166.0},{"name":"Mwapachu Secondary School","avg":190.0}],"ng":[{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":34.9,"avg":3147.3,"necta":true},{"name":"Semkiwa Secondary School","region":"Tanga","dist_km":153.1,"avg":165.8,"necta":true},{"name":"Mwapachu Secondary School","region":"Tanga","dist_km":176.4,"avg":189.6,"necta":true}]},{"id":"mdaula-secondary-school","name":"Mdaula Secondary School","short":"Mdaula","district":"Chalinze DC","region":"Pwani","team":"Ashura","lat":-6.64563,"lng":38.22931,"hy":{"2024":3083.9,"2025":4013.1},"avg":3548.5,"necta":false,"ul":"Good","isLagged":true,"exp":1167.6,"gap":-2380.9,"gapPct":-0.7,"nbQuick":[{"name":"Mandera Girls Secondary School","avg":3147.0},{"name":"Semkiwa Secondary School","avg":166.0},{"name":"Mwapachu Secondary School","avg":190.0}],"ng":[{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":52.0,"avg":3147.3,"necta":true},{"name":"Semkiwa Secondary School","region":"Tanga","dist_km":168.8,"avg":165.8,"necta":true},{"name":"Mwapachu Secondary School","region":"Tanga","dist_km":193.8,"avg":189.6,"necta":true}]},{"id":"msata-secondary-school","name":"Msata Secondary School","short":"Msata","district":"Chalinze DC","region":"Pwani","team":"Ashura","lat":-6.3401,"lng":38.38015,"hy":{"2024":2700.1,"2025":754.6},"avg":1727.3,"necta":false,"ul":"Moderate","isLagged":true,"exp":1167.6,"gap":-559.7,"gapPct":-0.3,"nbQuick":[{"name":"Mandera Girls Secondary School","avg":3147.0},{"name":"Semkiwa Secondary School","avg":166.0},{"name":"Mwapachu Secondary School","avg":190.0}],"ng":[{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":14.4,"avg":3147.3,"necta":true},{"name":"Semkiwa Secondary School","region":"Tanga","dist_km":133.5,"avg":165.8,"necta":true},{"name":"Mwapachu Secondary School","region":"Tanga","dist_km":156.0,"avg":189.6,"necta":true}]},{"id":"mwapachu-secondary-school","name":"Mwapachu Secondary School","short":"Mwapachu","district":"Kilindi DC","region":"Tanga","team":"Ashura","lat":-5.1276,"lng":39.0901,"hy":{"2025":189.6},"avg":189.6,"necta":true,"ul":"Poor","isLagged":false},{"id":"semkiwa-secondary-school","name":"Semkiwa Secondary School","short":"Semkiwa","district":"Kilindi DC","region":"Tanga","team":"Ashura","lat":-5.1405,"lng":38.4311,"hy":{"2025":165.8},"avg":165.8,"necta":true,"ul":"Poor","isLagged":false},{"id":"ndolwa-secondary-school","name":"Ndolwa Secondary School","short":"Ndolwa","district":"Handeni DC","region":"Tanga","team":"Ashura","lat":-5.506114,"lng":38.334813,"hy":{"2021":2370.6,"2022":719.0,"2023":6610.1,"2024":7122.8,"2025":515.1},"avg":4749.3,"necta":false,"ul":"Good","isLagged":true,"exp":1167.6,"gap":-3581.7,"gapPct":-0.8,"nbQuick":[{"name":"Semkiwa Secondary School","avg":166.0},{"name":"Mandera Girls Secondary School","avg":3147.0},{"name":"Mwapachu Secondary School","avg":190.0}],"ng":[{"name":"Semkiwa Secondary School","region":"Tanga","dist_km":42.0,"avg":165.8,"necta":true},{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":79.0,"avg":3147.3,"necta":true},{"name":"Mwapachu Secondary School","region":"Tanga","dist_km":93.6,"avg":189.6,"necta":true}]},{"id":"handeni-secondary-school","name":"Handeni Secondary School","short":"Handeni","district":"Handeni DC","region":"Tanga","team":"Ashura","lat":-5.427619,"lng":38.030748,"hy":{"2021":2903.1,"2022":3176.1,"2023":3712.2,"2024":2645.7},"avg":3178.9,"necta":false,"ul":"Good","isLagged":true,"exp":1167.6,"gap":-2011.3,"gapPct":-0.6,"nbQuick":[{"name":"Semkiwa Secondary School","avg":166.0},{"name":"Mandera Girls Secondary School","avg":3147.0},{"name":"Mwapachu Secondary School","avg":190.0}],"ng":[{"name":"Semkiwa Secondary School","region":"Tanga","dist_km":54.6,"avg":165.8,"necta":true},{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":96.8,"avg":3147.3,"necta":true},{"name":"Mwapachu Secondary School","region":"Tanga","dist_km":122.0,"avg":189.6,"necta":true}]},{"id":"mkata-secondary-school","name":"Mkata Secondary School","short":"Mkata","district":"Handeni DC","region":"Tanga","team":"Ashura","lat":-5.794806,"lng":38.28338,"hy":{"2021":925.1,"2022":2382.2,"2023":2798.5,"2024":1509.9,"2025":667.7},"avg":1658.7,"necta":false,"ul":"Moderate","isLagged":true,"exp":1167.6,"gap":-491.1,"gapPct":-0.3,"nbQuick":[{"name":"Mandera Girls Secondary School","avg":3147.0},{"name":"Semkiwa Secondary School","avg":166.0},{"name":"Mwapachu Secondary School","avg":190.0}],"ng":[{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":48.5,"avg":3147.3,"necta":true},{"name":"Semkiwa Secondary School","region":"Tanga","dist_km":74.6,"avg":165.8,"necta":true},{"name":"Mwapachu Secondary School","region":"Tanga","dist_km":116.1,"avg":189.6,"necta":true}]},{"id":"misima-secondary-school","name":"Misima Secondary School","short":"Misima","district":"Handeni DC","region":"Tanga","team":"Ashura","lat":-5.304264,"lng":38.115058,"hy":{"2021":993.3,"2022":1711.1,"2023":2504.0,"2024":1090.4,"2025":787.4},"avg":1460.6,"necta":false,"ul":"Moderate","isLagged":true,"exp":1167.6,"gap":-293.0,"gapPct":-0.2,"nbQuick":[{"name":"Semkiwa Secondary School","avg":166.0},{"name":"Mandera Girls Secondary School","avg":3147.0},{"name":"Mwapachu Secondary School","avg":190.0}],"ng":[{"name":"Semkiwa Secondary School","region":"Tanga","dist_km":39.5,"avg":165.8,"necta":true},{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":106.1,"avg":3147.3,"necta":true},{"name":"Mwapachu Secondary School","region":"Tanga","dist_km":109.7,"avg":189.6,"necta":true}]},{"id":"komnyang-anyo-secondary-school","name":"Komnyang'anyo Secondary School","short":"Komnyanganyo","district":"Handeni DC","region":"Tanga","team":"Ashura","lat":-5.49829,"lng":38.038028,"hy":{"2021":2917.8,"2022":2358.4,"2023":3302.0,"2024":531.2,"2025":157.4},"avg":1330.2,"necta":false,"ul":"Moderate","isLagged":true,"exp":1167.6,"gap":-162.6,"gapPct":-0.1,"nbQuick":[{"name":"Semkiwa Secondary School","avg":166.0},{"name":"Mandera Girls Secondary School","avg":3147.0},{"name":"Mwapachu Secondary School","avg":190.0}],"ng":[{"name":"Semkiwa Secondary School","region":"Tanga","dist_km":59.0,"avg":165.8,"necta":true},{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":89.4,"avg":3147.3,"necta":true},{"name":"Mwapachu Secondary School","region":"Tanga","dist_km":123.6,"avg":189.6,"necta":true}]},{"id":"kisaza-secondary-school","name":"Kisaza Secondary School","short":"Kisaza","district":"Handeni DC","region":"Tanga","team":"Ashura","lat":-5.604529,"lng":38.434626,"hy":{"2021":2228.3,"2022":170.4,"2023":1962.3,"2024":339.8,"2025":163.8},"avg":822.0,"necta":false,"ul":"Moderate","isLagged":true,"exp":1167.6,"gap":345.6,"gapPct":0.4,"nbQuick":[{"name":"Semkiwa Secondary School","avg":166.0},{"name":"Mandera Girls Secondary School","avg":3147.0},{"name":"Mwapachu Secondary School","avg":190.0}],"ng":[{"name":"Semkiwa Secondary School","region":"Tanga","dist_km":51.6,"avg":165.8,"necta":true},{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":67.8,"avg":3147.3,"necta":true},{"name":"Mwapachu Secondary School","region":"Tanga","dist_km":89.9,"avg":189.6,"necta":true}],"tei":{"score":5.0,"tier":"P4 \u2013 Monitor","timeline":"2+ years","gapBand":"Low","projectedHrsClosed":15.0,"newProjectedAvg":837.0,"residualGap":331.0,"levers":[{"code":"L1","score":1.0,"hrs":5.0},{"code":"L2","score":1.0,"hrs":3.0},{"code":"L3","score":1.0,"hrs":2.0},{"code":"L4","score":1.0,"hrs":3.0},{"code":"L5","score":1.0,"hrs":0.0},{"code":"L6","score":1.0,"hrs":1.0},{"code":"L7","score":1.0,"hrs":0.0},{"code":"L8","score":1.0,"hrs":0.0},{"code":"L9","score":1.0,"hrs":1.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"mbwego-secondary-school","name":"Mbwego Secondary School","short":"Mbwego","district":"Kilindi DC","region":"Tanga","team":"Ashura","lat":-5.4582,"lng":37.7799,"hy":{"2025":319.4},"avg":319.4,"necta":false,"ul":"Poor","isLagged":true,"exp":1167.6,"gap":848.2,"gapPct":2.7,"nbQuick":[{"name":"Semkiwa Secondary School","avg":166.0},{"name":"Mandera Girls Secondary School","avg":3147.0},{"name":"Mwapachu Secondary School","avg":190.0}],"ng":[{"name":"Semkiwa Secondary School","region":"Tanga","dist_km":80.3,"avg":165.8,"necta":true},{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":108.9,"avg":3147.3,"necta":true},{"name":"Mwapachu Secondary School","region":"Tanga","dist_km":149.7,"avg":189.6,"necta":true}],"tei":{"score":29.1,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Medium","projectedHrsClosed":66.0,"newProjectedAvg":385.4,"residualGap":782.0,"levers":[{"code":"L1","score":1.0,"hrs":22.0},{"code":"L2","score":1.0,"hrs":14.0},{"code":"L3","score":1.0,"hrs":7.0},{"code":"L4","score":1.0,"hrs":12.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":3.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":5.0},{"code":"L10","score":1.0,"hrs":0.0}]}},{"id":"chifu-mang-enya-secondary-school","name":"Chifu Mang'enya Secondary School","short":"ChifuMangenya","district":"Kilindi DC","region":"Tanga","team":"Ashura","lat":-5.1802,"lng":38.8034,"hy":{"2025":219.1},"avg":219.1,"necta":false,"ul":"Poor","isLagged":true,"exp":1167.6,"gap":948.5,"gapPct":4.3,"nbQuick":[{"name":"Mwapachu Secondary School","avg":190.0},{"name":"Semkiwa Secondary School","avg":166.0},{"name":"Mandera Girls Secondary School","avg":3147.0}],"ng":[{"name":"Mwapachu Secondary School","region":"Tanga","dist_km":32.3,"avg":189.6,"necta":true},{"name":"Semkiwa Secondary School","region":"Tanga","dist_km":41.5,"avg":165.8,"necta":true},{"name":"Mandera Girls Secondary School","region":"Pwani","dist_km":122.9,"avg":3147.3,"necta":true}],"tei":{"score":32.5,"tier":"P3 \u2013 Medium","timeline":"1\u20132 years","gapBand":"Medium","projectedHrsClosed":70.0,"newProjectedAvg":289.1,"residualGap":878.0,"levers":[{"code":"L1","score":1.0,"hrs":23.0},{"code":"L2","score":1.0,"hrs":15.0},{"code":"L3","score":1.0,"hrs":8.0},{"code":"L4","score":1.0,"hrs":13.0},{"code":"L5","score":1.0,"hrs":1.0},{"code":"L6","score":1.0,"hrs":3.0},{"code":"L7","score":1.0,"hrs":1.0},{"code":"L8","score":1.0,"hrs":1.0},{"code":"L9","score":1.0,"hrs":5.0},{"code":"L10","score":1.0,"hrs":0.0}]}}],"regionSummary":[{"region":"Arusha","schools":29,"avgActual":2677.6,"avgExpected":2945.6,"avgGap":268.0,"avgGapPct":0.1,"good":9,"moderate":13,"poor":7},{"region":"Dodoma","schools":5,"avgActual":3759.0,"avgExpected":15339.5,"avgGap":11580.5,"avgGapPct":3.1,"good":4,"moderate":1,"poor":0},{"region":"Iringa","schools":5,"avgActual":4029.5,"avgExpected":7233.3,"avgGap":3203.8,"avgGapPct":0.8,"good":4,"moderate":1,"poor":0},{"region":"Kilimanjaro","schools":5,"avgActual":8003.5,"avgExpected":3835.2,"avgGap":-4168.3,"avgGapPct":-0.5,"good":4,"moderate":1,"poor":0},{"region":"Lindi","schools":6,"avgActual":5076.0,"avgExpected":4951.0,"avgGap":-125.0,"avgGapPct":-0.0,"good":3,"moderate":3,"poor":0},{"region":"Manyara","schools":3,"avgActual":1289.3,"avgExpected":2535.1,"avgGap":1245.8,"avgGapPct":1.0,"good":0,"moderate":3,"poor":0},{"region":"Mara","schools":3,"avgActual":3729.2,"avgExpected":2952.4,"avgGap":-776.8,"avgGapPct":-0.2,"good":2,"moderate":1,"poor":0},{"region":"Mbeya","schools":7,"avgActual":4588.1,"avgExpected":14255.6,"avgGap":9667.5,"avgGapPct":2.1,"good":5,"moderate":1,"poor":1},{"region":"Mtwara","schools":2,"avgActual":2877.0,"avgExpected":4951.0,"avgGap":2074.0,"avgGapPct":0.7,"good":2,"moderate":0,"poor":0},{"region":"Pwani","schools":3,"avgActual":3156.6,"avgExpected":1167.6,"avgGap":-1989.0,"avgGapPct":-0.6,"good":2,"moderate":1,"poor":0},{"region":"Tanga","schools":8,"avgActual":1717.3,"avgExpected":1167.6,"avgGap":-549.7,"avgGapPct":-0.3,"good":2,"moderate":4,"poor":2}],"levers":[{"code":"L1","name":"Computer Teacher Retraining","description":"Upskill existing ICT teacher: structured curriculum delivery, hands-on coaching, syllabus coverage workshops.","maxHrs":600.0,"weight":0.3,"score5":"Teacher has near-zero ICT skills; immediate intensive retraining required","score1":"Teacher is competent; only minor refresher/update workshop needed"},{"code":"L2","name":"Additional Computer Teacher","description":"Recruit or redeploy a second ICT teacher to expand session coverage and reduce single-point-of-failure risk.","maxHrs":500.0,"weight":0.2,"score5":"No ICT teacher; recruit/redeploy is an emergency priority","score1":"Sufficient ICT staffing; minor role extension or CPD suffices"},{"code":"L3","name":"Student Computer Club","description":"Launch/strengthen a weekly computer club (2 sessions/wk \u00d7 2 hrs \u00d7 40 wks) to drive voluntary lab use outside class.","maxHrs":320.0,"weight":0.2,"score5":"No computer club exists; school has high student demand unsatisfied","score1":"Active club running well; light mentoring/resource support only"},{"code":"L4","name":"Timetable Restructuring","description":"Increase ICT periods per week from minimum (2) toward best-practice (5) and formalise lab booking.","maxHrs":480.0,"weight":0.2,"score5":"Lab used <2 periods/wk; timetable overhaul needed immediately","score1":"Lab timetabled to 4+ periods/wk; minor scheduling tweak needed"},{"code":"L5","name":"Peer School Exchange","description":"Pair with a high-performing neighbour school for joint workshops, resource sharing and mentorship visits.","maxHrs":150.0,"weight":0.1,"score5":"School is isolated with no high-performing neighbours nearby","score1":"Strong peer exchange already active; formalise and document"},{"code":"L6","name":"Lab Hardware & Maintenance","description":"Resolve downtime-causing faults, replace failed units, ensure solar / power stability. Reduces lost hours.","maxHrs":200.0,"weight":0.1,"score5":"Lab has multiple failed machines, power issues; urgent repair required","score1":"Lab fully functional; standard preventive maintenance sufficient"},{"code":"L7","name":"Head Teacher Engagement","description":"Formal commitment from school leadership: lab use targets set, progress reviewed termly, accountability built in.","maxHrs":120.0,"weight":0.1,"score5":"Head teacher unaware/disengaged; immediate leadership buy-in campaign needed","score1":"Head teacher actively champions lab use; sustain engagement only"},{"code":"L8","name":"Community / Parent Awareness","description":"Evening & weekend community access programme, parent ICT literacy sessions to extend lab utilisation.","maxHrs":100.0,"weight":0.1,"score5":"No community access; large evening/weekend hours potential untapped","score1":"Community programme active; expand gently with new offerings"},{"code":"L9","name":"ICT Exam Preparation Programme","description":"Dedicated NECTA ICT exam coaching sessions (Form 2 & 4) to create structured, high-frequency lab demand.","maxHrs":260.0,"weight":0.1,"score5":"No exam prep happening; large Form 2/4 cohort with zero ICT prep","score1":"Structured exam prep already in place; minor content update needed"},{"code":"L10","name":"Reneal Follow-Up Field Visit","description":"Targeted field visit with action plan review, on-site coaching for ICT teacher and log of barriers addressed.","maxHrs":80.0,"weight":0.0,"score5":"No visit in 12+ months; school has unresolved systemic barriers","score1":"Recent visit completed with action plan in progress; monitor only"}],"meta":{"totalSchools":115,"laggedCount":76,"teiCount":51,"regions":["Arusha","Dodoma","Iringa","Kilimanjaro","Lindi","Manyara","Mara","Mbeya","Mtwara","Pwani","Tanga"],"teams":["Abubakar","Ashura","Danny","Erick","James","Janeth","Jastin","Juma"],"years":[2019,2020,2021,2022,2023,2024,2025]}};
+
+</script>
+<script id="app-script">
+// ============================================================
+// CORE UTILITIES & STATE
+// ============================================================
+const SCHOOLS = DATA.schools;
+const LAGGED = SCHOOLS.filter(s => s.isLagged);
+const LEVERS = DATA.levers;
+const REGION_SUMMARY = DATA.regionSummary;
+const META = DATA.meta;
+
+const fmtH = n => n == null ? '\u2014' : Math.round(n).toLocaleString('en-US');
+const fmtH1 = n => n == null ? '\u2014' : n.toLocaleString('en-US', {maximumFractionDigits:1});
+const fmtPct = n => n == null ? '\u2014' : (n>0?'+':'') + n.toFixed(1) + '%';
+const fmtX = n => n == null ? '\u2014' : n.toFixed(1) + '\u00d7';
+const esc = s => (s==null?'':String(s)).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function tierClass(tier){
+  if(!tier) return 'tier-MODEL';
+  if(tier.startsWith('P1')) return 'tier-P1';
+  if(tier.startsWith('P2')) return 'tier-P2';
+  if(tier.startsWith('P3')) return 'tier-P3';
+  return 'tier-P4';
+}
+function tierLabel(s){
+  if(s.tei) return s.tei.tier.replace(/^P\d\s*\u2013\s*/,'').trim();
+  if(s.gap != null && s.gap < 0) return 'Model';
+  return 'Unscored';
+}
+function tierChipHTML(s){
+  if(s.tei){
+    const t = s.tei.tier; // "P1 – Urgent"
+    const code = t.split(' ')[0];
+    return `<span class="tier-chip ${tierClass(t)}">${code} ${esc(tierLabel(s))}</span>`;
+  }
+  if(s.gap != null && s.gap < 0){
+    return `<span class="tier-chip tier-MODEL">\u2605 Model</span>`;
+  }
+  return `<span class="tier-chip tier-P4">Unscored</span>`;
+}
+function ulChipHTML(ul){
+  return `<span class="ul-chip ul-${ul}">${ul}</span>`;
+}
+
+// Trend / decline detection (Tab 3 logic) — peak vs latest, >=50% drop, peak >500h
+function trendInfo(s){
+  const years = Object.keys(s.hy).map(Number).sort((a,b)=>a-b);
+  if(years.length < 2) return {badge:'\u2014', declining:false, peakYear:null, peakVal:null, latestYear:null, latestVal:null, cagr:null};
+  const peakYear = years.reduce((py,y)=> s.hy[y] > s.hy[py] ? y : py, years[0]);
+  const peakVal = s.hy[peakYear];
+  const latestYear = years[years.length-1];
+  const latestVal = s.hy[latestYear];
+  const declining = peakVal > 500 && latestVal <= 0.5*peakVal;
+
+  // 2-yr CAGR using last two available points
+  let cagr = null;
+  if(years.length >= 2){
+    const y1 = years[years.length-2], y2 = years[years.length-1];
+    const v1 = s.hy[y1], v2 = s.hy[y2];
+    if(v1 > 0) cagr = ((v2/v1) - 1) * 100;
+  }
+  let badge = '\u25cf Flat';
+  if(cagr != null){
+    if(cagr > 10) badge = '\u25b2 Improving';
+    else if(cagr < -10) badge = '\u25bc Declining';
+  }
+  return {badge, declining, peakYear, peakVal, latestYear, latestVal, cagr};
+}
+
+// Decline severity feeding Priority Score-style ranking (recency-weighted)
+function declineSeverity(s){
+  const t = trendInfo(s);
+  if(!t.declining) return 0;
+  const drop = 1 - (t.latestVal / t.peakVal);
+  const years = Object.keys(s.hy).map(Number).sort((a,b)=>a-b);
+  const yearsSincePeak = years[years.length-1] - t.peakYear;
+  const recencyWeight = yearsSincePeak <= 1 ? 1.0 : (yearsSincePeak === 2 ? 0.75 : 0.5);
+  return Math.round(drop * recencyWeight * 100) / 100;
+}
+
+// Composite priority score for schools lacking a TEI figure (the 25 "no data yet" lagged cases)
+// kept consistent in spirit with the TEI methodology: severity-led, bounded 0-100
+function fallbackScore(s){
+  if(s.gap == null) return 0;
+  if(s.gap < 0) return 0; // outperforming — Model school, not urgent
+  const gapPct = s.gapPct || 0;
+  return Math.min(100, Math.round(gapPct * 1.1));
+}
+function priorityScore(s){
+  return s.tei ? s.tei.score : fallbackScore(s);
+}
+
+function uniq(arr){ return [...new Set(arr)]; }
+
+// ---------- Global filter/sort/select state per tab ----------
+const State = {
+  activeTab: 't1',
+  selectedSchoolId: LAGGED.slice().sort((a,b)=>priorityScore(b)-priorityScore(a))[0].id,
+  t1: { region:'all', team:'all', tier:'all', search:'', sortKey:'score', sortDir:'desc', openId:null },
+  t3: { filter:'declining', search:'' },
+  t5: { schoolId: null, targetPct: 30 },
+};
+
+// ============================================================
+// TAB NAVIGATION
+// ============================================================
+function switchTab(tabId){
+  State.activeTab = tabId;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === tabId));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+  renderTab(tabId);
+  window.scrollTo({top:0, behavior:'instant'});
+}
+document.querySelectorAll('.nav-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=> switchTab(btn.dataset.tab));
+});
+
+function goToCaseFile(schoolId){
+  State.selectedSchoolId = schoolId;
+  switchTab('t6');
+}
+function goToSimulator(schoolId){
+  State.selectedSchoolId = schoolId;
+  State.t5.schoolId = schoolId;
+  switchTab('t5');
+}
+
+const renderers = {};
+function renderTab(tabId){
+  if(renderers[tabId]) renderers[tabId]();
+}
+
+document.getElementById('hdr-meta').textContent = `${META.laggedCount} lagged of ${META.totalSchools} schools`;
+// ============================================================
+// TAB 1 — PRIORITY QUEUE
+// ============================================================
+function t1Shell(){
+  const regions = META.regions, teams = META.teams;
+  return `
+  <div class="space-y-4">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+      <div>
+        <h2 class="font-eina text-xl sm:text-2xl font-semibold text-ink-900">Priority Queue</h2>
+        <p class="text-sm text-ink-700/70 mt-0.5">Which schools need intervention most urgently, right now? Ranked by Transformation Effort Index (TEI) where scored, or relative gap severity otherwise.</p>
+      </div>
+    </div>
+
+    <!-- KPI strip -->
+    <div id="t1-kpis" class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3"></div>
+
+    <!-- Filters -->
+    <div class="bg-white border border-sand-200 rounded-xl p-3 sm:p-4 shadow-card space-y-3">
+      <div class="flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-ink-700/40" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input id="t1-search" type="text" placeholder="Search school, district, region..." class="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border border-sand-200 bg-sand-50 focus:bg-white focus:border-rust-400 focus:ring-2 focus:ring-rust-100 outline-none font-nunito" />
+        </div>
+        <select id="t1-region" class="px-3 py-2.5 text-sm rounded-lg border border-sand-200 bg-sand-50 font-nunito font-semibold focus:border-rust-400 outline-none">
+          <option value="all">All Regions</option>
+          ${regions.map(r=>`<option value="${esc(r)}">${esc(r)}</option>`).join('')}
+        </select>
+        <select id="t1-team" class="px-3 py-2.5 text-sm rounded-lg border border-sand-200 bg-sand-50 font-nunito font-semibold focus:border-rust-400 outline-none">
+          <option value="all">All Team Members</option>
+          ${teams.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('')}
+        </select>
+      </div>
+      <div class="flex flex-wrap gap-1.5" id="t1-tier-chips">
+        ${['all','P1','P2','P3','P4','MODEL'].map(t=>`
+          <button data-tier="${t}" class="chip-btn ${t==='all'?'on':''} text-xs font-nunito font-bold px-3 py-1.5 rounded-full border border-sand-300 text-ink-700 hover:border-rust-400">
+            ${t==='all'?'All Schools':t==='MODEL'?'\u2605 Model (outperforming)':t+' \u2014 '+({P1:'Urgent',P2:'High',P3:'Medium',P4:'Monitor'}[t])}
+          </button>`).join('')}
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white border border-sand-200 rounded-xl shadow-card overflow-hidden">
+      <div class="scrollx">
+        <table class="data-tbl w-full text-sm min-w-[920px]">
+          <thead>
+            <tr>
+              <th class="px-3 py-2.5 text-left">#</th>
+              <th class="px-3 py-2.5 text-left sortable" data-sort="name">School <span class="sort-arrow">\u25be</span></th>
+              <th class="px-3 py-2.5 text-left hidden md:table-cell">Region / Team</th>
+              <th class="px-3 py-2.5 text-left">Level</th>
+              <th class="px-3 py-2.5 text-right sortable" data-sort="actual">Actual <span class="sort-arrow">\u25be</span></th>
+              <th class="px-3 py-2.5 text-right hidden sm:table-cell sortable" data-sort="expected">Expected <span class="sort-arrow">\u25be</span></th>
+              <th class="px-3 py-2.5 text-right sortable" data-sort="gap">Gap (hrs) <span class="sort-arrow">\u25be</span></th>
+              <th class="px-3 py-2.5 text-right hidden lg:table-cell sortable" data-sort="gapx">Gap \u00f7 Actual <span class="sort-arrow">\u25be</span></th>
+              <th class="px-3 py-2.5 text-right sortable sort-active" data-sort="score">TEI Score <span class="sort-arrow">\u25be</span></th>
+              <th class="px-3 py-2.5 text-left">Tier</th>
+            </tr>
+          </thead>
+          <tbody id="t1-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <p class="text-[11px] font-nunito text-black px-1">Tap a row to expand the case summary. TEI Score combines gap severity, gap band, and usage-level multiplier (see Tab 5 / Lever Reference for methodology). Schools with negative gap (outperforming neighbours) are tagged \u2605 Model and excluded from urgency ranking.</p>
+  </div>`;
+}
+
+function t1Rows(){
+  const f = State.t1;
+  let rows = LAGGED.filter(s=>{
+    if(f.region!=='all' && s.region!==f.region) return false;
+    if(f.team!=='all' && s.team!==f.team) return false;
+    if(f.tier!=='all'){
+      if(f.tier==='MODEL'){ if(!(s.gap<0)) return false; }
+      else { if(!s.tei || !s.tei.tier.startsWith(f.tier)) return false; }
+    }
+    if(f.search){
+      const q = f.search.toLowerCase();
+      if(!(s.name.toLowerCase().includes(q) || s.district.toLowerCase().includes(q) || s.region.toLowerCase().includes(q))) return false;
+    }
+    return true;
+  });
+
+  const dir = f.sortDir === 'asc' ? 1 : -1;
+  const keyFn = {
+    name: s=>s.name,
+    actual: s=>s.avg||0,
+    expected: s=>s.exp||0,
+    gap: s=>s.gap==null?-Infinity:s.gap,
+    gapx: s=>s.gapPct==null?-Infinity:s.gapPct,
+    score: s=>priorityScore(s),
+  }[f.sortKey] || (s=>priorityScore(s));
+  rows.sort((a,b)=>{
+    const av=keyFn(a), bv=keyFn(b);
+    if(av<bv) return -1*dir; if(av>bv) return 1*dir; return 0;
+  });
+  return rows;
+}
+
+function renderT1(){
+  const root = document.getElementById('t1');
+  if(!root.dataset.built){
+    root.innerHTML = t1Shell();
+    root.dataset.built = '1';
+
+    document.getElementById('t1-search').addEventListener('input', e=>{ State.t1.search = e.target.value; renderT1Table(); });
+    document.getElementById('t1-region').addEventListener('change', e=>{ State.t1.region = e.target.value; renderT1Table(); });
+    document.getElementById('t1-team').addEventListener('change', e=>{ State.t1.team = e.target.value; renderT1Table(); });
+    document.getElementById('t1-tier-chips').addEventListener('click', e=>{
+      const btn = e.target.closest('[data-tier]'); if(!btn) return;
+      State.t1.tier = btn.dataset.tier;
+      document.querySelectorAll('#t1-tier-chips [data-tier]').forEach(b=>b.classList.toggle('on', b===btn));
+      renderT1Table();
+    });
+    document.querySelectorAll('#t1 th.sortable').forEach(th=>{
+      th.addEventListener('click', ()=>{
+        const key = th.dataset.sort;
+        if(State.t1.sortKey === key){ State.t1.sortDir = State.t1.sortDir==='asc'?'desc':'asc'; }
+        else { State.t1.sortKey = key; State.t1.sortDir = 'desc'; }
+        document.querySelectorAll('#t1 th.sortable').forEach(t=>t.classList.toggle('sort-active', t===th));
+        renderT1Table();
+      });
+    });
+  }
+  renderT1KPIs();
+  renderT1Table();
+}
+renderers.t1 = renderT1;
+
+function renderT1KPIs(){
+  const p1 = LAGGED.filter(s=>s.tei && s.tei.tier.startsWith('P1')).length;
+  const p2 = LAGGED.filter(s=>s.tei && s.tei.tier.startsWith('P2')).length;
+  const model = LAGGED.filter(s=>s.gap<0).length;
+  const totalGap = LAGGED.filter(s=>s.gap>0).reduce((a,s)=>a+s.gap,0);
+  const kpis = [
+    {label:'P1 Urgent', val: p1, sub:'0\u20136 month plan', accent:'rust'},
+    {label:'P2 High', val: p2, sub:'6\u201312 month plan', accent:'rust'},
+    {label:'\u2605 Model Schools', val: model, sub:'Outperforming, no NECTA', accent:'teal'},
+    {label:'Total Gap Hours', val: fmtH(totalGap), sub:'Across all lagged schools', accent:'forest'},
+  ];
+  document.getElementById('t1-kpis').innerHTML = kpis.map(k=>`
+    <div class="bg-white border border-sand-200 rounded-xl p-3 sm:p-4 shadow-card">
+      <p class="font-nunito text-[10.5px] sm:text-xs font-bold uppercase tracking-wide text-ink-700/50">${k.label}</p>
+      <p class="font-eina text-xl sm:text-2xl font-bold text-${k.accent}-700 mt-0.5">${k.val}</p>
+      <p class="text-[11px] text-ink-700/50 mt-0.5">${k.sub}</p>
+    </div>`).join('');
+}
+
+function renderT1Table(){
+  const rows = t1Rows();
+  const tbody = document.getElementById('t1-tbody');
+  if(rows.length === 0){
+    tbody.innerHTML = `<tr><td colspan="10" class="px-4 py-10 text-center text-ink-700/40 font-nunito">No schools match these filters.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map((s,i)=>{
+    const open = State.t1.openId === s.id;
+    const score = priorityScore(s);
+    const scoreColor = s.gap<0 ? 'text-teal-700' : score>=75?'text-rust-700':score>=50?'text-rust-600':score>=25?'text-amber-600':'text-ink-700/60';
+    return `
+    <tr class="${open?'row-open':''}" data-row="${s.id}">
+      <td class="px-3 py-2.5 text-ink-700/40 font-nunito">${i+1}</td>
+      <td class="px-3 py-2.5 font-semibold text-ink-900">${esc(s.name)}<div class="md:hidden text-[11px] text-ink-700/50 font-normal">${esc(s.region)} \u00b7 ${esc(s.team)}</div></td>
+      <td class="px-3 py-2.5 hidden md:table-cell text-ink-700/70">${esc(s.region)} <span class="text-ink-700/40">/</span> ${esc(s.team)}</td>
+      <td class="px-3 py-2.5">${ulChipHTML(s.ul)}</td>
+      <td class="px-3 py-2.5 text-right font-nunito tabular-nums">${fmtH(s.avg)}</td>
+      <td class="px-3 py-2.5 text-right hidden sm:table-cell font-nunito tabular-nums text-ink-700/70">${fmtH(s.exp)}</td>
+      <td class="px-3 py-2.5 text-right font-nunito font-bold tabular-nums ${s.gap<0?'text-teal-700':'text-rust-700'}">${s.gap<0?'':'+'}${fmtH(s.gap)}</td>
+      <td class="px-3 py-2.5 text-right hidden lg:table-cell font-nunito tabular-nums text-ink-700/70">${fmtX(s.gapPct)}</td>
+      <td class="px-3 py-2.5 text-right font-nunito font-extrabold tabular-nums ${scoreColor}">${s.gap<0?'\u2014':score.toFixed(1)}</td>
+      <td class="px-3 py-2.5">${tierChipHTML(s)}</td>
+    </tr>
+    ${open ? `<tr class="expand-row"><td colspan="10" class="px-4 py-4">${t1ExpandHTML(s)}</td></tr>` : ''}
+    `;
+  }).join('');
+
+  tbody.querySelectorAll('tr[data-row]').forEach(tr=>{
+    tr.addEventListener('click', ()=>{
+      const id = tr.dataset.row;
+      State.t1.openId = State.t1.openId === id ? null : id;
+      renderT1Table();
+    });
+  });
+}
+
+function t1ExpandHTML(s){
+  const tier = s.tei ? s.tei.tier : (s.gap<0?'Model School':'Unscored');
+  const timeline = s.tei ? s.tei.timeline : (s.gap<0?'Peer-learning candidate':'\u2014');
+  const topLevers = s.tei ? s.tei.levers.slice().sort((a,b)=>b.score-a.score).slice(0,3) : [];
+  return `
+  <div class="flex flex-col lg:flex-row gap-4">
+    <div class="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div><p class="font-nunito text-[10px] uppercase font-bold text-ink-700/40">District</p><p class="text-sm font-semibold">${esc(s.district)}</p></div>
+      <div><p class="font-nunito text-[10px] uppercase font-bold text-ink-700/40">Priority Tier</p><p class="text-sm font-semibold">${esc(tier)}</p></div>
+      <div><p class="font-nunito text-[10px] uppercase font-bold text-ink-700/40">Recommended Timeline</p><p class="text-sm font-semibold">${esc(timeline)}</p></div>
+      <div><p class="font-nunito text-[10px] uppercase font-bold text-ink-700/40">Gap Band</p><p class="text-sm font-semibold">${esc(s.tei?s.tei.gapBand:'\u2014')}</p></div>
+      ${topLevers.length ? `<div class="col-span-2 sm:col-span-4">
+        <p class="font-nunito text-[10px] uppercase font-bold text-ink-700/40 mb-1">Top levers to activate</p>
+        <div class="flex flex-wrap gap-1.5">${topLevers.map(l=>{
+          const lv = LEVERS.find(x=>x.code===l.code);
+          return `<span class="text-xs font-nunito font-semibold bg-sand-100 border border-sand-200 rounded-lg px-2.5 py-1">${l.code}: ${esc(lv?lv.name:'')} <span class="text-rust-600 font-bold">(${l.score.toFixed(1)})</span></span>`;
+        }).join('')}</div>
+      </div>` : ''}
+    </div>
+    <div class="flex sm:flex-col gap-2 shrink-0">
+      <button onclick="event.stopPropagation(); goToCaseFile('${s.id}')" class="flex-1 lg:flex-none text-xs font-nunito font-bold bg-rust-700 hover:bg-rust-600 text-white px-4 py-2.5 rounded-lg whitespace-nowrap">Open Case File &rarr;</button>
+      <button onclick="event.stopPropagation(); goToSimulator('${s.id}')" class="flex-1 lg:flex-none text-xs font-nunito font-bold bg-white border border-sand-300 hover:border-rust-400 text-ink-800 px-4 py-2.5 rounded-lg whitespace-nowrap">Run Simulation &rarr;</button>
+    </div>
+  </div>`;
+}
+// ============================================================
+// TAB 2 — GAP & NEIGHBOUR BENCHMARK
+// ============================================================
+let t2Chart = null;
+
+function t2Shell(){
+  return `
+  <div class="space-y-4">
+    <div>
+      <h2 class="font-eina text-xl sm:text-2xl font-semibold text-ink-900">Gap &amp; Neighbour Benchmark</h2>
+      <p class="text-sm text-ink-700/70 mt-0.5">How far behind peers is this school, and who are the peers? Pick a school to see its Expected-vs-Actual gap alongside its named, geographically nearest NECTA-participating neighbours.</p>
+    </div>
+
+    <div class="bg-white border border-sand-200 rounded-xl p-3 sm:p-4 shadow-card">
+      <label class="font-nunito text-xs font-bold uppercase tracking-wide text-ink-700/50">Select a lagged school</label>
+      <select id="t2-select" class="w-full mt-1.5 px-3 py-2.5 text-sm rounded-lg border border-sand-200 bg-sand-50 font-nunito font-semibold focus:border-rust-400 outline-none"></select>
+    </div>
+
+    <div id="t2-body" class="space-y-4"></div>
+  </div>`;
+}
+
+function t2SchoolOptions(){
+  const sorted = LAGGED.slice().sort((a,b)=>priorityScore(b)-priorityScore(a));
+  return sorted.map(s=>`<option value="${s.id}">${esc(s.name)} \u2014 ${esc(s.region)} ${s.gap<0?'(Model)':`(Gap ${fmtH(s.gap)}h)`}</option>`).join('');
+}
+
+function renderT2(){
+  const root = document.getElementById('t2');
+  if(!root.dataset.built){
+    root.innerHTML = t2Shell();
+    root.dataset.built = '1';
+    document.getElementById('t2-select').innerHTML = t2SchoolOptions();
+    document.getElementById('t2-select').addEventListener('change', e=>{
+      State.selectedSchoolId = e.target.value;
+      renderT2Body();
+    });
+  }
+  document.getElementById('t2-select').value = State.selectedSchoolId;
+  renderT2Body();
+}
+renderers.t2 = renderT2;
+
+function renderT2Body(){
+  const s = SCHOOLS.find(x=>x.id===State.selectedSchoolId);
+  const body = document.getElementById('t2-body');
+  const neighbours = s.ng || (s.nbQuick ? s.nbQuick.map(n=>({name:n.name, avg:n.avg, dist_km:null, necta:true})) : []);
+  const isModel = s.gap != null && s.gap < 0;
+
+  body.innerHTML = `
+    <div class="grid sm:grid-cols-3 gap-3">
+      <div class="bg-white border border-sand-200 rounded-xl p-4 shadow-card">
+        <p class="font-nunito text-[11px] font-bold uppercase tracking-wide text-ink-700/50">Actual Average</p>
+        <p class="font-eina text-2xl font-bold text-ink-900 mt-0.5">${fmtH(s.avg)} <span class="text-sm font-nunito font-normal text-ink-700/50">hrs/yr</span></p>
+      </div>
+      <div class="bg-white border border-sand-200 rounded-xl p-4 shadow-card">
+        <p class="font-nunito text-[11px] font-bold uppercase tracking-wide text-ink-700/50">Expected Average (KNN, K=3)</p>
+        <p class="font-eina text-2xl font-bold text-teal-700 mt-0.5">${fmtH(s.exp)} <span class="text-sm font-nunito font-normal text-ink-700/50">hrs/yr</span></p>
+      </div>
+      <div class="bg-white border ${isModel?'border-teal-200 bg-teal-50/40':'border-rust-200 bg-rust-50/40'} rounded-xl p-4 shadow-card">
+        <p class="font-nunito text-[11px] font-bold uppercase tracking-wide text-ink-700/50">${isModel?'\u2605 Outperformance':'Gap (Expected \u2212 Actual)'}</p>
+        <p class="font-eina text-2xl font-bold ${isModel?'text-teal-700':'text-rust-700'} mt-0.5">${isModel?'':'+'}${fmtH(s.gap)} <span class="text-sm font-nunito font-normal text-ink-700/50">hrs (${fmtX(s.gapPct)})</span></p>
+      </div>
+    </div>
+
+    ${isModel ? `
+    <div class="bg-teal-50 border border-teal-200 rounded-xl p-4 text-sm text-teal-800 font-nunito">
+      <strong>\u2605 Model School:</strong> ${esc(s.short)} is already outperforming its 3 nearest NECTA-participating neighbours despite not yet sitting the NECTA ICT exam itself. This makes it a strong candidate for peer-learning visits and a priority for NECTA registration outreach (Lever L9) rather than usage remediation.
+    </div>` : ''}
+
+    <div class="bg-white border border-sand-200 rounded-xl p-3 sm:p-4 shadow-card">
+      <p class="font-nunito text-xs font-bold uppercase tracking-wide text-ink-700/50 mb-3">Expected vs. Actual &mdash; Diverging View</p>
+      <div class="h-44 sm:h-52"><canvas id="t2-chart"></canvas></div>
+    </div>
+
+    <div class="bg-white border border-sand-200 rounded-xl shadow-card overflow-hidden">
+      <p class="font-nunito text-xs font-bold uppercase tracking-wide text-ink-700/50 px-4 pt-4">3 Nearest Geographic NECTA Neighbours</p>
+      <div class="scrollx">
+        <table class="data-tbl w-full text-sm mt-2 min-w-[560px]">
+          <thead><tr>
+            <th class="px-3 py-2.5 text-left">Neighbour School</th>
+            <th class="px-3 py-2.5 text-left hidden sm:table-cell">Region</th>
+            <th class="px-3 py-2.5 text-right">Distance</th>
+            <th class="px-3 py-2.5 text-right">Avg hrs/yr</th>
+            <th class="px-3 py-2.5 text-right">vs. ${esc(s.short)}</th>
+          </tr></thead>
+          <tbody>
+            ${neighbours.map(n=>{
+              const diff = n.avg - s.avg;
+              return `<tr>
+                <td class="px-3 py-2.5 font-semibold">${esc(n.name)}</td>
+                <td class="px-3 py-2.5 hidden sm:table-cell text-ink-700/70">${esc(n.region||'\u2014')}</td>
+                <td class="px-3 py-2.5 text-right font-nunito tabular-nums">${n.dist_km!=null?n.dist_km.toFixed(1)+' km':'\u2014'}</td>
+                <td class="px-3 py-2.5 text-right font-nunito tabular-nums font-semibold">${fmtH(n.avg)}</td>
+                <td class="px-3 py-2.5 text-right font-nunito tabular-nums font-bold ${diff>=0?'text-rust-600':'text-teal-700'}">${diff>=0?'+':''}${fmtH(diff)}</td>
+              </tr>`;
+            }).join('') || `<tr><td colspan="5" class="px-3 py-6 text-center text-ink-700/40">No neighbour distance data recorded for this school.</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+      <p class="text-[11px] font-nunito text-ink-700/50 px-4 py-3">${neighbours.some(n=>n.dist_km!=null)?'Distances computed via Haversine formula on stored GPS coordinates.':'Expected Avg sourced from the network-wide KNN model (named neighbours, hours only \u2014 precise distance not available for this record).'}</p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-2">
+      <button onclick="goToCaseFile('${s.id}')" class="flex-1 text-sm font-nunito font-bold bg-rust-700 hover:bg-rust-600 text-white px-4 py-3 rounded-lg">Open Full Case File &rarr;</button>
+      <button onclick="goToSimulator('${s.id}')" class="flex-1 text-sm font-nunito font-bold bg-white border border-sand-300 hover:border-rust-400 text-ink-800 px-4 py-3 rounded-lg">Run Target Simulation &rarr;</button>
+    </div>
+  `;
+
+  const ctx = document.getElementById('t2-chart');
+  if(t2Chart) t2Chart.destroy();
+  const labels = ['Actual', 'Expected', ...neighbours.map(n=>n.name.replace(' Secondary School','').replace(' SS',''))];
+  const values = [s.avg, s.exp, ...neighbours.map(n=>n.avg)];
+  const colors = ['#7C2D12', '#0D9488', ...neighbours.map(()=>'#A0401E99')];
+  t2Chart = new Chart(ctx, {
+    type:'bar',
+    data:{ labels, datasets:[{ data: values, backgroundColor: colors, borderRadius:6, maxBarThickness:56 }]},
+    options:{
+      indexAxis:'y',
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>fmtH(c.raw)+' hrs/yr'}} },
+      scales:{ x:{ grid:{color:'#EFEAE0'}, ticks:{font:{family:'Nunito'}} }, y:{ grid:{display:false}, ticks:{font:{family:'Nunito', weight:'600'}} } }
+    }
+  });
+}
+// ============================================================
+// TAB 3 — TRAJECTORY & DECLINE WATCH
+// ============================================================
+function t3Shell(){
+  return `
+  <div class="space-y-4">
+    <div>
+      <h2 class="font-eina text-xl sm:text-2xl font-semibold text-ink-900">Trajectory &amp; Decline Watch</h2>
+      <p class="text-sm text-ink-700/70 mt-0.5">Is this school improving, flat, or collapsing &mdash; and how fast? Separates schools that never got off the ground from schools that were performing and have since collapsed.</p>
+    </div>
+
+    <div id="t3-kpis" class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3"></div>
+
+    <div class="bg-white border border-sand-200 rounded-xl p-3 sm:p-4 shadow-card space-y-3">
+      <div class="relative">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-ink-700/40" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="t3-search" type="text" placeholder="Search school..." class="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border border-sand-200 bg-sand-50 focus:bg-white focus:border-rust-400 focus:ring-2 focus:ring-rust-100 outline-none font-nunito" />
+      </div>
+      <div class="flex flex-wrap gap-1.5" id="t3-chips">
+        ${[['declining','\u25bc Declining'],['flat','\u25cf Flat'],['improving','\u25b2 Improving'],['all','All Lagged Schools']].map(([k,l],i)=>`
+          <button data-f="${k}" class="chip-btn ${k==='declining'?'on':''} text-xs font-nunito font-bold px-3 py-1.5 rounded-full border border-sand-300 text-ink-700 hover:border-rust-400">${l}</button>`).join('')}
+      </div>
+    </div>
+
+    <div class="bg-white border border-sand-200 rounded-xl shadow-card overflow-hidden">
+      <div class="scrollx">
+        <table class="data-tbl w-full text-sm min-w-[760px]">
+          <thead><tr>
+            <th class="px-3 py-2.5 text-left">School</th>
+            <th class="px-3 py-2.5 text-left hidden md:table-cell">Region</th>
+            <th class="px-3 py-2.5 text-center">Trend</th>
+            <th class="px-3 py-2.5 text-left">Sparkline (2019&ndash;2025)</th>
+            <th class="px-3 py-2.5 text-right">Peak \u2192 Latest</th>
+            <th class="px-3 py-2.5 text-right hidden sm:table-cell">Drop %</th>
+          </tr></thead>
+          <tbody id="t3-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <p class="text-[11px] font-nunito text-black px-1">Decline trigger: latest year \u2264 50% of peak year, where peak year exceeded 500 hrs. Trend badge uses 2-year CAGR (&gt;+10% Improving, &lt;\u221210% Declining, else Flat).</p>
+  </div>`;
+}
+
+function sparklineSVG(hy, declining){
+  const years = [2019,2020,2021,2022,2023,2024,2025];
+  const vals = years.map(y=>hy[y]);
+  const present = years.map((y,i)=>vals[i]!=null);
+  const maxV = Math.max(...vals.filter(v=>v!=null), 1);
+  const W=140,H=34,pad=3;
+  const pts = [];
+  years.forEach((y,i)=>{
+    if(vals[i]==null) return;
+    const x = pad + (i/(years.length-1))*(W-2*pad);
+    const yy = H-pad - (vals[i]/maxV)*(H-2*pad);
+    pts.push([x,yy]);
+  });
+  const path = pts.map((p,i)=> (i===0?'M':'L')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+  const color = declining ? '#C2532A' : '#0D9488';
+  const lastPt = pts[pts.length-1];
+  return `<svg class="spark" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <path d="${path}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    ${lastPt?`<circle cx="${lastPt[0].toFixed(1)}" cy="${lastPt[1].toFixed(1)}" r="2.6" fill="${color}"/>`:''}
+  </svg>`;
+}
+
+function renderT3(){
+  const root = document.getElementById('t3');
+  if(!root.dataset.built){
+    root.innerHTML = t3Shell();
+    root.dataset.built = '1';
+    document.getElementById('t3-search').addEventListener('input', e=>{ State.t3.search = e.target.value; renderT3Table(); });
+    document.getElementById('t3-chips').addEventListener('click', e=>{
+      const btn = e.target.closest('[data-f]'); if(!btn) return;
+      State.t3.filter = btn.dataset.f;
+      document.querySelectorAll('#t3-chips [data-f]').forEach(b=>b.classList.toggle('on', b===btn));
+      renderT3Table();
+    });
+  }
+  renderT3KPIs();
+  renderT3Table();
+}
+renderers.t3 = renderT3;
+
+function renderT3KPIs(){
+  const infos = LAGGED.map(s=>({s, t:trendInfo(s)}));
+  const declining = infos.filter(x=>x.t.declining).length;
+  const improving = infos.filter(x=>x.t.badge==='\u25b2 Improving').length;
+  const flat = infos.filter(x=>x.t.badge==='\u25cf Flat' && !x.t.declining).length;
+  const worst = infos.filter(x=>x.t.declining).sort((a,b)=>declineSeverity(b.s)-declineSeverity(a.s))[0];
+  document.getElementById('t3-kpis').innerHTML = [
+    {label:'\u25bc Declining', val:declining, sub:'\u226550% drop from peak', accent:'rust'},
+    {label:'\u25cf Flat', val:flat, sub:'Stable, no major trend', accent:'forest'},
+    {label:'\u25b2 Improving', val:improving, sub:'2-yr CAGR > +10%', accent:'teal'},
+    {label:'Steepest Decline', val: worst? esc(worst.s.short): '\u2014', sub: worst? `${fmtH(worst.t.peakVal)} \u2192 ${fmtH(worst.t.latestVal)} hrs`:'', accent:'rust'},
+  ].map(k=>`
+    <div class="bg-white border border-sand-200 rounded-xl p-3 sm:p-4 shadow-card">
+      <p class="font-nunito text-[10.5px] sm:text-xs font-bold uppercase tracking-wide text-ink-700/50">${k.label}</p>
+      <p class="font-eina text-lg sm:text-2xl font-bold text-${k.accent}-700 mt-0.5 truncate">${k.val}</p>
+      <p class="text-[11px] text-ink-700/50 mt-0.5">${k.sub}</p>
+    </div>`).join('');
+}
+
+function renderT3Table(){
+  const f = State.t3;
+  let rows = LAGGED.map(s=>({s, t:trendInfo(s)}));
+  if(f.filter==='declining') rows = rows.filter(x=>x.t.declining);
+  else if(f.filter==='flat') rows = rows.filter(x=>x.t.badge==='\u25cf Flat' && !x.t.declining);
+  else if(f.filter==='improving') rows = rows.filter(x=>x.t.badge==='\u25b2 Improving');
+  if(f.search){
+    const q = f.search.toLowerCase();
+    rows = rows.filter(x=>x.s.name.toLowerCase().includes(q) || x.s.region.toLowerCase().includes(q));
+  }
+  rows.sort((a,b)=> declineSeverity(b.s) - declineSeverity(a.s));
+
+  const tbody = document.getElementById('t3-tbody');
+  if(rows.length===0){
+    tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-10 text-center text-ink-700/40 font-nunito">No schools match this view.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(({s,t})=>{
+    const dropPct = t.declining ? Math.round((1-(t.latestVal/t.peakVal))*100) : null;
+    const badgeColor = t.badge.includes('Declining')?'text-rust-700':t.badge.includes('Improving')?'text-teal-700':'text-ink-700/60';
+    return `<tr onclick="goToCaseFile('${s.id}')">
+      <td class="px-3 py-2.5 font-semibold">${esc(s.name)}<div class="md:hidden text-[11px] text-ink-700/50 font-normal">${esc(s.region)}</div></td>
+      <td class="px-3 py-2.5 hidden md:table-cell text-ink-700/70">${esc(s.region)}</td>
+      <td class="px-3 py-2.5 text-center font-nunito font-bold ${badgeColor}">${t.badge}</td>
+      <td class="px-3 py-2.5">${sparklineSVG(s.hy, t.declining)}</td>
+      <td class="px-3 py-2.5 text-right font-nunito tabular-nums">${t.peakVal!=null?`${fmtH(t.peakVal)} <span class="text-ink-700/30">(${t.peakYear})</span> \u2192 ${fmtH(t.latestVal)} <span class="text-ink-700/30">(${t.latestYear})</span>`:'\u2014'}</td>
+      <td class="px-3 py-2.5 text-right hidden sm:table-cell font-nunito font-bold ${dropPct?'text-rust-700':'text-ink-700/40'}">${dropPct!=null?'\u2212'+dropPct+'%':'\u2014'}</td>
+    </tr>`;
+  }).join('');
+}
+// ============================================================
+// TAB 5 — TARGET & SIMULATION
+// ============================================================
+function t5Shell(){
+  return `
+  <div class="space-y-4">
+    <div>
+      <h2 class="font-eina text-xl sm:text-2xl font-semibold text-ink-900">Target &amp; Simulation</h2>
+      <p class="text-sm text-ink-700/70 mt-0.5">What usage target should we set, and is it realistic? Adjust the slider to see whether the projected usage clears the Good floor and how much of the gap to peers it closes.</p>
+    </div>
+
+    <div class="bg-white border border-sand-200 rounded-xl p-3 sm:p-4 shadow-card">
+      <label class="font-nunito text-xs font-bold uppercase tracking-wide text-ink-700/50">Select a lagged school</label>
+      <select id="t5-select" class="w-full mt-1.5 px-3 py-2.5 text-sm rounded-lg border border-sand-200 bg-sand-50 font-nunito font-semibold focus:border-rust-400 outline-none"></select>
+    </div>
+
+    <div id="t5-body"></div>
+  </div>`;
+}
+
+function renderT5(){
+  const root = document.getElementById('t5');
+  if(!root.dataset.built){
+    root.innerHTML = t5Shell();
+    root.dataset.built = '1';
+    document.getElementById('t5-select').innerHTML = t2SchoolOptions();
+    document.getElementById('t5-select').addEventListener('change', e=>{
+      State.selectedSchoolId = e.target.value;
+      State.t5.schoolId = e.target.value;
+      State.t5.targetPct = 30;
+      renderT5Body();
+    });
+  }
+  const sid = State.t5.schoolId || State.selectedSchoolId;
+  State.t5.schoolId = sid;
+  document.getElementById('t5-select').value = sid;
+  renderT5Body();
+}
+renderers.t5 = renderT5;
+
+function renderT5Body(){
+  const s = SCHOOLS.find(x=>x.id===State.t5.schoolId);
+  const body = document.getElementById('t5-body');
+  const pct = State.t5.targetPct;
+  const projected = s.avg * (1 + pct/100);
+  const clearsGood = projected >= 2000;
+  const clearsModerate = projected >= 500;
+  let levelLabel, levelColor;
+  if(clearsGood){ levelLabel='Good \u2265 2,000h'; levelColor='text-forest-700'; }
+  else if(clearsModerate){ levelLabel='Moderate 500\u20132,000h'; levelColor='text-amber-600'; }
+  else { levelLabel='Poor < 500h'; levelColor='text-rust-700'; }
+
+  let gapClosurePct = null;
+  if(s.gap != null && s.gap > 0){
+    gapClosurePct = Math.min(100, ((projected - s.avg) / s.gap) * 100);
+  }
+
+  const targetHrs = Math.round(projected);
+
+  body.innerHTML = `
+    <div class="grid lg:grid-cols-5 gap-4">
+      <div class="lg:col-span-3 bg-white border border-sand-200 rounded-xl p-4 sm:p-6 shadow-card space-y-5">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="font-nunito text-sm font-bold text-ink-900">Target % increase in usage</label>
+            <span class="font-eina text-lg font-bold text-rust-700">${pct>=0?'+':''}${pct}%</span>
+          </div>
+          <input type="range" min="-20" max="300" step="5" value="${pct}" id="t5-pct-slider" class="slider w-full" />
+          <div class="flex justify-between text-[10px] font-nunito text-ink-700/40 mt-1"><span>-20%</span><span>0%</span><span>150%</span><span>300%</span></div>
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="font-nunito text-sm font-bold text-ink-900">Target hours / year</label>
+            <span class="font-eina text-lg font-bold text-rust-700">${fmtH(targetHrs)} hrs</span>
+          </div>
+          <input type="range" min="0" max="${Math.max(20000, Math.round((s.exp||s.avg*2)*1.3))}" step="10" value="${targetHrs}" id="t5-hrs-slider" class="slider w-full" />
+          <p class="text-[11px] font-nunito text-ink-700/40 mt-1">Sliders are linked &mdash; drag either one.</p>
+        </div>
+        <div class="grid grid-cols-3 gap-2 pt-2">
+          ${[10,30,50,75,100,150].map(v=>`<button data-pct="${v}" class="t5-preset text-xs font-nunito font-bold border border-sand-300 hover:border-rust-400 hover:bg-rust-50 rounded-lg py-2">+${v}%</button>`).join('')}
+        </div>
+      </div>
+
+      <div class="lg:col-span-2 space-y-3">
+        <div class="bg-white border border-sand-200 rounded-xl p-4 shadow-card">
+          <p class="font-nunito text-[11px] font-bold uppercase tracking-wide text-ink-700/50">Projected New Average</p>
+          <p class="font-eina text-3xl font-bold text-ink-900 mt-1">${fmtH(projected)} <span class="text-sm font-nunito font-normal text-ink-700/50">hrs/yr</span></p>
+          <p class="font-nunito text-sm font-bold mt-1 ${levelColor}">${clearsGood?'\u2713':clearsModerate?'\u25b8':'\u2717'} ${levelLabel}</p>
+        </div>
+        <div class="bg-white border border-sand-200 rounded-xl p-4 shadow-card">
+          <p class="font-nunito text-[11px] font-bold uppercase tracking-wide text-ink-700/50">Gap Closure</p>
+          ${gapClosurePct!=null ? `
+            <p class="font-eina text-3xl font-bold text-teal-700 mt-1">${gapClosurePct.toFixed(0)}%</p>
+            <div class="w-full h-2 bg-sand-100 rounded-full overflow-hidden mt-2"><div class="h-full bg-teal-600 rounded-full" style="width:${gapClosurePct}%"></div></div>
+            <p class="text-[11px] text-ink-700/50 mt-1.5">of the ${fmtH(s.gap)}h gap to Expected Avg (${fmtH(s.exp)}h)</p>
+          ` : `<p class="font-eina text-xl font-bold text-teal-700 mt-1">N/A</p><p class="text-[11px] text-ink-700/50 mt-1">This school already outperforms its expected average \u2014 no gap to close.</p>`}
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-rust-50 border border-rust-200 rounded-xl p-4 sm:p-5">
+      <p class="font-nunito text-sm text-rust-900 leading-relaxed">
+        <strong>Plain-language readout:</strong> A ${pct>=0?'+':''}${pct}% change would bring <strong>${esc(s.short)}</strong> to
+        <strong>${fmtH(projected)} hrs/yr</strong> &mdash; ${clearsGood?'clearing the Good floor':clearsModerate?'reaching Moderate level but not yet Good':'still below the Moderate floor'}${gapClosurePct!=null?`, and ${gapClosurePct.toFixed(0)}% of the way to its Expected Avg of ${fmtH(s.exp)} hrs/yr.`:'.'}
+      </p>
+    </div>
+
+    ${s.tei ? `
+    <div class="bg-white border border-sand-200 rounded-xl p-4 sm:p-5 shadow-card">
+      <p class="font-nunito text-xs font-bold uppercase tracking-wide text-ink-700/50 mb-3">TEI Model Comparison &mdash; Lever-Based Projection</p>
+      <div class="grid sm:grid-cols-3 gap-3 text-center">
+        <div class="bg-sand-50 rounded-lg p-3">
+          <p class="font-nunito text-[10px] uppercase font-bold text-ink-700/40">Levers Projected Hrs Closed</p>
+          <p class="font-eina text-xl font-bold text-ink-900 mt-1">${fmtH(s.tei.projectedHrsClosed)}</p>
+        </div>
+        <div class="bg-sand-50 rounded-lg p-3">
+          <p class="font-nunito text-[10px] uppercase font-bold text-ink-700/40">TEI New Projected Avg</p>
+          <p class="font-eina text-xl font-bold text-ink-900 mt-1">${fmtH(s.tei.newProjectedAvg)}</p>
+        </div>
+        <div class="bg-sand-50 rounded-lg p-3">
+          <p class="font-nunito text-[10px] uppercase font-bold text-ink-700/40">TEI Residual Gap</p>
+          <p class="font-eina text-xl font-bold text-rust-700 mt-1">${fmtH(s.tei.residualGap)}</p>
+        </div>
+      </div>
+      <p class="text-[11px] font-nunito text-black mt-3">This is the bottom-up estimate from the 10-lever Transformation Effort Index model (Tab 6 / Case File shows full lever breakdown) &mdash; compare against your slider-based top-down target above.</p>
+    </div>` : ''}
+
+    <button onclick="goToCaseFile('${s.id}')" class="w-full text-sm font-nunito font-bold bg-rust-700 hover:bg-rust-600 text-white px-4 py-3 rounded-lg">Save &amp; Open Case File &rarr;</button>
+  `;
+
+  const pctSlider = document.getElementById('t5-pct-slider');
+  const hrsSlider = document.getElementById('t5-hrs-slider');
+  pctSlider.addEventListener('input', e=>{
+    State.t5.targetPct = Number(e.target.value);
+    renderT5Body();
+  });
+  hrsSlider.addEventListener('input', e=>{
+    const hrs = Number(e.target.value);
+    const newPct = s.avg > 0 ? Math.round(((hrs - s.avg) / s.avg) * 100) : 0;
+    State.t5.targetPct = newPct;
+    renderT5Body();
+  });
+  document.querySelectorAll('.t5-preset').forEach(b=>{
+    b.addEventListener('click', ()=>{ State.t5.targetPct = Number(b.dataset.pct); renderT5Body(); });
+  });
+}
+// ============================================================
+// TAB 6 — SCHOOL CASE FILE
+// ============================================================
+let t6Chart = null;
+
+function t6Shell(){
+  return `
+  <div class="space-y-4">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 no-print">
+      <div>
+        <h2 class="font-eina text-xl sm:text-2xl font-semibold text-ink-900">School Case File</h2>
+        <p class="text-sm text-ink-700/70 mt-0.5">Everything about one school in one place &mdash; for a visit folder or intervention planning meeting.</p>
+      </div>
+      <button onclick="window.print()" class="text-xs font-nunito font-bold bg-rust-700 hover:bg-rust-600 text-white px-4 py-2.5 rounded-lg self-start">Export / Print PDF</button>
+    </div>
+
+    <div class="bg-white border border-sand-200 rounded-xl p-3 sm:p-4 shadow-card no-print">
+      <label class="font-nunito text-xs font-bold uppercase tracking-wide text-ink-700/50">Select a school</label>
+      <select id="t6-select" class="w-full mt-1.5 px-3 py-2.5 text-sm rounded-lg border border-sand-200 bg-sand-50 font-nunito font-semibold focus:border-rust-400 outline-none"></select>
+    </div>
+
+    <div id="t6-body"></div>
+  </div>`;
+}
+
+function renderT6(){
+  const root = document.getElementById('t6');
+  if(!root.dataset.built){
+    root.innerHTML = t6Shell();
+    root.dataset.built = '1';
+    const sorted = SCHOOLS.slice().sort((a,b)=> (b.isLagged - a.isLagged) || priorityScore(b)-priorityScore(a));
+    document.getElementById('t6-select').innerHTML = sorted.map(s=>`<option value="${s.id}">${s.isLagged?'\u25cf':'\u2713'} ${esc(s.name)} \u2014 ${esc(s.region)}</option>`).join('');
+    document.getElementById('t6-select').addEventListener('change', e=>{
+      State.selectedSchoolId = e.target.value;
+      renderT6Body();
+    });
+  }
+  document.getElementById('t6-select').value = State.selectedSchoolId;
+  renderT6Body();
+}
+renderers.t6 = renderT6;
+
+function renderT6Body(){
+  const s = SCHOOLS.find(x=>x.id===State.selectedSchoolId);
+  const body = document.getElementById('t6-body');
+  const t = trendInfo(s);
+  const neighbours = s.ng || (s.nbQuick ? s.nbQuick.map(n=>({name:n.name, avg:n.avg, dist_km:null})) : []);
+  const isModel = s.gap != null && s.gap < 0;
+
+  const years = [2019,2020,2021,2022,2023,2024,2025];
+
+  body.innerHTML = `
+  <div class="bg-white border border-sand-200 rounded-xl shadow-pop overflow-hidden">
+    <!-- Header band -->
+    <div class="bg-gradient-to-br from-ink-900 to-rust-900 text-sand-50 p-5 sm:p-6">
+      <div class="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h3 class="font-eina text-xl sm:text-2xl font-bold">${esc(s.name)}</h3>
+          <p class="font-nunito text-sm text-sand-200/70 mt-1">${esc(s.district)} \u00b7 ${esc(s.region)} Region \u00b7 Field Lead: ${esc(s.team)}</p>
+        </div>
+        <div class="flex gap-2 flex-wrap">
+          ${ulChipHTML(s.ul)}
+          <span class="ul-chip ${s.necta?'ul-Good':'ul-Poor'}">${s.necta?'Has NECTA':'No NECTA'}</span>
+          ${tierChipHTML(s)}
+        </div>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
+        <div><p class="font-nunito text-[10px] uppercase font-bold text-sand-200/50">Actual Avg</p><p class="font-eina text-xl font-bold">${fmtH(s.avg)}h</p></div>
+        <div><p class="font-nunito text-[10px] uppercase font-bold text-sand-200/50">Expected Avg</p><p class="font-eina text-xl font-bold">${s.exp!=null?fmtH(s.exp)+'h':'\u2014'}</p></div>
+        <div><p class="font-nunito text-[10px] uppercase font-bold text-sand-200/50">${isModel?'Outperformance':'Gap'}</p><p class="font-eina text-xl font-bold ${isModel?'text-teal-300':'text-rust-300'}">${s.gap!=null?(isModel?'':'+')+fmtH(s.gap)+'h':'\u2014'}</p></div>
+        <div><p class="font-nunito text-[10px] uppercase font-bold text-sand-200/50">Trend</p><p class="font-eina text-xl font-bold">${t.badge}</p></div>
+      </div>
+      <div class="text-[11px] font-nunito text-sand-200/40 mt-4">GPS: ${s.lat!=null?s.lat.toFixed(5)+', '+s.lng.toFixed(5):'\u2014'}</div>
+    </div>
+
+    <div class="p-5 sm:p-6 space-y-6">
+      <!-- Usage chart -->
+      <div>
+        <p class="font-nunito text-xs font-bold uppercase tracking-wide text-ink-700/50 mb-2">Year-by-Year Usage (2019&ndash;2025)</p>
+        <div class="h-48 sm:h-56"><canvas id="t6-chart"></canvas></div>
+      </div>
+
+      <!-- Usage table (table-first per preference) -->
+      <div class="scrollx">
+        <table class="data-tbl w-full text-sm min-w-[560px]">
+          <thead><tr>${years.map(y=>`<th class="px-2.5 py-2 text-right">${y}</th>`).join('')}</tr></thead>
+          <tbody><tr>${years.map(y=>`<td class="px-2.5 py-2.5 text-right font-nunito tabular-nums ${s.hy[y]==null?'text-ink-700/30':''}">${s.hy[y]!=null?fmtH(s.hy[y]):'\u2014'}</td>`).join('')}</tr></tbody>
+        </table>
+      </div>
+
+      <!-- Neighbours -->
+      ${neighbours.length ? `
+      <div>
+        <p class="font-nunito text-xs font-bold uppercase tracking-wide text-ink-700/50 mb-2">3 Nearest Geographic Neighbours</p>
+        <div class="scrollx">
+        <table class="data-tbl w-full text-sm min-w-[480px]">
+          <thead><tr><th class="px-3 py-2 text-left">School</th><th class="px-3 py-2 text-right">Distance</th><th class="px-3 py-2 text-right">Avg hrs/yr</th></tr></thead>
+          <tbody>${neighbours.map(n=>`<tr><td class="px-3 py-2.5 font-semibold">${esc(n.name)}</td><td class="px-3 py-2.5 text-right font-nunito">${n.dist_km!=null?n.dist_km.toFixed(1)+' km':'\u2014'}</td><td class="px-3 py-2.5 text-right font-nunito font-semibold">${fmtH(n.avg)}</td></tr>`).join('')}</tbody>
+        </table>
+        </div>
+      </div>` : ''}
+
+      <!-- TEI summary (levers table removed) -->
+      ${s.tei ? `
+      <div class="bg-sand-50 border border-sand-200 rounded-xl px-4 py-3">
+        <p class="text-[12px] font-nunito text-ink-700/60">TEI Score: <strong class="text-ink-900">${s.tei.score.toFixed(1)}</strong> &middot; Priority: <strong class="text-ink-900">${esc(s.tei.tier)}</strong> &middot; Timeline: <strong class="text-ink-900">${esc(s.tei.timeline)}</strong> &middot; Gap Band: <strong class="text-ink-900">${esc(s.tei.gapBand)}</strong></p>
+      </div>` : isModel ? `
+      <div class="bg-teal-50 border border-teal-200 rounded-xl p-4 text-sm text-teal-800 font-nunito">
+        <strong>\u2605 Model School:</strong> Outperforms its KNN neighbours despite no NECTA participation. Recommended action: NECTA exam registration outreach (Lever L9) rather than usage remediation.
+      </div>` : ``}
+
+      <!-- Insights -->
+      <div class="bg-rust-50 border border-rust-200 rounded-xl p-4 sm:p-5">
+        <p class="font-nunito text-xs font-bold uppercase tracking-wide text-rust-700 mb-2">Field Notes &amp; Insights</p>
+        <ul class="space-y-1.5 text-sm text-rust-900 font-nunito list-disc list-inside">
+          ${t6Insights(s,t).map(i=>`<li>${i}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid sm:grid-cols-2 gap-2 no-print">
+    <button onclick="goToSimulator('${s.id}')" class="text-sm font-nunito font-bold bg-white border border-sand-300 hover:border-rust-400 text-ink-800 px-4 py-3 rounded-lg">Run Target Simulation &rarr;</button>
+    <button onclick="switchTab('t2')" class="text-sm font-nunito font-bold bg-white border border-sand-300 hover:border-rust-400 text-ink-800 px-4 py-3 rounded-lg">View Gap Benchmark &rarr;</button>
+  </div>
+  `;
+
+  const ctx = document.getElementById('t6-chart');
+  if(t6Chart) t6Chart.destroy();
+  const vals = years.map(y=>s.hy[y] ?? null);
+  t6Chart = new Chart(ctx, {
+    type:'bar',
+    data:{ labels: years, datasets:[{ data: vals, backgroundColor: years.map(y=> (t.peakYear===y? '#7C2D12':'#EEA17C')), borderRadius:6, maxBarThickness:48 }]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>fmtH(c.raw)+' hrs'}} },
+      scales:{ y:{ grid:{color:'#EFEAE0'}, ticks:{font:{family:'Nunito'}} }, x:{ grid:{display:false}, ticks:{font:{family:'Nunito',weight:'600'}} } }
+    }
+  });
+}
+
+function t6Insights(s,t){
+  const notes = [];
+  if(s.gap!=null && s.gap>0) notes.push(`Underperforming its 3 nearest NECTA neighbours by ${fmtH(s.gap)} hrs/yr (${fmtX(s.gapPct)} the size of its own actual average).`);
+  if(s.gap!=null && s.gap<0) notes.push(`Outperforming its KNN neighbour average by ${fmtH(Math.abs(s.gap))} hrs/yr \u2014 a candidate peer-learning site.`);
+  if(t.declining) notes.push(`Usage has declined ${Math.round((1-(t.latestVal/t.peakVal))*100)}% from its ${t.peakYear} peak of ${fmtH(t.peakVal)} hrs to ${fmtH(t.latestVal)} hrs in ${t.latestYear} \u2014 investigate root cause (teacher turnover, hardware fault, access restriction).`);
+  if(t.badge==='\u25b2 Improving') notes.push(`Usage is trending upward (2-yr CAGR ${t.cagr.toFixed(0)}%) \u2014 consider reinforcing whatever is currently working rather than introducing new levers.`);
+  if(!s.necta) notes.push(`Not yet registered for NECTA ICT exam participation \u2014 registration itself may be the highest-leverage single action (see Lever L9).`);
+  if(s.tei && s.tei.tier.startsWith('P1')) notes.push(`Flagged P1 Urgent \u2014 recommended action window is 0\u20136 months.`);
+  if(notes.length===0) notes.push('No major flags \u2014 monitor at next scheduled data refresh.');
+  return notes.map(esc);
+}
+// ============================================================
+// BOOTSTRAP
+// ============================================================
+renderTab('t1');
+
+</script>
+</body>
+</html>

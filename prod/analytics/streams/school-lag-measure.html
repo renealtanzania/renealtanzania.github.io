@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reneal Schools Lab Expected Performance </title>
+<link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+<script src="/public/css/script/tailwindcss3417.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --reneal:#1a6b3c; --reneal-light:#d1fae5; --reneal-dark:#145530;
+  --good:#16a34a; --moderate:#d97706; --poor:#dc2626;
+  --blue:#2563eb; --purple:#7c3aed; --bg:#f4f6f9; --card:#fff;
+  --border:#e5e7eb; --text:#111827; --muted:#6b7280;
+}
+* { box-sizing: border-box; }
+body { font-family:'Lato',sans-serif; background:#b3b4b9; color:var(--text); margin:0; }
+.font-eina { font-family:'Lato',sans-serif; font-weight:900; letter-spacing:-0.025em; }
+/* Tabs */
+.tab-btn { border-bottom:3px solid transparent; transition:all .15s; white-space:nowrap; }
+.tab-btn.active { border-bottom-color:var(--reneal); color:var(--reneal); font-weight:700; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+/* Badges */
+.badge-good { background:#dcfce7; color:#166534; }
+.badge-mod  { background:#fef3c7; color:#92400e; }
+.badge-poor { background:#fee2e2; color:#991b1b; }
+.badge-necta { background:#dbeafe; color:#1e40af; }
+.badge-lag  { background:#fef9c3; color:#713f12; }
+/* Spark bars */
+.spk { display:inline-block; height:14px; border-radius:1px; min-width:2px; vertical-align:bottom; }
+/* Scrollable table */
+.tbl-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+th { white-space:nowrap; }
+tbody tr:hover td { background:#f0fdf4 !important; }
+/* Header */
+#hdr { position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--border); box-shadow:0 1px 4px rgba(0,0,0,.06); }
+#tabbar { overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+#tabbar::-webkit-scrollbar { display:none; }
+/* Chart containers */
+.ch { position:relative; }
+/* KPI cards */
+.kpi-card { border-left:4px solid; border-radius:12px; background:#fff; padding:16px; }
+/* mini health bar */
+.hbar { height:6px; border-radius:3px; overflow:hidden; display:flex; gap:1px; width:80px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="hdr">
+  <div class="max-w-screen-xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center" style="background:var(--reneal)">
+        <a href="/">
+          <img src="/public/imgs/ren.jpg" width="80" height="80" alt="">
+        </a>
+      </div>
+      <div class="min-w-0">
+        <div class="font-eina text-base leading-tight" style="color:var(--reneal)">Reneal Schools Lab Lag Measure</div>
+        <div class="text-xs text-gray-400 hidden sm:block">115 Schools · 12 Regions · 2019–2025</div>
+      </div>
+    </div>
+    <span class="flex-shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style="background:var(--reneal-light);color:var(--reneal)">
+      <span class="w-1.5 h-1.5 rounded-full" style="background:var(--reneal)"></span> Data
+    </span>
+  </div>
+  <div id="tabbar" class="max-w-screen-xl mx-auto px-4 flex border-t border-gray-100">
+    <button class="tab-btn active py-2.5 px-4 text-sm text-gray-600" data-tab="overview">Network Overview</button>
+    <button class="tab-btn py-2.5 px-4 text-sm text-gray-600" data-tab="trends">Usage Trends</button>
+    <button class="tab-btn py-2.5 px-4 text-sm text-gray-600" data-tab="gap">Gap Analysis</button>
+    <button class="tab-btn py-2.5 px-4 text-sm text-gray-600" data-tab="regional">Regional & Team</button>
+    <button class="tab-btn py-2.5 px-4 text-sm text-gray-600" data-tab="dive">School Deep Dive</button>
+  </div>
+</header>
+
+<main class="max-w-screen-xl mx-auto px-4 py-5 space-y-5">
+
+<!-- ══════════════════════════════════════════════
+     TAB 1 — NETWORK OVERVIEW
+═══════════════════════════════════════════════ -->
+<div id="tab-overview" class="tab-panel active space-y-5">
+
+  <!-- KPI row -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+    <div class="kpi-card" style="border-left-color:var(--reneal)"><div class="font-eina text-2xl" style="color:var(--reneal)">115</div><div class="text-xs text-gray-500 mt-0.5">Total Schools</div></div>
+    <div class="kpi-card" style="border-left-color:var(--blue)"><div class="font-eina text-2xl" style="color:var(--blue)">12</div><div class="text-xs text-gray-500 mt-0.5">Regions</div></div>
+    <div class="kpi-card" style="border-left-color:var(--good)"><div class="font-eina text-2xl" style="color:var(--good)">69</div><div class="text-xs text-gray-500 mt-0.5">Good ≥2000h</div></div>
+    <div class="kpi-card" style="border-left-color:var(--moderate)"><div class="font-eina text-2xl" style="color:var(--moderate)">33</div><div class="text-xs text-gray-500 mt-0.5">Moderate</div></div>
+    <div class="kpi-card" style="border-left-color:var(--poor)"><div class="font-eina text-2xl" style="color:var(--poor)">13</div><div class="text-xs text-gray-500 mt-0.5">Poor &lt;500h</div></div>
+    <div class="kpi-card" style="border-left-color:var(--purple)"><div class="font-eina text-2xl" style="color:var(--purple)">387K</div><div class="text-xs text-gray-500 mt-0.5">2025 Hrs Total</div></div>
+  </div>
+
+  <!-- Donuts + note -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-xl p-5 border border-gray-100">
+      <h3 class="font-eina text-sm text-gray-700 mb-3">NECTA vs Lagged Schools</h3>
+      <div class="flex items-center gap-5">
+        <div class="ch flex-shrink-0" style="width:120px;height:120px"><canvas id="cNecta"></canvas></div>
+        <div class="space-y-2 flex-1 text-sm">
+          <div class="flex justify-between"><span class="flex items-center gap-2"><span class="inline-block w-3 h-3 rounded-sm" style="background:#2563eb"></span>Has NECTA</span><strong>40</strong></div>
+          <div class="flex justify-between"><span class="flex items-center gap-2"><span class="inline-block w-3 h-3 rounded-sm" style="background:#f59e0b"></span>No NECTA (Lagged)</span><strong>75</strong></div>
+          <p class="text-xs text-gray-400 mt-2 pt-2 border-t border-gray-100">65% of schools yet to achieve ICT exam participation — the core program challenge.</p>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-5 border border-gray-100">
+      <h3 class="font-eina text-sm text-gray-700 mb-3">Usage Level Distribution</h3>
+      <div class="flex items-center gap-5">
+        <div class="ch flex-shrink-0" style="width:120px;height:120px"><canvas id="cLevel"></canvas></div>
+        <div class="space-y-2 flex-1 text-sm">
+          <div class="flex justify-between"><span class="flex items-center gap-2"><span class="inline-block w-3 h-3 rounded-sm" style="background:#16a34a"></span>Good ≥2000h</span><strong>69 (60%)</strong></div>
+          <div class="flex justify-between"><span class="flex items-center gap-2"><span class="inline-block w-3 h-3 rounded-sm" style="background:#f59e0b"></span>Moderate 500–2000h</span><strong>33 (29%)</strong></div>
+          <div class="flex justify-between"><span class="flex items-center gap-2"><span class="inline-block w-3 h-3 rounded-sm" style="background:#dc2626"></span>Poor &lt;500h</span><strong>13 (11%)</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters + full table -->
+  <div class="bg-white rounded-xl border border-gray-100">
+    <div class="p-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-3">
+      <h3 class="font-eina text-sm text-gray-700 flex-1">All 115 Schools</h3>
+      <div class="flex flex-wrap gap-2">
+        <input id="ovSearch" type="text" placeholder="Search…" class="border border-gray-200 rounded-lg px-3 py-1.5 text-sm w-36 focus:outline-none focus:ring-1" style="--tw-ring-color:var(--reneal)">
+        <select id="ovRegion" class="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none">
+          <option value="">All Regions</option>
+          <option>Arusha</option><option>Dodoma</option><option>Iringa</option><option>Kilimanjaro</option>
+          <option>Lindi</option><option>Manyara</option><option>Mara</option><option>Mbeya</option>
+          <option>Mtwara</option><option>Pwani</option><option>Tanga</option>
+        </select>
+        <select id="ovLevel" class="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none">
+          <option value="">All Levels</option><option value="Good">Good</option><option value="Moderate">Moderate</option><option value="Poor">Poor</option>
+        </select>
+        <select id="ovNecta" class="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none">
+          <option value="">NECTA: All</option><option value="Yes">Has NECTA</option><option value="No">Lagged</option>
+        </select>
+        <select id="ovTeam" class="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none">
+          <option value="">All Teams</option>
+          <option>Danny</option><option>Erick</option><option>Jastin</option><option>Janeth</option>
+          <option>James</option><option>Juma</option><option>Abubakar</option><option>Ashura</option>
+        </select>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-100 text-left">
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold cursor-pointer hover:text-green-700" data-sort="name">School ↕</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold cursor-pointer hover:text-green-700" data-sort="region">Region ↕</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Team</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">NECTA</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold cursor-pointer hover:text-green-700" data-sort="actual_avg">Avg hrs/yr ↕</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Level</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">2019→2025 Trend</th>
+          </tr>
+        </thead>
+        <tbody id="ovBody" class="divide-y divide-gray-50"></tbody>
+      </table>
+    </div>
+    <div class="px-4 py-2 text-xs text-gray-400 border-t border-gray-50" id="ovCount"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 2 — USAGE TRENDS
+═══════════════════════════════════════════════ -->
+<div id="tab-trends" class="tab-panel space-y-5">
+
+  <div class="bg-white rounded-xl p-5 border border-gray-100">
+    <h3 class="font-eina text-sm text-gray-700">Network-Wide Usage Growth 2019–2025</h3>
+    <p class="text-xs text-gray-400 mt-0.5 mb-4">Total hours across all active schools (bars) and number of active schools each year (line).</p>
+    <div class="ch" style="height:270px"><canvas id="cNetTrend"></canvas></div>
+  </div>
+
+  <div class="bg-white rounded-xl p-5 border border-gray-100">
+    <h3 class="font-eina text-sm text-gray-700">Average Hours Per Active School Per Year</h3>
+    <p class="text-xs text-gray-400 mt-0.5 mb-4">Normalised average — shows whether individual school engagement is growing, not just total volume from new installs.</p>
+    <div class="ch" style="height:240px"><canvas id="cAvgTrend"></canvas></div>
+  </div>
+
+  <!-- Regional summary table -->
+  <div class="bg-white rounded-xl border border-gray-100">
+    <div class="p-4 border-b border-gray-100">
+      <h3 class="font-eina text-sm text-gray-700">Region Performance Snapshot</h3>
+    </div>
+    <div class="tbl-wrap">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-100 text-left">
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Region</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Schools</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Good</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Moderate</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Poor</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">NECTA</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Lagged</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Avg hrs/yr</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Health</th>
+          </tr>
+        </thead>
+        <tbody id="trendRegionBody" class="divide-y divide-gray-50"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Declining schools -->
+  <div class="bg-white rounded-xl border border-gray-100">
+    <div class="p-4 border-b border-gray-100">
+      <h3 class="font-eina text-sm text-gray-700">⚠️ Schools with Significant Usage Decline</h3>
+      <p class="text-xs text-gray-400 mt-0.5">Schools where latest year dropped ≥50% from peak recent year and prior usage was meaningful (&gt;500 hrs). Prioritise field visit.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-100 text-left">
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">School</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Region</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Team</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Peak yr</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Peak hrs</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">2025 hrs</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Drop</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">NECTA</th>
+          </tr>
+        </thead>
+        <tbody id="declBody" class="divide-y divide-gray-50"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 3 — GAP ANALYSIS
+═══════════════════════════════════════════════ -->
+<div id="tab-gap" class="tab-panel space-y-5">
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div class="bg-white rounded-xl p-4 border border-gray-100 text-center"><div class="font-eina text-2xl text-red-600">76</div><div class="text-xs text-gray-500 mt-0.5">Lagged schools with KNN gap data</div></div>
+    <div class="bg-white rounded-xl p-4 border border-gray-100 text-center"><div class="font-eina text-2xl text-amber-600">51</div><div class="text-xs text-gray-500 mt-0.5">Underperforming vs expected avg</div></div>
+    <div class="bg-white rounded-xl p-4 border border-gray-100 text-center"><div class="font-eina text-2xl text-green-600">25</div><div class="text-xs text-gray-500 mt-0.5">Exceeding expected (model schools)</div></div>
+  </div>
+
+  <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900">
+    <strong>What is the Gap?</strong> Expected Average = average of the 3 nearest geographic NECTA-participating schools (KNN, K=3). A <span class="font-semibold text-red-700">positive gap</span> means the school is underperforming relative to peers with comparable conditions. <span class="font-semibold text-green-700">Negative gap</span> = outperforming its neighbours.
+  </div>
+
+  <div class="bg-white rounded-xl border border-gray-100">
+    <div class="p-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-3">
+      <h3 class="font-eina text-sm text-gray-700 flex-1">Expected vs Actual — All Lagged Schools with Gap Data</h3>
+      <div class="flex flex-wrap gap-2">
+        <select id="gapRegion" class="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none">
+          <option value="">All Regions</option>
+          <option>Arusha</option><option>Dodoma</option><option>Iringa</option><option>Kilimanjaro</option>
+          <option>Lindi</option><option>Manyara</option><option>Mara</option><option>Mbeya</option>
+          <option>Mtwara</option><option>Pwani</option><option>Tanga</option>
+        </select>
+        <select id="gapSort" class="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none">
+          <option value="gap_desc">Worst gap first</option>
+          <option value="gap_asc">Outperformers first</option>
+          <option value="actual_desc">Highest actual first</option>
+          <option value="region">By region</option>
+        </select>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-100 text-left">
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">School</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Region</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Team</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Actual avg</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Expected avg</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Gap hrs</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Gap ratio</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Level</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Priority</th>
+          </tr>
+        </thead>
+        <tbody id="gapBody" class="divide-y divide-gray-50"></tbody>
+      </table>
+    </div>
+    <div class="px-4 py-2 text-xs text-gray-400 border-t border-gray-50" id="gapCount"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 4 — REGIONAL & TEAM
+═══════════════════════════════════════════════ -->
+<div id="tab-regional" class="tab-panel space-y-5">
+
+  <div class="bg-white rounded-xl border border-gray-100">
+    <div class="p-4 border-b border-gray-100">
+      <h3 class="font-eina text-sm text-gray-700">Regional Performance Summary</h3>
+    </div>
+    <div class="tbl-wrap">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-100 text-left">
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Region</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Schools</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Good</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Moderate</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Poor</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">NECTA</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Lagged</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Avg hrs/yr</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Good %</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Distribution</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Health</th>
+          </tr>
+        </thead>
+        <tbody id="regBody" class="divide-y divide-gray-50"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl p-5 border border-gray-100">
+    <h3 class="font-eina text-sm text-gray-700 mb-4">Schools by Usage Level per Region</h3>
+    <div class="ch" style="height:290px"><canvas id="cRegStack"></canvas></div>
+  </div>
+
+  <div class="bg-white rounded-xl border border-gray-100">
+    <div class="p-4 border-b border-gray-100">
+      <h3 class="font-eina text-sm text-gray-700">Field Team Performance Breakdown</h3>
+    </div>
+    <div class="tbl-wrap">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-100 text-left">
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Member</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Schools</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Good</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Moderate</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Poor</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">NECTA</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Lagged</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Avg hrs/yr</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Good %</th>
+            <th class="px-4 py-2.5 text-xs text-gray-500 font-semibold">Performance bar</th>
+          </tr>
+        </thead>
+        <tbody id="teamBody" class="divide-y divide-gray-50"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl p-5 border border-gray-100">
+    <h3 class="font-eina text-sm text-gray-700 mb-4">Team Average Usage per School (hrs/yr)</h3>
+    <div class="ch" style="height:250px"><canvas id="cTeam"></canvas></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 5 — SCHOOL DEEP DIVE
+═══════════════════════════════════════════════ -->
+<div id="tab-dive" class="tab-panel space-y-5">
+
+  <div class="bg-white rounded-xl p-4 border border-gray-100 flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+    <div class="flex-1">
+      <label class="text-xs text-gray-500 font-semibold block mb-1">Select a school to inspect</label>
+      <select id="schoolSel" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1" style="--tw-ring-color:var(--reneal)">
+        <option value="">— Choose a school —</option>
+      </select>
+    </div>
+    <div class="flex gap-2 flex-shrink-0">
+      <button id="btnPrev" class="px-3 py-2 rounded-lg border border-gray-200 text-sm hover:bg-gray-50 disabled:opacity-40">← Prev</button>
+      <button id="btnNext" class="px-3 py-2 rounded-lg border border-gray-200 text-sm hover:bg-gray-50 disabled:opacity-40">Next →</button>
+    </div>
+  </div>
+
+  <div id="diveDetail" class="hidden space-y-4">
+    <!-- School card -->
+    <div class="bg-white rounded-xl p-5 border border-gray-100">
+      <div class="flex flex-col sm:flex-row sm:items-start gap-4">
+        <div class="flex-1 min-w-0">
+          <h2 id="sdName" class="font-eina text-xl text-gray-900 leading-tight"></h2>
+          <div class="flex flex-wrap gap-2 mt-2" id="sdBadges"></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4">
+            <div class="bg-gray-50 rounded-lg p-3"><div class="text-xs text-gray-400">District</div><div class="font-bold text-sm mt-0.5" id="sdDistrict"></div></div>
+            <div class="bg-gray-50 rounded-lg p-3"><div class="text-xs text-gray-400">Region</div><div class="font-bold text-sm mt-0.5" id="sdRegion"></div></div>
+            <div class="bg-gray-50 rounded-lg p-3"><div class="text-xs text-gray-400">Field Team</div><div class="font-bold text-sm mt-0.5" id="sdTeam"></div></div>
+            <div class="bg-gray-50 rounded-lg p-3"><div class="text-xs text-gray-400">Avg hrs/yr</div><div class="font-bold text-sm mt-0.5" id="sdAvg"></div></div>
+          </div>
+        </div>
+        <div id="sdLevelBadge" class="flex-shrink-0 self-start px-6 py-3 rounded-xl text-sm font-bold"></div>
+      </div>
+    </div>
+
+    <!-- Year table + chart -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="bg-white rounded-xl border border-gray-100">
+        <div class="p-4 border-b border-gray-100"><h3 class="font-eina text-sm text-gray-700">Year-by-Year Usage</h3></div>
+        <div class="tbl-wrap">
+          <table class="w-full text-sm">
+            <thead><tr class="bg-gray-50 border-b border-gray-100 text-left">
+              <th class="px-4 py-2 text-xs text-gray-500 font-semibold">Year</th>
+              <th class="px-4 py-2 text-xs text-gray-500 font-semibold">Hours</th>
+              <th class="px-4 py-2 text-xs text-gray-500 font-semibold">vs Prior</th>
+              <th class="px-4 py-2 text-xs text-gray-500 font-semibold">Level</th>
+            </tr></thead>
+            <tbody id="sdYearBody" class="divide-y divide-gray-50"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-5 border border-gray-100">
+        <h3 class="font-eina text-sm text-gray-700 mb-3">Usage Chart</h3>
+        <div class="ch" style="height:220px"><canvas id="cSchool"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Gap card (lagged only) -->
+    <div id="sdGapSection" class="hidden bg-white rounded-xl border border-gray-100">
+      <div class="p-4 border-b border-gray-100"><h3 class="font-eina text-sm text-gray-700">KNN Gap Analysis</h3></div>
+      <div class="p-4 grid grid-cols-3 gap-3 text-center">
+        <div class="bg-gray-50 rounded-lg p-3"><div class="text-xs text-gray-400">Actual avg</div><div class="font-eina text-lg mt-0.5" id="sdActual"></div></div>
+        <div class="rounded-lg p-3" style="background:#f5f3ff"><div class="text-xs text-gray-400">Expected (KNN)</div><div class="font-eina text-lg text-purple-700 mt-0.5" id="sdExpected"></div></div>
+        <div id="sdGapCard" class="rounded-lg p-3"><div class="text-xs text-gray-400">Gap</div><div class="font-eina text-lg mt-0.5" id="sdGapVal"></div></div>
+      </div>
+    </div>
+
+    <!-- Insights -->
+    <div class="bg-white rounded-xl p-5 border border-gray-100">
+      <h3 class="font-eina text-sm text-gray-700 mb-3">🔍 Diagnostic Insights</h3>
+      <ul id="sdInsights" class="space-y-2 text-sm text-gray-700 list-none"></ul>
+    </div>
+  </div>
+
+  <div id="diveEmpty" class="text-center text-gray-400 py-16 text-sm">Select a school above to view its detailed profile.</div>
+</div>
+
+</main>
+
+<script>
+// ═══════════════════════════════════
+// DATA
+// ═══════════════════════════════════
+const S = [
+  {id:1,name:"Einoti Secondary School",district:"Arusha DC",region:"Arusha",team:"Danny",y:[3353.8,5830.5,12960.4,14111.8,31767.8,28899.8,21162.3],avg:27276.7,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:2,name:"Namanga SS",district:"Longido DC",region:"Arusha",team:"Erick",y:[null,2170.2,8964.7,14647.5,14916.2,11072.1,null],avg:12994.1,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:3,name:"Mlangarini SS A-Level",district:"Arusha DC",region:"Arusha",team:"Erick",y:[5846.1,3178.5,7099.1,5496.3,8500.3,13803.4,null],avg:11151.9,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:4,name:"Tingatinga SS",district:"Longido DC",region:"Arusha",team:"Erick",y:[null,0.2,71.1,1727.9,8329.6,8233.4,null],avg:8281.5,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:5,name:"Longido SS O-Level",district:"Longido DC",region:"Arusha",team:"Erick",y:[null,2259.5,8984.5,3740.1,5005.4,3762.6,null],avg:4384,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:6,name:"Themi Secondary School",district:"Arusha CC",region:"Arusha",team:"Jastin",y:[null,null,null,873.6,3009.9,2551.8,2474.8],avg:2678.8,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:7,name:"Kinana SS",district:"Arusha CC",region:"Arusha",team:"Jastin",y:[null,null,1613.6,711.2,2900.3,2031.2,2210.2],avg:2380.6,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:8,name:"Lengijave Secondary School",district:"Arusha DC",region:"Arusha",team:"Janeth",y:[null,null,null,1135.5,3570.9,2680.7,300.4],avg:2184,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:9,name:"Mwandet SS A-Level",district:"Arusha DC",region:"Arusha",team:"Erick",y:[4535.5,2640.5,754.6,2284.3,4423.2,882,1027],avg:2110.7,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:10,name:"Kiranyi Secondary School",district:"Arusha DC",region:"Arusha",team:"Erick",y:[5124.8,2869.6,2421.4,870.3,646.1,1846.9,3554.9],avg:2016,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:11,name:"Moshono Secondary School",district:"Arusha CC",region:"Arusha",team:"Janeth",y:[null,null,null,null,3266.2,1621.4,796.3],avg:1894.6,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:12,name:"Naura Secondary School",district:"Arusha CC",region:"Arusha",team:"Jastin",y:[null,null,null,null,1276.7,1797.8,1962.8],avg:1679.1,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:13,name:"Enyoito Secondary School",district:"Arusha DC",region:"Arusha",team:"Erick",y:[3999.7,2937,3262.4,1725.2,2621,526.9,null],avg:1574,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:14,name:"Kimaseki SS",district:"Arusha CC",region:"Arusha",team:"Jastin",y:[null,null,1705.2,1069.6,2095.3,337.6,2193.3],avg:1542.1,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:15,name:"Osiligi Secondary School",district:"Arusha DC",region:"Arusha",team:"Erick",y:[2675.7,2056.3,1386.8,2011.2,1622.9,2446,439.7],avg:1502.9,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:16,name:"Elerai SS",district:"Arusha CC",region:"Arusha",team:"Jastin",y:[null,null,3160.9,4479.2,2421.8,null,null],avg:1210.9,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:17,name:"Nkoasenga Secondary School",district:"Meru DC",region:"Arusha",team:"James",y:[null,null,null,null,1052.6,1174.5,214.9],avg:814,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:18,name:"Ngiresi Secondary School",district:"Arusha DC",region:"Arusha",team:"Jastin",y:[null,1264.2,1590.4,1081.1,1074.6,487.4,null],avg:781,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:19,name:"Suye SS",district:"Arusha CC",region:"Arusha",team:"Jastin",y:[null,null,1606,1509,2109.5,14.2,35.8],avg:719.9,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:20,name:"Engarenaibor SS",district:"Longido DC",region:"Arusha",team:"Erick",y:[null,354.8,4082.6,2359.8,1957.9,115.4,0.3],avg:691.2,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:21,name:"Mateves Secondary School",district:"Arusha DC",region:"Arusha",team:"Erick",y:[3547,2736.7,1958.8,312.1,459.1,null,null],avg:229.6,necta:"Yes",lvl:"Poor",exp:null,gap:null},
+  {id:22,name:"Mwandet SS O-Level Alt",district:"Arusha DC",region:"Arusha",team:"Erick",y:[null,406.8,null,1646.5,559.1,null,null],avg:279.5,necta:"Yes",lvl:"Poor",exp:null,gap:null},
+  {id:23,name:"Florian Secondary School",district:"Karatu DC",region:"Arusha",team:"Jastin",y:[null,null,null,null,15354.5,20300.5,16359.5],avg:17338.2,necta:"No",lvl:"Good",exp:1388.2,gap:-15950},
+  {id:24,name:"Mkonoo Secondary School",district:"Arusha CC",region:"Arusha",team:"Danny",y:[null,null,null,null,null,14362.8,6783.8],avg:10573.3,necta:"No",lvl:"Good",exp:5070.5,gap:-5502.8},
+  {id:25,name:"Losinoni Secondary School",district:"Arusha DC",region:"Arusha",team:"Jastin",y:[null,null,null,null,null,null,10179.8],avg:10179.8,necta:"No",lvl:"Good",exp:1259.7,gap:-8920.1},
+  {id:26,name:"Nkoarusambu Secondary School",district:"Meru DC",region:"Arusha",team:"James",y:[null,null,null,721.9,5371.8,6024.3,6104.8],avg:5833.6,necta:"No",lvl:"Good",exp:1405.9,gap:-4427.7},
+  {id:27,name:"Irkisongo Secondary School",district:"Monduli DC",region:"Arusha",team:"Janeth",y:[null,null,null,4761.7,7918.7,5918.6,1865],avg:5234.1,necta:"No",lvl:"Good",exp:9889,gap:4654.9},
+  {id:28,name:"Engutoto Secondary School",district:"Monduli DC",region:"Arusha",team:"Danny",y:[null,null,null,1723.5,4807.6,3326.9,3432.9],avg:3855.8,necta:"No",lvl:"Good",exp:9889,gap:6033.2},
+  {id:29,name:"Kikwe Secondary School",district:"Meru DC",region:"Arusha",team:"James",y:[null,null,null,433.6,2332.5,3454.9,2520.7],avg:2769.3,necta:"No",lvl:"Good",exp:4588.8,gap:1819.5},
+  {id:30,name:"Muungano Secondary School",district:"Meru DC",region:"Arusha",team:"James",y:[null,null,1098.6,1963.5,1806.4,2052,2693.7],avg:2184.1,necta:"No",lvl:"Good",exp:4609.2,gap:2425.1},
+  {id:31,name:"Moita Secondary School",district:"Monduli DC",region:"Arusha",team:"Janeth",y:[null,null,null,null,1230.4,2807.9,1983.8],avg:2007.4,necta:"No",lvl:"Good",exp:1429.8,gap:-577.6},
+  {id:32,name:"Sambasha Secondary School",district:"Arusha DC",region:"Arusha",team:"Janeth",y:[null,1113.1,874.6,133.4,3431,807.1,1677.8],avg:1971.9,necta:"No",lvl:"Moderate",exp:1697.6,gap:-274.3},
+  {id:33,name:"Oljoro Secondary School",district:"Arusha DC",region:"Arusha",team:"Janeth",y:[null,null,null,717.9,1270.4,1089.5,3186.9],avg:1848.9,necta:"No",lvl:"Moderate",exp:1429.8,gap:-419.1},
+  {id:34,name:"Enduimet SS",district:"Longido DC",region:"Arusha",team:"Erick",y:[null,0.5,17.1,4,3414.3,147.7,null],avg:1781,necta:"No",lvl:"Moderate",exp:4197.2,gap:2416.2},
+  {id:35,name:"Irkisale Secondary School",district:"Monduli DC",region:"Arusha",team:"Janeth",y:[null,null,null,null,2446.9,2061.6,677.4],avg:1728.7,necta:"No",lvl:"Moderate",exp:9962.3,gap:8233.6},
+  {id:36,name:"Olturment Secondary School",district:"Arusha DC",region:"Arusha",team:"Janeth",y:[1178.9,2142.9,660,68.4,3105.2,508.9,452.9],avg:1355.6,necta:"No",lvl:"Moderate",exp:1876.5,gap:520.9},
+  {id:37,name:"Oloasiti Secondary School",district:"Arusha CC",region:"Arusha",team:"Janeth",y:[null,null,null,null,1474.4,26.1,2433.4],avg:1311.3,necta:"No",lvl:"Moderate",exp:1968.6,gap:657.3},
+  {id:38,name:"Nkoanrua Secondary School",district:"Meru DC",region:"Arusha",team:"James",y:[null,null,null,1555.5,1653.3,976.6,1106.5],avg:1245.4,necta:"No",lvl:"Moderate",exp:1405.9,gap:160.5},
+  {id:39,name:"Bangata Secondary School",district:"Arusha DC",region:"Arusha",team:"Jastin",y:[1937.6,1786.9,1691.4,710.8,1765.9,1307.5,50.5],avg:1041.3,necta:"No",lvl:"Moderate",exp:1299,gap:257.7},
+  {id:40,name:"Mringa Secondary School",district:"Arusha DC",region:"Arusha",team:"Erick",y:[3299.3,2960.8,3287.4,802.6,2809.5,144.2,10.5],avg:988.1,necta:"No",lvl:"Moderate",exp:1576.6,gap:588.5},
+  {id:41,name:"Ilkiding'a Secondary School",district:"Arusha DC",region:"Arusha",team:"Jastin",y:[701.5,null,251.7,55.7,1412.6,272.3,null],avg:842.4,necta:"No",lvl:"Moderate",exp:1600.3,gap:757.9},
+  {id:42,name:"Oldadai Secondary School",district:"Arusha DC",region:"Arusha",team:"Jastin",y:[891.5,347.1,846.3,244,965.9,362.6,513],avg:613.8,necta:"No",lvl:"Moderate",exp:1405.9,gap:792.1},
+  {id:43,name:"Mukulat Secondary School",district:"Arusha DC",region:"Arusha",team:"Erick",y:[2978.1,2847.1,2139.5,1014.9,1314.6,447.1,33.3],avg:598.3,necta:"No",lvl:"Moderate",exp:1932.5,gap:1334.2},
+  {id:44,name:"Sing'isi Secondary School",district:"Meru DC",region:"Arusha",team:"James",y:[null,null,4,1320,1097.3,266.1,304.7],avg:556,necta:"No",lvl:"Moderate",exp:1131.8,gap:575.8},
+  {id:45,name:"Olmotoni Secondary School",district:"Arusha DC",region:"Arusha",team:"Erick",y:[311,775.5,845.9,270.6,923.5,255.4,43.7],avg:407.6,necta:"No",lvl:"Poor",exp:1576.6,gap:1169},
+  {id:46,name:"Kimnyaki Secondary School",district:"Arusha DC",region:"Arusha",team:"Jastin",y:[2555.9,3447.2,1291.2,335.9,260.5,446.7,423.3],avg:376.8,necta:"No",lvl:"Poor",exp:1576.6,gap:1199.8},
+  {id:47,name:"Poli Secondary School",district:"Meru DC",region:"Arusha",team:"James",y:[null,null,null,886.8,857,0.5,117.3],avg:325,necta:"No",lvl:"Poor",exp:1131.8,gap:806.8},
+  {id:48,name:"Sokon II Secondary School",district:"Arusha DC",region:"Arusha",team:"Jastin",y:[477,1099.8,771.2,14.5,560.5,181.8,9.8],avg:250.7,necta:"No",lvl:"Poor",exp:1299,gap:1048.3},
+  {id:49,name:"Oldonyowas Secondary School",district:"Arusha DC",region:"Arusha",team:"Janeth",y:[null,null,null,1322.1,null,426.4,248.4],avg:224.9,necta:"No",lvl:"Poor",exp:1932.5,gap:1707.6},
+  {id:50,name:"Olokii Secondary School",district:"Arusha DC",region:"Arusha",team:"James",y:[1205.1,1170.4,39,54.9,310.4,155.6,146.8],avg:204.3,necta:"No",lvl:"Poor",exp:5070.5,gap:4866.2},
+  {id:51,name:"Ilboru Secondary School",district:"Arusha DC",region:"Arusha",team:"Jastin",y:[2321.5,2586.4,1726.8,441.7,null,3.2,null],avg:1.6,necta:"No",lvl:"Poor",exp:1821.2,gap:1819.6},
+  {id:52,name:"Amani Abeid Karume SS",district:"Kondoa DC",region:"Dodoma",team:"Juma",y:[null,null,null,23942.4,32095.1,37428.2,47932.8],avg:39152.1,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:53,name:"Bukulu Secondary School",district:"Kondoa DC",region:"Dodoma",team:"Juma",y:[null,null,null,null,15.4,6026.5,15001.1],avg:7014.3,necta:"No",lvl:"Good",exp:15339.5,gap:8325.2},
+  {id:54,name:"Ula Secondary School",district:"Kondoa DC",region:"Dodoma",team:"Juma",y:[null,null,null,3132.5,5898.3,4954,1778.6],avg:4210.3,necta:"No",lvl:"Good",exp:15339.5,gap:11129.2},
+  {id:55,name:"Bicha Secondary School",district:"Kondoa DC",region:"Dodoma",team:"Juma",y:[null,null,null,null,4612,2935.5,1974.8],avg:3174.1,necta:"No",lvl:"Good",exp:15339.5,gap:12165.4},
+  {id:56,name:"Bihawana Secondary School",district:"Dodoma CC",region:"Dodoma",team:"Juma",y:[null,null,null,null,4549.9,2994.1,1040.3],avg:2861.5,necta:"No",lvl:"Good",exp:15339.5,gap:12478},
+  {id:57,name:"Viwandani Secondary School",district:"Dodoma CC",region:"Dodoma",team:"Juma",y:[null,null,null,null,null,null,1534.6],avg:1534.6,necta:"No",lvl:"Moderate",exp:15339.5,gap:13804.9},
+  {id:58,name:"Kilolo Secondary School",district:"Kilolo DC",region:"Iringa",team:"Juma",y:[null,null,null,null,null,4613.4,7637.1],avg:6125.2,necta:"No",lvl:"Good",exp:2254,gap:-3871.2},
+  {id:59,name:"Udzungwa Secondary School",district:"Kilolo DC",region:"Iringa",team:"Juma",y:[null,null,null,null,null,3912.6,6441.7],avg:5177.1,necta:"No",lvl:"Good",exp:2254,gap:-2923.1},
+  {id:60,name:"Selebu Secondary School",district:"Kilolo DC",region:"Iringa",team:"Juma",y:[null,null,null,null,null,971.3,7719.8],avg:4345.6,necta:"No",lvl:"Good",exp:14726.9,gap:10381.3},
+  {id:61,name:"Uhambingeto Secondary School",district:"Kilolo DC",region:"Iringa",team:"Juma",y:[null,null,null,null,null,null,2555.8],avg:2555.8,necta:"No",lvl:"Good",exp:14677.5,gap:12121.7},
+  {id:62,name:"Nyalumbu Secondary School",district:"Kilolo DC",region:"Iringa",team:"Juma",y:[null,null,null,null,null,2909.3,977.9],avg:1943.6,necta:"No",lvl:"Moderate",exp:2254,gap:310.4},
+  {id:63,name:"Kiboriloni Secondary School",district:"Moshi CC",region:"Kilimanjaro",team:"James",y:[null,null,null,null,null,3617.4,3374.7],avg:3496,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:64,name:"Nuru Secondary School",district:"Siha DC",region:"Kilimanjaro",team:"James",y:[null,null,null,null,null,null,17429.5],avg:17429.5,necta:"No",lvl:"Good",exp:3292.2,gap:-14137.3},
+  {id:65,name:"Oshara Secondary School",district:"Siha DC",region:"Kilimanjaro",team:"James",y:[null,null,null,null,null,null,8793],avg:8793,necta:"No",lvl:"Good",exp:4197.2,gap:-4595.8},
+  {id:66,name:"Namwai Secondary School",district:"Siha DC",region:"Kilimanjaro",team:"James",y:[null,null,null,null,null,null,6893.6],avg:6893.6,necta:"No",lvl:"Good",exp:3292.2,gap:-3601.4},
+  {id:67,name:"Sanya Juu Secondary School",district:"Siha DC",region:"Kilimanjaro",team:"James",y:[null,null,null,null,null,null,5239.6],avg:5239.6,necta:"No",lvl:"Good",exp:4197.2,gap:-1042.4},
+  {id:68,name:"Ifati Secondary School",district:"Moshi DC",region:"Kilimanjaro",team:"James",y:[null,null,null,null,null,1280.2,2043.2],avg:1661.7,necta:"No",lvl:"Moderate",exp:4197.2,gap:2535.5},
+  {id:69,name:"Mtama Secondary School",district:"Lindi DC",region:"Lindi",team:"Danny",y:[null,null,null,null,10492.4,6990.1,2693.9],avg:6725.5,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:70,name:"Nkowe Secondary School",district:"Ruangwa DC",region:"Lindi",team:"Danny",y:[null,null,null,null,null,2903.6,5371.9],avg:4137.8,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:71,name:"Hawa Mchopa Secondary School",district:"Ruangwa DC",region:"Lindi",team:"Danny",y:[null,null,null,null,null,2890.3,5089],avg:3989.6,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:72,name:"Lucas Malia Secondary School",district:"Ruangwa DC",region:"Lindi",team:"Danny",y:[null,null,null,null,null,11933.3,26869.1],avg:19401.2,necta:"No",lvl:"Good",exp:4951,gap:-14450.2},
+  {id:73,name:"Mbekenyera Secondary School",district:"Ruangwa DC",region:"Lindi",team:"Danny",y:[null,null,null,null,null,3700.1,5304],avg:4502.1,necta:"No",lvl:"Good",exp:4951,gap:448.9},
+  {id:74,name:"Nyegendi Secondary School",district:"Lindi DC",region:"Lindi",team:"Danny",y:[null,null,null,null,3202.2,3640.5,1236.1],avg:2692.9,necta:"No",lvl:"Good",exp:4951,gap:2258.1},
+  {id:75,name:"Mahiwa Secondary School",district:"Lindi DC",region:"Lindi",team:"Danny",y:[null,null,null,null,1297.1,451.3,2572.6],avg:1440.4,necta:"No",lvl:"Moderate",exp:4951,gap:3510.6},
+  {id:76,name:"Ruangwa Secondary School",district:"Ruangwa DC",region:"Lindi",team:"Danny",y:[null,null,null,null,null,524.9,1962.2],avg:1243.5,necta:"No",lvl:"Moderate",exp:4951,gap:3707.5},
+  {id:77,name:"Kiwalala Secondary School",district:"Lindi DC",region:"Lindi",team:"Danny",y:[null,null,null,null,1926.8,1086.3,514],avg:1175.7,necta:"No",lvl:"Moderate",exp:4951,gap:3775.3},
+  {id:78,name:"Dareda Secondary School",district:"Babati DC",region:"Manyara",team:"Abubakar",y:[null,null,null,null,11008.4,5569.9,3959.2],avg:6845.9,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:79,name:"Nakwa Secondary School",district:"Babati TC",region:"Manyara",team:"Abubakar",y:[null,null,null,1774.3,8746.4,2923.4,4544.9],avg:5404.9,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:80,name:"Komoto Secondary School",district:"Babati TC",region:"Manyara",team:"Abubakar",y:[null,null,null,411.4,2687.4,3533.1,1691.7],avg:2637.4,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:81,name:"Nangara Secondary School",district:"Babati TC",region:"Manyara",team:"Abubakar",y:[null,null,null,1518.9,1538.5,909.8,1936.5],avg:1461.6,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:82,name:"Manyara Girls Secondary School",district:"Babati TC",region:"Manyara",team:"Abubakar",y:[null,null,null,null,null,null,941.9],avg:941.9,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:83,name:"Kwaraa Secondary School",district:"Babati TC",region:"Manyara",team:"Abubakar",y:[null,null,null,1523.9,1022.6,393.1,340.3],avg:585.3,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:84,name:"Chief Dodo Secondary School",district:"Babati DC",region:"Manyara",team:"Abubakar",y:[null,null,null,null,2678.4,1031,null],avg:1854.7,necta:"No",lvl:"Moderate",exp:3168,gap:1313.3},
+  {id:85,name:"Babati Day Secondary School",district:"Babati TC",region:"Manyara",team:"Abubakar",y:[null,null,null,30.1,1500.8,1638.8,17.6],avg:1052.4,necta:"No",lvl:"Moderate",exp:1561.4,gap:509},
+  {id:86,name:"Bagara Secondary School",district:"Babati TC",region:"Manyara",team:"Abubakar",y:[null,null,null,6.1,2866.3,13.7,2.2],avg:960.7,necta:"No",lvl:"Moderate",exp:2875.9,gap:1915.2},
+  {id:87,name:"Kiabakari Secondary School",district:"Butiama DC",region:"Mara",team:"Danny",y:[null,null,null,null,null,988.7,6575.1],avg:3781.9,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:88,name:"Kiagata Secondary School",district:"Butiama DC",region:"Mara",team:"Danny",y:[null,null,null,null,null,3435.8,10362.3],avg:6899,necta:"No",lvl:"Good",exp:2952.4,gap:-3946.6},
+  {id:89,name:"Bumangi Secondary School",district:"Butiama DC",region:"Mara",team:"Danny",y:[null,null,null,null,null,1552.9,5291.9],avg:3422.4,necta:"No",lvl:"Good",exp:2952.4,gap:-470},
+  {id:90,name:"Butuguri Secondary School",district:"Butiama DC",region:"Mara",team:"Danny",y:[null,null,null,null,null,504.3,1228.4],avg:866.3,necta:"No",lvl:"Moderate",exp:2952.4,gap:2086.1},
+  {id:91,name:"Mpuguso Secondary School",district:"Rungwe DC",region:"Mbeya",team:"Juma",y:[null,null,null,null,null,null,1881.4],avg:1881.4,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:92,name:"Iyunga Technical SS",district:"Mbeya DC",region:"Mbeya",team:"Juma",y:[null,null,null,null,null,null,1733.2],avg:1733.2,necta:"Yes",lvl:"Moderate",exp:null,gap:null},
+  {id:93,name:"Ikuti Secondary School",district:"Rungwe DC",region:"Mbeya",team:"Juma",y:[null,null,null,null,null,null,14379.7],avg:14379.7,necta:"No",lvl:"Good",exp:14255.6,gap:-124.1},
+  {id:94,name:"Kinyala Secondary School",district:"Rungwe DC",region:"Mbeya",team:"Juma",y:[null,null,null,null,null,null,6183.2],avg:6183.2,necta:"No",lvl:"Good",exp:14255.6,gap:8072.4},
+  {id:95,name:"Lupoto Secondary School",district:"Rungwe DC",region:"Mbeya",team:"Juma",y:[null,null,null,null,null,null,4409.4],avg:4409.4,necta:"No",lvl:"Good",exp:14255.6,gap:9846.2},
+  {id:96,name:"Ilembo Secondary School",district:"Mbeya DC",region:"Mbeya",team:"Juma",y:[null,null,null,null,null,null,3003],avg:3003,necta:"No",lvl:"Good",exp:14255.6,gap:11252.6},
+  {id:97,name:"Imezu Secondary School",district:"Mbeya DC",region:"Mbeya",team:"Juma",y:[null,null,null,null,null,null,2435.8],avg:2435.8,necta:"No",lvl:"Good",exp:14255.6,gap:11819.8},
+  {id:98,name:"Songwe Secondary School",district:"Mbeya DC",region:"Mbeya",team:"Juma",y:[null,null,null,null,null,null,1386.2],avg:1386.2,necta:"No",lvl:"Moderate",exp:14255.6,gap:12869.4},
+  {id:99,name:"Usongwe Secondary School",district:"Mbeya DC",region:"Mbeya",team:"Juma",y:[null,null,null,null,null,null,319.2],avg:319.2,necta:"No",lvl:"Poor",exp:14255.6,gap:13936.4},
+  {id:100,name:"Namalenga Secondary School",district:"Masasi DC",region:"Mtwara",team:"Danny",y:[null,null,null,null,5039.4,391.1,4557.3],avg:3329.3,necta:"No",lvl:"Good",exp:4951,gap:1621.7},
+  {id:101,name:"Mitesa Secondary School",district:"Masasi DC",region:"Mtwara",team:"Danny",y:[null,null,null,null,null,6.9,4842.5],avg:2424.7,necta:"No",lvl:"Good",exp:4951,gap:2526.3},
+  {id:102,name:"Mandera Girls Secondary School",district:"Chalinze DC",region:"Pwani",team:"Ashura",y:[null,null,null,null,null,4157.7,2136.9],avg:3147.3,necta:"Yes",lvl:"Good",exp:null,gap:null},
+  {id:103,name:"Mboga Secondary School",district:"Chalinze DC",region:"Pwani",team:"Ashura",y:[null,null,null,null,null,3421.6,4966.6],avg:4194.1,necta:"No",lvl:"Good",exp:1167.6,gap:-3026.5},
+  {id:104,name:"Mdaula Secondary School",district:"Chalinze DC",region:"Pwani",team:"Ashura",y:[null,null,null,null,null,3083.9,4013.1],avg:3548.5,necta:"No",lvl:"Good",exp:1167.6,gap:-2380.9},
+  {id:105,name:"Msata Secondary School",district:"Chalinze DC",region:"Pwani",team:"Ashura",y:[null,null,null,null,null,2700.1,754.6],avg:1727.3,necta:"No",lvl:"Moderate",exp:1167.6,gap:-559.7},
+  {id:106,name:"Mwapachu Secondary School",district:"Kilindi DC",region:"Tanga",team:"Ashura",y:[null,null,null,null,null,null,189.6],avg:189.6,necta:"Yes",lvl:"Poor",exp:null,gap:null},
+  {id:107,name:"Semkiwa Secondary School",district:"Kilindi DC",region:"Tanga",team:"Ashura",y:[null,null,null,null,null,null,165.8],avg:165.8,necta:"Yes",lvl:"Poor",exp:null,gap:null},
+  {id:108,name:"Ndolwa Secondary School",district:"Handeni DC",region:"Tanga",team:"Ashura",y:[null,null,2370.6,719,6610.1,7122.8,515.1],avg:4749.3,necta:"No",lvl:"Good",exp:1167.6,gap:-3581.7},
+  {id:109,name:"Handeni Secondary School",district:"Handeni DC",region:"Tanga",team:"Ashura",y:[null,null,2903.1,3176.1,3712.2,2645.7,null],avg:3178.9,necta:"No",lvl:"Good",exp:1167.6,gap:-2011.3},
+  {id:110,name:"Mkata Secondary School",district:"Handeni DC",region:"Tanga",team:"Ashura",y:[null,null,925.1,2382.2,2798.5,1509.9,667.7],avg:1658.7,necta:"No",lvl:"Moderate",exp:1167.6,gap:-491.1},
+  {id:111,name:"Misima Secondary School",district:"Handeni DC",region:"Tanga",team:"Ashura",y:[null,null,993.3,1711.1,2504,1090.4,787.4],avg:1460.6,necta:"No",lvl:"Moderate",exp:1167.6,gap:-293},
+  {id:112,name:"Komnyang'anyo Secondary School",district:"Handeni DC",region:"Tanga",team:"Ashura",y:[null,null,2917.8,2358.4,3302,531.2,157.4],avg:1330.2,necta:"No",lvl:"Moderate",exp:1167.6,gap:-162.6},
+  {id:113,name:"Kisaza Secondary School",district:"Handeni DC",region:"Tanga",team:"Ashura",y:[null,null,2228.3,170.4,1962.3,339.8,163.8],avg:822,necta:"No",lvl:"Moderate",exp:1167.6,gap:345.6},
+  {id:114,name:"Mbwego Secondary School",district:"Kilindi DC",region:"Tanga",team:"Ashura",y:[null,null,null,null,null,null,319.4],avg:319.4,necta:"No",lvl:"Poor",exp:1167.6,gap:848.2},
+  {id:115,name:"Chifu Mang'enya Secondary School",district:"Kilindi DC",region:"Tanga",team:"Ashura",y:[null,null,null,null,null,null,219.1],avg:219.1,necta:"No",lvl:"Poor",exp:1167.6,gap:948.5}
+];
+
+const REGIONS = {
+  Arusha:{good:19,mod:23,poor:9,total:51,sum:166026.3,necta:22,lag:29},
+  Dodoma:{good:5,mod:1,poor:0,total:6,sum:57946.9,necta:1,lag:5},
+  Iringa:{good:4,mod:1,poor:0,total:5,sum:20147.3,necta:0,lag:5},
+  Kilimanjaro:{good:5,mod:1,poor:0,total:6,sum:43513.4,necta:1,lag:5},
+  Lindi:{good:6,mod:3,poor:0,total:9,sum:45308.7,necta:3,lag:6},
+  Manyara:{good:3,mod:6,poor:0,total:9,sum:21744.8,necta:6,lag:3},
+  Mara:{good:3,mod:1,poor:0,total:4,sum:14969.6,necta:1,lag:3},
+  Mbeya:{good:5,mod:3,poor:1,total:9,sum:35731.1,necta:2,lag:7},
+  Mtwara:{good:2,mod:0,poor:0,total:2,sum:5754,necta:0,lag:2},
+  Pwani:{good:3,mod:1,poor:0,total:4,sum:12617.2,necta:1,lag:3},
+  Tanga:{good:2,mod:4,poor:4,total:10,sum:14093.6,necta:2,lag:8}
+};
+const TEAMS = {
+  Danny:{good:14,mod:4,poor:0,total:18,necta:5,lag:13,avg:5985.4},
+  Erick:{good:6,mod:6,poor:3,total:15,necta:11,lag:4,avg:3266},
+  Jastin:{good:4,mod:8,poor:3,total:15,necta:7,lag:8,avg:2775.8},
+  Janeth:{good:3,mod:6,poor:1,total:10,necta:2,lag:8,avg:1976.1},
+  James:{good:8,mod:4,poor:2,total:14,necta:2,lag:12,avg:4103.2},
+  Juma:{good:14,mod:5,poor:1,total:20,necta:3,lag:17,avg:5691.3},
+  Abubakar:{good:3,mod:6,poor:0,total:9,necta:6,lag:3,avg:2416.1},
+  Ashura:{good:5,mod:5,poor:4,total:14,necta:3,lag:11,avg:1907.9}
+};
+const YRS=[2019,2020,2021,2022,2023,2024,2025];
+const YTOT=[46940,48982.5,89505.4,124206.9,293548,307678.4,386793.2];
+const YCNT=[18,25,37,56,71,91,101];
+
+// ═══════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════
+const f=n=>n==null?'—':n.toLocaleString(undefined,{maximumFractionDigits:0});
+const fK=n=>!n?'—':n>=1000?(n/1000).toFixed(1)+'K':n.toFixed(0);
+function badge(lvl){
+  if(!lvl) return '';
+  const map={Good:['badge-good','Good'],Moderate:['badge-mod','Moderate'],Poor:['badge-poor','Poor']};
+  const [cls,lbl]=map[lvl]||['',''];
+  return `<span class="${cls} text-xs px-2 py-0.5 rounded-full font-semibold">${lbl}</span>`;
+}
+function spark(school){
+  const vals=school.y.map(v=>v||0);
+  const mx=Math.max(...vals,1);
+  const cols=['#bbf7d0','#86efac','#4ade80','#22c55e','#16a34a','#15803d','#166534'];
+  return vals.map((v,i)=>`<span class="spk" style="width:${Math.max(2,Math.round(v/mx*30))}px;background:${cols[i]}" title="${YRS[i]}: ${f(v)}h"></span>`).join('');
+}
+
+// ═══════════════════════════════════
+// TABS
+// ═══════════════════════════════════
+document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  document.getElementById('tab-'+b.dataset.tab).classList.add('active');
+}));
+
+// ═══════════════════════════════════
+// TAB 1 — OVERVIEW
+// ═══════════════════════════════════
+new Chart(document.getElementById('cNecta'),{type:'doughnut',data:{labels:['NECTA','Lagged'],datasets:[{data:[40,75],backgroundColor:['#2563eb','#f59e0b'],borderWidth:0}]},options:{cutout:'72%',plugins:{legend:{display:false}},responsive:true,maintainAspectRatio:false}});
+new Chart(document.getElementById('cLevel'),{type:'doughnut',data:{labels:['Good','Moderate','Poor'],datasets:[{data:[69,33,13],backgroundColor:['#16a34a','#f59e0b','#dc2626'],borderWidth:0}]},options:{cutout:'72%',plugins:{legend:{display:false}},responsive:true,maintainAspectRatio:false}});
+
+let ovCol='avg', ovAsc=false;
+function renderOv(){
+  const q=document.getElementById('ovSearch').value.toLowerCase();
+  const rg=document.getElementById('ovRegion').value;
+  const lv=document.getElementById('ovLevel').value;
+  const nc=document.getElementById('ovNecta').value;
+  const tm=document.getElementById('ovTeam').value;
+  let d=S.filter(s=>{
+    if(q&&!s.name.toLowerCase().includes(q)) return false;
+    if(rg&&s.region!==rg) return false;
+    if(lv&&s.lvl!==lv) return false;
+    if(nc&&s.necta!==nc) return false;
+    if(tm&&s.team!==tm) return false;
+    return true;
+  });
+  d.sort((a,b)=>{
+    const av=a[ovCol], bv=b[ovCol];
+    if(typeof av==='string') return ovAsc?av.localeCompare(bv):bv.localeCompare(av);
+    return ovAsc?(av||0)-(bv||0):(bv||0)-(av||0);
+  });
+  document.getElementById('ovBody').innerHTML=d.map(s=>`
+    <tr>
+      <td class="px-4 py-2 text-xs font-medium text-gray-900">${s.name}</td>
+      <td class="px-4 py-2 text-xs text-gray-500">${s.region}</td>
+      <td class="px-4 py-2 text-xs text-gray-500">${s.team}</td>
+      <td class="px-4 py-2">${s.necta==='Yes'?'<span class="badge-necta text-xs px-2 py-0.5 rounded-full font-semibold">NECTA</span>':'<span class="badge-lag text-xs px-2 py-0.5 rounded-full font-semibold">Lagged</span>'}</td>
+      <td class="px-4 py-2 text-xs font-mono font-bold ${s.lvl==='Good'?'text-green-700':s.lvl==='Moderate'?'text-amber-700':'text-red-700'}">${f(s.avg)}</td>
+      <td class="px-4 py-2">${badge(s.lvl)}</td>
+      <td class="px-4 py-2"><div class="flex items-end gap-px">${spark(s)}</div></td>
+    </tr>`).join('');
+  document.getElementById('ovCount').textContent=`Showing ${d.length} of ${S.length} schools`;
+}
+['ovSearch','ovRegion','ovLevel','ovNecta','ovTeam'].forEach(id=>document.getElementById(id).addEventListener('input',renderOv));
+document.querySelectorAll('[data-sort]').forEach(th=>th.addEventListener('click',()=>{
+  const col=th.dataset.sort==='name'?'name':th.dataset.sort==='region'?'region':'avg';
+  if(ovCol===col) ovAsc=!ovAsc; else{ovCol=col;ovAsc=false;}
+  renderOv();
+}));
+renderOv();
+
+// ═══════════════════════════════════
+// TAB 2 — TRENDS
+// ═══════════════════════════════════
+new Chart(document.getElementById('cNetTrend'),{type:'bar',data:{labels:YRS,datasets:[
+  {label:'Total hrs',data:YTOT,backgroundColor:'#16a34a',borderRadius:4,yAxisID:'y'},
+  {label:'Active schools',data:YCNT,type:'line',borderColor:'#2563eb',backgroundColor:'#2563eb',pointRadius:4,tension:0.3,yAxisID:'y2'}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,font:{size:11}}}},scales:{y:{ticks:{callback:v=>fK(v)},title:{display:true,text:'Total Hours',font:{size:10}}},y2:{position:'right',grid:{display:false},min:0,max:130,title:{display:true,text:'Schools',font:{size:10}}}}}});
+
+new Chart(document.getElementById('cAvgTrend'),{type:'line',data:{labels:YRS,datasets:[{label:'Avg hrs/school',data:YRS.map((_,i)=>Math.round(YTOT[i]/YCNT[i])),borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.08)',fill:true,tension:0.4,pointRadius:5,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>fK(v)},title:{display:true,text:'Avg hrs/school/yr',font:{size:10}}}}}});
+
+document.getElementById('trendRegionBody').innerHTML=Object.entries(REGIONS).map(([r,v])=>{
+  const avg=Math.round(v.sum/v.total);
+  const gp=Math.round(v.good/v.total*100);
+  const hlth=gp>=70?'🟢 Strong':gp>=40?'🟡 Mixed':'🔴 At risk';
+  return `<tr><td class="px-4 py-2 text-sm font-semibold">${r}</td><td class="px-4 py-2 text-sm">${v.total}</td><td class="px-4 py-2 text-sm text-green-700 font-bold">${v.good}</td><td class="px-4 py-2 text-sm text-amber-700">${v.mod}</td><td class="px-4 py-2 text-sm text-red-700">${v.poor}</td><td class="px-4 py-2 text-sm">${v.necta}</td><td class="px-4 py-2 text-sm">${v.lag}</td><td class="px-4 py-2 text-sm font-mono">${f(avg)}</td><td class="px-4 py-2 text-sm">${hlth}</td></tr>`;
+}).join('');
+
+// Declining schools
+const decl=S.filter(s=>{
+  const vals=s.y.filter(v=>v!=null&&v>0);
+  if(vals.length<2) return false;
+  const pk=Math.max(...vals);
+  const last=s.y[6]||s.y[5]||0;
+  return pk>500 && last<pk*0.5;
+}).sort((a,b)=>{
+  const la=a.y[6]||a.y[5]||0, lb=b.y[6]||b.y[5]||0;
+  return la-lb;
+}).slice(0,20);
+document.getElementById('declBody').innerHTML=decl.map(s=>{
+  const vals=s.y.map((v,i)=>({v,yr:YRS[i]})).filter(x=>x.v&&x.v>0);
+  const pk=vals.reduce((a,b)=>b.v>a.v?b:a,{v:0,yr:'-'});
+  const last=s.y[6]||s.y[5]||0;
+  const drop=pk.v?Math.round((last-pk.v)/pk.v*100):null;
+  return `<tr>
+    <td class="px-4 py-2 text-xs font-medium">${s.name}</td>
+    <td class="px-4 py-2 text-xs">${s.region}</td>
+    <td class="px-4 py-2 text-xs">${s.team}</td>
+    <td class="px-4 py-2 text-xs">${pk.yr}</td>
+    <td class="px-4 py-2 text-xs font-mono text-green-700 font-bold">${f(pk.v)}</td>
+    <td class="px-4 py-2 text-xs font-mono text-red-700 font-bold">${f(last)||'—'}</td>
+    <td class="px-4 py-2 text-xs font-bold text-red-600">${drop!==null?drop+'%':'—'}</td>
+    <td class="px-4 py-2">${s.necta==='Yes'?'<span class="badge-necta text-xs px-2 py-0.5 rounded-full font-semibold">NECTA</span>':'<span class="badge-lag text-xs px-2 py-0.5 rounded-full font-semibold">Lagged</span>'}</td>
+  </tr>`;}).join('');
+
+// ═══════════════════════════════════
+// TAB 3 — GAP
+// ═══════════════════════════════════
+function renderGap(){
+  const rg=document.getElementById('gapRegion').value;
+  const srt=document.getElementById('gapSort').value;
+  let d=S.filter(s=>s.gap!=null&&(!rg||s.region===rg));
+  if(srt==='gap_desc') d.sort((a,b)=>b.gap-a.gap);
+  else if(srt==='gap_asc') d.sort((a,b)=>a.gap-b.gap);
+  else if(srt==='actual_desc') d.sort((a,b)=>b.avg-a.avg);
+  else d.sort((a,b)=>a.region.localeCompare(b.region));
+  const under=d.filter(x=>x.gap>0).length;
+  document.getElementById('gapBody').innerHTML=d.map(s=>{
+    const isU=s.gap>0;
+    const ratio=s.avg?(s.gap/s.avg).toFixed(2)+'×':'—';
+    const sig=s.gap>10000?'🔴 Critical':s.gap>5000?'🟠 High':s.gap>1000?'🟡 Moderate':s.gap>0?'🟢 Low':'⭐ Outperforming';
+    return `<tr>
+      <td class="px-4 py-2 text-xs font-medium">${s.name}</td>
+      <td class="px-4 py-2 text-xs">${s.region}</td>
+      <td class="px-4 py-2 text-xs">${s.team}</td>
+      <td class="px-4 py-2 text-xs font-mono font-bold">${f(s.avg)}</td>
+      <td class="px-4 py-2 text-xs font-mono text-purple-700">${f(s.exp)}</td>
+      <td class="px-4 py-2 text-xs font-mono font-bold ${isU?'text-red-600':'text-green-600'}">${isU?'+':''}${f(s.gap)}</td>
+      <td class="px-4 py-2 text-xs ${isU?'text-red-500':'text-green-500'}">${ratio}</td>
+      <td class="px-4 py-2">${badge(s.lvl)}</td>
+      <td class="px-4 py-2 text-xs">${sig}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('gapCount').textContent=`${d.length} schools · ${under} underperforming · ${d.length-under} outperforming`;
+}
+document.getElementById('gapRegion').addEventListener('change',renderGap);
+document.getElementById('gapSort').addEventListener('change',renderGap);
+renderGap();
+
+// ═══════════════════════════════════
+// TAB 4 — REGIONAL & TEAM
+// ═══════════════════════════════════
+document.getElementById('regBody').innerHTML=Object.entries(REGIONS).map(([r,v])=>{
+  const avg=Math.round(v.sum/v.total);
+  const gp=Math.round(v.good/v.total*100);
+  const bar=`<div class="hbar"><div style="width:${v.good/v.total*100}%;background:#16a34a"></div><div style="width:${v.mod/v.total*100}%;background:#f59e0b"></div><div style="width:${v.poor/v.total*100}%;background:#dc2626"></div></div>`;
+  const hlth=gp>=70?'🟢 Strong':gp>=40?'🟡 Mixed':'🔴 At risk';
+  return `<tr><td class="px-4 py-2 text-sm font-semibold">${r}</td><td class="px-4 py-2 text-sm">${v.total}</td><td class="px-4 py-2 text-sm text-green-700 font-bold">${v.good}</td><td class="px-4 py-2 text-sm text-amber-700">${v.mod}</td><td class="px-4 py-2 text-sm text-red-700">${v.poor}</td><td class="px-4 py-2 text-sm">${v.necta}</td><td class="px-4 py-2 text-sm">${v.lag}</td><td class="px-4 py-2 text-sm font-mono">${f(avg)}</td><td class="px-4 py-2 text-sm">${gp}%</td><td class="px-4 py-2">${bar}</td><td class="px-4 py-2 text-sm">${hlth}</td></tr>`;
+}).join('');
+
+new Chart(document.getElementById('cRegStack'),{type:'bar',data:{labels:Object.keys(REGIONS),datasets:[
+  {label:'Good',data:Object.values(REGIONS).map(v=>v.good),backgroundColor:'#16a34a',borderRadius:{topLeft:2,topRight:2}},
+  {label:'Moderate',data:Object.values(REGIONS).map(v=>v.mod),backgroundColor:'#f59e0b'},
+  {label:'Poor',data:Object.values(REGIONS).map(v=>v.poor),backgroundColor:'#dc2626'}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,title:{display:true,text:'Schools',font:{size:10}}}},plugins:{legend:{position:'top',labels:{boxWidth:10,font:{size:11}}}}}});
+
+const maxAvg=Math.max(...Object.values(TEAMS).map(v=>v.avg));
+document.getElementById('teamBody').innerHTML=Object.entries(TEAMS).sort((a,b)=>b[1].avg-a[1].avg).map(([t,v])=>{
+  const gp=Math.round(v.good/v.total*100);
+  const bw=Math.round(v.avg/maxAvg*100);
+  return `<tr><td class="px-4 py-2 text-sm font-semibold">${t}</td><td class="px-4 py-2 text-sm">${v.total}</td><td class="px-4 py-2 text-sm text-green-700 font-bold">${v.good}</td><td class="px-4 py-2 text-sm text-amber-700">${v.mod}</td><td class="px-4 py-2 text-sm text-red-700">${v.poor}</td><td class="px-4 py-2 text-sm">${v.necta}</td><td class="px-4 py-2 text-sm">${v.lag}</td><td class="px-4 py-2 text-sm font-mono font-bold">${f(v.avg)}</td><td class="px-4 py-2 text-sm">${gp}%</td><td class="px-4 py-2"><div class="h-2 rounded-full" style="width:${bw}%;background:var(--reneal);min-width:4px"></div></td></tr>`;
+}).join('');
+
+new Chart(document.getElementById('cTeam'),{type:'bar',data:{labels:Object.keys(TEAMS),datasets:[{label:'Avg hrs/school/yr',data:Object.values(TEAMS).map(v=>v.avg),backgroundColor:Object.values(TEAMS).map(v=>v.good/v.total>0.6?'#16a34a':v.good/v.total>0.4?'#f59e0b':'#dc2626'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>fK(v)},title:{display:true,text:'Avg hrs/school/yr',font:{size:10}}}}}});
+
+// ═══════════════════════════════════
+// TAB 5 — DEEP DIVE
+// ═══════════════════════════════════
+const sel=document.getElementById('schoolSel');
+S.forEach(s=>{const o=document.createElement('option');o.value=s.id;o.textContent=`${s.name} (${s.region})`;sel.appendChild(o);});
+
+let schoolChart=null, curIdx=-1;
+function renderDive(school){
+  if(!school) return;
+  document.getElementById('diveDetail').classList.remove('hidden');
+  document.getElementById('diveEmpty').classList.add('hidden');
+  document.getElementById('sdName').textContent=school.name;
+  document.getElementById('sdDistrict').textContent=school.district;
+  document.getElementById('sdRegion').textContent=school.region;
+  document.getElementById('sdTeam').textContent=school.team;
+  document.getElementById('sdAvg').textContent=f(school.avg)+' hrs';
+  document.getElementById('sdBadges').innerHTML=`
+    ${school.necta==='Yes'?'<span class="badge-necta text-xs px-3 py-1 rounded-full font-semibold">📊 NECTA Participant</span>':'<span class="badge-lag text-xs px-3 py-1 rounded-full font-semibold">🕐 Lagged — No NECTA</span>'}
+    <span class="text-xs px-3 py-1 rounded-full font-semibold bg-gray-100 text-gray-600">${school.region}</span>
+    <span class="text-xs px-3 py-1 rounded-full font-semibold bg-gray-100 text-gray-600">Team: ${school.team}</span>`;
+  const lb=document.getElementById('sdLevelBadge');
+  const lm={Good:['badge-good','✓ Good Usage'],Moderate:['badge-mod','⚠ Moderate Usage'],Poor:['badge-poor','✗ Poor Usage']};
+  const [lc,lt]=lm[school.lvl]||['','—'];
+  lb.className=`flex-shrink-0 self-start px-5 py-2.5 rounded-xl text-sm font-bold ${lc}`;
+  lb.textContent=lt;
+
+  // Year table
+  document.getElementById('sdYearBody').innerHTML=YRS.map((yr,i)=>{
+    const v=school.y[i];
+    const pv=i>0?school.y[i-1]:null;
+    let chg='—';
+    if(v&&pv){const p=Math.round((v-pv)/pv*100);chg=`<span style="color:${p>=0?'#16a34a':'#dc2626'}">${p>=0?'+':''}${p}%</span>`;}
+    const lbl=!v?'—':v>=2000?'<span class="text-green-600 text-xs">Good</span>':v>=500?'<span class="text-amber-600 text-xs">Mod</span>':'<span class="text-red-600 text-xs">Poor</span>';
+    return `<tr><td class="px-4 py-1.5 text-xs font-semibold">${yr}</td><td class="px-4 py-1.5 text-xs font-mono">${v?f(v):'—'}</td><td class="px-4 py-1.5 text-xs">${chg}</td><td class="px-4 py-1.5 text-xs">${lbl}</td></tr>`;
+  }).join('');
+
+  // Chart
+  if(schoolChart) schoolChart.destroy();
+  const cd=school.y.map(v=>v||null);
+  schoolChart=new Chart(document.getElementById('cSchool'),{type:'bar',data:{labels:YRS,datasets:[{label:'Hours',data:cd,backgroundColor:cd.map(v=>!v?'transparent':v>=2000?'#16a34a':v>=500?'#f59e0b':'#dc2626'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>fK(v)}}}}});
+
+  // Gap
+  const gs=document.getElementById('sdGapSection');
+  if(school.gap!=null){
+    gs.classList.remove('hidden');
+    document.getElementById('sdActual').textContent=f(school.avg)+' hrs';
+    document.getElementById('sdExpected').textContent=f(school.exp)+' hrs';
+    const gv=document.getElementById('sdGapVal');
+    const gc=document.getElementById('sdGapCard');
+    if(school.gap>0){gv.textContent='+'+f(school.gap)+' below';gv.style.color='#dc2626';gc.style.background='#fef2f2';}
+    else{gv.textContent=f(Math.abs(school.gap))+' above';gv.style.color='#16a34a';gc.style.background='#f0fdf4';}
+  } else {gs.classList.add('hidden');}
+
+  // Insights
+  const ins=[];
+  if(school.avg>=2000) ins.push('✅ Lab usage meets the Good threshold (≥2000 hrs/yr) — solid foundation for NECTA ICT preparation.');
+  else if(school.avg>=500) ins.push('⚠️ Usage is Moderate (500–2000 hrs/yr). Increased scheduling and teacher engagement needed to reach exam-readiness levels.');
+  else ins.push('🔴 Usage is critically low (<500 hrs/yr). Immediate field intervention required — likely hardware, access, or teacher availability issue.');
+  if(school.necta==='No') ins.push('🕐 School has not entered ICT NECTA (CSEE). Engage ICT teacher and head of school to register students for the examination this academic year.');
+  else ins.push('📊 School participates in NECTA ICT. Cross-reference exam results in the NECTA Performance module to check pass rates.');
+  const last=school.y[6], prev=school.y[5];
+  if(last!=null&&prev!=null){const d=last-prev;if(d<-500) ins.push(`📉 Usage fell ${f(Math.abs(d))} hrs from 2024→2025. Investigate: teacher change, hardware failure, power issues, or access restriction.`);else if(d>500) ins.push(`📈 Usage grew ${f(d)} hrs from 2024→2025 — positive momentum. Reinforce with continued field support.`);}
+  if(school.gap!=null&&school.gap>5000) ins.push(`🚨 Gap of ${f(school.gap)} hrs vs KNN peers — severely underperforming relative to schools with comparable geographic conditions. High intervention priority.`);
+  else if(school.gap!=null&&school.gap<-2000) ins.push(`⭐ Outperforming nearest NECTA neighbours by ${f(Math.abs(school.gap))} hrs — potential model school for peer learning visits.`);
+  document.getElementById('sdInsights').innerHTML=ins.map(i=>`<li class="flex gap-2 leading-snug">${i}</li>`).join('');
+}
+
+sel.addEventListener('change',()=>{
+  const id=parseInt(sel.value);
+  curIdx=S.findIndex(s=>s.id===id);
+  renderDive(S[curIdx]);
+});
+document.getElementById('btnPrev').addEventListener('click',()=>{if(curIdx>0){curIdx--;sel.value=S[curIdx].id;renderDive(S[curIdx]);}});
+document.getElementById('btnNext').addEventListener('click',()=>{if(curIdx<S.length-1){curIdx++;sel.value=S[curIdx].id;renderDive(S[curIdx]);}});
+</script>
+</body>
+</html>

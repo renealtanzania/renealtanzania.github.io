@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reneal — Intervention Priority Engine</title>
+<link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Outfit:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script src="/public/css/script/tailwindcss3417.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --brand-dark: #1a2e1a;
+    --brand-green: #2d6a4f;
+    --brand-mid: #40916c;
+    --brand-light: #74c69d;
+    --accent-warm: #b5835a;
+    --p1: #c0392b;
+    --p2: #e67e22;
+    --p3: #2980b9;
+    --p4: #27ae60;
+    --bg: #f5f6f0;
+    --surface: #ffffff;
+    --border: #e2e8e0;
+    --text: #1a2e1a;
+    --muted: #6b7b6b;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: 'Lato', sans-serif; background: #c0d0d1; }
+  h1, h2, h3 { font-family: 'Outfit', sans-serif; }
+  .nunito { font-family: 'Nunito', sans-serif; }
+
+  /* Header */
+  .app-header {
+    background: var(--brand-dark);
+    color: #fff;
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    min-height: 56px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .app-header h1 { font-size: 15px; font-weight: 600; letter-spacing: 0.02em; margin: 0; color: #fff; }
+  .app-header .sub { font-size: 11px; color: #74c69d; font-family: 'Nunito', sans-serif; }
+  .app-header .hdr-right { font-size: 11px; color: #74c69d; font-family:'Nunito',sans-serif; text-align:right; white-space:nowrap; flex-shrink:0; }
+  .hdr-meta { display: none; }
+
+  /* Tabs */
+  .tab-bar {
+    background: var(--brand-green);
+    display: flex; gap: 0;
+    position: sticky; top: 56px; z-index: 99;
+    border-bottom: 2px solid #1d4e35;
+  }
+  .tab-btn {
+    padding: 10px 20px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    border: none; background: transparent;
+    cursor: pointer; transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
+  .tab-btn.active { color: #fff; border-bottom-color: #74c69d; background: rgba(255,255,255,0.1); }
+
+  /* KPI Cards */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding: 20px 24px 8px; }
+  .kpi-card {
+    background: var(--surface); border-radius: 10px;
+    padding: 16px 18px; border: 1px solid var(--border);
+    border-top: 3px solid;
+  }
+  .kpi-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-family: 'Outfit', sans-serif; }
+  .kpi-value { font-size: 28px; font-weight: 900; font-family: 'Outfit', sans-serif; line-height: 1.1; margin: 4px 0 2px; }
+  .kpi-sub { font-size: 11px; color: var(--muted); }
+  .kpi-p1 { border-top-color: var(--p1); } .kpi-p1 .kpi-value { color: var(--p1); }
+  .kpi-p2 { border-top-color: var(--p2); } .kpi-p2 .kpi-value { color: var(--p2); }
+  .kpi-p3 { border-top-color: var(--p3); } .kpi-p3 .kpi-value { color: var(--p3); }
+  .kpi-total { border-top-color: var(--brand-mid); } .kpi-total .kpi-value { color: var(--brand-mid); }
+
+  /* Controls bar */
+  .controls {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 24px; flex-wrap: wrap;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+  }
+  .controls input, .controls select {
+    font-family: 'Lato', sans-serif; font-size: 13px;
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 6px 10px; outline: none; background: #fff;
+    color: var(--text);
+  }
+  .controls input { min-width: 240px; }
+  .controls input:focus, .controls select:focus { border-color: var(--brand-mid); }
+  .filter-pill {
+    padding: 5px 14px; border-radius: 20px;
+    font-size: 12px; font-family: 'Outfit', sans-serif; font-weight: 500;
+    border: 1.5px solid; cursor: pointer; transition: all 0.15s;
+    background: transparent;
+  }
+  .filter-pill.all { border-color: var(--brand-mid); color: var(--brand-mid); }
+  .filter-pill.all.active { background: var(--brand-mid); color: #fff; }
+  .filter-pill.p1 { border-color: var(--p1); color: var(--p1); }
+  .filter-pill.p1.active { background: var(--p1); color: #fff; }
+  .filter-pill.p2 { border-color: var(--p2); color: var(--p2); }
+  .filter-pill.p2.active { background: var(--p2); color: #fff; }
+  .filter-pill.p3 { border-color: var(--p3); color: var(--p3); }
+  .filter-pill.p3.active { background: var(--p3); color: #fff; }
+  .filter-pill.p4 { border-color: var(--p4); color: var(--p4); }
+  .filter-pill.p4.active { background: var(--p4); color: #fff; }
+  .pills-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+  /* Tab short/full labels */
+  .tab-short { display: none; }
+  .tab-full { display: inline; }
+
+  /* Team summary cards (mobile) */
+  .team-card {
+    background: var(--surface); border-radius: 10px;
+    border: 1px solid var(--border); margin-bottom: 10px; overflow: hidden;
+  }
+  .team-card-head {
+    background: var(--brand-dark); color: #fff;
+    padding: 10px 14px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .team-card-head .tm-name { font-family: 'Outfit',sans-serif; font-size: 14px; font-weight: 700; }
+  .team-card-head .tm-count { font-size: 11px; color: #74c69d; }
+  .team-card-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .tm-cell {
+    padding: 8px 14px; border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+  .tm-cell:nth-child(even) { border-right: none; }
+  .tm-cell:nth-last-child(-n+2) { border-bottom: none; }
+  .tm-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-family:'Outfit',sans-serif; margin-bottom: 3px; }
+  .tm-value { font-size: 14px; font-weight: 700; }
+
+  /* Network cards (mobile) */
+  .network-card {
+    background: var(--surface); border-radius: 10px;
+    border: 1px solid var(--border); margin-bottom: 10px; overflow: hidden;
+  }
+  .network-card-head {
+    padding: 10px 14px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    border-bottom: 1px solid var(--border);
+    gap: 8px;
+  }
+  .network-card-head .nc-school { font-weight: 700; font-size: 13px; line-height: 1.3; font-family:'Outfit',sans-serif; flex: 1; }
+  .network-card-head .nc-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .network-card-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .nc-cell { padding: 8px 14px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+  .nc-cell:nth-child(even) { border-right: none; }
+  .nc-cell:nth-last-child(-n+2) { border-bottom: none; }
+  .nc-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-family:'Outfit',sans-serif; margin-bottom: 3px; }
+  .nc-value { font-size: 13px; font-weight: 700; }
+  .network-card-years {
+    display: flex; justify-content: space-between;
+    padding: 8px 14px; background: #f7f8f5; font-size: 11px; color: var(--muted);
+  }
+  .network-card-years span strong { color: var(--text); font-size: 12px; }
+
+  /* Trajectory badges */
+  .traj-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 12px;
+    font-size: 11px; font-weight: 700; font-family: 'Outfit', sans-serif;
+    white-space: nowrap;
+  }
+  .traj-declining    { background:#fdeaea; color:#c0392b; border:1px solid #f5c6c6; }
+  .traj-stagnant     { background:#fdf0e0; color:#e67e22; border:1px solid #f5dba0; }
+  .traj-recovering   { background:#e8f0fb; color:#2980b9; border:1px solid #b8d0f0; }
+  .traj-strong       { background:#e8f5ec; color:#27ae60; border:1px solid #a8dbb8; }
+  .traj-insufficient { background:#f5f5f5; color:#999;    border:1px solid #ddd; }
+
+  /* Signal badge */
+  .signal-badge {
+    display: inline-block; padding: 3px 9px; border-radius: 12px;
+    font-size: 10px; font-weight: 700; font-family: 'Outfit', sans-serif;
+    white-space: nowrap;
+  }
+  .signal-urgent   { background:#c0392b; color:#fff; }
+  .signal-watch    { background:#e67e22; color:#fff; }
+  .signal-positive { background:#27ae60; color:#fff; }
+  .signal-monitor  { background:#2980b9; color:#fff; }
+  .signal-data     { background:#999; color:#fff; }
+
+  /* YoY change coloring */
+  .yoy-down { color:#c0392b; font-weight:700; }
+  .yoy-up   { color:#27ae60; font-weight:700; }
+  .yoy-flat { color:#e67e22; font-weight:700; }
+
+  /* Trend sparkline cell */
+  .spark-cell { display:flex; align-items:center; gap:6px; }
+  .spark-bar { display:inline-block; height:8px; border-radius:4px; min-width:4px; }
+
+  /* Trajectory cards */
+  .traj-card {
+    background: var(--surface); border-radius: 10px;
+    border: 1px solid var(--border); margin-bottom: 10px; overflow: hidden;
+  }
+  .traj-card-head {
+    padding: 10px 14px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    border-bottom: 1px solid var(--border); gap: 8px;
+  }
+  .traj-card-head .tc-name { font-weight:700; font-size:13px; font-family:'Outfit',sans-serif; flex:1; line-height:1.3; }
+  .traj-card-head .tc-meta { font-size:11px; color:var(--muted); margin-top:2px; }
+  .traj-card-body { display:grid; grid-template-columns:1fr 1fr; }
+  .tc-cell { padding:8px 14px; border-bottom:1px solid var(--border); border-right:1px solid var(--border); }
+  .tc-cell:nth-child(even) { border-right:none; }
+  .tc-cell:nth-last-child(-n+2) { border-bottom:none; }
+  .tc-label { font-size:9px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); font-family:'Outfit',sans-serif; margin-bottom:3px; }
+  .tc-value { font-size:13px; font-weight:700; }
+  .traj-card-footer { padding:8px 14px; background:#f7f8f5; display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--muted); }
+
+
+
+  /* Mobile cluster grid */
+  @media (max-width: 768px) {
+    #cluster-district-grid { grid-template-columns: 1fr !important; padding: 0 12px 16px !important; }
+    #cluster-tbl-wrap { display: none !important; }
+    #cluster-school-cards { display: block !important; }
+  }
+
+  /* Tables */
+  .tbl-wrap { overflow-x: auto; padding: 0 24px 24px; }
+  table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 10px; overflow: hidden; font-size: 13px; }
+  thead th {
+    background: var(--brand-dark); color: #fff;
+    padding: 10px 12px; text-align: left;
+    font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap;
+    cursor: pointer; user-select: none;
+  }
+  thead th:hover { background: var(--brand-green); }
+  thead th .sort-icon { margin-left: 4px; opacity: 0.5; font-size: 10px; }
+  thead th.sorted .sort-icon { opacity: 1; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #f0f5f0; }
+  tbody td { padding: 9px 12px; vertical-align: middle; }
+
+  /* Tier badges */
+  .tier-badge {
+    display: inline-block; padding: 3px 9px; border-radius: 12px;
+    font-size: 11px; font-weight: 700; font-family: 'Outfit', sans-serif;
+    white-space: nowrap;
+  }
+  .tier-p1 { background: #fdeaea; color: var(--p1); border: 1px solid #f5c6c6; }
+  .tier-p2 { background: #fdf0e0; color: var(--p2); border: 1px solid #f5dba0; }
+  .tier-p3 { background: #e8f0fb; color: var(--p3); border: 1px solid #b8d0f0; }
+  .tier-p4 { background: #e8f5ec; color: var(--p4); border: 1px solid #a8dbb8; }
+
+  /* Level badges */
+  .level-poor { color: var(--p1); font-weight: 700; }
+  .level-mod { color: var(--p2); font-weight: 700; }
+  .level-good { color: var(--p4); font-weight: 700; }
+
+  /* Gap value */
+  .gap-val { color: var(--p1); font-weight: 700; }
+  .gap-neg { color: var(--p4); font-weight: 700; }
+
+  /* Priority score bar */
+  .score-bar { display: flex; align-items: center; gap: 6px; }
+  .score-bar-track { flex: 1; height: 6px; background: #e8eae8; border-radius: 3px; min-width: 50px; }
+  .score-bar-fill { height: 100%; border-radius: 3px; }
+  .score-num { font-weight: 700; font-size: 12px; min-width: 30px; text-align: right; }
+
+  /* Tab panels */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Section heading */
+  .section-heading {
+    font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600;
+    color: var(--brand-dark); padding: 16px 24px 6px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-heading::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* Print button */
+  .print-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 6px;
+    background: var(--brand-green); color: #fff;
+    font-size: 12px; font-family: 'Outfit', sans-serif; font-weight: 600;
+    border: none; cursor: pointer; transition: background 0.15s;
+    margin-left: auto;
+  }
+  .print-btn:hover { background: var(--brand-mid); }
+
+  /* Region breakdown */
+  .region-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; padding: 8px 24px 24px; }
+  .region-card {
+    background: var(--surface); border-radius: 10px;
+    border: 1px solid var(--border); overflow: hidden;
+  }
+  .region-card-head {
+    background: var(--brand-dark); color: #fff;
+    padding: 10px 14px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .region-card-head .name { font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 600; }
+  .region-card-head .count { font-size: 11px; color: #74c69d; }
+  .region-card-body { padding: 10px 14px; }
+  .region-tier-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .region-tier-row:last-child { border-bottom: none; }
+
+  /* Chart container */
+  .chart-wrap { background: var(--surface); border-radius: 10px; border: 1px solid var(--border); padding: 20px; margin: 0 24px 16px; }
+  .chart-title { font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 600; color: var(--brand-dark); margin-bottom: 12px; }
+
+  /* Team breakdown tab */
+  .team-row { display: grid; grid-template-columns: 120px 1fr; gap: 0; }
+
+  /* Multiplier severity */
+  .mult-high { color: var(--p1); font-weight: 700; }
+  .mult-med { color: var(--p2); font-weight: 700; }
+  .mult-low { color: var(--muted); }
+
+  /* Empty state */
+  .empty-state { text-align: center; padding: 40px; color: var(--muted); font-family: 'Nunito', sans-serif; }
+
+  /* Info tooltip area */
+  .info-note {
+    margin: 0 24px 12px; padding: 10px 14px;
+    background: #f0f5f0; border-left: 3px solid var(--brand-mid);
+    border-radius: 0 6px 6px 0; font-size: 12px; color: var(--muted);
+    font-family: 'Nunito', sans-serif;
+  }
+
+  /* ============================================================ MOBILE */
+  @media (max-width: 768px) {
+
+    /* Header — compact */
+    .app-header {
+      height: auto; padding: 10px 14px; flex-direction: column;
+      align-items: flex-start; gap: 2px;
+    }
+    .app-header h1 { font-size: 13px; line-height: 1.3; }
+    .app-header .sub { font-size: 10px; }
+    .app-header .hdr-right { display: none; }
+    .hdr-meta { display: block !important; font-size: 10px; color: #74c69d; font-family:'Nunito',sans-serif; margin-top: 2px; }
+
+    /* Tab labels — short on mobile */
+    .tab-short { display: inline; }
+    .tab-full { display: none; }
+
+
+    /* Network cards show, table hide */
+    #network-tbl-wrap { display: none !important; }
+    #network-cards-wrap { display: block !important; }
+
+    /* Trajectory cards show, table hide */
+    #traj-tbl-wrap { display: none !important; }
+    #traj-cards-wrap { display: block !important; }
+
+    /* Tab bar — scrollable horizontal */
+    .tab-bar {
+      top: 0;
+      position: relative; /* on mobile let it flow naturally */
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex-shrink: 0;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn { padding: 10px 14px; font-size: 12px; flex-shrink: 0; }
+
+    /* KPI — 2×2 grid on mobile */
+    .kpi-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px; padding: 12px 12px 6px;
+    }
+    .kpi-card { padding: 12px 14px; }
+    .kpi-value { font-size: 22px; }
+    .kpi-label { font-size: 9px; }
+
+    /* Controls — full width stacked */
+    .controls {
+      padding: 10px 12px; gap: 8px; flex-direction: column; align-items: stretch;
+    }
+    .controls input { min-width: 0; width: 100%; }
+    .controls select { width: 100%; }
+    .controls .pills-row {
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .filter-pill { padding: 5px 10px; font-size: 11px; }
+    .print-btn { margin-left: 0; width: 100%; justify-content: center; }
+
+    /* Info note */
+    .info-note { margin: 0 12px 10px; font-size: 11px; }
+
+    /* Tables — horizontal scroll with min width */
+    .tbl-wrap { padding: 0 12px 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { font-size: 12px; min-width: 600px; }
+    thead th { padding: 8px 10px; font-size: 10px; }
+    tbody td { padding: 8px 10px; }
+
+    /* On priority table — use card layout instead of wide table */
+    .priority-cards { display: block; }
+    .priority-card {
+      background: var(--surface); border-radius: 10px;
+      border: 1px solid var(--border); margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .priority-card-head {
+      padding: 10px 14px;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      border-bottom: 1px solid var(--border);
+    }
+    .priority-card-head .school-name {
+      font-weight: 700; font-size: 13px; line-height: 1.3;
+      font-family: 'Outfit', sans-serif; flex: 1; margin-right: 8px;
+    }
+    .priority-card-body {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .pc-cell {
+      padding: 8px 14px; border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+    .pc-cell:nth-child(even) { border-right: none; }
+    .pc-cell:nth-last-child(-n+2) { border-bottom: none; }
+    .pc-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-family: 'Outfit', sans-serif; margin-bottom: 3px; }
+    .pc-value { font-size: 13px; font-weight: 700; }
+
+    /* Score bar on mobile */
+    .score-bar-track { min-width: 30px; }
+
+    /* Region grid — single column */
+    .region-grid {
+      grid-template-columns: 1fr;
+      padding: 8px 12px 16px;
+    }
+
+    /* Chart wrap */
+    .chart-wrap { margin: 0 12px 12px; padding: 14px; }
+    .chart-title { font-size: 12px; }
+
+    /* Section headings */
+    .section-heading { padding: 14px 12px 6px; font-size: 13px; }
+  }
+
+  @media (max-width: 480px) {
+    .kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px 10px 4px; }
+    .kpi-value { font-size: 20px; }
+    .tbl-wrap { padding: 0 10px 14px; }
+    .info-note { margin: 0 10px 10px; }
+    .region-grid { padding: 8px 10px 14px; }
+    .chart-wrap { margin: 0 10px 12px; }
+    .section-heading { padding: 12px 10px 6px; }
+    .controls { padding: 10px; }
+  }
+
+  @media print {
+    .app-header, .tab-bar, .controls, .print-btn { display: none !important; }
+    .tab-panel { display: block !important; }
+    .tab-panel:not(.active) { page-break-before: always; }
+    body { background: #fff; }
+    .tbl-wrap { padding: 0; }
+    table { font-size: 11px; min-width: unset; }
+    .priority-cards { display: none; }
+  }
+
+  /* Solution tab — peer cards */
+  .peer-card {
+    background: #f0f8f3; border: 1px solid #b8ddc8; border-radius: 8px;
+    padding: 8px 12px; margin-bottom: 6px;
+  }
+  .peer-rank { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--brand-mid); font-family:'Outfit',sans-serif; font-weight: 700; }
+  .peer-name { font-weight: 700; font-size: 13px; font-family:'Outfit',sans-serif;
+    color: var(--brand-dark); line-height:1.3; margin: 2px 0; }
+  .peer-detail { font-size: 11px; color: var(--muted); }
+  .peer-hrs { font-weight: 700; color: var(--brand-mid); }
+  .dist-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    background: var(--brand-dark); color: #74c69d;
+    font-size: 10px; font-weight: 700; font-family:'Outfit',sans-serif;
+  }
+  .no-gps { color: #bbb; font-size: 11px; font-style: italic; }
+
+  /* Soln school card (mobile) */
+  .soln-card {
+    background: var(--surface); border-radius: 10px;
+    border: 1px solid var(--border); margin-bottom: 14px; overflow: hidden;
+  }
+  .soln-card-head {
+    padding: 11px 14px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+  }
+  .soln-card-head .sv-name { font-weight: 700; font-size: 13px; font-family:'Outfit',sans-serif; flex:1; line-height:1.3; }
+  .soln-card-head .sv-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .soln-card-stats { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); }
+  .sv-cell { padding: 8px 14px; border-right: 1px solid var(--border); }
+  .sv-cell:nth-child(even) { border-right: none; }
+  .sv-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--muted); font-family:'Outfit',sans-serif; margin-bottom: 3px; }
+  .sv-value { font-size: 13px; font-weight: 700; }
+  .soln-card-peers { padding: 10px 14px; background: #f7fbf9; }
+  .soln-peers-heading { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--brand-mid); font-weight: 700; font-family:'Outfit',sans-serif;
+    margin-bottom: 8px; }
+
+  @media (max-width: 768px) {
+    #soln-tbl-wrap { display: none !important; }
+    #soln-cards-wrap { display: block !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="app-header">
+  <div>
+    <h1>Reneal Tanzania — Intervention Priority App</h1>
+    <div class="sub">School Lab Underperformance · Quantitative Priority Ranking </div>
+    <div class="hdr-meta">120 Schools · 12 Regions · Usage 2019–2025</div>
+  </div>
+  <div class="hdr-right">
+    120 Schools · 12 Regions<br>Data: Usage 2019–2025
+  </div>
+</header>
+
+<!-- TABS -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('priority')">
+    <span class="tab-full">① Priority Rankings</span>
+    <span class="tab-short">① Priority</span>
+  </button>
+  <button class="tab-btn" onclick="showTab('trajectory')">
+    <span class="tab-full">② Trajectory Analysis</span>
+    <span class="tab-short">② Trajectory</span>
+  </button>
+  <button class="tab-btn" onclick="showTab('soln')">
+    <span class="tab-full">③ Lagged School Comparison</span>
+    <span class="tab-short">③ Solution</span>
+  </button>
+  <button class="tab-btn" onclick="showTab('network')">
+    <span class="tab-full">④ Network</span>
+    <span class="tab-short">④ Network</span>
+  </button>
+</div>
+
+<!-- ============================================================ TAB 1: PRIORITY RANKINGS -->
+<div id="tab-priority" class="tab-panel active">
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid" id="kpi-grid"></div>
+
+  <!-- Controls -->
+  <div class="controls" id="priority-controls">
+    <input type="text" id="search-priority" placeholder="Search school, district, region, team…" oninput="renderPriority()"/>
+    <select id="filter-region" onchange="renderPriority()"><option value="">All Regions</option></select>
+    <select id="filter-team" onchange="renderPriority()"><option value="">All Team Members</option></select>
+    <div class="pills-row">
+      <button class="filter-pill all active" id="pill-all" onclick="setTierFilter('')">All Lagged</button>
+      <button class="filter-pill p1" id="pill-p1" onclick="setTierFilter('P1')">P1 — Urgent</button>
+      <button class="filter-pill p2" id="pill-p2" onclick="setTierFilter('P2')">P2 — High</button>
+      <button class="filter-pill p3" id="pill-p3" onclick="setTierFilter('P3')">P3 — Medium</button>
+      <button class="filter-pill p4" id="pill-p4" onclick="setTierFilter('P4')">P4 — Monitor</button>
+    </div>
+    <button class="print-btn" onclick="window.print()">⎙ Print</button>
+  </div>
+
+  <div class="info-note">
+    Priority Score = 60% absolute Gap Hours + 40% Gap÷Actual multiplier (both normalised). TEI removed — field team assesses intervention complexity on-site. Showing 100 lagged schools from 120 total across 12 regions.
+  </div>
+
+  <!-- Desktop table (hidden on mobile via JS class) -->
+  <div class="tbl-wrap" id="priority-tbl-wrap">
+    <table id="priority-table">
+      <thead>
+        <tr>
+          <th onclick="sortPriority('rank')"># <span class="sort-icon">↕</span></th>
+          <th onclick="sortPriority('school')">School <span class="sort-icon">↕</span></th>
+          <th onclick="sortPriority('region')">Region / Team <span class="sort-icon">↕</span></th>
+          <th onclick="sortPriority('level')">Level <span class="sort-icon">↕</span></th>
+          <th onclick="sortPriority('actual')">Actual (hrs) <span class="sort-icon">↕</span></th>
+          <th onclick="sortPriority('expected')">Expected (hrs) <span class="sort-icon">↕</span></th>
+          <th onclick="sortPriority('gap')">Gap (hrs) <span class="sort-icon">↕</span></th>
+          <th onclick="sortPriority('mult')">Gap÷Actual <span class="sort-icon">↕</span></th>
+          <th onclick="sortPriority('score')">Priority Score <span class="sort-icon sorted">↓</span></th>
+          <th onclick="sortPriority('tier')">Tier <span class="sort-icon">↕</span></th>
+        </tr>
+      </thead>
+      <tbody id="priority-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- Mobile cards (hidden on desktop) -->
+  <div id="priority-cards-wrap" style="padding:0 12px 16px; display:none;">
+    <div id="priority-cards-body"></div>
+  </div>
+</div>
+
+
+<!-- ============================================================ TAB 2: TRAJECTORY ANALYSIS -->
+<div id="tab-trajectory" class="tab-panel">
+
+  <!-- KPI Summary Cards -->
+  <div class="kpi-grid" id="traj-kpi-grid"></div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <input type="text" id="traj-search" placeholder="Search school, region, team…" oninput="renderTrajectory()"/>
+    <select id="traj-region" onchange="renderTrajectory()"><option value="">All Regions</option></select>
+    <select id="traj-team" onchange="renderTrajectory()"><option value="">All Team Members</option></select>
+    <div class="pills-row">
+      <button class="filter-pill all active" id="traj-pill-all" onclick="setTrajFilter('')">All</button>
+      <button class="filter-pill" id="traj-pill-declining" onclick="setTrajFilter('Declining')"
+        style="border-color:#c0392b;color:#c0392b;">↓ Declining</button>
+      <button class="filter-pill" id="traj-pill-stagnant" onclick="setTrajFilter('Stagnant')"
+        style="border-color:#e67e22;color:#e67e22;">→ Stagnant</button>
+      <button class="filter-pill" id="traj-pill-recovering" onclick="setTrajFilter('Recovering')"
+        style="border-color:#2980b9;color:#2980b9;">↑ Recovering</button>
+      <button class="filter-pill" id="traj-pill-strong" onclick="setTrajFilter('Strong Growth')"
+        style="border-color:#27ae60;color:#27ae60;">↑↑ Strong Growth</button>
+    </div>
+    <button class="print-btn" onclick="window.print()">⎙ Print</button>
+  </div>
+
+  <div class="info-note">
+    Trajectory is determined by comparing 2023→2024→2025 usage trends. Schools with fewer than 2 data points are flagged as <strong>Insufficient Data</strong>. Direction and rate-of-change are calculated from available years only.
+  </div>
+
+  <!-- Sparkline chart -->
+  <div class="chart-wrap" style="max-width:900px;">
+    <div class="chart-title">Usage Trend Overview — Lagged Schools by Trajectory Class</div>
+    <canvas id="traj-chart" height="180"></canvas>
+  </div>
+
+  <!-- Desktop table -->
+  <div class="tbl-wrap" id="traj-tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>School</th>
+          <th>Region / Team</th>
+          <th>Tier</th>
+          <th>2023 (hrs)</th>
+          <th>2024 (hrs)</th>
+          <th>2025 (hrs)</th>
+          <th>YoY Change</th>
+          <th>Trend Rate</th>
+          <th>Trajectory</th>
+          <th>Intervention Signal</th>
+        </tr>
+      </thead>
+      <tbody id="traj-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- Mobile cards -->
+  <div id="traj-cards-wrap" style="padding:0 12px 16px; display:none;">
+    <div id="traj-cards-body"></div>
+  </div>
+
+</div>
+
+<!-- ============================================================ TAB 3: LAGGED SCHOOL SOLUTION -->
+<div id="tab-soln" class="tab-panel">
+
+  <!-- KPI row -->
+  <div class="kpi-grid" id="soln-kpi-grid"></div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <input type="text" id="soln-search" placeholder="Search school, region, district, team…" oninput="renderSoln()"/>
+    <select id="soln-region" onchange="renderSoln()"><option value="">All Regions</option></select>
+    <select id="soln-team" onchange="renderSoln()"><option value="">All Team Members</option></select>
+    <div class="pills-row">
+      <button class="filter-pill all active" id="soln-pill-all" onclick="setSolnFilter('')">All</button>
+      <button class="filter-pill p1" id="soln-pill-p1" onclick="setSolnFilter('P1')">P1 Urgent</button>
+      <button class="filter-pill p2" id="soln-pill-p2" onclick="setSolnFilter('P2')">P2 High</button>
+      <button class="filter-pill p3" id="soln-pill-p3" onclick="setSolnFilter('P3')">P3 Medium</button>
+    </div>
+    <button class="print-btn" onclick="window.print()">⎙ Print</button>
+  </div>
+
+  <div class="info-note">
+    Each lagged school is matched to its <strong>3 nearest high-performing schools</strong> (Good level, ≥2000 hrs actual usage) using GPS Haversine distance. The field team officer assigned to the lagged school should arrange a peer visit to understand what those nearby schools are doing differently.
+  </div>
+
+  <!-- Desktop table -->
+  <div class="tbl-wrap" id="soln-tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Lagged School (Victim)</th>
+          <th>Region / Team</th>
+          <th>Tier</th>
+          <th>Actual (hrs)</th>
+          <th>Gap (hrs)</th>
+          <th>Nearest Peer #1</th>
+          <th>Distance</th>
+          <th>Nearest Peer #2</th>
+          <th>Distance</th>
+          <th>Nearest Peer #3</th>
+          <th>Distance</th>
+        </tr>
+      </thead>
+      <tbody id="soln-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- Mobile cards -->
+  <div id="soln-cards-wrap" style="padding:0 12px 16px; display:none;">
+    <div id="soln-cards-body"></div>
+  </div>
+
+</div>
+
+<!-- ============================================================ TAB 4: FULL NETWORK -->
+<div id="tab-network" class="tab-panel">
+  <div class="controls">
+    <input type="text" id="search-network" placeholder="Search full network…" oninput="renderNetwork()"/>
+    <div class="pills-row" style="gap:8px;">
+      <select id="network-region" onchange="renderNetwork()" style="flex:1;min-width:120px;"><option value="">All Regions</option></select>
+      <select id="network-necta" onchange="renderNetwork()" style="flex:1;min-width:120px;">
+        <option value="">All Schools</option>
+        <option value="Yes">NECTA Schools</option>
+        <option value="No">No NECTA (Lagged)</option>
+      </select>
+      <select id="network-level" onchange="renderNetwork()" style="flex:1;min-width:130px;">
+        <option value="">All Levels</option>
+        <option value="Good">Good ≥2000h</option>
+        <option value="Moderate">Moderate 500–2000h</option>
+        <option value="Poor">Poor &lt;500h</option>
+      </select>
+    </div>
+    <button class="print-btn" onclick="window.print()">⎙ Print Full Network</button>
+  </div>
+  <!-- Desktop table -->
+  <div class="tbl-wrap" id="network-tbl-wrap">
+    <table id="network-table">
+      <thead>
+        <tr>
+          <th>#</th><th>School</th><th>Region</th><th>District</th><th>Team</th>
+          <th>NECTA</th><th>Level</th>
+          <th>Actual Avg (hrs)</th><th>Expected Avg (hrs)</th><th>Gap (hrs)</th>
+          <th>2023</th><th>2024</th><th>2025</th>
+        </tr>
+      </thead>
+      <tbody id="network-tbody"></tbody>
+    </table>
+  </div>
+  <!-- Mobile cards -->
+  <div id="network-cards-wrap" style="padding:0 12px 16px; display:none;">
+    <div id="network-cards-body"></div>
+  </div>
+</div>
+
+<script>
+// ================================================================ DATA
+const LAGGED = [
+  ["Ula Secondary School","Dodoma","Kondoa DC","Juma","Moderate",1778.63,15339.5,13560.9,7.62,5898.34,4953.96,1778.63],
+  ["Bicha Secondary School","Dodoma","Kondoa DC","Juma","Moderate",1974.85,15339.5,13364.6,6.77,4611.96,2935.48,1974.85],
+  ["Usongwe Secondary School","Mbeya","Mbeya DC","Juma","Poor",319.17,8000.0,7680.8,24.07,null,null,319.17],
+  ["Banjika Secondary School","Arusha","Karatu DC","Jastin","Moderate",1619.3,9000.0,7380.7,4.56,null,6714.54,1619.3],
+  ["Nyalumbu Secondary School","Iringa","Kilolo DC","Juma","Moderate",977.93,8000.0,7022.1,7.18,null,2909.31,977.93],
+  ["Bihawana Secondary School","Dodoma","Dodoma CC","Juma","Moderate",1040.35,8000.0,6959.6,4.11,4549.94,2994.09,1040.35],
+  ["Songwe Secondary School","Mbeya","Mbeya DC","Juma","Moderate",1386.22,8000.0,6613.8,4.77,null,null,1386.22],
+  ["Viwandani Secondary School","Dodoma","Dodoma CC","Juma","Moderate",1534.59,8000.0,6465.4,4.21,null,null,1534.59],
+  ["Iyunga Technical Secondary School","Mbeya","Mbeya DC","Juma","Moderate",1733.15,8000.0,6266.9,3.62,null,null,1733.15],
+  ["Mpuguso Secondary School","Mbeya","Rungwe DC","Juma","Moderate",1881.37,8000.0,6118.6,3.25,null,null,1881.37],
+  ["Ruangwa Secondary School","Lindi","Ruangwa DC","Danny","Moderate",1962.17,8000.0,6037.8,3.08,null,524.92,1962.17],
+  ["Imezu Secondary School (Malama)","Mbeya","Mbeya DC","Juma","Good",2435.81,8000.0,5564.2,2.28,null,null,2435.81],
+  ["Uhambingeto Secondary School","Iringa","Kilolo DC","Juma","Good",2555.83,8000.0,5444.2,2.13,null,null,2555.83],
+  ["Ilembo Secondary School (Ilunga)","Mbeya","Mbeya DC","Juma","Good",3003.01,8000.0,4997.0,1.66,null,null,3003.01],
+  ["Irkisale Secondary School","Arusha","Monduli DC","Janeth","Moderate",677.44,5200.0,4522.6,6.68,2446.95,2061.64,677.44],
+  ["Kiwalala Secondary School","Lindi","Lindi DC","Danny","Moderate",514.02,4951.0,4437.0,8.63,1926.79,1086.35,514.02],
+  ["Gorowa Secondary School","Manyara","Babati DC","Abubakar","Poor",222.68,4500.0,4277.3,19.21,2435.68,1692.82,222.68],
+  ["Butuguri Secondary School","Mara","Butiama DC","Danny","Moderate",1228.37,5500.0,4271.6,3.48,null,504.32,1228.37],
+  ["Engarenaboir Secondary School","Arusha","Longido DC","Erick","Poor",0.35,4197.2,4196.8,999.0,1957.94,115.42,0.35],
+  ["Enduimet Secondary School","Arusha","Longido DC","Erick","Poor",147.73,4197.2,4049.5,27.41,3414.32,147.73,null],
+  ["Sanya Juu Secondary School","Kilimanjaro","Siha DC","James","Good",5239.59,9000.0,3760.4,0.72,null,null,5239.59],
+  ["Nyegendi Secondary School","Lindi","Lindi DC","Danny","Moderate",1236.11,4951.0,3714.9,3.01,3202.2,3640.49,1236.11],
+  ["Poli Secondary School","Arusha","Meru DC","James","Poor",117.32,3800.0,3682.7,31.39,857.02,0.53,117.32],
+  ["Lupoto Secondary School","Mbeya","Rungwe DC","Juma","Good",4409.4,8000.0,3590.6,0.81,null,null,4409.4],
+  ["Nkoasenga Secondary School","Arusha","Meru DC","James","Poor",214.87,3800.0,3585.1,16.69,1052.6,1174.48,214.87],
+  ["Bagara Secondary School","Manyara","Babati TC","Abubakar","Poor",2.22,3500.0,3497.8,1575.58,2866.28,13.69,2.22],
+  ["Sing'isi Secondary School","Arusha","Meru DC","James","Poor",304.67,3800.0,3495.3,11.47,1097.31,266.14,304.67],
+  ["Babati Day Secondary School","Manyara","Babati TC","Abubakar","Poor",17.58,3500.0,3482.4,198.09,1500.85,1638.8,17.58],
+  ["Chief Dodo Secondary School","Manyara","Babati DC","Abubakar","Moderate",1030.97,4500.0,3469.0,3.36,2678.39,1030.97,null],
+  ["Komnyanganyo Secondary School","Tanga","Handeni DC","Ashura","Poor",157.38,3500.0,3342.6,21.24,3302.03,531.25,157.38],
+  ["Kisaza Secondary School","Tanga","Handeni DC","Ashura","Poor",163.79,3500.0,3336.2,20.37,1962.31,339.76,163.79],
+  ["Irkisongo Secondary School","Arusha","Monduli DC","Janeth","Moderate",1864.97,5200.0,3335.0,1.79,7918.73,5918.63,1864.97],
+  ["Msata Secondary School","Pwani","Chalinze DC","Ashura","Moderate",754.64,4000.0,3245.4,4.3,null,2700.06,754.64],
+  ["Moita Secondary School","Arusha","Monduli DC","Janeth","Moderate",1983.82,5200.0,3216.2,1.62,1230.4,2807.88,1983.82],
+  ["Elerai Secondary School","Arusha","Arusha CC","Jastin","Poor",0.0,3200.0,3200.0,999.0,2421.84,0.0,null],
+  ["Suye Secondary School","Arusha","Arusha CC","Jastin","Poor",35.81,3200.0,3164.2,88.36,2109.53,14.21,35.81],
+  ["Kwaraa Secondary School","Manyara","Babati TC","Abubakar","Poor",340.28,3500.0,3159.7,9.29,1022.64,393.06,340.28],
+  ["Ayagalaya Secondary School","Manyara","Babati DC","Abubakar","Moderate",1486.13,4500.0,3013.9,2.03,88.07,1755.1,1486.13],
+  ["Ndolwa Secondary School","Tanga","Handeni DC","Ashura","Moderate",515.07,3500.0,2984.9,5.8,6610.11,7122.75,515.07],
+  ["Hawa Mchopa Secondary School","Lindi","Ruangwa DC","Danny","Good",5088.99,8000.0,2911.0,0.57,null,2890.3,5088.99],
+  ["Mkata Secondary School","Tanga","Handeni DC","Ashura","Moderate",667.67,3500.0,2832.3,4.24,2798.53,1509.89,667.67],
+  ["Misima Secondary School","Tanga","Handeni DC","Ashura","Moderate",787.35,3500.0,2712.7,3.45,2504.0,1090.4,787.35],
+  ["Mbekenyera Secondary School","Lindi","Ruangwa DC","Danny","Good",5303.98,8000.0,2696.0,0.51,null,3700.13,5303.98],
+  ["Nkoanrua Secondary School","Arusha","Meru DC","James","Moderate",1106.46,3800.0,2693.5,2.43,1653.29,976.57,1106.46],
+  ["Nkowe Secondary School","Lindi","Ruangwa DC","Danny","Good",5371.9,8000.0,2628.1,0.49,null,2903.62,5371.9],
+  ["Manyara Girls Secondary School","Manyara","Babati TC","Abubakar","Moderate",941.89,3500.0,2558.1,2.72,null,null,941.89],
+  ["Moshono Secondary School","Arusha","Arusha CC","Janeth","Moderate",796.3,3200.0,2403.7,3.02,3266.23,1621.38,796.3],
+  ["Mahiwa Secondary School","Lindi","Lindi DC","Danny","Good",2572.63,4951.0,2378.4,0.92,1297.12,451.32,2572.63],
+  ["Mtama Secondary School","Lindi","Lindi DC","Danny","Good",2693.94,4951.0,2257.1,0.84,10492.43,6990.05,2693.94],
+  ["Ifati Secondary School","Kilimanjaro","Moshi DC","James","Good",2043.22,4197.2,2154.0,1.05,null,1280.23,2043.22],
+  ["Namwai Secondary School","Kilimanjaro","Siha DC","James","Good",6893.59,9000.0,2106.4,0.31,null,null,6893.59],
+  ["Mwandet SS A-Level","Arusha","Arusha DC","Erick","Poor",0.0,1932.5,1932.5,999.0,559.09,0.0,null],
+  ["Mateves Secondary School","Arusha","Arusha DC","Erick","Poor",0.0,1932.5,1932.5,999.0,459.15,0.0,null],
+  ["Ilboru Secondary School","Arusha","Arusha DC","Jastin","Poor",3.17,1932.5,1929.3,608.62,null,3.17,null],
+  ["Sokon II Secondary School","Arusha","Arusha DC","Jastin","Poor",9.83,1932.5,1922.7,195.59,560.53,181.84,9.83],
+  ["Mringa Secondary School","Arusha","Arusha DC","Erick","Poor",10.52,1932.5,1922.0,182.7,2809.46,144.22,10.52],
+  ["Mukulat Secondary School","Arusha","Arusha DC","Erick","Poor",33.28,1932.5,1899.2,57.07,1314.58,447.06,33.28],
+  ["Olmotoni Secondary School","Arusha","Arusha DC","Erick","Poor",43.69,1932.5,1888.8,43.23,923.53,255.45,43.69],
+  ["Bangata Secondary School","Arusha","Arusha DC","Jastin","Poor",50.45,1932.5,1882.0,37.31,1765.87,1307.52,50.45],
+  ["Mandera Girls Secondary School","Pwani","Chalinze DC","Ashura","Good",2136.87,4000.0,1863.1,0.87,null,4157.66,2136.87],
+  ["Kinyala Secondary School","Mbeya","Rungwe DC","Juma","Good",6183.2,8000.0,1816.8,0.29,null,null,6183.2],
+  ["Komoto Secondary School","Manyara","Babati TC","Abubakar","Moderate",1691.73,3500.0,1808.3,1.07,2687.38,3533.08,1691.73],
+  ["Olokii Secondary School","Arusha","Arusha DC","James","Poor",146.75,1932.5,1785.8,12.17,310.42,155.61,146.75],
+  ["Engutoto Secondary School","Arusha","Monduli DC","Danny","Good",3432.89,5200.0,1767.1,0.51,4807.62,3326.89,3432.89],
+  ["Oldonyowas Secondary School","Arusha","Arusha DC","Janeth","Poor",248.36,1932.5,1684.1,6.78,null,426.35,248.36],
+  ["Ilkiding'a Secondary School","Arusha","Arusha DC","Jastin","Poor",272.33,1932.5,1660.2,6.1,1412.57,272.33,null],
+  ["Lengijave Secondary School","Arusha","Arusha DC","Janeth","Poor",300.45,1932.5,1632.0,5.43,3570.93,2680.7,300.45],
+  ["Nangara Secondary School","Manyara","Babati TC","Abubakar","Moderate",1936.51,3500.0,1563.5,0.81,1538.49,909.8,1936.51],
+  ["Udzungwa Secondary School","Iringa","Kilolo DC","Juma","Good",6441.72,8000.0,1558.3,0.24,null,3912.57,6441.72],
+  ["Kimnyaki Secondary School","Arusha","Arusha DC","Jastin","Poor",423.27,1932.5,1509.2,3.57,260.52,446.67,423.27],
+  ["Osiligi Secondary School","Arusha","Arusha DC","Erick","Poor",439.74,1932.5,1492.8,3.39,1622.94,2446.03,439.74],
+  ["Olturment Secondary School","Arusha","Arusha DC","Janeth","Poor",452.86,1932.5,1479.6,3.27,3105.19,508.89,452.86],
+  ["Ngiresi Secondary School","Arusha","Arusha DC","Jastin","Poor",487.36,1932.5,1445.1,1074.62,487.36,null,null],
+  ["Oldadai Secondary School","Arusha","Arusha DC","Jastin","Moderate",512.95,1932.5,1419.5,2.77,965.85,362.58,512.95],
+  ["Enyoito Secondary School","Arusha","Arusha DC","Erick","Moderate",526.93,1932.5,1405.6,2.67,2621.0,526.93,null],
+  ["Semkiwa Secondary School","Tanga","Kilindi DC","Ashura","Poor",165.81,1500.0,1334.2,8.05,null,null,165.81],
+  ["Mwapachu Secondary School","Tanga","Kilindi DC","Ashura","Poor",189.63,1500.0,1310.4,6.91,null,null,189.63],
+  ["Chifu Mang'enya Secondary School","Tanga","Kilindi DC","Ashura","Poor",219.1,1500.0,1280.9,5.85,null,null,219.1],
+  ["Kikwe Secondary School","Arusha","Meru DC","James","Good",2520.69,3800.0,1279.3,0.51,2332.48,3454.88,2520.69],
+  ["Naura Secondary School","Arusha","Arusha CC","Jastin","Moderate",1962.76,3200.0,1237.2,0.63,1276.71,1797.78,1962.76],
+  ["Mbwego Secondary School","Tanga","Kilindi DC","Ashura","Poor",319.4,1500.0,1180.6,3.7,null,null,319.4],
+  ["Muungano Secondary School","Arusha","Meru DC","James","Good",2693.69,3800.0,1106.3,0.41,1806.43,2052.03,2693.69],
+  ["Kimaseki Secondary School","Arusha","Arusha CC","Jastin","Good",2193.3,3200.0,1006.7,0.46,2095.35,337.58,2193.3],
+  ["Kinana Secondary School","Arusha","Arusha CC","Jastin","Good",2210.17,3200.0,989.8,0.45,2900.33,2031.19,2210.17],
+  ["Mwandet Secondary School","Arusha","Arusha DC","Erick","Moderate",1026.98,1932.5,905.5,0.88,4423.2,882.0,1026.98],
+  ["Butiama Secondary School","Mara","Butiama DC","Danny","Good",4643.94,5500.0,856.1,0.18,null,1545.92,4643.94],
+  ["Handeni Secondary School","Tanga","Handeni DC","Ashura","Good",2645.67,3500.0,854.3,0.32,3712.2,2645.67,null],
+  ["Oloasiti Secondary School","Arusha","Arusha CC","Janeth","Good",2433.45,3200.0,766.6,0.32,1474.44,26.12,2433.45],
+  ["Themi Secondary School","Arusha","Arusha CC","Jastin","Good",2474.79,3200.0,725.2,0.29,3009.94,2551.75,2474.79],
+  ["Dareda Secondary School","Manyara","Babati DC","Abubakar","Good",3959.25,4500.0,540.8,0.14,11008.42,5569.92,3959.25],
+  ["Longido A-Level Secondary School","Arusha","Longido DC","Erick","Good",3762.61,4197.2,434.6,0.12,5005.44,3762.61,null],
+  ["Namalenga Secondary School","Mtwara","Masasi DC","Danny","Good",4557.26,4951.0,393.7,0.09,5039.42,391.15,4557.26],
+  ["Kilolo Secondary School","Iringa","Kilolo DC","Juma","Good",7637.12,8000.0,362.9,0.05,null,4613.36,7637.12],
+  ["Bukulu Secondary School","Dodoma","Kondoa DC","Juma","Good",15001.11,15339.5,338.4,0.02,15.36,6026.51,15001.11],
+  ["Selebu Secondary School","Iringa","Kilolo DC","Juma","Good",7719.83,8000.0,280.2,0.04,null,971.29,7719.83],
+  ["Sambasha Secondary School","Arusha","Arusha DC","Janeth","Moderate",1677.76,1932.5,254.7,0.15,3430.98,807.07,1677.76],
+  ["Bumangi Secondary School","Mara","Butiama DC","Danny","Good",5291.95,5500.0,208.1,0.04,null,1552.88,5291.95],
+  ["Oshara Secondary School","Kilimanjaro","Siha DC","James","Good",8793.05,9000.0,207.0,0.02,null,null,8793.05],
+  ["Kiboriloni Secondary School","Kilimanjaro","Moshi CC","James","Good",3374.7,3500.0,125.3,0.04,null,3617.39,3374.7],
+  ["Mitesa Secondary School","Mtwara","Masasi DC","Danny","Good",4842.46,4951.0,108.5,0.02,null,6.87,4842.46],
+];
+
+const FULL_NETWORK = [
+  ["Mkonoo Secondary School","Arusha","Arusha CC","Danny","Yes","Good",6783.8,3200.0,-3583.8,null,14362.81,6783.8],
+  ["Arusha Day Secondary School","Arusha","Arusha CC","Jastin","Yes","Good",3223.53,3200.0,-23.5,4262.12,639.7,3223.53],
+  ["Themi Secondary School","Arusha","Arusha CC","Jastin","No","Good",2474.79,3200.0,725.2,3009.94,2551.75,2474.79],
+  ["Oloasiti Secondary School","Arusha","Arusha CC","Janeth","No","Good",2433.45,3200.0,766.6,1474.44,26.12,2433.45],
+  ["Kinana Secondary School","Arusha","Arusha CC","Jastin","No","Good",2210.17,3200.0,989.8,2900.33,2031.19,2210.17],
+  ["Kimaseki Secondary School","Arusha","Arusha CC","Jastin","No","Good",2193.3,3200.0,1006.7,2095.35,337.58,2193.3],
+  ["Naura Secondary School","Arusha","Arusha CC","Jastin","No","Moderate",1962.76,3200.0,1237.2,1276.71,1797.78,1962.76],
+  ["Moshono Secondary School","Arusha","Arusha CC","Janeth","No","Moderate",796.3,3200.0,2403.7,3266.23,1621.38,796.3],
+  ["Suye Secondary School","Arusha","Arusha CC","Jastin","No","Poor",35.81,3200.0,3164.2,2109.53,14.21,35.81],
+  ["Elerai Secondary School","Arusha","Arusha CC","Jastin","No","Poor",0.0,3200.0,3200.0,2421.84,0.0,null],
+  ["Einoti Secondary School","Arusha","Arusha DC","Danny","Yes","Good",21162.34,1932.5,-19229.8,31767.85,28899.84,21162.34],
+  ["Losinoni Secondary School","Arusha","Arusha DC","Jastin","Yes","Good",10179.79,1932.5,-8247.3,null,null,10179.79],
+  ["Kiranyi Secondary School","Arusha","Arusha DC","Erick","Yes","Good",3554.91,1932.5,-1622.4,646.08,1846.91,3554.91],
+  ["Oljoro Secondary School","Arusha","Arusha DC","Janeth","Yes","Good",3186.87,1932.5,-1254.4,1270.38,1089.5,3186.87],
+  ["Sambasha Secondary School","Arusha","Arusha DC","Janeth","No","Moderate",1677.76,1932.5,254.7,3430.98,807.07,1677.76],
+  ["Mwandet Secondary School","Arusha","Arusha DC","Erick","No","Moderate",1026.98,1932.5,905.5,4423.2,882.0,1026.98],
+  ["Oldadai Secondary School","Arusha","Arusha DC","Jastin","No","Moderate",512.95,1932.5,1419.5,965.85,362.58,512.95],
+  ["Olturment Secondary School","Arusha","Arusha DC","Janeth","No","Poor",452.86,1932.5,1479.6,3105.19,508.89,452.86],
+  ["Osiligi Secondary School","Arusha","Arusha DC","Erick","No","Poor",439.74,1932.5,1492.8,1622.94,2446.03,439.74],
+  ["Kimnyaki Secondary School","Arusha","Arusha DC","Jastin","No","Poor",423.27,1932.5,1509.2,260.52,446.67,423.27],
+  ["Lengijave Secondary School","Arusha","Arusha DC","Janeth","No","Poor",300.45,1932.5,1632.0,3570.93,2680.7,300.45],
+  ["Oldonyowas Secondary School","Arusha","Arusha DC","Janeth","No","Poor",248.36,1932.5,1684.1,null,426.35,248.36],
+  ["Olokii Secondary School","Arusha","Arusha DC","James","No","Poor",146.75,1932.5,1785.8,310.42,155.61,146.75],
+  ["Bangata Secondary School","Arusha","Arusha DC","Jastin","No","Poor",50.45,1932.5,1882.0,1765.87,1307.52,50.45],
+  ["Olmotoni Secondary School","Arusha","Arusha DC","Erick","No","Poor",43.69,1932.5,1888.8,923.53,255.45,43.69],
+  ["Mukulat Secondary School","Arusha","Arusha DC","Erick","No","Poor",33.28,1932.5,1899.2,1314.58,447.06,33.28],
+  ["Mringa Secondary School","Arusha","Arusha DC","Erick","No","Poor",10.52,1932.5,1922.0,2809.46,144.22,10.52],
+  ["Sokon II Secondary School","Arusha","Arusha DC","Jastin","No","Poor",9.83,1932.5,1922.7,560.53,181.84,9.83],
+  ["Mlangarini Secondary School","Arusha","Arusha DC","Erick","Yes","Good",13803.42,1932.5,-11870.9,8500.34,13803.42,null],
+  ["Enyoito Secondary School","Arusha","Arusha DC","Erick","No","Moderate",526.93,1932.5,1405.6,2621.0,526.93,null],
+  ["Ngiresi Secondary School","Arusha","Arusha DC","Jastin","No","Poor",487.36,1932.5,1445.1,1074.62,487.36,null],
+  ["Ilkiding'a Secondary School","Arusha","Arusha DC","Jastin","No","Poor",272.33,1932.5,1660.2,1412.57,272.33,null],
+  ["Ilboru Secondary School","Arusha","Arusha DC","Jastin","No","Poor",3.17,1932.5,1929.3,null,3.17,null],
+  ["Mwandet SS A-Level","Arusha","Arusha DC","Erick","No","Poor",0.0,1932.5,1932.5,559.09,0.0,null],
+  ["Mateves Secondary School","Arusha","Arusha DC","Erick","No","Poor",0.0,1932.5,1932.5,459.15,0.0,null],
+  ["Florian Secondary School","Arusha","Karatu DC","Jastin","Yes","Good",16359.55,9000.0,-7359.5,15354.45,20300.47,16359.55],
+  ["Banjika Secondary School","Arusha","Karatu DC","Jastin","No","Moderate",1619.3,9000.0,7380.7,null,6714.54,1619.3],
+  ["Engarenaboir Secondary School","Arusha","Longido DC","Erick","No","Poor",0.35,4197.2,4196.8,1957.94,115.42,0.35],
+  ["Namanga Secondary School","Arusha","Longido DC","Erick","Yes","Good",11072.09,4197.2,-6874.9,14916.2,11072.09,null],
+  ["Tingatinga Secondary School","Arusha","Longido DC","Erick","Yes","Good",8233.44,4197.2,-4036.2,8329.65,8233.44,null],
+  ["Longido A-Level Secondary School","Arusha","Longido DC","Erick","No","Good",3762.61,4197.2,434.6,5005.44,3762.61,null],
+  ["Enduimet Secondary School","Arusha","Longido DC","Erick","No","Poor",147.73,4197.2,4049.5,3414.32,147.73,null],
+  ["Nkoarusambu Secondary School","Arusha","Meru DC","James","Yes","Good",6104.78,3800.0,-2304.8,5371.78,6024.3,6104.78],
+  ["Muungano Secondary School","Arusha","Meru DC","James","No","Good",2693.69,3800.0,1106.3,1806.43,2052.03,2693.69],
+  ["Kikwe Secondary School","Arusha","Meru DC","James","No","Good",2520.69,3800.0,1279.3,2332.48,3454.88,2520.69],
+  ["Nkoanrua Secondary School","Arusha","Meru DC","James","No","Moderate",1106.46,3800.0,2693.5,1653.29,976.57,1106.46],
+  ["Sing'isi Secondary School","Arusha","Meru DC","James","No","Poor",304.67,3800.0,3495.3,1097.31,266.14,304.67],
+  ["Nkoasenga Secondary School","Arusha","Meru DC","James","No","Poor",214.87,3800.0,3585.1,1052.6,1174.48,214.87],
+  ["Poli Secondary School","Arusha","Meru DC","James","No","Poor",117.32,3800.0,3682.7,857.02,0.53,117.32],
+  ["Engutoto Secondary School","Arusha","Monduli DC","Danny","No","Good",3432.89,5200.0,1767.1,4807.62,3326.89,3432.89],
+  ["Moita Secondary School","Arusha","Monduli DC","Janeth","No","Moderate",1983.82,5200.0,3216.2,1230.4,2807.88,1983.82],
+  ["Irkisongo Secondary School","Arusha","Monduli DC","Janeth","No","Moderate",1864.97,5200.0,3335.0,7918.73,5918.63,1864.97],
+  ["Irkisale Secondary School","Arusha","Monduli DC","Janeth","No","Moderate",677.44,5200.0,4522.6,2446.95,2061.64,677.44],
+  ["Viwandani Secondary School","Dodoma","Dodoma CC","Juma","No","Moderate",1534.59,8000.0,6465.4,null,null,1534.59],
+  ["Bihawana Secondary School","Dodoma","Dodoma CC","Juma","No","Moderate",1040.35,8000.0,6959.6,4549.94,2994.09,1040.35],
+  ["Amani Abeid Karume Secondary School","Dodoma","Kondoa DC","Juma","Yes","Good",47932.8,15339.5,-32593.3,32095.14,37428.25,47932.8],
+  ["Bukulu Secondary School","Dodoma","Kondoa DC","Juma","No","Good",15001.11,15339.5,338.4,15.36,6026.51,15001.11],
+  ["Bicha Secondary School","Dodoma","Kondoa DC","Juma","No","Moderate",1974.85,15339.5,13364.6,4611.96,2935.48,1974.85],
+  ["Ula Secondary School","Dodoma","Kondoa DC","Juma","No","Moderate",1778.63,15339.5,13560.9,5898.34,4953.96,1778.63],
+  ["Selebu Secondary School","Iringa","Kilolo DC","Juma","No","Good",7719.83,8000.0,280.2,null,971.29,7719.83],
+  ["Kilolo Secondary School","Iringa","Kilolo DC","Juma","No","Good",7637.12,8000.0,362.9,null,4613.36,7637.12],
+  ["Udzungwa Secondary School","Iringa","Kilolo DC","Juma","No","Good",6441.72,8000.0,1558.3,null,3912.57,6441.72],
+  ["Uhambingeto Secondary School","Iringa","Kilolo DC","Juma","No","Good",2555.83,8000.0,5444.2,null,null,2555.83],
+  ["Nyalumbu Secondary School","Iringa","Kilolo DC","Juma","No","Moderate",977.93,8000.0,7022.1,null,2909.31,977.93],
+  ["Kiboriloni Secondary School","Kilimanjaro","Moshi CC","James","No","Good",3374.7,3500.0,125.3,null,3617.39,3374.7],
+  ["Ifati Secondary School","Kilimanjaro","Moshi DC","James","No","Good",2043.22,4197.2,2154.0,null,1280.23,2043.22],
+  ["Nuru Secondary School","Kilimanjaro","Siha DC","James","Yes","Good",17429.53,9000.0,-8429.5,null,null,17429.53],
+  ["Oshara Secondary School","Kilimanjaro","Siha DC","James","No","Good",8793.05,9000.0,207.0,null,null,8793.05],
+  ["Namwai Secondary School","Kilimanjaro","Siha DC","James","No","Good",6893.59,9000.0,2106.4,null,null,6893.59],
+  ["Sanya Juu Secondary School","Kilimanjaro","Siha DC","James","No","Good",5239.59,9000.0,3760.4,null,null,5239.59],
+  ["Mtama Secondary School","Lindi","Lindi DC","Danny","No","Good",2693.94,4951.0,2257.1,10492.43,6990.05,2693.94],
+  ["Mahiwa Secondary School","Lindi","Lindi DC","Danny","No","Good",2572.63,4951.0,2378.4,1297.12,451.32,2572.63],
+  ["Nyegendi Secondary School","Lindi","Lindi DC","Danny","No","Moderate",1236.11,4951.0,3714.9,3202.2,3640.49,1236.11],
+  ["Kiwalala Secondary School","Lindi","Lindi DC","Danny","No","Moderate",514.02,4951.0,4437.0,1926.79,1086.35,514.02],
+  ["Lucas Malia Secondary School","Lindi","Ruangwa DC","Danny","Yes","Good",26869.14,8000.0,-18869.1,null,11933.26,26869.14],
+  ["Nkowe Secondary School","Lindi","Ruangwa DC","Danny","No","Good",5371.9,8000.0,2628.1,null,2903.62,5371.9],
+  ["Mbekenyera Secondary School","Lindi","Ruangwa DC","Danny","No","Good",5303.98,8000.0,2696.0,null,3700.13,5303.98],
+  ["Hawa Mchopa Secondary School","Lindi","Ruangwa DC","Danny","No","Good",5088.99,8000.0,2911.0,null,2890.3,5088.99],
+  ["Ruangwa Secondary School","Lindi","Ruangwa DC","Danny","No","Moderate",1962.17,8000.0,6037.8,null,524.92,1962.17],
+  ["Dareda Secondary School","Manyara","Babati DC","Abubakar","No","Good",3959.25,4500.0,540.8,11008.42,5569.92,3959.25],
+  ["Ayagalaya Secondary School","Manyara","Babati DC","Abubakar","No","Moderate",1486.13,4500.0,3013.9,88.07,1755.1,1486.13],
+  ["Gorowa Secondary School","Manyara","Babati DC","Abubakar","No","Poor",222.68,4500.0,4277.3,2435.68,1692.82,222.68],
+  ["Chief Dodo Secondary School","Manyara","Babati DC","Abubakar","No","Moderate",1030.97,4500.0,3469.0,2678.39,1030.97,null],
+  ["Nakwa Secondary School","Manyara","Babati TC","Abubakar","Yes","Good",4544.9,3500.0,-1044.9,8746.37,2923.36,4544.9],
+  ["Nangara Secondary School","Manyara","Babati TC","Abubakar","No","Moderate",1936.51,3500.0,1563.5,1538.49,909.8,1936.51],
+  ["Komoto Secondary School","Manyara","Babati TC","Abubakar","No","Moderate",1691.73,3500.0,1808.3,2687.38,3533.08,1691.73],
+  ["Manyara Girls Secondary School","Manyara","Babati TC","Abubakar","No","Moderate",941.89,3500.0,2558.1,null,null,941.89],
+  ["Kwaraa Secondary School","Manyara","Babati TC","Abubakar","No","Poor",340.28,3500.0,3159.7,1022.64,393.06,340.28],
+  ["Babati Day Secondary School","Manyara","Babati TC","Abubakar","No","Poor",17.58,3500.0,3482.4,1500.85,1638.8,17.58],
+  ["Bagara Secondary School","Manyara","Babati TC","Abubakar","No","Poor",2.22,3500.0,3497.8,2866.28,13.69,2.22],
+  ["Kiagata Secondary School","Mara","Butiama DC","Danny","Yes","Good",10362.32,5500.0,-4862.3,null,3435.77,10362.32],
+  ["Kiabakari Secondary School","Mara","Butiama DC","Danny","Yes","Good",6575.11,5500.0,-1075.1,null,988.72,6575.11],
+  ["Bumangi Secondary School","Mara","Butiama DC","Danny","No","Good",5291.95,5500.0,208.1,null,1552.88,5291.95],
+  ["Butiama Secondary School","Mara","Butiama DC","Danny","No","Good",4643.94,5500.0,856.1,null,1545.92,4643.94],
+  ["Butuguri Secondary School","Mara","Butiama DC","Danny","No","Moderate",1228.37,5500.0,4271.6,null,504.32,1228.37],
+  ["Ilembo Secondary School (Ilunga)","Mbeya","Mbeya DC","Juma","No","Good",3003.01,8000.0,4997.0,null,null,3003.01],
+  ["Imezu Secondary School (Malama)","Mbeya","Mbeya DC","Juma","No","Good",2435.81,8000.0,5564.2,null,null,2435.81],
+  ["Iyunga Technical Secondary School","Mbeya","Mbeya DC","Juma","No","Moderate",1733.15,8000.0,6266.9,null,null,1733.15],
+  ["Songwe Secondary School","Mbeya","Mbeya DC","Juma","No","Moderate",1386.22,8000.0,6613.8,null,null,1386.22],
+  ["Usongwe Secondary School","Mbeya","Mbeya DC","Juma","No","Poor",319.17,8000.0,7680.8,null,null,319.17],
+  ["Ikuti Secondary School","Mbeya","Rungwe DC","Juma","Yes","Good",14379.66,8000.0,-6379.7,null,null,14379.66],
+  ["Kinyala Secondary School","Mbeya","Rungwe DC","Juma","No","Good",6183.2,8000.0,1816.8,null,null,6183.2],
+  ["Lupoto Secondary School","Mbeya","Rungwe DC","Juma","No","Good",4409.4,8000.0,3590.6,null,null,4409.4],
+  ["Mpuguso Secondary School","Mbeya","Rungwe DC","Juma","No","Moderate",1881.37,8000.0,6118.6,null,null,1881.37],
+  ["Mitesa Secondary School","Mtwara","Masasi DC","Danny","No","Good",4842.46,4951.0,108.5,null,6.87,4842.46],
+  ["Namalenga Secondary School","Mtwara","Masasi DC","Danny","No","Good",4557.26,4951.0,393.7,5039.42,391.15,4557.26],
+  ["Mboga Secondary School","Pwani","Chalinze DC","Ashura","Yes","Good",4966.62,4000.0,-966.6,null,3421.56,4966.62],
+  ["Mdaula Secondary School","Pwani","Chalinze DC","Ashura","Yes","Good",4013.14,4000.0,-13.1,null,3083.93,4013.14],
+  ["Mandera Girls Secondary School","Pwani","Chalinze DC","Ashura","No","Good",2136.87,4000.0,1863.1,null,4157.66,2136.87],
+  ["Msata Secondary School","Pwani","Chalinze DC","Ashura","No","Moderate",754.64,4000.0,3245.4,null,2700.06,754.64],
+  ["Misima Secondary School","Tanga","Handeni DC","Ashura","No","Moderate",787.35,3500.0,2712.7,2504.0,1090.4,787.35],
+  ["Mkata Secondary School","Tanga","Handeni DC","Ashura","No","Moderate",667.67,3500.0,2832.3,2798.53,1509.89,667.67],
+  ["Ndolwa Secondary School","Tanga","Handeni DC","Ashura","No","Moderate",515.07,3500.0,2984.9,6610.11,7122.75,515.07],
+  ["Kisaza Secondary School","Tanga","Handeni DC","Ashura","No","Poor",163.79,3500.0,3336.2,1962.31,339.76,163.79],
+  ["Komnyanganyo Secondary School","Tanga","Handeni DC","Ashura","No","Poor",157.38,3500.0,3342.6,3302.03,531.25,157.38],
+  ["Handeni Secondary School","Tanga","Handeni DC","Ashura","No","Good",2645.67,3500.0,854.3,3712.2,2645.67,null],
+  ["Mbwego Secondary School","Tanga","Kilindi DC","Ashura","No","Poor",319.4,1500.0,1180.6,null,null,319.4],
+  ["Chifu Mang'enya Secondary School","Tanga","Kilindi DC","Ashura","No","Poor",219.1,1500.0,1280.9,null,null,219.1],
+  ["Mwapachu Secondary School","Tanga","Kilindi DC","Ashura","No","Poor",189.63,1500.0,1310.4,null,null,189.63],
+  ["Semkiwa Secondary School","Tanga","Kilindi DC","Ashura","No","Poor",165.81,1500.0,1334.2,null,null,165.81],
+];
+
+// ================================================================ PRIORITY SCORE CALCULATION
+function calcPriorityScores(schools) {
+  const maxGap = Math.max(...schools.map(s => s[7]));
+  const maxMult = Math.max(...schools.filter(s => s[8] < 2000).map(s => s[8]));
+  return schools.map(s => {
+    const gapNorm = s[7] / maxGap;
+    const multNorm = Math.min(s[8], maxMult) / maxMult;
+    const score = gapNorm * 60 + multNorm * 40;
+    return score;
+  });
+}
+
+function getTier(score) {
+  if (score >= 60) return 'P1';
+  if (score >= 35) return 'P2';
+  if (score >= 12) return 'P3';
+  return 'P4';
+}
+
+function getTierLabel(t) {
+  return { P1: 'P1 — Urgent', P2: 'P2 — High', P3: 'P3 — Medium', P4: 'P4 — Monitor' }[t];
+}
+
+// Compute scores
+const SCORES = calcPriorityScores(LAGGED);
+const RANKED = LAGGED.map((s, i) => ({
+  school: s[0], region: s[1], district: s[2], team: s[3], level: s[4],
+  actual: s[5], expected: s[6], gap: s[7], mult: s[8],
+  y2023: s[9], y2024: s[10], y2025: s[11],
+  score: Math.round(SCORES[i] * 10) / 10,
+  tier: getTier(SCORES[i])
+})).sort((a, b) => b.score - a.score).map((s, i) => ({ ...s, rank: i + 1 }));
+
+// ================================================================ STATE
+let sortCol = 'score', sortDir = -1, tierFilter = '', networkSortCol = '', networkSortDir = 1;
+
+// ================================================================ TRAJECTORY ENGINE
+
+function calcTrajectory(y23, y24, y25) {
+  // Collect available data points
+  const pts = [];
+  if (y23 !== null && y23 > 0) pts.push({ yr: 2023, val: y23 });
+  if (y24 !== null && y24 > 0) pts.push({ yr: 2024, val: y24 });
+  if (y25 !== null && y25 > 0) pts.push({ yr: 2025, val: y25 });
+
+  if (pts.length < 2) return { label: 'Insufficient Data', rate: null, yoy: null, signal: 'data' };
+
+  // YoY change: use last two available points
+  const last = pts[pts.length - 1].val;
+  const prev = pts[pts.length - 2].val;
+  const yoy = ((last - prev) / prev) * 100;
+
+  // Trend rate over all available points (simple linear slope normalized)
+  let rate = 0;
+  if (pts.length >= 2) {
+    const first = pts[0].val;
+    const years = pts[pts.length - 1].yr - pts[0].yr;
+    rate = years > 0 ? ((last - first) / first / years) * 100 : yoy;
+  }
+
+  // Classification
+  let label, signal;
+  if (rate <= -20) {
+    label = 'Declining'; signal = 'urgent';
+  } else if (rate > -20 && rate <= 10) {
+    label = 'Stagnant'; signal = 'watch';
+  } else if (rate > 10 && rate <= 50) {
+    label = 'Recovering'; signal = 'monitor';
+  } else {
+    label = 'Strong Growth'; signal = 'positive';
+  }
+
+  // Override: if latest year is near-zero regardless of trend
+  if (last < 50) { label = 'Declining'; signal = 'urgent'; }
+
+  return { label, rate: Math.round(rate * 10) / 10, yoy: Math.round(yoy * 10) / 10, signal };
+}
+
+function getSignalLabel(signal, traj) {
+  if (signal === 'data')     return ['signal-data',     'Insufficient Data'];
+  if (signal === 'urgent')   return ['signal-urgent',   'Intervene Now'];
+  if (signal === 'watch')    return ['signal-watch',    'Watch Closely'];
+  if (signal === 'monitor')  return ['signal-monitor',  'Monitor Progress'];
+  if (signal === 'positive') return ['signal-positive', 'On Track'];
+  return ['signal-data', '—'];
+}
+
+function getTrajClass(label) {
+  if (label === 'Declining')        return 'traj-declining';
+  if (label === 'Stagnant')         return 'traj-stagnant';
+  if (label === 'Recovering')       return 'traj-recovering';
+  if (label === 'Strong Growth')    return 'traj-strong';
+  return 'traj-insufficient';
+}
+
+function getTrajIcon(label) {
+  if (label === 'Declining')        return '↓';
+  if (label === 'Stagnant')         return '→';
+  if (label === 'Recovering')       return '↑';
+  if (label === 'Strong Growth')    return '↑↑';
+  return '?';
+}
+
+// Build trajectory dataset from RANKED (lagged schools with y23/y24/y25)
+const TRAJ_DATA = RANKED.map(s => {
+  const t = calcTrajectory(s.y2023, s.y2024, s.y2025);
+  return { ...s, ...t };
+});
+
+let trajFilter = '';
+let _tsort = { col: 'score', dir: -1 };
+
+function setTrajFilter(val) {
+  trajFilter = val;
+  ['all','declining','stagnant','recovering','strong'].forEach(id => {
+    const el = document.getElementById('traj-pill-' + id);
+    if (el) el.classList.remove('active');
+  });
+  const map = { '': 'all', 'Declining': 'declining', 'Stagnant': 'stagnant',
+                'Recovering': 'recovering', 'Strong Growth': 'strong' };
+  const el = document.getElementById('traj-pill-' + (map[val] || 'all'));
+  if (el) el.classList.add('active');
+  renderTrajectory();
+}
+
+function renderTrajKPIs() {
+  const declining   = TRAJ_DATA.filter(s => s.label === 'Declining').length;
+  const stagnant    = TRAJ_DATA.filter(s => s.label === 'Stagnant').length;
+  const recovering  = TRAJ_DATA.filter(s => s.label === 'Recovering').length;
+  const strong      = TRAJ_DATA.filter(s => s.label === 'Strong Growth').length;
+  const nodata      = TRAJ_DATA.filter(s => s.label === 'Insufficient Data').length;
+  document.getElementById('traj-kpi-grid').innerHTML = `
+    <div class="kpi-card" style="border-top-color:#c0392b;">
+      <div class="kpi-label">↓ Declining</div>
+      <div class="kpi-value" style="color:#c0392b;">${declining}</div>
+      <div class="kpi-sub">Usage falling year-on-year</div>
+    </div>
+    <div class="kpi-card" style="border-top-color:#e67e22;">
+      <div class="kpi-label">→ Stagnant</div>
+      <div class="kpi-value" style="color:#e67e22;">${stagnant}</div>
+      <div class="kpi-sub">Flat or marginal change</div>
+    </div>
+    <div class="kpi-card" style="border-top-color:#2980b9;">
+      <div class="kpi-label">↑ Recovering</div>
+      <div class="kpi-value" style="color:#2980b9;">${recovering}</div>
+      <div class="kpi-sub">Meaningful upward trend</div>
+    </div>
+    <div class="kpi-card" style="border-top-color:#27ae60;">
+      <div class="kpi-label">↑↑ Strong Growth</div>
+      <div class="kpi-value" style="color:#27ae60;">${strong}</div>
+      <div class="kpi-sub">Sustained strong improvement</div>
+    </div>`;
+}
+
+let _trajChartInstance = null;
+function renderTrajChart() {
+  const counts = {
+    'Declining':     TRAJ_DATA.filter(s => s.label === 'Declining').length,
+    'Stagnant':      TRAJ_DATA.filter(s => s.label === 'Stagnant').length,
+    'Recovering':    TRAJ_DATA.filter(s => s.label === 'Recovering').length,
+    'Strong Growth': TRAJ_DATA.filter(s => s.label === 'Strong Growth').length,
+    'Insufficient':  TRAJ_DATA.filter(s => s.label === 'Insufficient Data').length,
+  };
+  const ctx = document.getElementById('traj-chart').getContext('2d');
+  if (_trajChartInstance) _trajChartInstance.destroy();
+  _trajChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Declining', 'Stagnant', 'Recovering', 'Strong Growth', 'Insuff. Data'],
+      datasets: [{
+        label: 'Schools',
+        data: Object.values(counts),
+        backgroundColor: ['rgba(192,57,43,0.8)','rgba(230,126,34,0.8)',
+                          'rgba(41,128,185,0.8)','rgba(39,174,96,0.8)','rgba(180,180,180,0.6)'],
+        borderRadius: 5,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { ticks: { stepSize: 1, font: { family: 'Lato', size: 11 } }, grid: { color: '#eee' } },
+        x: { ticks: { font: { family: 'Lato', size: 11 } } }
+      }
+    }
+  });
+}
+
+function renderTrajectory() {
+  const q      = document.getElementById('traj-search').value.toLowerCase();
+  const region = document.getElementById('traj-region').value;
+  const team   = document.getElementById('traj-team').value;
+
+  let data = TRAJ_DATA.filter(s => {
+    if (trajFilter && s.label !== trajFilter) return false;
+    if (region && s.region !== region) return false;
+    if (team && s.team !== team) return false;
+    if (q && ![s.school, s.region, s.district, s.team].some(v => v && v.toLowerCase().includes(q))) return false;
+    return true;
+  });
+
+  const fmt = v => v !== null && v !== undefined ? v.toLocaleString(undefined, { maximumFractionDigits: 0 }) : '—';
+  const fmtPct = v => v !== null ? (v > 0 ? '+' : '') + v.toFixed(1) + '%' : '—';
+
+  const isMobile = window.innerWidth <= 768;
+
+  // ---- Desktop table ----
+  const tbody = document.getElementById('traj-tbody');
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td colspan="11" class="empty-state">No schools match.</td></tr>`;
+  } else {
+    tbody.innerHTML = data.map((s, i) => {
+      const tierClass  = { P1:'tier-p1', P2:'tier-p2', P3:'tier-p3', P4:'tier-p4' }[s.tier];
+      const trajClass  = getTrajClass(s.label);
+      const trajIcon   = getTrajIcon(s.label);
+      const [sigClass, sigLabel] = getSignalLabel(s.signal, s.label);
+      const yoyClass   = s.yoy === null ? '' : s.yoy > 10 ? 'yoy-up' : s.yoy < -10 ? 'yoy-down' : 'yoy-flat';
+      const rateClass  = s.rate === null ? '' : s.rate > 10 ? 'yoy-up' : s.rate < -10 ? 'yoy-down' : 'yoy-flat';
+
+      // Mini bar visualization for trend direction
+      const barColor = s.label === 'Declining' ? '#c0392b' : s.label === 'Stagnant' ? '#e67e22' :
+                       s.label === 'Recovering' ? '#2980b9' : s.label === 'Strong Growth' ? '#27ae60' : '#ccc';
+      const barW = s.rate !== null ? Math.min(80, Math.abs(s.rate)) : 10;
+
+      return `<tr>
+        <td style="color:var(--muted);font-size:11px;">${s.rank}</td>
+        <td style="font-weight:600;font-size:12px;">${s.school}</td>
+        <td style="color:var(--muted);font-size:11px;">${s.region} / <strong style="color:var(--text)">${s.team}</strong></td>
+        <td><span class="tier-badge ${tierClass}">${s.tier}</span></td>
+        <td style="color:var(--muted);font-size:12px;">${fmt(s.y2023)}</td>
+        <td style="color:var(--muted);font-size:12px;">${fmt(s.y2024)}</td>
+        <td style="font-weight:700;font-size:12px;">${fmt(s.y2025 !== null ? s.y2025 : s.actual)}</td>
+        <td class="${yoyClass}">${fmtPct(s.yoy)}</td>
+        <td>
+          <div class="spark-cell">
+            <span class="spark-bar" style="width:${barW}px;background:${barColor};"></span>
+            <span class="${rateClass}" style="font-size:11px;">${s.rate !== null ? fmtPct(s.rate) + '/yr' : '—'}</span>
+          </div>
+        </td>
+        <td><span class="traj-badge ${trajClass}">${trajIcon} ${s.label}</span></td>
+        <td><span class="signal-badge ${sigClass}">${sigLabel}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ---- Mobile cards ----
+  const cardsBody = document.getElementById('traj-cards-body');
+  if (!data.length) {
+    cardsBody.innerHTML = `<div class="empty-state">No schools match.</div>`;
+  } else {
+    cardsBody.innerHTML = data.map(s => {
+      const tierClass  = { P1:'tier-p1', P2:'tier-p2', P3:'tier-p3', P4:'tier-p4' }[s.tier];
+      const trajClass  = getTrajClass(s.label);
+      const trajIcon   = getTrajIcon(s.label);
+      const [sigClass, sigLabel] = getSignalLabel(s.signal, s.label);
+      const yoyClass   = s.yoy === null ? '' : s.yoy > 10 ? 'yoy-up' : s.yoy < -10 ? 'yoy-down' : 'yoy-flat';
+      const fmt = v => v !== null && v !== undefined ? v.toLocaleString(undefined, { maximumFractionDigits: 0 }) : '—';
+      const fmtPct = v => v !== null ? (v > 0 ? '+' : '') + v.toFixed(1) + '%' : '—';
+      return `<div class="traj-card">
+        <div class="traj-card-head">
+          <div>
+            <div class="tc-name">${s.rank}. ${s.school}</div>
+            <div class="tc-meta">${s.region} · ${s.district} · <strong style="color:var(--text)">${s.team}</strong></div>
+          </div>
+          <span class="traj-badge ${trajClass}" style="flex-shrink:0;">${trajIcon} ${s.label}</span>
+        </div>
+        <div class="traj-card-body">
+          <div class="tc-cell">
+            <div class="tc-label">Priority Tier</div>
+            <div class="tc-value"><span class="tier-badge ${tierClass}">${s.tier}</span></div>
+          </div>
+          <div class="tc-cell">
+            <div class="tc-label">YoY Change</div>
+            <div class="tc-value ${yoyClass}">${fmtPct(s.yoy)}</div>
+          </div>
+          <div class="tc-cell">
+            <div class="tc-label">2023</div>
+            <div class="tc-value" style="color:var(--muted);font-size:12px;">${fmt(s.y2023)}</div>
+          </div>
+          <div class="tc-cell">
+            <div class="tc-label">2024</div>
+            <div class="tc-value" style="color:var(--muted);font-size:12px;">${fmt(s.y2024)}</div>
+          </div>
+          <div class="tc-cell" style="grid-column:span 2;">
+            <div class="tc-label">2025 (Latest)</div>
+            <div class="tc-value">${fmt(s.y2025 !== null ? s.y2025 : s.actual)}</div>
+          </div>
+        </div>
+        <div class="traj-card-footer">
+          <span>Trend rate: <strong style="color:var(--text);">${s.rate !== null ? fmtPct(s.rate) + '/yr' : '—'}</strong></span>
+          <span class="signal-badge ${sigClass}">${sigLabel}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  updateTrajLayout();
+}
+
+function updateTrajLayout() {
+  const isMobile = window.innerWidth <= 768;
+  const tw = document.getElementById('traj-tbl-wrap');
+  const cw = document.getElementById('traj-cards-wrap');
+  if (tw) tw.style.display = isMobile ? 'none' : 'block';
+  if (cw) cw.style.display = isMobile ? 'block' : 'none';
+}
+
+// ================================================================ INIT
+window.onload = () => {
+  populateFilters();
+  renderKPIs();
+  renderPriority();
+  renderTrajKPIs();
+  renderTrajChart();
+  renderTrajectory();
+  renderSolnKPIs();
+  renderSoln();
+  renderNetwork();
+};
+
+function populateFilters() {
+  const regions = [...new Set(RANKED.map(s => s.region))].sort();
+  const teams = [...new Set(RANKED.map(s => s.team))].sort();
+  const netRegions = [...new Set(FULL_NETWORK.map(s => s[1]))].filter(Boolean).sort();
+
+  const rSel = document.getElementById('filter-region');
+  regions.forEach(r => rSel.innerHTML += `<option>${r}</option>`);
+  const tSel = document.getElementById('filter-team');
+  teams.forEach(t => tSel.innerHTML += `<option>${t}</option>`);
+  const nrSel = document.getElementById('network-region');
+  netRegions.forEach(r => nrSel.innerHTML += `<option>${r}</option>`);
+
+  // team-select removed with Team Allocation tab
+
+  // Trajectory tab filters
+  const trSel = document.getElementById('traj-region');
+  if (trSel) regions.forEach(r => trSel.innerHTML += `<option>${r}</option>`);
+  const ttSel = document.getElementById('traj-team');
+  if (ttSel) teams.forEach(t => ttSel.innerHTML += `<option>${t}</option>`);
+  // Solution tab filters
+  const srSel = document.getElementById('soln-region');
+  if (srSel) regions.forEach(r => srSel.innerHTML += `<option>${r}</option>`);
+  const stSel = document.getElementById('soln-team');
+  if (stSel) teams.forEach(t => stSel.innerHTML += `<option>${t}</option>`);
+}
+
+function renderKPIs() {
+  const p1 = RANKED.filter(s => s.tier === 'P1').length;
+  const p2 = RANKED.filter(s => s.tier === 'P2').length;
+  const p3 = RANKED.filter(s => s.tier === 'P3').length;
+  const p4 = RANKED.filter(s => s.tier === 'P4').length;
+  const totalGap = RANKED.reduce((a, s) => a + s.gap, 0);
+  document.getElementById('kpi-grid').innerHTML = `
+    <div class="kpi-card kpi-p1">
+      <div class="kpi-label">P1 Urgent</div>
+      <div class="kpi-value">${p1}</div>
+      <div class="kpi-sub">0–6 month action plan</div>
+    </div>
+    <div class="kpi-card kpi-p2">
+      <div class="kpi-label">P2 High</div>
+      <div class="kpi-value">${p2}</div>
+      <div class="kpi-sub">6–12 month structured plan</div>
+    </div>
+    <div class="kpi-card kpi-p3">
+      <div class="kpi-label">P3 Medium + P4 Monitor</div>
+      <div class="kpi-value">${p3 + p4}</div>
+      <div class="kpi-sub">1–2 yr plan / annual check-in</div>
+    </div>
+    <div class="kpi-card kpi-total">
+      <div class="kpi-label">Total Gap Hours</div>
+      <div class="kpi-value">${totalGap.toLocaleString(undefined,{maximumFractionDigits:0})}</div>
+      <div class="kpi-sub">Across all ${RANKED.length} lagged schools (${FULL_NETWORK.length} total)</div>
+    </div>`;
+}
+
+// ================================================================ PRIORITY TABLE
+function setTierFilter(tier) {
+  tierFilter = tier;
+  ['all','p1','p2','p3','p4'].forEach(id => document.getElementById('pill-'+id).classList.remove('active'));
+  document.getElementById('pill-'+(tier.toLowerCase()||'all')).classList.add('active');
+  renderPriority();
+}
+
+let _psort = { col: 'score', dir: -1 };
+function sortPriority(col) {
+  if (_psort.col === col) _psort.dir *= -1; else { _psort.col = col; _psort.dir = -1; }
+  renderPriority();
+}
+
+function renderPriority() {
+  const q = document.getElementById('search-priority').value.toLowerCase();
+  const region = document.getElementById('filter-region').value;
+  const team = document.getElementById('filter-team').value;
+
+  let data = RANKED.filter(s => {
+    if (tierFilter && s.tier !== tierFilter) return false;
+    if (region && s.region !== region) return false;
+    if (team && s.team !== team) return false;
+    if (q && ![s.school,s.region,s.district,s.team].some(v => v && v.toLowerCase().includes(q))) return false;
+    return true;
+  });
+
+  const col = _psort.col, d = _psort.dir;
+  data = data.sort((a, b) => {
+    const av = typeof a[col] === 'string' ? a[col] : a[col];
+    const bv = typeof b[col] === 'string' ? b[col] : b[col];
+    return typeof av === 'string' ? av.localeCompare(bv) * d : (av - bv) * d;
+  });
+
+  const isMobile = window.innerWidth <= 768;
+
+  // ---- Desktop table ----
+  const tbody = document.getElementById('priority-tbody');
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td colspan="10" class="empty-state">No schools match the current filters.</td></tr>`;
+  } else {
+    tbody.innerHTML = data.map((s) => {
+      const tierClass = { P1:'tier-p1', P2:'tier-p2', P3:'tier-p3', P4:'tier-p4' }[s.tier];
+      const lvlClass = { Poor:'level-poor', Moderate:'level-mod', Good:'level-good' }[s.level];
+      const scorePct = Math.min(100, s.score);
+      const scoreColor = s.tier === 'P1' ? '#c0392b' : s.tier === 'P2' ? '#e67e22' : s.tier === 'P3' ? '#2980b9' : '#27ae60';
+      const multClass = s.mult > 20 ? 'mult-high' : s.mult > 5 ? 'mult-med' : 'mult-low';
+      return `<tr>
+        <td style="color:var(--muted);font-size:12px;">${s.rank}</td>
+        <td style="font-weight:600;">${s.school}</td>
+        <td style="color:var(--muted);font-size:12px;">${s.region} / <strong style="color:var(--text)">${s.team}</strong></td>
+        <td><span class="${lvlClass}">${s.level}</span></td>
+        <td>${s.actual.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
+        <td style="color:var(--muted);">${s.expected.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
+        <td class="gap-val">+${s.gap.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
+        <td class="${multClass}">${s.mult >= 100 ? s.mult.toFixed(0) : s.mult.toFixed(1)}×</td>
+        <td>
+          <div class="score-bar">
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:${scorePct}%;background:${scoreColor};"></div></div>
+            <span class="score-num" style="color:${scoreColor};">${s.score}</span>
+          </div>
+        </td>
+        <td><span class="tier-badge ${tierClass}">${getTierLabel(s.tier)}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ---- Mobile cards ----
+  const cardsBody = document.getElementById('priority-cards-body');
+  if (!data.length) {
+    cardsBody.innerHTML = `<div class="empty-state">No schools match the current filters.</div>`;
+  } else {
+    cardsBody.innerHTML = data.map((s) => {
+      const tierClass = { P1:'tier-p1', P2:'tier-p2', P3:'tier-p3', P4:'tier-p4' }[s.tier];
+      const lvlClass = { Poor:'level-poor', Moderate:'level-mod', Good:'level-good' }[s.level];
+      const scoreColor = s.tier === 'P1' ? '#c0392b' : s.tier === 'P2' ? '#e67e22' : s.tier === 'P3' ? '#2980b9' : '#27ae60';
+      const scorePct = Math.min(100, s.score);
+      const multClass = s.mult > 20 ? 'mult-high' : s.mult > 5 ? 'mult-med' : 'mult-low';
+      return `<div class="priority-card">
+        <div class="priority-card-head">
+          <div>
+            <div class="school-name">${s.rank}. ${s.school}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">${s.region} · ${s.district} · <strong>${s.team}</strong></div>
+          </div>
+          <span class="tier-badge ${tierClass}" style="flex-shrink:0;">${s.tier}</span>
+        </div>
+        <div class="priority-card-body">
+          <div class="pc-cell">
+            <div class="pc-label">Level</div>
+            <div class="pc-value"><span class="${lvlClass}">${s.level}</span></div>
+          </div>
+          <div class="pc-cell">
+            <div class="pc-label">Actual (hrs)</div>
+            <div class="pc-value">${s.actual.toLocaleString(undefined,{maximumFractionDigits:0})}</div>
+          </div>
+          <div class="pc-cell">
+            <div class="pc-label">Expected (hrs)</div>
+            <div class="pc-value" style="color:var(--muted);">${s.expected.toLocaleString(undefined,{maximumFractionDigits:0})}</div>
+          </div>
+          <div class="pc-cell">
+            <div class="pc-label">Gap (hrs)</div>
+            <div class="pc-value gap-val">+${s.gap.toLocaleString(undefined,{maximumFractionDigits:0})}</div>
+          </div>
+          <div class="pc-cell">
+            <div class="pc-label">Gap ÷ Actual</div>
+            <div class="pc-value ${multClass}">${s.mult >= 100 ? s.mult.toFixed(0) : s.mult.toFixed(1)}×</div>
+          </div>
+          <div class="pc-cell">
+            <div class="pc-label">Priority Score</div>
+            <div class="pc-value">
+              <div class="score-bar" style="margin-top:4px;">
+                <div class="score-bar-track"><div class="score-bar-fill" style="width:${scorePct}%;background:${scoreColor};"></div></div>
+                <span class="score-num" style="color:${scoreColor};">${s.score}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Switch display based on viewport
+  updatePriorityLayout();
+}
+
+// ================================================================ REGION TAB
+
+
+
+
+// ================================================================ NETWORK TAB
+let _nsort = { col: null, dir: -1 };
+function renderNetwork() {
+  const q = document.getElementById('search-network').value.toLowerCase();
+  const region = document.getElementById('network-region').value;
+  const necta = document.getElementById('network-necta').value;
+  const level = document.getElementById('network-level').value;
+
+  let data = FULL_NETWORK.filter(s => {
+    const [school,reg,dist,team,nec,lev] = s;
+    if (region && reg !== region) return false;
+    if (necta && nec !== necta) return false;
+    if (level && !lev.startsWith(level)) return false;
+    if (q && ![school,reg,dist,team].some(v => v && v.toLowerCase().includes(q))) return false;
+    return true;
+  });
+
+  const fmt = v => v !== null && v !== undefined ? v.toLocaleString(undefined,{maximumFractionDigits:0}) : '—';
+
+  // Desktop table
+  const tbody = document.getElementById('network-tbody');
+  tbody.innerHTML = data.map((s, i) => {
+    const [school,reg,dist,team,nec,lev,actual,expected,gap,y2023,y2024,y2025] = s;
+    const lvlClass = { Good:'level-good', Moderate:'level-mod', Poor:'level-poor' }[lev.split(' ')[0]] || '';
+    const gapClass = gap !== null ? (gap < 0 ? 'gap-neg' : 'gap-val') : '';
+    return `<tr>
+      <td style="color:var(--muted);font-size:11px;">${i+1}</td>
+      <td style="font-weight:600;font-size:12px;">${school}</td>
+      <td style="font-size:12px;">${reg}</td>
+      <td style="color:var(--muted);font-size:11px;">${dist}</td>
+      <td style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;">${team}</td>
+      <td>${nec === 'Yes' ? '<span style="color:#27ae60;font-weight:700;">✓ Yes</span>' : '<span style="color:#aaa;">No</span>'}</td>
+      <td><span class="${lvlClass}" style="font-size:11px;">${lev}</span></td>
+      <td style="font-weight:700;">${fmt(actual)}</td>
+      <td style="color:var(--muted);">${expected !== null ? fmt(expected) : '—'}</td>
+      <td class="${gapClass}">${gap !== null ? (gap < 0 ? '' : '+') + fmt(gap) : '—'}</td>
+      <td style="color:var(--muted);font-size:11px;">${fmt(y2023)}</td>
+      <td style="color:var(--muted);font-size:11px;">${fmt(y2024)}</td>
+      <td style="font-size:11px;">${fmt(y2025)}</td>
+    </tr>`;
+  }).join('');
+  if (!data.length) tbody.innerHTML = `<tr><td colspan="13" class="empty-state">No schools match.</td></tr>`;
+
+  // Mobile cards
+  const cardsBody = document.getElementById('network-cards-body');
+  if (!data.length) {
+    cardsBody.innerHTML = `<div class="empty-state">No schools match.</div>`;
+  } else {
+    cardsBody.innerHTML = data.map((s, i) => {
+      const [school,reg,dist,team,nec,lev,actual,expected,gap,y2023,y2024,y2025] = s;
+      const lvlClass = { Good:'level-good', Moderate:'level-mod', Poor:'level-poor' }[lev.split(' ')[0]] || '';
+      const gapClass = gap !== null ? (gap < 0 ? 'gap-neg' : 'gap-val') : '';
+      return `<div class="network-card">
+        <div class="network-card-head">
+          <div>
+            <div class="nc-school">${i+1}. ${school}</div>
+            <div class="nc-meta">${reg} · ${dist} · <strong style="color:var(--text)">${team}</strong></div>
+          </div>
+          <div style="flex-shrink:0;text-align:right;">
+            ${nec === 'Yes' ? '<span style="color:#27ae60;font-weight:700;font-size:11px;">✓ NECTA</span>' : '<span style="color:#aaa;font-size:11px;">No NECTA</span>'}
+          </div>
+        </div>
+        <div class="network-card-body">
+          <div class="nc-cell">
+            <div class="nc-label">Level</div>
+            <div class="nc-value"><span class="${lvlClass}">${lev}</span></div>
+          </div>
+          <div class="nc-cell">
+            <div class="nc-label">Actual Avg (hrs)</div>
+            <div class="nc-value">${fmt(actual)}</div>
+          </div>
+          <div class="nc-cell">
+            <div class="nc-label">Expected Avg (hrs)</div>
+            <div class="nc-value" style="color:var(--muted);">${expected !== null ? fmt(expected) : '—'}</div>
+          </div>
+          <div class="nc-cell">
+            <div class="nc-label">Gap (hrs)</div>
+            <div class="nc-value ${gapClass}">${gap !== null ? (gap < 0 ? '' : '+') + fmt(gap) : '—'}</div>
+          </div>
+        </div>
+        <div class="network-card-years">
+          <span>2023: <strong>${fmt(y2023)}</strong></span>
+          <span>2024: <strong>${fmt(y2024)}</strong></span>
+          <span>2025: <strong>${fmt(y2025)}</strong></span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+// ================================================================ CLUSTER OF CONCERN ENGINE
+
+// Possible shared causes inferred from district patterns
+
+let _clusterChartInstance = null;
+// ================================================================ GPS DATA
+const GPS = {
+  "Mukulat Secondary School": [-3.264408,36.617579],
+  "Mlangarini Secondary School": [-3.447376,36.786076],
+  "Mwandet Secondary School": [-3.266919,36.566752],
+  "Ilkiding'a Secondary School": [-3.322391,36.683232],
+  "Mringa Secondary School": [-3.32316,36.62937],
+  "Ilboru Secondary School": [-3.348026,36.687645],
+  "Enyoito Secondary School": [-3.346801,36.7029],
+  "Oldadai Secondary School": [-3.36347,36.74031],
+  "Mateves Secondary School": [-3.377822,36.58005],
+  "Kiranyi Secondary School": [-3.3443191,36.650516],
+  "Kimnyaki Secondary School": [-3.309715,36.658016],
+  "Sokon II Secondary School": [-3.354396,36.7233987],
+  "Osiligi Secondary School": [-3.295763,36.620196],
+  "Olmotoni Secondary School": [-3.301652,36.651083],
+  "Mwandet SS A-Level": [-3.266919,36.566752],
+  "Bangata Secondary School": [-3.3308394,36.7485722],
+  "Einoti Secondary School": [-3.371739,36.546412],
+  "Olokii Secondary School": [-3.57061,36.810032],
+  "Olturment Secondary School": [-3.313913,36.608297],
+  "Ngiresi Secondary School": [-3.337094,36.734764],
+  "Sambasha Secondary School": [-3.292778,36.672707],
+  "Longido A-Level Secondary School": [-2.734231082,36.70610581],
+  "Namanga Secondary School": [-2.563853728,36.79375972],
+  "Engarenaboir Secondary School": [-2.533557895,36.49281035],
+  "Tingatinga Secondary School": [-2.971489,36.936318],
+  "Enduimet Secondary School": [-2.859053,37.204694],
+  "Kimaseki Secondary School": [-3.37121132,36.71705281],
+  "Suye Secondary School": [-3.3842958,36.7200957],
+  "Elerai Secondary School": [-3.363731149,36.66147112],
+  "Kinana Secondary School": [-3.49501032,36.68391518],
+  "Handeni Secondary School": [-5.427618939,38.03074835],
+  "Komnyanganyo Secondary School": [-5.49829,38.038028],
+  "Kisaza Secondary School": [-5.604529,38.434626],
+  "Ndolwa Secondary School": [-5.506114,38.334813],
+  "Mkata Secondary School": [-5.794806,38.28338],
+  "Misima Secondary School": [-5.304264,38.115058],
+  "Arusha Day Secondary School": [-3.3776512,36.69376132],
+  "Sing'isi Secondary School": [-3.36489,36.80148],
+  "Muungano Secondary School": [-3.366270039,36.85453855],
+  "Amani Abeid Karume Secondary School": [-4.723431,35.918123],
+  "Nkoanrua Secondary School": [-3.3557375,36.7607344],
+  "Oldonyowas Secondary School": [-3.156514,36.69348],
+  "Lengijave Secondary School": [-3.2326,36.6086],
+  "Engutoto Secondary School": [-3.3113607,36.4499275],
+  "Irkisongo Secondary School": [-3.29828,36.448268],
+  "Oljoro Secondary School": [-3.471507,36.624111],
+  "Kikwe Secondary School": [-3.426586,36.830218],
+  "Themi Secondary School": [-3.381443,36.693562],
+  "Ula Secondary School": [-4.897931,35.762116],
+  "Nakwa Secondary School": [-4.255942755,35.69499101],
+  "Bagara Secondary School": [-4.219473,35.714064],
+  "Komoto Secondary School": [-4.20286877,35.7208251],
+  "Kwaraa Secondary School": [-4.20953,35.76245],
+  "Nkoarusambu Secondary School": [-3.3337902,36.77154],
+  "Nangara Secondary School": [-4.254785,35.775047],
+  "Babati Day Secondary School": [-4.2035111,35.738845],
+  "Poli Secondary School": [-3.362325436,36.80293277],
+  "Chief Dodo Secondary School": [-4.3,35.6501],
+  "Kiwalala Secondary School": [-10.1892,39.531],
+  "Nyegendi Secondary School": [-10.248,39.443],
+  "Mtama Secondary School": [-10.2946,39.3758],
+  "Mahiwa Secondary School": [-10.3438,39.2675],
+  "Namalenga Secondary School": [-10.917888,39.113176],
+  "Bicha Secondary School": [-4.921112,35.803211],
+  "Bukulu Secondary School": [-4.622125,35.757465],
+  "Irkisale Secondary School": [-3.764526518,36.41914064],
+  "Bihawana Secondary School": [-6.190152398,35.74010225],
+  "Moshono Secondary School": [-3.389898463,36.72991808],
+  "Naura Secondary School": [-3.444205756,36.7063391],
+  "Nkoasenga Secondary School": [-3.2515572,36.9134925],
+  "Dareda Secondary School": [-4.244151485,35.49517983],
+  "Ayagalaya Secondary School": [-4.2191842,35.54973528],
+  "Oloasiti Secondary School": [-3.400740356,36.6430836],
+  "Moita Secondary School": [-3.560403,36.603365],
+  "Florian Secondary School": [-3.491407,35.655484],
+  "Mboga Secondary School": [-6.51273,38.31298],
+  "Mdaula Secondary School": [-6.64563,38.22931],
+  "Msata Secondary School": [-6.3401,38.38015],
+  "Mandera Girls Secondary School": [-6.213230014,38.40738242],
+  "Selebu Secondary School": [-7.5369,36.1012],
+  "Nyalumbu Secondary School": [-7.69032,36.02145],
+  "Kilolo Secondary School": [-7.97798,35.82313],
+  "Udzungwa Secondary School": [-8.0887,35.87717],
+  "Mkonoo Secondary School": [-3.474724,36.704234],
+  "Kiboriloni Secondary School": [-3.334249,37.372825],
+  "Ifati Secondary School": [-3.2776958,37.4692556],
+  "Lucas Malia Secondary School": [-10.2585,38.9967],
+  "Hawa Mchopa Secondary School": [-10.367786,39.053688],
+  "Kiabakari Secondary School": [-1.755752,33.870821],
+  "Bumangi Secondary School": [-1.730158,34.009563],
+  "Butuguri Secondary School": [-1.67569944,33.92905443],
+  "Kiagata Secondary School": [-1.663585881,34.12561806],
+  "Nkowe Secondary School": [-10.1984,38.944],
+  "Mbekenyera Secondary School": [-9.99,38.957],
+  "Ruangwa Secondary School": [-10.0524,38.9399],
+  "Mitesa Secondary School": [-10.8514,39.1207],
+  "Viwandani Secondary School": [-6.179097,35.753619],
+  "Mpuguso Secondary School": [-9.31448,33.661],
+  "Ikuti Secondary School": [-9.313459455,33.54553821],
+  "Lupoto Secondary School": [-9.20732,33.6509],
+  "Kinyala Secondary School": [-9.12008,33.4947],
+  "Uhambingeto Secondary School": [-7.56191,35.9613],
+  "Namwai Secondary School": [-3.05311,37.0439],
+  "Sanya Juu Secondary School": [-3.19561,37.08618],
+  "Nuru Secondary School": [-3.2353,37.0439],
+  "Oshara Secondary School": [-3.19684,37.1083],
+  "Manyara Girls Secondary School": [-4.10195,35.79925],
+  "Losinoni Secondary School": [-3.12813,36.784459],
+  "Songwe Secondary School": [-8.94999,33.24224],
+  "Usongwe Secondary School": [-8.94006,33.34318],
+  "Imezu Secondary School (Malama)": [-8.86682,33.62768],
+  "Iyunga Technical Secondary School": [-8.92504,33.41226],
+  "Ilembo Secondary School (Ilunga)": [-9.20766,33.34844],
+  "Chifu Mang'enya Secondary School": [-5.1802,38.8034],
+  "Mwapachu Secondary School": [-5.1276,39.0901],
+  "Mbwego Secondary School": [-5.4582,37.7799],
+  "Semkiwa Secondary School": [-5.1405,38.4311]
+};
+
+// ================================================================ HAVERSINE DISTANCE (km)
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+// ================================================================ BUILD SOLN DATA
+// Good performers = FULL_NETWORK schools with level Good (actual ≥ 2000) and GPS coords
+function buildSolnData() {
+  // High performers from FULL_NETWORK: index [6]=actual, [5]=level
+  const goodSchools = FULL_NETWORK.filter(s => s[5] === 'Good' && s[6] >= 2000);
+
+  return RANKED.map(victim => {
+    const vGPS = GPS[victim.school];
+    const peers = [];
+
+    if (vGPS) {
+      // Calculate distance to every good school
+      const withDist = goodSchools
+        .filter(g => g[0] !== victim.school) // exclude itself
+        .map(g => {
+          const gGPS = GPS[g[0]];
+          if (!gGPS) return null;
+          const dist = haversine(vGPS[0], vGPS[1], gGPS[0], gGPS[1]);
+          return {
+            name: g[0], region: g[1], district: g[2], team: g[3],
+            actual: g[6], dist: Math.round(dist * 10) / 10
+          };
+        })
+        .filter(Boolean)
+        .sort((a, b) => a.dist - b.dist)
+        .slice(0, 3);
+      peers.push(...withDist);
+    }
+
+    return { ...victim, peers, hasGPS: !!vGPS };
+  });
+}
+
+const SOLN_DATA = buildSolnData();
+
+let solnTierFilter = '';
+
+function setSolnFilter(val) {
+  solnTierFilter = val;
+  ['all','p1','p2','p3'].forEach(id => {
+    const el = document.getElementById('soln-pill-' + id);
+    if (el) el.classList.remove('active');
+  });
+  const map = { '':'all','P1':'p1','P2':'p2','P3':'p3' };
+  const el = document.getElementById('soln-pill-' + (map[val]||'all'));
+  if (el) el.classList.add('active');
+  renderSoln();
+}
+
+function renderSolnKPIs() {
+  const total = SOLN_DATA.length;
+  const withGPS = SOLN_DATA.filter(s => s.hasGPS).length;
+  const noGPS = total - withGPS;
+  const totalGap = SOLN_DATA.reduce((a,s) => a+s.gap, 0);
+  document.getElementById('soln-kpi-grid').innerHTML = `
+    <div class="kpi-card kpi-p1">
+      <div class="kpi-label">Lagged Schools</div>
+      <div class="kpi-value" style="color:var(--p1);">${total}</div>
+      <div class="kpi-sub">Schools needing peer learning</div>
+    </div>
+    <div class="kpi-card" style="border-top-color:var(--brand-mid);">
+      <div class="kpi-label">GPS Matched</div>
+      <div class="kpi-value" style="color:var(--brand-mid);">${withGPS}</div>
+      <div class="kpi-sub">Schools with peer recommendations</div>
+    </div>
+    <div class="kpi-card" style="border-top-color:#aaa;">
+      <div class="kpi-label">No GPS Data</div>
+      <div class="kpi-value" style="color:#aaa;">${noGPS}</div>
+      <div class="kpi-sub">Cannot compute nearest peers</div>
+    </div>
+    <div class="kpi-card kpi-total">
+      <div class="kpi-label">Total Gap Hours</div>
+      <div class="kpi-value">${Math.round(totalGap).toLocaleString()}</div>
+      <div class="kpi-sub">Recoverable lab hours network-wide</div>
+    </div>`;
+}
+
+function renderSoln() {
+  const q      = document.getElementById('soln-search').value.toLowerCase();
+  const region = document.getElementById('soln-region').value;
+  const team   = document.getElementById('soln-team').value;
+
+  let data = SOLN_DATA.filter(s => {
+    if (solnTierFilter && s.tier !== solnTierFilter) return false;
+    if (region && s.region !== region) return false;
+    if (team && s.team !== team) return false;
+    if (q && ![s.school, s.region, s.district, s.team,
+                ...s.peers.map(p => p.name)].some(v => v && v.toLowerCase().includes(q))) return false;
+    return true;
+  });
+
+  const fmt = v => v !== null && v !== undefined
+    ? v.toLocaleString(undefined, {maximumFractionDigits:0}) : '—';
+
+  const peerCell = (p) => p
+    ? `<td style="font-size:11px;font-weight:600;max-width:160px;">${p.name.replace(' Secondary School','')}<br>
+         <span style="color:var(--muted);font-weight:400;">${p.region} · ${p.team}</span><br>
+         <span class="peer-hrs">${fmt(p.actual)} hrs</span></td>
+       <td><span class="dist-badge">${p.dist} km</span></td>`
+    : `<td class="no-gps">—</td><td>—</td>`;
+
+  // Desktop table
+  const tbody = document.getElementById('soln-tbody');
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td colspan="12" class="empty-state">No schools match.</td></tr>`;
+  } else {
+    tbody.innerHTML = data.map((s, i) => {
+      const tierClass = {P1:'tier-p1',P2:'tier-p2',P3:'tier-p3',P4:'tier-p4'}[s.tier];
+      return `<tr>
+        <td style="color:var(--muted);font-size:11px;">${s.rank}</td>
+        <td>
+          <div style="font-weight:700;font-size:12px;">${s.school}</div>
+          <div style="font-size:10px;color:var(--muted);">${s.district}</div>
+          ${!s.hasGPS ? '<span class="no-gps">No GPS — peer match unavailable</span>' : ''}
+        </td>
+        <td style="font-size:11px;color:var(--muted);">${s.region} / <strong style="color:var(--text)">${s.team}</strong></td>
+        <td><span class="tier-badge ${tierClass}">${s.tier}</span></td>
+        <td style="font-weight:700;">${fmt(s.actual)}</td>
+        <td class="gap-val">+${fmt(s.gap)}</td>
+        ${s.peers[0] ? peerCell(s.peers[0]) : '<td class="no-gps">No GPS</td><td>—</td>'}
+        ${s.peers[1] ? peerCell(s.peers[1]) : '<td class="no-gps">—</td><td>—</td>'}
+        ${s.peers[2] ? peerCell(s.peers[2]) : '<td class="no-gps">—</td><td>—</td>'}
+      </tr>`;
+    }).join('');
+  }
+
+  // Mobile cards
+  const cardsBody = document.getElementById('soln-cards-body');
+  if (!data.length) {
+    cardsBody.innerHTML = `<div class="empty-state">No schools match.</div>`;
+  } else {
+    cardsBody.innerHTML = data.map(s => {
+      const tierClass = {P1:'tier-p1',P2:'tier-p2',P3:'tier-p3',P4:'tier-p4'}[s.tier];
+      const lvlClass  = {Poor:'level-poor',Moderate:'level-mod',Good:'level-good'}[s.level];
+      const peersHtml = s.hasGPS && s.peers.length
+        ? s.peers.map((p, i) => `
+          <div class="peer-card">
+            <div class="peer-rank">Peer ${i+1} · <span class="dist-badge">${p.dist} km away</span></div>
+            <div class="peer-name">${p.name}</div>
+            <div class="peer-detail">${p.region} · ${p.district} · ${p.team}</div>
+            <div class="peer-detail" style="margin-top:3px;">Usage: <span class="peer-hrs">${fmt(p.actual)} hrs/yr</span></div>
+          </div>`).join('')
+        : `<div class="no-gps" style="padding:8px 0;">No GPS coordinates — peer matching unavailable for this school.</div>`;
+
+      return `<div class="soln-card">
+        <div class="soln-card-head">
+          <div>
+            <div class="sv-name">${s.rank}. ${s.school}</div>
+            <div class="sv-meta">${s.region} · ${s.district} · <strong style="color:var(--text)">${s.team}</strong></div>
+          </div>
+          <span class="tier-badge ${tierClass}" style="flex-shrink:0;">${s.tier}</span>
+        </div>
+        <div class="soln-card-stats">
+          <div class="sv-cell">
+            <div class="sv-label">Level</div>
+            <div class="sv-value"><span class="${lvlClass}">${s.level}</span></div>
+          </div>
+          <div class="sv-cell">
+            <div class="sv-label">Actual (hrs)</div>
+            <div class="sv-value">${fmt(s.actual)}</div>
+          </div>
+          <div class="sv-cell">
+            <div class="sv-label">Gap (hrs)</div>
+            <div class="sv-value gap-val">+${fmt(s.gap)}</div>
+          </div>
+          <div class="sv-cell">
+            <div class="sv-label">Priority Score</div>
+            <div class="sv-value">${s.score}</div>
+          </div>
+        </div>
+        <div class="soln-card-peers">
+          <div class="soln-peers-heading">📍 3 Nearest High-Performing Peers — Visit for Advice</div>
+          ${peersHtml}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  updateSolnLayout();
+}
+
+function updateSolnLayout() {
+  const isMobile = window.innerWidth <= 768;
+  const tw = document.getElementById('soln-tbl-wrap');
+  const cw = document.getElementById('soln-cards-wrap');
+  if (tw) tw.style.display = isMobile ? 'none' : 'block';
+  if (cw) cw.style.display = isMobile ? 'block' : 'none';
+}
+
+// ================================================================ RESPONSIVE LAYOUT SWITCH
+function updatePriorityLayout() {
+  const isMobile = window.innerWidth <= 768;
+  // Priority tab
+  const tPri = document.getElementById('priority-tbl-wrap');
+  const cPri = document.getElementById('priority-cards-wrap');
+  if (tPri) tPri.style.display = isMobile ? 'none' : 'block';
+  if (cPri) cPri.style.display = isMobile ? 'block' : 'none';
+  // Network tab
+  const tNet = document.getElementById('network-tbl-wrap');
+  const cNet = document.getElementById('network-cards-wrap');
+  if (tNet) tNet.style.display = isMobile ? 'none' : 'block';
+  if (cNet) cNet.style.display = isMobile ? 'block' : 'none';
+  // Trajectory tab
+  updateTrajLayout();
+  // Solution tab
+  updateSolnLayout();
+}
+window.addEventListener('resize', updatePriorityLayout);
+
+// ================================================================ TAB SWITCHER
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
