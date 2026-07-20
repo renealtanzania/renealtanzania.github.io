@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Reneal Tanzania · School Lag Tracking</title>
+<link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+<script src="/js/middleware.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300&family=Nunito:wght@400;600;700;800;900&family=Noto+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="/public/css/script/tailwindcss3417.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+<style>
+  :root {
+    --good: #059669; --good-bg: #ecfdf5; --good-border: #a7f3d0;
+    --poor: #dc2626; --poor-bg: #fff1f2; --poor-border: #fecdd3;
+    --mod:  #d97706; --mod-bg:  #fffbeb; --mod-border:  #fde68a;
+    --necta:#4f46e5; --necta-bg:#eef2ff; --necta-border:#c7d2fe;
+    --teal: #0d9488; --teal-bg: #f0fdfa;
+    --slate:#1e293b; --slate2:#334155; --slate3:#475569;
+    --muted:#94a3b8; --border:#e2e8f0; --surface:#f8fafc;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: 'Noto Sans', sans-serif; background: #c0dbf7; color: var(--slate); }
+  h1,h2,h3,h4,.font-display { font-family: 'Nunito', sans-serif; }
+  .font-data { font-family: 'Lato', sans-serif; }
+
+  /* NAV */
+  #nav {
+    position: sticky; top: 0; z-index: 100;
+    background: white; border-bottom: 2px solid var(--border);
+    box-shadow: 0 1px 6px rgba(0,0,0,.06);
+  }
+  .nav-inner { max-width: 1400px; margin: 0 auto; padding: 0 1rem; display: flex; align-items: stretch; gap: 0; }
+  .nav-logo { font-family:'Nunito',sans-serif; font-weight:900; font-size:1rem; color:var(--slate); padding: .9rem 1.25rem .9rem 0; border-right: 1px solid var(--border); margin-right: .5rem; white-space:nowrap; }
+  .nav-logo span { color: var(--teal); }
+  .nav-tab {
+    display: flex; align-items: center; gap: .35rem; padding: 0 .9rem;
+    font-family:'Lato',sans-serif; font-weight:700; font-size:.7rem; letter-spacing:.8px; text-transform:uppercase;
+    color: var(--muted); cursor: pointer; border: none; background: transparent;
+    border-bottom: 3px solid transparent; transition: all .18s; white-space:nowrap;
+    height: 52px;
+  }
+  .nav-tab:hover { color: var(--slate); }
+  .nav-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+  .nav-tab .ndot { width:7px;height:7px;border-radius:50%;flex-shrink:0; }
+  .nav-count { margin-left:auto; display:flex; gap:.5rem; align-items:center; padding:.5rem 0; }
+  .nc { font-family:'Lato',sans-serif; font-size:.68rem; font-weight:700; padding:.18rem .6rem; border-radius:99px; white-space:nowrap; }
+
+  /* PAGE WRAPPER */
+  .page { max-width:1400px; margin:0 auto; padding:1.25rem 1rem 3rem; }
+
+  /* STAT STRIP */
+  .stat-strip { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.75rem; margin-bottom:1.25rem; }
+  .stat-box { background:white; border:1px solid var(--border); border-radius:10px; padding:.9rem 1.1rem; position:relative; overflow:hidden; }
+  .stat-box::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:var(--accent,var(--teal)); }
+  .stat-n { font-family:'Lato',sans-serif; font-weight:900; font-size:1.9rem; line-height:1; color:var(--slate); }
+  .stat-l { font-family:'Lato',sans-serif; font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.7px; color:var(--muted); margin-top:.3rem; }
+  .stat-s { font-size:.72rem; color:var(--slate3); margin-top:.1rem; }
+
+  /* TOOLBAR */
+  .toolbar { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; margin-bottom:1rem; }
+  .tl { font-family:'Lato',sans-serif; font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); }
+  .fbtn {
+    font-family:'Lato',sans-serif; font-size:.7rem; font-weight:700; letter-spacing:.2px;
+    padding:.3rem .75rem; border-radius:6px; border:1.5px solid var(--border);
+    background:white; color:var(--slate3); cursor:pointer; transition:all .15s;
+  }
+  .fbtn:hover { border-color:var(--teal); color:var(--teal); }
+  .fbtn.on { background:var(--teal); border-color:var(--teal); color:white; }
+  .search-wrap { margin-left:auto; position:relative; }
+  .search-wrap svg { position:absolute; left:.6rem; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
+  .search-box { font-family:'Noto Sans',sans-serif; font-size:.78rem; padding:.32rem .7rem .32rem 2rem; border:1.5px solid var(--border); border-radius:7px; outline:none; width:200px; transition:border-color .15s; background:white; color:var(--slate); }
+  .search-box:focus { border-color:var(--teal); }
+  .search-box::placeholder { color:var(--muted); }
+
+  /* TABLE SHELL */
+  .tbl-wrap { background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:0 1px 6px rgba(0,0,0,.05); margin-bottom:1.5rem; }
+  .tbl-head { padding:.75rem 1.1rem; background:var(--surface); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.5rem; }
+  .tbl-head h3 { font-family:'Nunito',sans-serif; font-weight:800; font-size:.92rem; color:var(--slate); }
+  .tbl-head p  { font-size:.72rem; color:var(--slate3); }
+  .tbl-count   { font-family:'Lato',sans-serif; font-size:.7rem; font-weight:700; color:var(--muted); }
+  .tbl-scroll  { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
+  table { width:100%; border-collapse:collapse; }
+  thead th {
+    font-family:'Lato',sans-serif; font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.7px;
+    color:var(--muted); background:var(--surface); padding:.6rem .85rem;
+    text-align:left; white-space:nowrap; border-bottom:1px solid var(--border);
+    cursor:pointer; user-select:none;
+  }
+  thead th:hover { color:var(--teal); }
+  thead th .sort-icon { display:inline; margin-left:.25rem; opacity:.4; }
+  thead th.sorted .sort-icon { opacity:1; color:var(--teal); }
+  tbody tr { border-bottom:1px solid var(--border); cursor:pointer; transition:background .12s; }
+  tbody tr:last-child { border-bottom:none; }
+  tbody tr:hover { background:var(--surface); }
+  tbody tr.expanded { background:#f0fdfa; }
+  tbody td { padding:.65rem .85rem; font-size:.8rem; color:var(--slate); vertical-align:middle; }
+  .td-name { font-family:'Nunito',sans-serif; font-weight:700; font-size:.84rem; color:var(--slate); }
+  .td-sub  { font-size:.68rem; color:var(--muted); margin-top:.1rem; }
+
+  /* BADGES */
+  .badge { display:inline-flex; align-items:center; gap:.2rem; font-family:'Lato',sans-serif; font-size:.65rem; font-weight:700; padding:.1rem .45rem; border-radius:5px; white-space:nowrap; }
+  .badge-good   { background:var(--good-bg);  color:var(--good);  border:1px solid var(--good-border); }
+  .badge-poor   { background:var(--poor-bg);  color:var(--poor);  border:1px solid var(--poor-border); }
+  .badge-mod    { background:var(--mod-bg);   color:var(--mod);   border:1px solid var(--mod-border); }
+  .badge-necta  { background:var(--necta-bg); color:var(--necta); border:1px solid var(--necta-border); }
+  .badge-none   { background:#f8fafc; color:var(--muted); border:1px solid var(--border); }
+
+  /* USAGE BAR */
+  .ubar-wrap { display:flex; align-items:center; gap:.5rem; }
+  .ubar { flex:1; min-width:60px; max-width:120px; height:5px; background:var(--border); border-radius:99px; overflow:hidden; }
+  .ubar-fill { height:100%; border-radius:99px; transition:width .3s; }
+  .ubar-val  { font-family:'Lato',sans-serif; font-size:.72rem; font-weight:700; white-space:nowrap; }
+
+  /* EXPAND ROW */
+  .expand-row td { padding:0; border-top:none; }
+  .expand-inner {
+    padding:.9rem 1.1rem 1.1rem; background:linear-gradient(to bottom,#f0fdfa,#f8fafc);
+    border-top:2px solid var(--teal); display:none;
+  }
+  .expand-inner.open { display:block; }
+  .expand-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:.85rem; }
+  .exp-card { background:white; border:1px solid var(--border); border-radius:9px; padding:.8rem .95rem; }
+  .exp-card h4 { font-family:'Lato',sans-serif; font-weight:700; font-size:.63rem; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); margin-bottom:.5rem; }
+  .nb-row { display:flex; justify-content:space-between; align-items:center; padding:.35rem 0; border-bottom:1px solid var(--border); }
+  .nb-row:last-child { border-bottom:none; }
+  .nb-n { font-family:'Nunito',sans-serif; font-weight:700; font-size:.78rem; color:var(--slate); }
+  .nb-d { font-size:.68rem; color:var(--muted); }
+  .nb-v { font-family:'Lato',sans-serif; font-weight:900; font-size:.8rem; }
+  .hist-bars { display:flex; align-items:flex-end; gap:3px; height:40px; }
+  .hist-bar  { flex:1; border-radius:3px 3px 0 0; min-height:2px; position:relative; }
+  .hist-bar span { position:absolute; bottom:100%; left:50%; transform:translateX(-50%); font-size:.55rem; font-family:'Lato',sans-serif; font-weight:700; white-space:nowrap; color:var(--slate3); margin-bottom:1px; display:none; }
+  .hist-bar:hover span { display:block; }
+  .hist-labels { display:flex; gap:3px; margin-top:3px; }
+  .hist-lbl { flex:1; font-size:.58rem; font-family:'Lato',sans-serif; color:var(--muted); text-align:center; }
+  .insight-box { border-radius:7px; padding:.6rem .8rem; font-size:.75rem; line-height:1.55; }
+  .insight-box.red    { background:var(--poor-bg);  border-left:3px solid var(--poor);  color:#9f1239; }
+  .insight-box.green  { background:var(--good-bg);  border-left:3px solid var(--good);  color:#065f46; }
+  .insight-box.amber  { background:var(--mod-bg);   border-left:3px solid var(--mod);   color:#78350f; }
+  .insight-box.indigo { background:var(--necta-bg); border-left:3px solid var(--necta); color:#3730a3; }
+  .expand-close { font-family:'Lato',sans-serif; font-size:.68rem; font-weight:700; color:var(--teal); cursor:pointer; float:right; margin-bottom:.5rem; }
+
+  /* CHARTS */
+  .chart-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.25rem; margin-bottom:1.5rem; }
+  .chart-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1.1rem 1.25rem; box-shadow:0 1px 4px rgba(0,0,0,.04); }
+  .chart-card h3 { font-family:'Nunito',sans-serif; font-weight:800; font-size:.88rem; color:var(--slate); }
+  .chart-card p  { font-size:.7rem; color:var(--slate3); margin-bottom:.85rem; }
+  .chart-wrap    { position:relative; }
+
+  /* EMPTY */
+  .empty { padding:2.5rem; text-align:center; color:var(--muted); font-size:.82rem; }
+
+  /* MOBILE CARD TOGGLE */
+  .mobile-hint { display:none; font-size:.68rem; color:var(--muted); font-family:'Lato',sans-serif; padding:.4rem .85rem .5rem; background:var(--surface); border-bottom:1px solid var(--border); }
+  @media(max-width:640px) {
+    .mobile-hint { display:block; }
+    .hide-sm { display:none !important; }
+    .search-box { width:140px; }
+    .nav-count { display:none; }
+    tbody td { padding:.55rem .65rem; }
+  }
+  @media(max-width:400px) {
+    .fbtn { font-size:.63rem; padding:.25rem .5rem; }
+    .search-box { width:110px; }
+  }
+
+  /* SORT ARROWS */
+  .sa { font-size:.6rem; }
+
+  /* LOADING FADE */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+  .tbl-wrap, .chart-card, .stat-box { animation:fadeUp .3s ease both; }
+  .stat-box:nth-child(2){animation-delay:.04s} .stat-box:nth-child(3){animation-delay:.08s} .stat-box:nth-child(4){animation-delay:.12s}
+
+  /* PDF BUTTON */
+  .pdf-btn {
+    display:inline-flex; align-items:center; gap:.4rem;
+    font-family:'Lato',sans-serif; font-size:.7rem; font-weight:700; letter-spacing:.3px;
+    padding:.32rem .85rem; border-radius:7px;
+    background:#fff; color:#dc2626; border:1.5px solid #fca5a5;
+    cursor:pointer; transition:all .18s; white-space:nowrap;
+  }
+  .pdf-btn:hover { background:#fff1f2; border-color:#dc2626; }
+  .pdf-btn:active { transform:scale(.97); }
+  .pdf-btn svg { flex-shrink:0; }
+  .pdf-btn.loading { opacity:.6; pointer-events:none; }
+
+  /* PDF TOOLBAR BUTTONS */
+  .pdf-sep { width:1px; height:20px; background:var(--border); margin:0 .15rem; flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">Reneal <span>Schools Lag Info</span></div>
+    <button class="nav-tab active" onclick="showTab('t1',this)">
+      <span class="ndot" style="background:#dc2626"></span> Usage Checkup
+    </button>
+    <button class="nav-tab" onclick="showTab('t2',this)">
+      <span class="ndot" style="background:#4f46e5"></span> NECTA Checkup
+    </button>
+    <button class="nav-tab" onclick="showTab('t3',this)">
+      <span class="ndot" style="background:#0d9488"></span> Overview
+    </button>
+    <a href="/prod/analytics"><button class="nav-tab" onclick="showTab('t3',this)">
+      <span class="ndot" style="background:purple"></span> Back 
+    </button></a>
+    <div class="nav-count">
+      <span class="nc" id="nc1" style="background:#fff1f2;color:#dc2626">– poor</span>
+      <span class="nc" id="nc2" style="background:#eef2ff;color:#4f46e5">– no NECTA</span>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 1: POOR USAGE -->
+<div id="t1" class="tab-content">
+  <div class="page">
+    <div class="stat-strip" id="ss1"></div>
+    <div class="toolbar">
+      <span class="tl">Filter:</span>
+      <button class="fbtn on" onclick="applyF1('all',this)">All Schools</button>
+      <button class="fbtn" onclick="applyF1('poor',this)">🔴 Poor &lt;1000h</button>
+      <button class="fbtn" onclick="applyF1('moderate',this)">🟡 Moderate</button>
+      <button class="fbtn" onclick="applyF1('good',this)">🟢 Good ≥2000h</button>
+      <button class="fbtn" onclick="applyF1('poor-necta',this)">🔴✅ Poor + Has NECTA</button>
+      <button class="fbtn" onclick="applyF1('moderate-necta',this)">🟡✅ Moderate + Has NECTA</button>
+      <div class="pdf-sep" style="margin:0 .1rem"></div>
+      <span class="tl">Team:</span>
+      <select id="tf1" onchange="render1()" style="font-family:'Lato',sans-serif;font-size:.7rem;font-weight:700;padding:.3rem .6rem;border:1.5px solid var(--border);border-radius:6px;background:white;color:var(--slate3);cursor:pointer;outline:none;transition:border-color .15s;" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="if(this.value==='all')this.style.borderColor='var(--border)'" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor=this.value==='all'?'var(--border)':'var(--teal)'">
+        <option value="all">All Teams</option>
+        <option value="Abubakar">Abubakar</option>
+        <option value="Ashura">Ashura</option>
+        <option value="Danny">Danny</option>
+        <option value="Erick">Erick</option>
+        <option value="James">James</option>
+        <option value="Janeth">Janeth</option>
+        <option value="Jastin">Jastin</option>
+        <option value="Juma">Juma</option>
+      </select>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;">
+        <div class="search-wrap" style="margin-left:0">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-box" id="sq1" placeholder="Search…" oninput="render1()"/>
+        </div>
+        <div class="pdf-sep"></div>
+        <button class="pdf-btn" id="pdf1" onclick="downloadPDF(1,'poor-usage',false)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Download Current view
+        </button>
+        <button class="pdf-btn" id="pdf1all" onclick="downloadPDF(1,'poor-usage-all',true)" style="color:#0d9488;border-color:#99f6e4;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          All schools
+        </button>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <div>
+          <h3>Lab Usage — All Schools</h3>
+          <p>Schools with poor usage can improve by learning from nearby high-performing neighbours</p>
+        </div>
+        <span class="tbl-count" id="tc1"></span>
+      </div>
+      <div class="mobile-hint">⟵ Scroll right for more columns &nbsp;·&nbsp; Tap a row to expand details</div>
+      <div class="tbl-scroll">
+        <table id="tbl1">
+          <thead>
+            <tr>
+              <th style="width:36px;text-align:center">#</th>
+              <th onclick="sort1('name')">School <span class="sort-icon sa" id="si1-name">↕</span></th>
+              <th onclick="sort1('district')" class="hide-sm">District <span class="sort-icon sa" id="si1-district">↕</span></th>
+              <th onclick="sort1('region')" class="hide-sm">Region <span class="sort-icon sa" id="si1-region">↕</span></th>
+              <th onclick="sort1('avg')">Avg Usage (HRS) <span class="sort-icon sa" id="si1-avg">↕</span></th>
+              <th>Status</th>
+              <th class="hide-sm">NECTA</th>
+              <th onclick="sort1('nearestGood')" class="hide-sm">Nearest Good <span class="sort-icon sa" id="si1-nearestGood">↕</span></th>
+              <th class="hide-sm">Team</th>
+            </tr>
+          </thead>
+          <tbody id="tb1"></tbody>
+        </table>
+        <div class="empty" id="em1" style="display:none">No schools match your filter.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: NO NECTA -->
+<div id="t2" class="tab-content" style="display:none">
+  <div class="page">
+    <div class="stat-strip" id="ss2"></div>
+    <div class="toolbar">
+      <span class="tl">Filter:</span>
+      <button class="fbtn on" onclick="applyF2('all',this)">All Schools</button>
+      <button class="fbtn" onclick="applyF2('no-good',this)">📋 No NECTA + Good</button>
+      <button class="fbtn" onclick="applyF2('no-mod',this)">📋 No NECTA + Moderate</button>
+      <button class="fbtn" onclick="applyF2('has',this)">✅ Has NECTA</button>
+      <div class="pdf-sep" style="margin:0 .1rem"></div>
+      <span class="tl">Team:</span>
+      <select id="tf2" onchange="render2()" style="font-family:'Lato',sans-serif;font-size:.7rem;font-weight:700;padding:.3rem .6rem;border:1.5px solid var(--border);border-radius:6px;background:white;color:var(--slate3);cursor:pointer;outline:none;transition:border-color .15s;" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor=this.value==='all'?'var(--border)':'var(--teal)'">
+        <option value="all">All Teams</option>
+        <option value="Abubakar">Abubakar</option>
+        <option value="Ashura">Ashura</option>
+        <option value="Danny">Danny</option>
+        <option value="Erick">Erick</option>
+        <option value="James">James</option>
+        <option value="Janeth">Janeth</option>
+        <option value="Jastin">Jastin</option>
+        <option value="Juma">Juma</option>
+      </select>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;">
+        <div class="search-wrap" style="margin-left:0">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-box" id="sq2" placeholder="Search…" oninput="render2()"/>
+        </div>
+        <div class="pdf-sep"></div>
+        <button class="pdf-btn" id="pdf2" onclick="downloadPDF(2,'no-necta',false)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Download Current view
+        </button>
+        <button class="pdf-btn" id="pdf2all" onclick="downloadPDF(2,'no-necta-all',true)" style="color:#0d9488;border-color:#99f6e4;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          All schools
+        </button>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <div>
+          <h3>NECTA ICT Exam Participation</h3>
+          <p>Schools with good lab usage that have never sat the ICT NECTA exam — and how close neighbouring exam schools are</p>
+        </div>
+        <span class="tbl-count" id="tc2"></span>
+      </div>
+      <div class="mobile-hint">⟵ Scroll right for more columns &nbsp;·&nbsp; Tap a row to expand details</div>
+      <div class="tbl-scroll">
+        <table id="tbl2">
+          <thead>
+            <tr>
+              <th style="width:36px;text-align:center">#</th>
+              <th onclick="sort2('name')">School <span class="sort-icon sa" id="si2-name">↕</span></th>
+              <th onclick="sort2('district')" class="hide-sm">District <span class="sort-icon sa" id="si2-district">↕</span></th>
+              <th onclick="sort2('region')" class="hide-sm">Region <span class="sort-icon sa" id="si2-region">↕</span></th>
+              <th onclick="sort2('avg')">Avg Usage (HRS) <span class="sort-icon sa" id="si2-avg">↕</span></th>
+              <th>NECTA Status</th>
+              <th onclick="sort2('nearestNecta')" class="hide-sm">Nearest NECTA <span class="sort-icon sa" id="si2-nearestNecta">↕</span></th>
+              <th class="hide-sm">Readiness</th>
+              <th class="hide-sm">Team</th>
+            </tr>
+          </thead>
+          <tbody id="tb2"></tbody>
+        </table>
+        <div class="empty" id="em2" style="display:none">No schools match your filter.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: OVERVIEW -->
+<div id="t3" class="tab-content" style="display:none">
+  <div class="page">
+    <div class="stat-strip" id="ss3"></div>
+    <div class="chart-grid" id="cg3"></div>
+    <div class="tbl-wrap">
+      <div class="tbl-head"><div><h3>Top 20 Schools by Average Usage</h3><p>Best performing labs ranked by average student hours (last 3 years)</p></div></div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr>
+            <th>#</th><th>School</th>
+            <th class="hide-sm">District</th>
+            <th class="hide-sm">Region</th>
+            <th>Avg Usage (HRS)</th>
+            <th class="hide-sm">NECTA</th>
+            <th class="hide-sm">Team</th>
+          </tr></thead>
+          <tbody id="tb3"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const S = [{"id":"mkonoo","name":"Mkonoo Secondary School","sn":"Mkonoo","district":"Arusha CC","region":"Arusha","team":"Danny","lat":-3.474724,"lng":36.704234,"avg":10573.3,"rank":14,"hy":{"2024":14362.8,"2025":6783.8},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kinana","name":"Kinana SS","dist":3.19,"avg":2380.6,"ul":"good","necta":true},{"id":"mlangarini","name":"Mlangarini SS A-Level","dist":9.58,"avg":11151.9,"ul":"good","necta":true},{"id":"themi","name":"Themi Secondary School","dist":10.44,"avg":2678.8,"ul":"good","necta":true}],"nn":[{"id":"kinana","name":"Kinana SS","dist":3.19,"avg":2380.6},{"id":"naura","name":"Naura Secondary School ","dist":3.4,"avg":1679.1},{"id":"mlangarini","name":"Mlangarini SS A-Level","dist":9.58,"avg":11151.9}]},{"id":"themi","name":"Themi Secondary School","sn":"Themi","district":"Arusha CC","region":"Arusha","team":"Jastin","lat":-3.381443,"lng":36.693562,"avg":2678.8,"rank":43,"hy":{"2022":873.6,"2023":3009.9,"2024":2551.8,"2025":2474.8},"ul":"good","necta":true,"nectaYears":["2025_F2"],"totalSat":100,"noData":false,"ng":[{"id":"kiranyi","name":"Kiranyi Secondary School","dist":6.31,"avg":2016.0,"ul":"good","necta":true},{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":10.15,"avg":5833.6,"ul":"good","necta":false},{"id":"mkonoo","name":"Mkonoo Secondary School","dist":10.44,"avg":10573.3,"ul":"good","necta":false}],"nn":[{"id":"kimaseki","name":"Kimaseki SS","dist":2.84,"avg":1542.1},{"id":"suye","name":"Suye SS","dist":2.96,"avg":719.9},{"id":"enyoito","name":"Enyoito Secondary School","dist":3.99,"avg":1574.0}]},{"id":"oloasiti","name":"Oloasiti Secondary School","sn":"Oloasiti","district":"Arusha CC","region":"Arusha","team":"Janeth","lat":-3.400740356,"lng":36.6430836,"avg":1311.3,"rank":45,"hy":{"2023":1474.4,"2024":26.1,"2025":2433.4},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"themi","name":"Themi Secondary School","dist":6.0,"avg":2678.8,"ul":"good","necta":true},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":6.33,"avg":2016.0,"ul":"good","necta":true},{"id":"mkonoo","name":"Mkonoo Secondary School","dist":10.67,"avg":10573.3,"ul":"good","necta":false}],"nn":[{"id":"elerai","name":"Elerai SS","dist":4.59,"avg":1210.9},{"id":"themi","name":"Themi Secondary School","dist":6.0,"avg":2678.8},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":6.33,"avg":2016.0}]},{"id":"kinana","name":"Kinana SS","sn":"Kinana","district":"Arusha CC","region":"Arusha","team":"Jastin","lat":-3.49501032,"lng":36.68391518,"avg":2380.6,"rank":46,"hy":{"2021":1613.6,"2022":711.2,"2023":2900.3,"2024":2031.2,"2025":2210.2},"ul":"good","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":32,"noData":false,"ng":[{"id":"mkonoo","name":"Mkonoo Secondary School","dist":3.19,"avg":10573.3,"ul":"good","necta":false},{"id":"moita","name":"Moita Secondary School","dist":11.52,"avg":2007.4,"ul":"good","necta":false},{"id":"mlangarini","name":"Mlangarini SS A-Level","dist":12.52,"avg":11151.9,"ul":"good","necta":true}],"nn":[{"id":"naura","name":"Naura Secondary School ","dist":6.17,"avg":1679.1},{"id":"mlangarini","name":"Mlangarini SS A-Level","dist":12.52,"avg":11151.9},{"id":"themi","name":"Themi Secondary School","dist":12.67,"avg":2678.8}]},{"id":"kimaseki","name":"Kimaseki SS","sn":"Kimaseki","district":"Arusha CC","region":"Arusha","team":"Jastin","lat":-3.37121132,"lng":36.71705281,"avg":1542.1,"rank":47,"hy":{"2021":1705.2,"2022":1069.6,"2023":2095.3,"2024":337.6,"2025":2193.3},"ul":"moderate","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":158,"noData":false,"ng":[{"id":"themi","name":"Themi Secondary School","dist":2.84,"avg":2678.8,"ul":"good","necta":true},{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":7.34,"avg":5833.6,"ul":"good","necta":false},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":7.97,"avg":2016.0,"ul":"good","necta":true}],"nn":[{"id":"suye","name":"Suye SS","dist":1.49,"avg":719.9},{"id":"moshono","name":"Moshono Secondary School","dist":2.52,"avg":1894.6},{"id":"themi","name":"Themi Secondary School","dist":2.84,"avg":2678.8}]},{"id":"naura","name":"Naura Secondary School ","sn":"Naura","district":"Arusha CC","region":"Arusha","team":"Jastin","lat":-3.444205756,"lng":36.7063391,"avg":1679.1,"rank":52,"hy":{"2023":1276.7,"2024":1797.8,"2025":1962.8},"ul":"moderate","necta":true,"nectaYears":["2025_F2"],"totalSat":25,"noData":false,"ng":[{"id":"mkonoo","name":"Mkonoo Secondary School","dist":3.4,"avg":10573.3,"ul":"good","necta":false},{"id":"kinana","name":"Kinana SS","dist":6.17,"avg":2380.6,"ul":"good","necta":true},{"id":"themi","name":"Themi Secondary School","dist":7.12,"avg":2678.8,"ul":"good","necta":true}],"nn":[{"id":"kinana","name":"Kinana SS","dist":6.17,"avg":2380.6},{"id":"moshono","name":"Moshono Secondary School","dist":6.58,"avg":1894.6},{"id":"suye","name":"Suye SS","dist":6.83,"avg":719.9}]},{"id":"moshono","name":"Moshono Secondary School","sn":"Moshono","district":"Arusha CC","region":"Arusha","team":"Janeth","lat":-3.389898463,"lng":36.72991808,"avg":1894.6,"rank":72,"hy":{"2023":3266.2,"2024":1621.4,"2025":796.3},"ul":"moderate","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":19,"noData":false,"ng":[{"id":"themi","name":"Themi Secondary School","dist":4.14,"avg":2678.8,"ul":"good","necta":true},{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":7.76,"avg":5833.6,"ul":"good","necta":false},{"id":"mlangarini","name":"Mlangarini SS A-Level","dist":8.93,"avg":11151.9,"ul":"good","necta":true}],"nn":[{"id":"suye","name":"Suye SS","dist":1.26,"avg":719.9},{"id":"kimaseki","name":"Kimaseki SS","dist":2.52,"avg":1542.1},{"id":"themi","name":"Themi Secondary School","dist":4.14,"avg":2678.8}]},{"id":"suye","name":"Suye SS","sn":"Suye","district":"Arusha CC","region":"Arusha","team":"Jastin","lat":-3.3842958,"lng":36.7200957,"avg":719.9,"rank":100,"hy":{"2021":1606.0,"2022":1509,"2023":2109.5,"2024":14.2,"2025":35.8},"ul":"poor","necta":true,"nectaYears":["2021_F2","2022_F2","2023_F2","2024_F2","2025_F4"],"totalSat":132,"noData":false,"ng":[{"id":"themi","name":"Themi Secondary School","dist":2.96,"avg":2678.8,"ul":"good","necta":true},{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":8.01,"avg":5833.6,"ul":"good","necta":false},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":8.91,"avg":2016.0,"ul":"good","necta":true}],"nn":[{"id":"moshono","name":"Moshono Secondary School","dist":1.26,"avg":1894.6},{"id":"kimaseki","name":"Kimaseki SS","dist":1.49,"avg":1542.1},{"id":"themi","name":"Themi Secondary School","dist":2.96,"avg":2678.8}]},{"id":"elerai","name":"Elerai SS","sn":"Elerai","district":"Arusha CC","region":"Arusha","team":"Jastin","lat":-3.363731149,"lng":36.66147112,"avg":1210.9,"rank":107,"hy":{"2021":3160.9,"2022":4479.2,"2023":2421.8},"ul":"moderate","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":36,"noData":true,"ng":[{"id":"kiranyi","name":"Kiranyi Secondary School","dist":2.48,"avg":2016.0,"ul":"good","necta":true},{"id":"themi","name":"Themi Secondary School","dist":4.07,"avg":2678.8,"ul":"good","necta":true},{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":12.66,"avg":5833.6,"ul":"good","necta":false}],"nn":[{"id":"kiranyi","name":"Kiranyi Secondary School","dist":2.48,"avg":2016.0},{"id":"themi","name":"Themi Secondary School","dist":4.07,"avg":2678.8},{"id":"enyoito","name":"Enyoito Secondary School","dist":4.97,"avg":1574.0}]},{"id":"einoti","name":"Einoti Secondary School","sn":"Einoti","district":"Arusha DC","region":"Arusha","team":"Danny","lat":-3.371739,"lng":36.546412,"avg":27276.7,"rank":3,"hy":{"2019":3353.8,"2020":5830.5,"2021":12960.4,"2022":14111.8,"2023":31767.8,"2024":28899.8,"2025":21162.3},"ul":"good","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":61,"noData":false,"ng":[{"id":"mwandet","name":"Mwandet SS A-Level","dist":11.87,"avg":2110.7,"ul":"good","necta":true},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":11.95,"avg":2016.0,"ul":"good","necta":true},{"id":"engutoto","name":"Engutoto Secondary School","dist":12.64,"avg":3855.8,"ul":"good","necta":false}],"nn":[{"id":"mateves","name":"Mateves Secondary School","dist":3.79,"avg":229.6},{"id":"osiligi","name":"Osiligi Secondary School","dist":11.77,"avg":1502.9},{"id":"mwandet","name":"Mwandet SS A-Level","dist":11.87,"avg":2110.7}]},{"id":"losinoni","name":"Losinoni Secondary School","sn":"Losinoni","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.12813,"lng":36.784459,"avg":10179.8,"rank":9,"hy":{"2025":10179.8},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"lengijave","name":"Lengijave Secondary School","dist":22.72,"avg":2184.0,"ul":"good","necta":true},{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":22.91,"avg":5833.6,"ul":"good","necta":false},{"id":"tingatinga","name":"Tingatinga SS","dist":24.24,"avg":8281.5,"ul":"good","necta":true}],"nn":[{"id":"nkoasenga","name":"Nkoasenga Secondary School","dist":19.84,"avg":814.0},{"id":"lengijave","name":"Lengijave Secondary School","dist":22.72,"avg":2184.0},{"id":"ngiresi","name":"Ngiresi Secondary School","dist":23.88,"avg":781.0}]},{"id":"kiranyi","name":"Kiranyi Secondary School","sn":"Kiranyi","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.3443191,"lng":36.650516,"avg":2016.0,"rank":32,"hy":{"2019":5124.8,"2020":2869.6,"2021":2421.4,"2022":870.3,"2023":646.1,"2024":1846.9,"2025":3554.9},"ul":"good","necta":true,"nectaYears":["2025_F2"],"totalSat":44,"noData":false,"ng":[{"id":"themi","name":"Themi Secondary School","dist":6.31,"avg":2678.8,"ul":"good","necta":true},{"id":"einoti","name":"Einoti Secondary School","dist":11.95,"avg":27276.7,"ul":"good","necta":true},{"id":"mwandet","name":"Mwandet SS A-Level","dist":12.67,"avg":2110.7,"ul":"good","necta":true}],"nn":[{"id":"elerai","name":"Elerai SS","dist":2.48,"avg":1210.9},{"id":"enyoito","name":"Enyoito Secondary School","dist":5.82,"avg":1574.0},{"id":"themi","name":"Themi Secondary School","dist":6.31,"avg":2678.8}]},{"id":"oljoro","name":"Oljoro Secondary School","sn":"Oljoro","district":"Arusha DC","region":"Arusha","team":"Janeth","lat":-3.471507,"lng":36.624111,"avg":1848.9,"rank":36,"hy":{"2022":717.9,"2023":1270.4,"2024":1089.5,"2025":3186.9},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kinana","name":"Kinana SS","dist":7.13,"avg":2380.6,"ul":"good","necta":true},{"id":"mkonoo","name":"Mkonoo Secondary School","dist":8.9,"avg":10573.3,"ul":"good","necta":false},{"id":"moita","name":"Moita Secondary School","dist":10.15,"avg":2007.4,"ul":"good","necta":false}],"nn":[{"id":"kinana","name":"Kinana SS","dist":7.13,"avg":2380.6},{"id":"naura","name":"Naura Secondary School ","dist":9.62,"avg":1679.1},{"id":"mateves","name":"Mateves Secondary School","dist":11.51,"avg":229.6}]},{"id":"sambasha","name":"Sambasha Secondary School","sn":"Sambasha","district":"Arusha DC","region":"Arusha","team":"Janeth","lat":-3.292778,"lng":36.672707,"avg":1971.9,"rank":60,"hy":{"2020":1113.1,"2021":874.6,"2022":133.4,"2023":3431.0,"2024":807.1,"2025":1677.8},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kiranyi","name":"Kiranyi Secondary School","dist":6.24,"avg":2016.0,"ul":"good","necta":true},{"id":"lengijave","name":"Lengijave Secondary School","dist":9.77,"avg":2184.0,"ul":"good","necta":true},{"id":"themi","name":"Themi Secondary School","dist":10.13,"avg":2678.8,"ul":"good","necta":true}],"nn":[{"id":"osiligi","name":"Osiligi Secondary School","dist":5.84,"avg":1502.9},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":6.24,"avg":2016.0},{"id":"enyoito","name":"Enyoito Secondary School","dist":6.88,"avg":1574.0}]},{"id":"mwandet","name":"Mwandet SS A-Level","sn":"Mwandet","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.266919,"lng":36.566752,"avg":2110.7,"rank":69,"hy":{"2019":4535.5,"2020":2640.5,"2021":754.6,"2022":2284.3,"2023":4423.2,"2024":882,"2025":1027.0},"ul":"good","necta":true,"nectaYears":["2018_F2","2019_F2","2020_F2","2021_F2","2022_F2","2023_F2","2024_F2","2020_F4","2021_F4","2022_F4","2023_F4","2024_F4","2025_F4"],"totalSat":299,"noData":false,"ng":[{"id":"lengijave","name":"Lengijave Secondary School","dist":6.01,"avg":2184.0,"ul":"good","necta":true},{"id":"einoti","name":"Einoti Secondary School","dist":11.87,"avg":27276.7,"ul":"good","necta":true},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":12.67,"avg":2016.0,"ul":"good","necta":true}],"nn":[{"id":"mwandeta","name":"Mwandet SS A-Level","dist":0.0,"avg":279.5},{"id":"lengijave","name":"Lengijave Secondary School","dist":6.01,"avg":2184.0},{"id":"osiligi","name":"Osiligi Secondary School","dist":6.74,"avg":1502.9}]},{"id":"oldadai","name":"Oldadai Secondary School","sn":"Oldadai","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.36347,"lng":36.74031,"avg":613.8,"rank":79,"hy":{"2019":891.5,"2020":347.1,"2021":846.3,"2022":244.0,"2023":965.9,"2024":362.6,"2025":513.0},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":4.79,"avg":5833.6,"ul":"good","necta":false},{"id":"themi","name":"Themi Secondary School","dist":5.56,"avg":2678.8,"ul":"good","necta":true},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":10.19,"avg":2016.0,"ul":"good","necta":true}],"nn":[{"id":"kimaseki","name":"Kimaseki SS","dist":2.72,"avg":1542.1},{"id":"ngiresi","name":"Ngiresi Secondary School","dist":3.0,"avg":781.0},{"id":"moshono","name":"Moshono Secondary School","dist":3.16,"avg":1894.6}]},{"id":"olturmet","name":"Olturment Secondary School","sn":"Olturmet","district":"Arusha DC","region":"Arusha","team":"Janeth","lat":-3.313913,"lng":36.608297,"avg":1355.6,"rank":80,"hy":{"2019":1178.9,"2020":2142.9,"2021":660.0,"2022":68.4,"2023":3105.2,"2024":508.9,"2025":452.9},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kiranyi","name":"Kiranyi Secondary School","dist":5.78,"avg":2016.0,"ul":"good","necta":true},{"id":"mwandet","name":"Mwandet SS A-Level","dist":6.97,"avg":2110.7,"ul":"good","necta":true},{"id":"lengijave","name":"Lengijave Secondary School","dist":9.04,"avg":2184.0,"ul":"good","necta":true}],"nn":[{"id":"osiligi","name":"Osiligi Secondary School","dist":2.41,"avg":1502.9},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":5.78,"avg":2016.0},{"id":"mwandet","name":"Mwandet SS A-Level","dist":6.97,"avg":2110.7}]},{"id":"osiligi","name":"Osiligi Secondary School","sn":"Osiligi","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.295763,"lng":36.620196,"avg":1502.9,"rank":81,"hy":{"2019":2675.7,"2020":2056.3,"2021":1386.8,"2022":2011.2,"2023":1622.9,"2024":2446.0,"2025":439.7},"ul":"moderate","necta":true,"nectaYears":["2019_F2","2020_F2","2021_F2","2022_F2","2023_F2","2024_F2","2025_F2"],"totalSat":122,"noData":false,"ng":[{"id":"kiranyi","name":"Kiranyi Secondary School","dist":6.36,"avg":2016.0,"ul":"good","necta":true},{"id":"mwandet","name":"Mwandet SS A-Level","dist":6.74,"avg":2110.7,"ul":"good","necta":true},{"id":"lengijave","name":"Lengijave Secondary School","dist":7.14,"avg":2184.0,"ul":"good","necta":true}],"nn":[{"id":"kiranyi","name":"Kiranyi Secondary School","dist":6.36,"avg":2016.0},{"id":"mwandet","name":"Mwandet SS A-Level","dist":6.74,"avg":2110.7},{"id":"mwandeta","name":"Mwandet SS A-Level","dist":6.74,"avg":279.5}]},{"id":"kimnyaki","name":"Kimnyaki Secondary School","sn":"Kimnyaki","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.309715,"lng":36.658016,"avg":376.8,"rank":82,"hy":{"2019":2555.9,"2020":3447.2,"2021":1291.2,"2022":335.9,"2023":260.5,"2024":446.7,"2025":423.3},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kiranyi","name":"Kiranyi Secondary School","dist":3.94,"avg":2016.0,"ul":"good","necta":true},{"id":"themi","name":"Themi Secondary School","dist":8.9,"avg":2678.8,"ul":"good","necta":true},{"id":"lengijave","name":"Lengijave Secondary School","dist":10.18,"avg":2184.0,"ul":"good","necta":true}],"nn":[{"id":"kiranyi","name":"Kiranyi Secondary School","dist":3.94,"avg":2016.0},{"id":"osiligi","name":"Osiligi Secondary School","dist":4.48,"avg":1502.9},{"id":"elerai","name":"Elerai SS","dist":6.02,"avg":1210.9}]},{"id":"lengijave","name":"Lengijave Secondary School","sn":"Lengijave","district":"Arusha DC","region":"Arusha","team":"Janeth","lat":-3.2326,"lng":36.6086,"avg":2184.0,"rank":87,"hy":{"2022":1135.5,"2023":3570.9,"2024":2680.7,"2025":300.4},"ul":"good","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":40,"noData":false,"ng":[{"id":"mwandet","name":"Mwandet SS A-Level","dist":6.01,"avg":2110.7,"ul":"good","necta":true},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":13.27,"avg":2016.0,"ul":"good","necta":true},{"id":"einoti","name":"Einoti Secondary School","dist":16.94,"avg":27276.7,"ul":"good","necta":true}],"nn":[{"id":"mwandet","name":"Mwandet SS A-Level","dist":6.01,"avg":2110.7},{"id":"mwandeta","name":"Mwandet SS A-Level","dist":6.01,"avg":279.5},{"id":"osiligi","name":"Osiligi Secondary School","dist":7.14,"avg":1502.9}]},{"id":"oldonyowas","name":"Oldonyowas Secondary School","sn":"Oldonyowas","district":"Arusha DC","region":"Arusha","team":"Janeth","lat":-3.156514,"lng":36.69348,"avg":224.9,"rank":88,"hy":{"2022":1322.1,"2024":426.4,"2025":248.4},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"losinoni","name":"Losinoni Secondary School","dist":10.58,"avg":10179.8,"ul":"good","necta":false},{"id":"lengijave","name":"Lengijave Secondary School","dist":12.66,"avg":2184.0,"ul":"good","necta":true},{"id":"mwandet","name":"Mwandet SS A-Level","dist":18.67,"avg":2110.7,"ul":"good","necta":true}],"nn":[{"id":"lengijave","name":"Lengijave Secondary School","dist":12.66,"avg":2184.0},{"id":"osiligi","name":"Osiligi Secondary School","dist":17.49,"avg":1502.9},{"id":"mwandet","name":"Mwandet SS A-Level","dist":18.67,"avg":2110.7}]},{"id":"olokii","name":"Olokii Secondary School","sn":"Olokii","district":"Arusha DC","region":"Arusha","team":"James","lat":-3.57061,"lng":36.810032,"avg":204.3,"rank":96,"hy":{"2019":1205.1,"2020":1170.4,"2021":39.0,"2022":54.9,"2023":310.4,"2024":155.6,"2025":146.8},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"mlangarini","name":"Mlangarini SS A-Level","dist":13.96,"avg":11151.9,"ul":"good","necta":true},{"id":"mkonoo","name":"Mkonoo Secondary School","dist":15.86,"avg":10573.3,"ul":"good","necta":false},{"id":"kikwe","name":"Kikwe Secondary School","dist":16.17,"avg":2769.3,"ul":"good","necta":false}],"nn":[{"id":"mlangarini","name":"Mlangarini SS A-Level","dist":13.96,"avg":11151.9},{"id":"kinana","name":"Kinana SS","dist":16.33,"avg":2380.6},{"id":"naura","name":"Naura Secondary School ","dist":18.17,"avg":1679.1}]},{"id":"bangata","name":"Bangata Secondary School","sn":"Bangata","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.3308394,"lng":36.7485722,"avg":1041.3,"rank":98,"hy":{"2019":1937.6,"2020":1786.9,"2021":1691.4,"2022":710.8,"2023":1765.9,"2024":1307.5,"2025":50.5},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":2.57,"avg":5833.6,"ul":"good","necta":false},{"id":"themi","name":"Themi Secondary School","dist":8.3,"avg":2678.8,"ul":"good","necta":true},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":10.99,"avg":2016.0,"ul":"good","necta":true}],"nn":[{"id":"ngiresi","name":"Ngiresi Secondary School","dist":1.68,"avg":781.0},{"id":"enyoito","name":"Enyoito Secondary School","dist":5.37,"avg":1574.0},{"id":"kimaseki","name":"Kimaseki SS","dist":5.69,"avg":1542.1}]},{"id":"olmotonyi","name":"Olmotoni Secondary School","sn":"Olmotonyi","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.301652,"lng":36.651083,"avg":407.6,"rank":99,"hy":{"2019":311.0,"2020":775.5,"2021":845.9,"2022":270.6,"2023":923.5,"2024":255.4,"2025":43.7},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kiranyi","name":"Kiranyi Secondary School","dist":4.74,"avg":2016.0,"ul":"good","necta":true},{"id":"lengijave","name":"Lengijave Secondary School","dist":9.01,"avg":2184.0,"ul":"good","necta":true},{"id":"themi","name":"Themi Secondary School","dist":10.05,"avg":2678.8,"ul":"good","necta":true}],"nn":[{"id":"osiligi","name":"Osiligi Secondary School","dist":3.49,"avg":1502.9},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":4.74,"avg":2016.0},{"id":"elerai","name":"Elerai SS","dist":7.0,"avg":1210.9}]},{"id":"mukulat","name":"Mukulat Secondary School","sn":"Mukulat","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.264408,"lng":36.617579,"avg":598.3,"rank":101,"hy":{"2019":2978.1,"2020":2847.1,"2021":2139.5,"2022":1014.9,"2023":1314.6,"2024":447.1,"2025":33.3},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"lengijave","name":"Lengijave Secondary School","dist":3.67,"avg":2184.0,"ul":"good","necta":true},{"id":"mwandet","name":"Mwandet SS A-Level","dist":5.65,"avg":2110.7,"ul":"good","necta":true},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":9.61,"avg":2016.0,"ul":"good","necta":true}],"nn":[{"id":"osiligi","name":"Osiligi Secondary School","dist":3.5,"avg":1502.9},{"id":"lengijave","name":"Lengijave Secondary School","dist":3.67,"avg":2184.0},{"id":"mwandet","name":"Mwandet SS A-Level","dist":5.65,"avg":2110.7}]},{"id":"mringa","name":"Mringa Secondary School","sn":"Mringa","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.32316,"lng":36.62937,"avg":988.1,"rank":103,"hy":{"2019":3299.3,"2020":2960.8,"2021":3287.4,"2022":802.6,"2023":2809.5,"2024":144.2,"2025":10.5},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kiranyi","name":"Kiranyi Secondary School","dist":3.32,"avg":2016.0,"ul":"good","necta":true},{"id":"mwandet","name":"Mwandet SS A-Level","dist":9.35,"avg":2110.7,"ul":"good","necta":true},{"id":"themi","name":"Themi Secondary School","dist":9.63,"avg":2678.8,"ul":"good","necta":true}],"nn":[{"id":"osiligi","name":"Osiligi Secondary School","dist":3.21,"avg":1502.9},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":3.32,"avg":2016.0},{"id":"elerai","name":"Elerai SS","dist":5.75,"avg":1210.9}]},{"id":"sokonii","name":"Sokon II Secondary School","sn":"SokonII","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.354396,"lng":36.7233987,"avg":250.7,"rank":104,"hy":{"2019":477.0,"2020":1099.8,"2021":771.2,"2022":14.5,"2023":560.5,"2024":181.8,"2025":9.8},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"themi","name":"Themi Secondary School","dist":4.47,"avg":2678.8,"ul":"good","necta":true},{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":5.81,"avg":5833.6,"ul":"good","necta":false},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":8.17,"avg":2016.0,"ul":"good","necta":true}],"nn":[{"id":"kimaseki","name":"Kimaseki SS","dist":2.0,"avg":1542.1},{"id":"ngiresi","name":"Ngiresi Secondary School","dist":2.3,"avg":781.0},{"id":"enyoito","name":"Enyoito Secondary School","dist":2.43,"avg":1574.0}]},{"id":"mlangarini","name":"Mlangarini SS A-Level","sn":"Mlangarini","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.447376,"lng":36.786076,"avg":11151.9,"rank":107,"hy":{"2019":5846.1,"2020":3178.5,"2021":7099.1,"2022":5496.3,"2023":8500.3,"2024":13803.4},"ul":"good","necta":true,"nectaYears":["2019_F2","2020_F2","2021_F2","2022_F2","2023_F2","2024_F2","2025_F2","2020_F4","2021_F4","2022_F4","2023_F4","2024_F4","2025_F4"],"totalSat":347,"noData":true,"ng":[{"id":"kikwe","name":"Kikwe Secondary School","dist":5.42,"avg":2769.3,"ul":"good","necta":false},{"id":"mkonoo","name":"Mkonoo Secondary School","dist":9.58,"avg":10573.3,"ul":"good","necta":false},{"id":"muungano","name":"Muungano Secondary School","dist":11.79,"avg":2184.1,"ul":"good","necta":false}],"nn":[{"id":"naura","name":"Naura Secondary School ","dist":8.86,"avg":1679.1},{"id":"moshono","name":"Moshono Secondary School","dist":8.93,"avg":1894.6},{"id":"suye","name":"Suye SS","dist":10.14,"avg":719.9}]},{"id":"enyoito","name":"Enyoito Secondary School","sn":"Enyoito","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.346801,"lng":36.7029,"avg":1574.0,"rank":107,"hy":{"2019":3999.7,"2020":2937.0,"2021":3262.4,"2022":1725.2,"2023":2621,"2024":526.9},"ul":"moderate","necta":true,"nectaYears":["2018_F2","2019_F2","2020_F2","2021_F2","2022_F2","2023_F2","2024_F2","2025_F2"],"totalSat":353,"noData":true,"ng":[{"id":"themi","name":"Themi Secondary School","dist":3.99,"avg":2678.8,"ul":"good","necta":true},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":5.82,"avg":2016.0,"ul":"good","necta":true},{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":7.76,"avg":5833.6,"ul":"good","necta":false}],"nn":[{"id":"kimaseki","name":"Kimaseki SS","dist":3.14,"avg":1542.1},{"id":"ngiresi","name":"Ngiresi Secondary School","dist":3.7,"avg":781.0},{"id":"themi","name":"Themi Secondary School","dist":3.99,"avg":2678.8}]},{"id":"ngiresi","name":"Ngiresi Secondary School","sn":"Ngiresi","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.337094,"lng":36.734764,"avg":781.0,"rank":107,"hy":{"2020":1264.2,"2021":1590.4,"2022":1081.1,"2023":1074.6,"2024":487.4},"ul":"poor","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":14,"noData":true,"ng":[{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":4.1,"avg":5833.6,"ul":"good","necta":false},{"id":"themi","name":"Themi Secondary School","dist":6.73,"avg":2678.8,"ul":"good","necta":true},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":9.39,"avg":2016.0,"ul":"good","necta":true}],"nn":[{"id":"enyoito","name":"Enyoito Secondary School","dist":3.7,"avg":1574.0},{"id":"kimaseki","name":"Kimaseki SS","dist":4.27,"avg":1542.1},{"id":"suye","name":"Suye SS","dist":5.5,"avg":719.9}]},{"id":"ilkidinga","name":"Ilkiding'a Secondary School","sn":"Ilkidinga","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.322391,"lng":36.683232,"avg":842.4,"rank":107,"hy":{"2019":701.5,"2020":0.0,"2021":251.7,"2022":55.7,"2023":1412.6,"2024":272.3},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":true,"ng":[{"id":"kiranyi","name":"Kiranyi Secondary School","dist":4.37,"avg":2016.0,"ul":"good","necta":true},{"id":"themi","name":"Themi Secondary School","dist":6.67,"avg":2678.8,"ul":"good","necta":true},{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":9.88,"avg":5833.6,"ul":"good","necta":false}],"nn":[{"id":"enyoito","name":"Enyoito Secondary School","dist":3.48,"avg":1574.0},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":4.37,"avg":2016.0},{"id":"elerai","name":"Elerai SS","dist":5.19,"avg":1210.9}]},{"id":"ilboru","name":"Ilboru Secondary School","sn":"Ilboru","district":"Arusha DC","region":"Arusha","team":"Jastin","lat":-3.348026,"lng":36.687645,"avg":1.6,"rank":107,"hy":{"2019":2321.5,"2020":2586.4,"2021":1726.8,"2022":441.7,"2024":3.2},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":true,"ng":[{"id":"themi","name":"Themi Secondary School","dist":3.77,"avg":2678.8,"ul":"good","necta":true},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":4.14,"avg":2016.0,"ul":"good","necta":true},{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":9.45,"avg":5833.6,"ul":"good","necta":false}],"nn":[{"id":"enyoito","name":"Enyoito Secondary School","dist":1.7,"avg":1574.0},{"id":"elerai","name":"Elerai SS","dist":3.39,"avg":1210.9},{"id":"themi","name":"Themi Secondary School","dist":3.77,"avg":2678.8}]},{"id":"mwandeta","name":"Mwandet SS A-Level","sn":"MwandetA","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.266919,"lng":36.566752,"avg":279.5,"rank":107,"hy":{"2020":406.8,"2022":1646.5,"2023":559.1},"ul":"poor","necta":true,"nectaYears":["2018_F2","2019_F2","2020_F2","2021_F2","2022_F2","2023_F2","2024_F2","2020_F4","2021_F4","2022_F4","2023_F4","2024_F4","2025_F4"],"totalSat":299,"noData":true,"ng":[{"id":"mwandet","name":"Mwandet SS A-Level","dist":0.0,"avg":2110.7,"ul":"good","necta":true},{"id":"lengijave","name":"Lengijave Secondary School","dist":6.01,"avg":2184.0,"ul":"good","necta":true},{"id":"einoti","name":"Einoti Secondary School","dist":11.87,"avg":27276.7,"ul":"good","necta":true}],"nn":[{"id":"mwandet","name":"Mwandet SS A-Level","dist":0.0,"avg":2110.7},{"id":"lengijave","name":"Lengijave Secondary School","dist":6.01,"avg":2184.0},{"id":"osiligi","name":"Osiligi Secondary School","dist":6.74,"avg":1502.9}]},{"id":"mateves","name":"Mateves Secondary School","sn":"Mateves","district":"Arusha DC","region":"Arusha","team":"Erick","lat":-3.377822,"lng":36.58005,"avg":229.6,"rank":107,"hy":{"2019":3547.0,"2020":2736.7,"2021":1958.8,"2022":312.1,"2023":459.1},"ul":"poor","necta":true,"nectaYears":["2022_F2"],"totalSat":21,"noData":true,"ng":[{"id":"einoti","name":"Einoti Secondary School","dist":3.79,"avg":27276.7,"ul":"good","necta":true},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":8.66,"avg":2016.0,"ul":"good","necta":true},{"id":"mwandet","name":"Mwandet SS A-Level","dist":12.42,"avg":2110.7,"ul":"good","necta":true}],"nn":[{"id":"einoti","name":"Einoti Secondary School","dist":3.79,"avg":27276.7},{"id":"kiranyi","name":"Kiranyi Secondary School","dist":8.66,"avg":2016.0},{"id":"elerai","name":"Elerai SS","dist":9.17,"avg":1210.9}]},{"id":"dareda","name":"Dareda Secondary School","sn":"Dareda","district":"Babati DC","region":"Manyara","team":"Abubakar","lat":-4.244151485,"lng":35.49517983,"avg":6845.9,"rank":31,"hy":{"2023":11008.4,"2024":5569.9,"2025":3959.2},"ul":"good","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":86,"noData":false,"ng":[{"id":"nakwa","name":"Nakwa Secondary School","dist":22.2,"avg":5404.9,"ul":"good","necta":true},{"id":"komoto","name":"Komoto Secondary School","dist":25.44,"avg":2637.4,"ul":"good","necta":true},{"id":"bukulu","name":"Bukulu Secondary School","dist":51.11,"avg":7014.3,"ul":"good","necta":false}],"nn":[{"id":"nakwa","name":"Nakwa Secondary School","dist":22.2,"avg":5404.9},{"id":"komoto","name":"Komoto Secondary School","dist":25.44,"avg":2637.4},{"id":"kwaraa","name":"Kwaraa Secondary School","dist":29.89,"avg":585.3}]},{"id":"chiefdodo","name":"Chief Dodo Secondary School","sn":"ChiefDodo","district":"Babati DC","region":"Manyara","team":"Abubakar","lat":-4.3,"lng":35.6501,"avg":1854.7,"rank":107,"hy":{"2023":2678.4,"2024":1031.0},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":true,"ng":[{"id":"nakwa","name":"Nakwa Secondary School","dist":6.98,"avg":5404.9,"ul":"good","necta":true},{"id":"komoto","name":"Komoto Secondary School","dist":13.35,"avg":2637.4,"ul":"good","necta":true},{"id":"dareda","name":"Dareda Secondary School","dist":18.27,"avg":6845.9,"ul":"good","necta":true}],"nn":[{"id":"nakwa","name":"Nakwa Secondary School","dist":6.98,"avg":5404.9},{"id":"komoto","name":"Komoto Secondary School","dist":13.35,"avg":2637.4},{"id":"nangara","name":"Nangara Secondary School","dist":14.74,"avg":1461.6}]},{"id":"nakwa","name":"Nakwa Secondary School","sn":"Nakwa","district":"Babati TC","region":"Manyara","team":"Abubakar","lat":-4.255942755,"lng":35.69499101,"avg":5404.9,"rank":28,"hy":{"2022":1774.3,"2023":8746.4,"2024":2923.4,"2025":4544.9},"ul":"good","necta":true,"nectaYears":["2025_F2"],"totalSat":31,"noData":false,"ng":[{"id":"komoto","name":"Komoto Secondary School","dist":6.56,"avg":2637.4,"ul":"good","necta":true},{"id":"dareda","name":"Dareda Secondary School","dist":22.2,"avg":6845.9,"ul":"good","necta":true},{"id":"bukulu","name":"Bukulu Secondary School","dist":41.3,"avg":7014.3,"ul":"good","necta":false}],"nn":[{"id":"komoto","name":"Komoto Secondary School","dist":6.56,"avg":2637.4},{"id":"nangara","name":"Nangara Secondary School","dist":8.88,"avg":1461.6},{"id":"kwaraa","name":"Kwaraa Secondary School","dist":9.09,"avg":585.3}]},{"id":"nangara","name":"Nangara Secondary School","sn":"Nangara","district":"Babati TC","region":"Manyara","team":"Abubakar","lat":-4.254785,"lng":35.775047,"avg":1461.6,"rank":54,"hy":{"2022":1518.9,"2023":1538.5,"2024":909.8,"2025":1936.5},"ul":"moderate","necta":true,"nectaYears":["2025_F2"],"totalSat":25,"noData":false,"ng":[{"id":"komoto","name":"Komoto Secondary School","dist":8.34,"avg":2637.4,"ul":"good","necta":true},{"id":"nakwa","name":"Nakwa Secondary School","dist":8.88,"avg":5404.9,"ul":"good","necta":true},{"id":"dareda","name":"Dareda Secondary School","dist":31.06,"avg":6845.9,"ul":"good","necta":true}],"nn":[{"id":"kwaraa","name":"Kwaraa Secondary School","dist":5.22,"avg":585.3},{"id":"komoto","name":"Komoto Secondary School","dist":8.34,"avg":2637.4},{"id":"nakwa","name":"Nakwa Secondary School","dist":8.88,"avg":5404.9}]},{"id":"komoto","name":"Komoto Secondary School","sn":"Komoto","district":"Babati TC","region":"Manyara","team":"Abubakar","lat":-4.20286877,"lng":35.7208251,"avg":2637.4,"rank":59,"hy":{"2022":411.4,"2023":2687.4,"2024":3533.1,"2025":1691.7},"ul":"good","necta":true,"nectaYears":["2025_F2"],"totalSat":41,"noData":false,"ng":[{"id":"nakwa","name":"Nakwa Secondary School","dist":6.56,"avg":5404.9,"ul":"good","necta":true},{"id":"dareda","name":"Dareda Secondary School","dist":25.44,"avg":6845.9,"ul":"good","necta":true},{"id":"bukulu","name":"Bukulu Secondary School","dist":46.8,"avg":7014.3,"ul":"good","necta":false}],"nn":[{"id":"kwaraa","name":"Kwaraa Secondary School","dist":4.68,"avg":585.3},{"id":"nakwa","name":"Nakwa Secondary School","dist":6.56,"avg":5404.9},{"id":"nangara","name":"Nangara Secondary School","dist":8.34,"avg":1461.6}]},{"id":"manyara","name":"Manyara Girls Secondary School","sn":"ManyaraGirls","district":"Babati TC","region":"Manyara","team":"Abubakar","lat":-4.10195,"lng":35.79925,"avg":941.9,"rank":71,"hy":{"2025":941.9},"ul":"poor","necta":true,"nectaYears":["2025_F2"],"totalSat":28,"noData":false,"ng":[{"id":"komoto","name":"Komoto Secondary School","dist":14.2,"avg":2637.4,"ul":"good","necta":true},{"id":"nakwa","name":"Nakwa Secondary School","dist":20.66,"avg":5404.9,"ul":"good","necta":true},{"id":"dareda","name":"Dareda Secondary School","dist":37.24,"avg":6845.9,"ul":"good","necta":true}],"nn":[{"id":"kwaraa","name":"Kwaraa Secondary School","dist":12.64,"avg":585.3},{"id":"komoto","name":"Komoto Secondary School","dist":14.2,"avg":2637.4},{"id":"nangara","name":"Nangara Secondary School","dist":17.21,"avg":1461.6}]},{"id":"kwaraa","name":"Kwaraa Secondary School","sn":"Kwaraa","district":"Babati TC","region":"Manyara","team":"Abubakar","lat":-4.20953,"lng":35.76245,"avg":585.3,"rank":83,"hy":{"2022":1523.9,"2023":1022.6,"2024":393.1,"2025":340.3},"ul":"poor","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":23,"noData":false,"ng":[{"id":"komoto","name":"Komoto Secondary School","dist":4.68,"avg":2637.4,"ul":"good","necta":true},{"id":"nakwa","name":"Nakwa Secondary School","dist":9.09,"avg":5404.9,"ul":"good","necta":true},{"id":"dareda","name":"Dareda Secondary School","dist":29.89,"avg":6845.9,"ul":"good","necta":true}],"nn":[{"id":"komoto","name":"Komoto Secondary School","dist":4.68,"avg":2637.4},{"id":"nangara","name":"Nangara Secondary School","dist":5.22,"avg":1461.6},{"id":"nakwa","name":"Nakwa Secondary School","dist":9.09,"avg":5404.9}]},{"id":"babati","name":"Babati Day Secondary School","sn":"BabatiDay","district":"Babati TC","region":"Manyara","team":"Abubakar","lat":-4.2035111,"lng":35.738845,"avg":1052.4,"rank":102,"hy":{"2022":30.1,"2023":1500.8,"2024":1638.8,"2025":17.6},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"komoto","name":"Komoto Secondary School","dist":2.0,"avg":2637.4,"ul":"good","necta":true},{"id":"nakwa","name":"Nakwa Secondary School","dist":7.59,"avg":5404.9,"ul":"good","necta":true},{"id":"dareda","name":"Dareda Secondary School","dist":27.4,"avg":6845.9,"ul":"good","necta":true}],"nn":[{"id":"komoto","name":"Komoto Secondary School","dist":2.0,"avg":2637.4},{"id":"kwaraa","name":"Kwaraa Secondary School","dist":2.7,"avg":585.3},{"id":"nangara","name":"Nangara Secondary School","dist":6.97,"avg":1461.6}]},{"id":"bagara","name":"Bagara Secondary School","sn":"Bagara","district":"Babati TC","region":"Manyara","team":"Abubakar","lat":-4.219473,"lng":35.714064,"avg":960.7,"rank":105,"hy":{"2022":6.1,"2023":2866.3,"2024":13.7,"2025":2.2},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"komoto","name":"Komoto Secondary School","dist":1.99,"avg":2637.4,"ul":"good","necta":true},{"id":"nakwa","name":"Nakwa Secondary School","dist":4.57,"avg":5404.9,"ul":"good","necta":true},{"id":"dareda","name":"Dareda Secondary School","dist":24.43,"avg":6845.9,"ul":"good","necta":true}],"nn":[{"id":"komoto","name":"Komoto Secondary School","dist":1.99,"avg":2637.4},{"id":"nakwa","name":"Nakwa Secondary School","dist":4.57,"avg":5404.9},{"id":"kwaraa","name":"Kwaraa Secondary School","dist":5.48,"avg":585.3}]},{"id":"kiagata","name":"Kiagata Secondary School","sn":"Kiagata","district":"Butiama DC","region":"Mara","team":"Danny","lat":-1.663585881,"lng":34.12561806,"avg":6899.0,"rank":8,"hy":{"2024":3435.8,"2025":10362.3},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"bumangi","name":"Bumangi Secondary School","dist":14.87,"avg":3422.4,"ul":"good","necta":false},{"id":"kiabakari","name":"Kiabakari Secondary School","dist":30.12,"avg":3781.9,"ul":"good","necta":true},{"id":"florian","name":"Florian Secondary School","dist":264.93,"avg":17338.2,"ul":"good","necta":false}],"nn":[{"id":"kiabakari","name":"Kiabakari Secondary School","dist":30.12,"avg":3781.9},{"id":"engarenaibor","name":"Engarenaibor SS","dist":280.26,"avg":691.2},{"id":"longidoa","name":"Longido SS O-Level","dist":310.45,"avg":4384.0}]},{"id":"kiabakari","name":"Kiabakari Secondary School","sn":"Kiabakari","district":"Butiama DC","region":"Mara","team":"Danny","lat":-1.755752,"lng":33.870821,"avg":3781.9,"rank":15,"hy":{"2024":988.7,"2025":6575.1},"ul":"good","necta":true,"nectaYears":["2025_F2"],"totalSat":82,"noData":false,"ng":[{"id":"bumangi","name":"Bumangi Secondary School","dist":15.68,"avg":3422.4,"ul":"good","necta":false},{"id":"kiagata","name":"Kiagata Secondary School","dist":30.12,"avg":6899.0,"ul":"good","necta":false},{"id":"florian","name":"Florian Secondary School","dist":276.66,"avg":17338.2,"ul":"good","necta":false}],"nn":[{"id":"engarenaibor","name":"Engarenaibor SS","dist":303.91,"avg":691.2},{"id":"dareda","name":"Dareda Secondary School","dist":330.29,"avg":6845.9},{"id":"longidoa","name":"Longido SS O-Level","dist":333.28,"avg":4384.0}]},{"id":"bumangi","name":"Bumangi Secondary School","sn":"Bumangi","district":"Butiama DC","region":"Mara","team":"Danny","lat":-1.730158,"lng":34.009563,"avg":3422.4,"rank":21,"hy":{"2024":1552.9,"2025":5291.9},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kiagata","name":"Kiagata Secondary School","dist":14.87,"avg":6899.0,"ul":"good","necta":false},{"id":"kiabakari","name":"Kiabakari Secondary School","dist":15.68,"avg":3781.9,"ul":"good","necta":true},{"id":"florian","name":"Florian Secondary School","dist":267.91,"avg":17338.2,"ul":"good","necta":false}],"nn":[{"id":"kiabakari","name":"Kiabakari Secondary School","dist":15.68,"avg":3781.9},{"id":"engarenaibor","name":"Engarenaibor SS","dist":290.03,"avg":691.2},{"id":"longidoa","name":"Longido SS O-Level","dist":319.74,"avg":4384.0}]},{"id":"butuguri","name":"Butuguri Secondary School","sn":"Butuguri","district":"Butiama DC","region":"Mara","team":"Danny","lat":-1.67569944,"lng":33.92905443,"avg":866.3,"rank":66,"hy":{"2024":504.3,"2025":1228.4},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"bumangi","name":"Bumangi Secondary School","dist":10.8,"avg":3422.4,"ul":"good","necta":false},{"id":"kiabakari","name":"Kiabakari Secondary School","dist":11.01,"avg":3781.9,"ul":"good","necta":true},{"id":"kiagata","name":"Kiagata Secondary School","dist":21.89,"avg":6899.0,"ul":"good","necta":false}],"nn":[{"id":"kiabakari","name":"Kiabakari Secondary School","dist":11.01,"avg":3781.9},{"id":"engarenaibor","name":"Engarenaibor SS","dist":300.43,"avg":691.2},{"id":"longidoa","name":"Longido SS O-Level","dist":330.25,"avg":4384.0}]},{"id":"mboga","name":"Mboga Secondary School","sn":"Mboga","district":"Chalinze DC","region":"Pwani","team":"Ashura","lat":-6.51273,"lng":38.31298,"avg":4194.1,"rank":24,"hy":{"2024":3421.6,"2025":4966.6},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"mdaula","name":"Mdaula Secondary School","dist":17.43,"avg":3548.5,"ul":"good","necta":false},{"id":"mandera","name":"Mandera Girls Secondary School","dist":34.9,"avg":3147.3,"ul":"good","necta":true},{"id":"ndolwa","name":"Ndolwa Secondary School","dist":111.96,"avg":4749.3,"ul":"good","necta":false}],"nn":[{"id":"mandera","name":"Mandera Girls Secondary School","dist":34.9,"avg":3147.3},{"id":"semkiwa","name":"Semkiwa Secondary School","dist":153.14,"avg":165.8},{"id":"mwapachu","name":"Mwapachu Secondary School","dist":176.39,"avg":189.6}]},{"id":"mdaula","name":"Mdaula Secondary School","sn":"Mdaula","district":"Chalinze DC","region":"Pwani","team":"Ashura","lat":-6.64563,"lng":38.22931,"avg":3548.5,"rank":30,"hy":{"2024":3083.9,"2025":4013.1},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"mboga","name":"Mboga Secondary School","dist":17.43,"avg":4194.1,"ul":"good","necta":false},{"id":"mandera","name":"Mandera Girls Secondary School","dist":51.95,"avg":3147.3,"ul":"good","necta":true},{"id":"ndolwa","name":"Ndolwa Secondary School","dist":127.24,"avg":4749.3,"ul":"good","necta":false}],"nn":[{"id":"mandera","name":"Mandera Girls Secondary School","dist":51.95,"avg":3147.3},{"id":"semkiwa","name":"Semkiwa Secondary School","dist":168.84,"avg":165.8},{"id":"mwapachu","name":"Mwapachu Secondary School","dist":193.8,"avg":189.6}]},{"id":"mandera","name":"Mandera Girls Secondary School","sn":"ManderaGirls","district":"Chalinze DC","region":"Pwani","team":"Ashura","lat":-6.213230014,"lng":38.40738242,"avg":3147.3,"rank":48,"hy":{"2024":4157.7,"2025":2136.9},"ul":"good","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":52,"noData":false,"ng":[{"id":"mboga","name":"Mboga Secondary School","dist":34.9,"avg":4194.1,"ul":"good","necta":false},{"id":"mdaula","name":"Mdaula Secondary School","dist":51.95,"avg":3548.5,"ul":"good","necta":false},{"id":"ndolwa","name":"Ndolwa Secondary School","dist":79.04,"avg":4749.3,"ul":"good","necta":false}],"nn":[{"id":"semkiwa","name":"Semkiwa Secondary School","dist":119.31,"avg":165.8},{"id":"mwapachu","name":"Mwapachu Secondary School","dist":142.4,"avg":189.6},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":321.49,"avg":39152.1}]},{"id":"msata","name":"Msata Secondary School","sn":"Msata","district":"Chalinze DC","region":"Pwani","team":"Ashura","lat":-6.3401,"lng":38.38015,"avg":1727.3,"rank":74,"hy":{"2024":2700.1,"2025":754.6},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"mandera","name":"Mandera Girls Secondary School","dist":14.42,"avg":3147.3,"ul":"good","necta":true},{"id":"mboga","name":"Mboga Secondary School","dist":20.58,"avg":4194.1,"ul":"good","necta":false},{"id":"mdaula","name":"Mdaula Secondary School","dist":37.84,"avg":3548.5,"ul":"good","necta":false}],"nn":[{"id":"mandera","name":"Mandera Girls Secondary School","dist":14.42,"avg":3147.3},{"id":"semkiwa","name":"Semkiwa Secondary School","dist":133.51,"avg":165.8},{"id":"mwapachu","name":"Mwapachu Secondary School","dist":156.04,"avg":189.6}]},{"id":"viwandani","name":"Viwandani Secondary School","sn":"Viwandani","district":"Dodoma CC","region":"Dodoma","team":"Juma","lat":-6.179097,"lng":35.753619,"avg":1534.6,"rank":62,"hy":{"2025":1534.6},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"bihawana","name":"Bihawana Secondary School","dist":1.93,"avg":2861.5,"ul":"good","necta":false},{"id":"bicha","name":"Bicha Secondary School","dist":139.99,"avg":3174.1,"ul":"good","necta":false},{"id":"ula","name":"Ula Secondary School","dist":142.46,"avg":4210.3,"ul":"good","necta":false}],"nn":[{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":162.88,"avg":39152.1},{"id":"nakwa","name":"Nakwa Secondary School","dist":213.94,"avg":5404.9},{"id":"nangara","name":"Nangara Secondary School","dist":213.99,"avg":1461.6}]},{"id":"bihawana","name":"Bihawana Secondary School","sn":"Bihawana","district":"Dodoma CC","region":"Dodoma","team":"Juma","lat":-6.190152398,"lng":35.74010225,"avg":2861.5,"rank":68,"hy":{"2023":4549.9,"2024":2994.1,"2025":1040.3},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"bicha","name":"Bicha Secondary School","dist":141.28,"avg":3174.1,"ul":"good","necta":false},{"id":"ula","name":"Ula Secondary School","dist":143.71,"avg":4210.3,"ul":"good","necta":false},{"id":"uhambingeto","name":"Uhambingeto Secondary School","dist":154.47,"avg":2555.8,"ul":"good","necta":false}],"nn":[{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":164.28,"avg":39152.1},{"id":"nakwa","name":"Nakwa Secondary School","dist":215.13,"avg":5404.9},{"id":"nangara","name":"Nangara Secondary School","dist":215.24,"avg":1461.6}]},{"id":"misima","name":"Misima Secondary School","sn":"Misima","district":"Handeni DC","region":"Tanga","team":"Ashura","lat":-5.304264,"lng":38.115058,"avg":1460.6,"rank":73,"hy":{"2021":993.3,"2022":1711.1,"2023":2504,"2024":1090.4,"2025":787.4},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"handeni","name":"Handeni Secondary School","dist":16.59,"avg":3178.9,"ul":"good","necta":false},{"id":"ndolwa","name":"Ndolwa Secondary School","dist":33.1,"avg":4749.3,"ul":"good","necta":false},{"id":"mandera","name":"Mandera Girls Secondary School","dist":106.12,"avg":3147.3,"ul":"good","necta":true}],"nn":[{"id":"semkiwa","name":"Semkiwa Secondary School","dist":39.45,"avg":165.8},{"id":"mandera","name":"Mandera Girls Secondary School","dist":106.12,"avg":3147.3},{"id":"mwapachu","name":"Mwapachu Secondary School","dist":109.74,"avg":189.6}]},{"id":"mkata","name":"Mkata Secondary School","sn":"Mkata","district":"Handeni DC","region":"Tanga","team":"Ashura","lat":-5.794806,"lng":38.28338,"avg":1658.7,"rank":76,"hy":{"2021":925.1,"2022":2382.2,"2023":2798.5,"2024":1509.9,"2025":667.7},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"ndolwa","name":"Ndolwa Secondary School","dist":32.6,"avg":4749.3,"ul":"good","necta":false},{"id":"mandera","name":"Mandera Girls Secondary School","dist":48.51,"avg":3147.3,"ul":"good","necta":true},{"id":"handeni","name":"Handeni Secondary School","dist":49.48,"avg":3178.9,"ul":"good","necta":false}],"nn":[{"id":"mandera","name":"Mandera Girls Secondary School","dist":48.51,"avg":3147.3},{"id":"semkiwa","name":"Semkiwa Secondary School","dist":74.57,"avg":165.8},{"id":"mwapachu","name":"Mwapachu Secondary School","dist":116.09,"avg":189.6}]},{"id":"ndolwa","name":"Ndolwa Secondary School","sn":"Ndolwa","district":"Handeni DC","region":"Tanga","team":"Ashura","lat":-5.506114,"lng":38.334813,"avg":4749.3,"rank":77,"hy":{"2021":2370.6,"2022":719.0,"2023":6610.1,"2024":7122.8,"2025":515.1},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"handeni","name":"Handeni Secondary School","dist":34.77,"avg":3178.9,"ul":"good","necta":false},{"id":"mandera","name":"Mandera Girls Secondary School","dist":79.04,"avg":3147.3,"ul":"good","necta":true},{"id":"mboga","name":"Mboga Secondary School","dist":111.96,"avg":4194.1,"ul":"good","necta":false}],"nn":[{"id":"semkiwa","name":"Semkiwa Secondary School","dist":42.03,"avg":165.8},{"id":"mandera","name":"Mandera Girls Secondary School","dist":79.04,"avg":3147.3},{"id":"mwapachu","name":"Mwapachu Secondary School","dist":93.62,"avg":189.6}]},{"id":"kisaza","name":"Kisaza Secondary School","sn":"Kisaza","district":"Handeni DC","region":"Tanga","team":"Ashura","lat":-5.604529,"lng":38.434626,"avg":822.0,"rank":94,"hy":{"2021":2228.3,"2022":170.4,"2023":1962.3,"2024":339.8,"2025":163.8},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"ndolwa","name":"Ndolwa Secondary School","dist":15.55,"avg":4749.3,"ul":"good","necta":false},{"id":"handeni","name":"Handeni Secondary School","dist":48.84,"avg":3178.9,"ul":"good","necta":false},{"id":"mandera","name":"Mandera Girls Secondary School","dist":67.75,"avg":3147.3,"ul":"good","necta":true}],"nn":[{"id":"semkiwa","name":"Semkiwa Secondary School","dist":51.6,"avg":165.8},{"id":"mandera","name":"Mandera Girls Secondary School","dist":67.75,"avg":3147.3},{"id":"mwapachu","name":"Mwapachu Secondary School","dist":89.88,"avg":189.6}]},{"id":"komnyanganyo","name":"Komnyang'anyo Secondary School","sn":"Komnyanganyo","district":"Handeni DC","region":"Tanga","team":"Ashura","lat":-5.49829,"lng":38.038028,"avg":1330.2,"rank":95,"hy":{"2021":2917.8,"2022":2358.4,"2023":3302.0,"2024":531.2,"2025":157.4},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"handeni","name":"Handeni Secondary School","dist":7.9,"avg":3178.9,"ul":"good","necta":false},{"id":"ndolwa","name":"Ndolwa Secondary School","dist":32.86,"avg":4749.3,"ul":"good","necta":false},{"id":"mandera","name":"Mandera Girls Secondary School","dist":89.38,"avg":3147.3,"ul":"good","necta":true}],"nn":[{"id":"semkiwa","name":"Semkiwa Secondary School","dist":58.96,"avg":165.8},{"id":"mandera","name":"Mandera Girls Secondary School","dist":89.38,"avg":3147.3},{"id":"mwapachu","name":"Mwapachu Secondary School","dist":123.56,"avg":189.6}]},{"id":"handeni","name":"Handeni Secondary School","sn":"Handeni","district":"Handeni DC","region":"Tanga","team":"Ashura","lat":-5.427618939,"lng":38.03074835,"avg":3178.9,"rank":107,"hy":{"2021":2903.1,"2022":3176.1,"2023":3712.2,"2024":2645.7},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":true,"ng":[{"id":"ndolwa","name":"Ndolwa Secondary School","dist":34.77,"avg":4749.3,"ul":"good","necta":false},{"id":"mandera","name":"Mandera Girls Secondary School","dist":96.78,"avg":3147.3,"ul":"good","necta":true},{"id":"mboga","name":"Mboga Secondary School","dist":124.63,"avg":4194.1,"ul":"good","necta":false}],"nn":[{"id":"semkiwa","name":"Semkiwa Secondary School","dist":54.63,"avg":165.8},{"id":"mandera","name":"Mandera Girls Secondary School","dist":96.78,"avg":3147.3},{"id":"mwapachu","name":"Mwapachu Secondary School","dist":121.95,"avg":189.6}]},{"id":"florian","name":"Florian Secondary School","sn":"Florian","district":"Karatu DC","region":"Arusha","team":"Jastin","lat":-3.491407,"lng":35.655484,"avg":17338.2,"rank":5,"hy":{"2023":15354.5,"2024":20300.5,"2025":16359.5},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"komoto","name":"Komoto Secondary School","dist":79.44,"avg":2637.4,"ul":"good","necta":true},{"id":"nakwa","name":"Nakwa Secondary School","dist":85.13,"avg":5404.9,"ul":"good","necta":true},{"id":"dareda","name":"Dareda Secondary School","dist":85.57,"avg":6845.9,"ul":"good","necta":true}],"nn":[{"id":"manyara","name":"Manyara Girls Secondary School","dist":69.74,"avg":941.9},{"id":"komoto","name":"Komoto Secondary School","dist":79.44,"avg":2637.4},{"id":"kwaraa","name":"Kwaraa Secondary School","dist":80.73,"avg":585.3}]},{"id":"mbwego","name":"Mbwego Secondary School","sn":"Mbwego","district":"Kilindi DC","region":"Tanga","team":"Ashura","lat":-5.4582,"lng":37.7799,"avg":319.4,"rank":84,"hy":{"2025":319.4},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"handeni","name":"Handeni Secondary School","dist":27.97,"avg":3178.9,"ul":"good","necta":false},{"id":"ndolwa","name":"Ndolwa Secondary School","dist":61.65,"avg":4749.3,"ul":"good","necta":false},{"id":"mandera","name":"Mandera Girls Secondary School","dist":108.93,"avg":3147.3,"ul":"good","necta":true}],"nn":[{"id":"semkiwa","name":"Semkiwa Secondary School","dist":80.29,"avg":165.8},{"id":"mandera","name":"Mandera Girls Secondary School","dist":108.93,"avg":3147.3},{"id":"mwapachu","name":"Mwapachu Secondary School","dist":149.65,"avg":189.6}]},{"id":"chifumangenya","name":"Chifu Mang'enya Secondary School","sn":"ChifuMangenya","district":"Kilindi DC","region":"Tanga","team":"Ashura","lat":-5.1802,"lng":38.8034,"avg":219.1,"rank":90,"hy":{"2025":219.1},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"ndolwa","name":"Ndolwa Secondary School","dist":63.28,"avg":4749.3,"ul":"good","necta":false},{"id":"handeni","name":"Handeni Secondary School","dist":89.86,"avg":3178.9,"ul":"good","necta":false},{"id":"mandera","name":"Mandera Girls Secondary School","dist":122.94,"avg":3147.3,"ul":"good","necta":true}],"nn":[{"id":"mwapachu","name":"Mwapachu Secondary School","dist":32.28,"avg":189.6},{"id":"semkiwa","name":"Semkiwa Secondary School","dist":41.47,"avg":165.8},{"id":"mandera","name":"Mandera Girls Secondary School","dist":122.94,"avg":3147.3}]},{"id":"mwapachu","name":"Mwapachu Secondary School","sn":"Mwapachu","district":"Kilindi DC","region":"Tanga","team":"Ashura","lat":-5.1276,"lng":39.0901,"avg":189.6,"rank":92,"hy":{"2025":189.6},"ul":"poor","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":38,"noData":false,"ng":[{"id":"ndolwa","name":"Ndolwa Secondary School","dist":93.62,"avg":4749.3,"ul":"good","necta":false},{"id":"handeni","name":"Handeni Secondary School","dist":121.95,"avg":3178.9,"ul":"good","necta":false},{"id":"mandera","name":"Mandera Girls Secondary School","dist":142.4,"avg":3147.3,"ul":"good","necta":true}],"nn":[{"id":"semkiwa","name":"Semkiwa Secondary School","dist":73.0,"avg":165.8},{"id":"mandera","name":"Mandera Girls Secondary School","dist":142.4,"avg":3147.3},{"id":"kiboriloni","name":"Kiboriloni Secondary School","dist":275.73,"avg":3496.0}]},{"id":"semkiwa","name":"Semkiwa Secondary School","sn":"Semkiwa","district":"Kilindi DC","region":"Tanga","team":"Ashura","lat":-5.1405,"lng":38.4311,"avg":165.8,"rank":93,"hy":{"2025":165.8},"ul":"poor","necta":true,"nectaYears":["2025_F4"],"totalSat":17,"noData":false,"ng":[{"id":"ndolwa","name":"Ndolwa Secondary School","dist":42.03,"avg":4749.3,"ul":"good","necta":false},{"id":"handeni","name":"Handeni Secondary School","dist":54.63,"avg":3178.9,"ul":"good","necta":false},{"id":"mandera","name":"Mandera Girls Secondary School","dist":119.31,"avg":3147.3,"ul":"good","necta":true}],"nn":[{"id":"mwapachu","name":"Mwapachu Secondary School","dist":73.0,"avg":189.6},{"id":"mandera","name":"Mandera Girls Secondary School","dist":119.31,"avg":3147.3},{"id":"kiboriloni","name":"Kiboriloni Secondary School","dist":232.61,"avg":3496.0}]},{"id":"selebu","name":"Selebu Secondary School","sn":"Selebu","district":"Kilolo DC","region":"Iringa","team":"Juma","lat":-7.5369,"lng":36.1012,"avg":4345.6,"rank":11,"hy":{"2024":971.3,"2025":7719.8},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"uhambingeto","name":"Uhambingeto Secondary School","dist":15.67,"avg":2555.8,"ul":"good","necta":false},{"id":"kilolo","name":"Kilolo Secondary School","dist":57.83,"avg":6125.2,"ul":"good","necta":false},{"id":"udzungwa","name":"Udzungwa Secondary School","dist":66.13,"avg":5177.1,"ul":"good","necta":false}],"nn":[{"id":"mandera","name":"Mandera Girls Secondary School","dist":294.07,"avg":3147.3},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":313.5,"avg":39152.1},{"id":"mpuguso","name":"Mpuguso Secondary School","dist":333.33,"avg":1881.4}]},{"id":"kilolo","name":"Kilolo Secondary School","sn":"Kilolo","district":"Kilolo DC","region":"Iringa","team":"Juma","lat":-7.97798,"lng":35.82313,"avg":6125.2,"rank":12,"hy":{"2024":4613.4,"2025":7637.1},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"udzungwa","name":"Udzungwa Secondary School","dist":13.67,"avg":5177.1,"ul":"good","necta":false},{"id":"uhambingeto","name":"Uhambingeto Secondary School","dist":48.7,"avg":2555.8,"ul":"good","necta":false},{"id":"selebu","name":"Selebu Secondary School","dist":57.83,"avg":4345.6,"ul":"good","necta":false}],"nn":[{"id":"mpuguso","name":"Mpuguso Secondary School","dist":280.32,"avg":1881.4},{"id":"iyunga","name":"Iyunga Technical Secondary School","dist":285.31,"avg":1733.2},{"id":"mandera","name":"Mandera Girls Secondary School","dist":346.14,"avg":3147.3}]},{"id":"udzungwa","name":"Udzungwa Secondary School","sn":"Udzungwa","district":"Kilolo DC","region":"Iringa","team":"Juma","lat":-8.0887,"lng":35.87717,"avg":5177.1,"rank":16,"hy":{"2024":3912.6,"2025":6441.7},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kilolo","name":"Kilolo Secondary School","dist":13.67,"avg":6125.2,"ul":"good","necta":false},{"id":"uhambingeto","name":"Uhambingeto Secondary School","dist":59.3,"avg":2555.8,"ul":"good","necta":false},{"id":"selebu","name":"Selebu Secondary School","dist":66.13,"avg":4345.6,"ul":"good","necta":false}],"nn":[{"id":"mpuguso","name":"Mpuguso Secondary School","dist":279.13,"avg":1881.4},{"id":"iyunga","name":"Iyunga Technical Secondary School","dist":286.58,"avg":1733.2},{"id":"mandera","name":"Mandera Girls Secondary School","dist":348.44,"avg":3147.3}]},{"id":"uhambingeto","name":"Uhambingeto Secondary School","sn":"Uhambingeto","district":"Kilolo DC","region":"Iringa","team":"Juma","lat":-7.56191,"lng":35.9613,"avg":2555.8,"rank":41,"hy":{"2025":2555.8},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"selebu","name":"Selebu Secondary School","dist":15.67,"avg":4345.6,"ul":"good","necta":false},{"id":"kilolo","name":"Kilolo Secondary School","dist":48.7,"avg":6125.2,"ul":"good","necta":false},{"id":"udzungwa","name":"Udzungwa Secondary School","dist":59.3,"avg":5177.1,"ul":"good","necta":false}],"nn":[{"id":"mandera","name":"Mandera Girls Secondary School","dist":308.87,"avg":3147.3},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":315.66,"avg":39152.1},{"id":"iyunga","name":"Iyunga Technical Secondary School","dist":318.84,"avg":1733.2}]},{"id":"nyalumbu","name":"Nyalumbu Secondary School","sn":"Nyalumbu","district":"Kilolo DC","region":"Iringa","team":"Juma","lat":-7.69032,"lng":36.02145,"avg":1943.6,"rank":70,"hy":{"2024":2909.3,"2025":977.9},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"uhambingeto","name":"Uhambingeto Secondary School","dist":15.74,"avg":2555.8,"ul":"good","necta":false},{"id":"selebu","name":"Selebu Secondary School","dist":19.19,"avg":4345.6,"ul":"good","necta":false},{"id":"kilolo","name":"Kilolo Secondary School","dist":38.73,"avg":6125.2,"ul":"good","necta":false}],"nn":[{"id":"mandera","name":"Mandera Girls Secondary School","dist":310.37,"avg":3147.3},{"id":"mpuguso","name":"Mpuguso Secondary School","dist":316.22,"avg":1881.4},{"id":"iyunga","name":"Iyunga Technical Secondary School","dist":318.22,"avg":1733.2}]},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","sn":"AmaniAbeidKarume","district":"Kondoa DC","region":"Dodoma","team":"Juma","lat":-4.723431,"lng":35.918123,"avg":39152.1,"rank":1,"hy":{"2022":23942.4,"2023":32095.1,"2024":37428.2,"2025":47932.8},"ul":"good","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":15,"noData":false,"ng":[{"id":"bukulu","name":"Bukulu Secondary School","dist":21.07,"avg":7014.3,"ul":"good","necta":false},{"id":"bicha","name":"Bicha Secondary School","dist":25.4,"avg":3174.1,"ul":"good","necta":false},{"id":"ula","name":"Ula Secondary School","dist":25.99,"avg":4210.3,"ul":"good","necta":false}],"nn":[{"id":"nangara","name":"Nangara Secondary School","dist":54.47,"avg":1461.6},{"id":"nakwa","name":"Nakwa Secondary School","dist":57.57,"avg":5404.9},{"id":"kwaraa","name":"Kwaraa Secondary School","dist":59.69,"avg":585.3}]},{"id":"bukulu","name":"Bukulu Secondary School","sn":"Bukulu","district":"Kondoa DC","region":"Dodoma","team":"Juma","lat":-4.622125,"lng":35.757465,"avg":7014.3,"rank":6,"hy":{"2023":15.4,"2024":6026.5,"2025":15001.1},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":21.07,"avg":39152.1,"ul":"good","necta":true},{"id":"ula","name":"Ula Secondary School","dist":30.67,"avg":4210.3,"ul":"good","necta":false},{"id":"bicha","name":"Bicha Secondary School","dist":33.63,"avg":3174.1,"ul":"good","necta":false}],"nn":[{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":21.07,"avg":39152.1},{"id":"nangara","name":"Nangara Secondary School","dist":40.89,"avg":1461.6},{"id":"nakwa","name":"Nakwa Secondary School","dist":41.3,"avg":5404.9}]},{"id":"bicha","name":"Bicha Secondary School","sn":"Bicha","district":"Kondoa DC","region":"Dodoma","team":"Juma","lat":-4.921112,"lng":35.803211,"avg":3174.1,"rank":51,"hy":{"2023":4612.0,"2024":2935.5,"2025":1974.8},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"ula","name":"Ula Secondary School","dist":5.23,"avg":4210.3,"ul":"good","necta":false},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":25.4,"avg":39152.1,"ul":"good","necta":true},{"id":"bukulu","name":"Bukulu Secondary School","dist":33.63,"avg":7014.3,"ul":"good","necta":false}],"nn":[{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":25.4,"avg":39152.1},{"id":"nangara","name":"Nangara Secondary School","dist":74.16,"avg":1461.6},{"id":"nakwa","name":"Nakwa Secondary School","dist":74.93,"avg":5404.9}]},{"id":"ula","name":"Ula Secondary School","sn":"Ula","district":"Kondoa DC","region":"Dodoma","team":"Juma","lat":-4.897931,"lng":35.762116,"avg":4210.3,"rank":57,"hy":{"2022":3132.5,"2023":5898.3,"2024":4954.0,"2025":1778.6},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"bicha","name":"Bicha Secondary School","dist":5.23,"avg":3174.1,"ul":"good","necta":false},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":25.99,"avg":39152.1,"ul":"good","necta":true},{"id":"bukulu","name":"Bukulu Secondary School","dist":30.67,"avg":7014.3,"ul":"good","necta":false}],"nn":[{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":25.99,"avg":39152.1},{"id":"nangara","name":"Nangara Secondary School","dist":71.53,"avg":1461.6},{"id":"nakwa","name":"Nakwa Secondary School","dist":71.77,"avg":5404.9}]},{"id":"mtama","name":"Mtama Secondary School","sn":"Mtama","district":"Lindi DC","region":"Lindi","team":"Danny","lat":-10.2946,"lng":39.3758,"avg":6725.5,"rank":38,"hy":{"2023":10492.4,"2024":6990.1,"2025":2693.9},"ul":"good","necta":true,"nectaYears":["2025_F2"],"totalSat":10,"noData":false,"ng":[{"id":"nyegendi","name":"Nyegendi Secondary School","dist":8.99,"avg":2692.9,"ul":"good","necta":false},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":36.16,"avg":3989.6,"ul":"good","necta":true},{"id":"lucasmalia","name":"Lucas Malia Secondary School","dist":41.67,"avg":19401.2,"ul":"good","necta":false}],"nn":[{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":36.16,"avg":3989.6},{"id":"nkowe","name":"Nkowe Secondary School","dist":48.44,"avg":4137.8},{"id":"mandera","name":"Mandera Girls Secondary School","dist":466.17,"avg":3147.3}]},{"id":"mahiwa","name":"Mahiwa Secondary School","sn":"Mahiwa","district":"Lindi DC","region":"Lindi","team":"Danny","lat":-10.3438,"lng":39.2675,"avg":1440.4,"rank":40,"hy":{"2023":1297.1,"2024":451.3,"2025":2572.6},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"mtama","name":"Mtama Secondary School","dist":13.05,"avg":6725.5,"ul":"good","necta":true},{"id":"nyegendi","name":"Nyegendi Secondary School","dist":21.96,"avg":2692.9,"ul":"good","necta":false},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":23.54,"avg":3989.6,"ul":"good","necta":true}],"nn":[{"id":"mtama","name":"Mtama Secondary School","dist":13.05,"avg":6725.5},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":23.54,"avg":3989.6},{"id":"nkowe","name":"Nkowe Secondary School","dist":38.91,"avg":4137.8}]},{"id":"nyegendi","name":"Nyegendi Secondary School","sn":"Nyegendi","district":"Lindi DC","region":"Lindi","team":"Danny","lat":-10.248,"lng":39.443,"avg":2692.9,"rank":65,"hy":{"2023":3202.2,"2024":3640.5,"2025":1236.1},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"mtama","name":"Mtama Secondary School","dist":8.99,"avg":6725.5,"ul":"good","necta":true},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":44.63,"avg":3989.6,"ul":"good","necta":true},{"id":"lucasmalia","name":"Lucas Malia Secondary School","dist":48.85,"avg":19401.2,"ul":"good","necta":false}],"nn":[{"id":"mtama","name":"Mtama Secondary School","dist":8.99,"avg":6725.5},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":44.63,"avg":3989.6},{"id":"nkowe","name":"Nkowe Secondary School","dist":54.88,"avg":4137.8}]},{"id":"kiwalala","name":"Kiwalala Secondary School","sn":"Kiwalala","district":"Lindi DC","region":"Lindi","team":"Danny","lat":-10.1892,"lng":39.531,"avg":1175.7,"rank":78,"hy":{"2023":1926.8,"2024":1086.3,"2025":514.0},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"nyegendi","name":"Nyegendi Secondary School","dist":11.64,"avg":2692.9,"ul":"good","necta":false},{"id":"mtama","name":"Mtama Secondary School","dist":20.63,"avg":6725.5,"ul":"good","necta":true},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":55.87,"avg":3989.6,"ul":"good","necta":true}],"nn":[{"id":"mtama","name":"Mtama Secondary School","dist":20.63,"avg":6725.5},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":55.87,"avg":3989.6},{"id":"nkowe","name":"Nkowe Secondary School","dist":64.25,"avg":4137.8}]},{"id":"engarenaibor","name":"Engarenaibor SS","sn":"Engarenaibor","district":"Longido DC","region":"Arusha","team":"Erick","lat":-2.533557895,"lng":36.49281035,"avg":691.2,"rank":106,"hy":{"2020":354.8,"2021":4082.6,"2022":2359.8,"2023":1957.9,"2024":115.4,"2025":0.3},"ul":"poor","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":31,"noData":false,"ng":[{"id":"longidoa","name":"Longido SS O-Level","dist":32.55,"avg":4384.0,"ul":"good","necta":true},{"id":"namanga","name":"Namanga SS","dist":33.6,"avg":12994.1,"ul":"good","necta":true},{"id":"tingatinga","name":"Tingatinga SS","dist":69.27,"avg":8281.5,"ul":"good","necta":true}],"nn":[{"id":"longidoa","name":"Longido SS O-Level","dist":32.55,"avg":4384.0},{"id":"namanga","name":"Namanga SS","dist":33.6,"avg":12994.1},{"id":"tingatinga","name":"Tingatinga SS","dist":69.27,"avg":8281.5}]},{"id":"namanga","name":"Namanga SS","sn":"Namanga","district":"Longido DC","region":"Arusha","team":"Erick","lat":-2.563853728,"lng":36.79375972,"avg":12994.1,"rank":107,"hy":{"2020":2170.2,"2021":8964.7,"2022":14647.5,"2023":14916.2,"2024":11072.1},"ul":"good","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":47,"noData":true,"ng":[{"id":"longidoa","name":"Longido SS O-Level","dist":21.3,"avg":4384.0,"ul":"good","necta":true},{"id":"tingatinga","name":"Tingatinga SS","dist":48.01,"avg":8281.5,"ul":"good","necta":true},{"id":"namwai","name":"Namwai Secondary School","dist":61.09,"avg":6893.6,"ul":"good","necta":false}],"nn":[{"id":"longidoa","name":"Longido SS O-Level","dist":21.3,"avg":4384.0},{"id":"engarenaibor","name":"Engarenaibor SS","dist":33.6,"avg":691.2},{"id":"tingatinga","name":"Tingatinga SS","dist":48.01,"avg":8281.5}]},{"id":"tingatinga","name":"Tingatinga SS","sn":"Tingatinga","district":"Longido DC","region":"Arusha","team":"Erick","lat":-2.971489,"lng":36.936318,"avg":8281.5,"rank":107,"hy":{"2020":0.2,"2021":71.1,"2022":1727.9,"2023":8329.6,"2024":8233.4},"ul":"good","necta":true,"nectaYears":["2022_F2","2023_F2","2024_F2","2025_F2","2025_F4"],"totalSat":183,"noData":true,"ng":[{"id":"namwai","name":"Namwai Secondary School","dist":15.0,"avg":6893.6,"ul":"good","necta":false},{"id":"losinoni","name":"Losinoni Secondary School","dist":24.24,"avg":10179.8,"ul":"good","necta":false},{"id":"sanyajuu","name":"Sanya Juu Secondary School","dist":29.97,"avg":5239.6,"ul":"good","necta":false}],"nn":[{"id":"nkoasenga","name":"Nkoasenga Secondary School","dist":31.25,"avg":814.0},{"id":"longidoa","name":"Longido SS O-Level","dist":36.74,"avg":4384.0},{"id":"ngiresi","name":"Ngiresi Secondary School","dist":46.41,"avg":781.0}]},{"id":"longidoa","name":"Longido SS O-Level","sn":"LongidoA","district":"Longido DC","region":"Arusha","team":"Erick","lat":-2.734231082,"lng":36.70610581,"avg":4384.0,"rank":107,"hy":{"2020":2259.5,"2021":8984.5,"2022":3740.1,"2023":5005.4,"2024":3762.6},"ul":"good","necta":true,"nectaYears":["2018_F2","2019_F2","2020_F2","2021_F2","2022_F2","2023_F2","2024_F2","2025_F2","2018_F4","2019_F4","2020_F4","2021_F4","2022_F4","2023_F4","2024_F4","2025_F4"],"totalSat":558,"noData":true,"ng":[{"id":"namanga","name":"Namanga SS","dist":21.3,"avg":12994.1,"ul":"good","necta":true},{"id":"tingatinga","name":"Tingatinga SS","dist":36.74,"avg":8281.5,"ul":"good","necta":true},{"id":"losinoni","name":"Losinoni Secondary School","dist":44.66,"avg":10179.8,"ul":"good","necta":false}],"nn":[{"id":"namanga","name":"Namanga SS","dist":21.3,"avg":12994.1},{"id":"engarenaibor","name":"Engarenaibor SS","dist":32.55,"avg":691.2},{"id":"tingatinga","name":"Tingatinga SS","dist":36.74,"avg":8281.5}]},{"id":"enduimet","name":"Enduimet SS","sn":"Enduimet","district":"Longido DC","region":"Arusha","team":"Erick","lat":-2.859053,"lng":37.204694,"avg":1781.0,"rank":107,"hy":{"2020":0.5,"2021":17.1,"2022":4.0,"2023":3414.3,"2024":147.7},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":true,"ng":[{"id":"namwai","name":"Namwai Secondary School","dist":28.01,"avg":6893.6,"ul":"good","necta":false},{"id":"tingatinga","name":"Tingatinga SS","dist":32.32,"avg":8281.5,"ul":"good","necta":true},{"id":"oshara","name":"Oshara Secondary School","dist":39.06,"avg":8793.0,"ul":"good","necta":false}],"nn":[{"id":"tingatinga","name":"Tingatinga SS","dist":32.32,"avg":8281.5},{"id":"nkoasenga","name":"Nkoasenga Secondary School","dist":54.32,"avg":814.0},{"id":"kiboriloni","name":"Kiboriloni Secondary School","dist":56.04,"avg":3496.0}]},{"id":"mitesa","name":"Mitesa Secondary School","sn":"Mitesa","district":"Masasi DC","region":"Mtwara","team":"Danny","lat":-10.8514,"lng":39.1207,"avg":2424.7,"rank":25,"hy":{"2024":6.9,"2025":4842.5},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"namalenga","name":"Namalenga Secondary School","dist":7.44,"avg":3329.3,"ul":"good","necta":false},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":54.27,"avg":3989.6,"ul":"good","necta":true},{"id":"lucasmalia","name":"Lucas Malia Secondary School","dist":67.31,"avg":19401.2,"ul":"good","necta":false}],"nn":[{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":54.27,"avg":3989.6},{"id":"mtama","name":"Mtama Secondary School","dist":67.9,"avg":6725.5},{"id":"nkowe","name":"Nkowe Secondary School","dist":75.14,"avg":4137.8}]},{"id":"namalenga","name":"Namalenga Secondary School","sn":"Namalenga","district":"Masasi DC","region":"Mtwara","team":"Danny","lat":-10.917888,"lng":39.113176,"avg":3329.3,"rank":27,"hy":{"2023":5039.4,"2024":391.1,"2025":4557.3},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"mitesa","name":"Mitesa Secondary School","dist":7.44,"avg":2424.7,"ul":"good","necta":false},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":61.51,"avg":3989.6,"ul":"good","necta":true},{"id":"lucasmalia","name":"Lucas Malia Secondary School","dist":74.42,"avg":19401.2,"ul":"good","necta":false}],"nn":[{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":61.51,"avg":3989.6},{"id":"mtama","name":"Mtama Secondary School","dist":75.02,"avg":6725.5},{"id":"nkowe","name":"Nkowe Secondary School","dist":82.11,"avg":4137.8}]},{"id":"ilembo","name":"Ilembo Secondary School (Ilunga)","sn":"Ilembo","district":"Mbeya DC","region":"Mbeya","team":"Juma","lat":-9.20766,"lng":33.34844,"avg":3003.0,"rank":37,"hy":{"2025":3003.0},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kinyala","name":"Kinyala Secondary School","dist":18.78,"avg":6183.2,"ul":"good","necta":false},{"id":"ikuti","name":"Ikuti Secondary School","dist":24.62,"avg":14379.7,"ul":"good","necta":false},{"id":"lupoto","name":"Lupoto Secondary School","dist":33.2,"avg":4409.4,"ul":"good","necta":false}],"nn":[{"id":"iyunga","name":"Iyunga Technical Secondary School","dist":32.2,"avg":1733.2},{"id":"mpuguso","name":"Mpuguso Secondary School","dist":36.3,"avg":1881.4},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":573.61,"avg":39152.1}]},{"id":"imezu","name":"Imezu Secondary School (Malama)","sn":"Imezu","district":"Mbeya DC","region":"Mbeya","team":"Juma","lat":-8.86682,"lng":33.62768,"avg":2435.8,"rank":44,"hy":{"2025":2435.8},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kinyala","name":"Kinyala Secondary School","dist":31.72,"avg":6183.2,"ul":"good","necta":false},{"id":"lupoto","name":"Lupoto Secondary School","dist":37.95,"avg":4409.4,"ul":"good","necta":false},{"id":"ilembo","name":"Ilembo Secondary School (Ilunga)","dist":48.75,"avg":3003.0,"ul":"good","necta":false}],"nn":[{"id":"iyunga","name":"Iyunga Technical Secondary School","dist":24.53,"avg":1733.2},{"id":"mpuguso","name":"Mpuguso Secondary School","dist":49.91,"avg":1881.4},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":525.54,"avg":39152.1}]},{"id":"iyunga","name":"Iyunga Technical Secondary School","sn":"IyungaTechnical","district":"Mbeya DC","region":"Mbeya","team":"Juma","lat":-8.92504,"lng":33.41226,"avg":1733.2,"rank":58,"hy":{"2025":1733.2},"ul":"moderate","necta":true,"nectaYears":["2025_F2"],"totalSat":170,"noData":false,"ng":[{"id":"kinyala","name":"Kinyala Secondary School","dist":23.5,"avg":6183.2,"ul":"good","necta":false},{"id":"imezu","name":"Imezu Secondary School (Malama)","dist":24.53,"avg":2435.8,"ul":"good","necta":false},{"id":"ilembo","name":"Ilembo Secondary School (Ilunga)","dist":32.2,"avg":3003.0,"ul":"good","necta":false}],"nn":[{"id":"mpuguso","name":"Mpuguso Secondary School","dist":51.2,"avg":1881.4},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":542.94,"avg":39152.1},{"id":"dareda","name":"Dareda Secondary School","dist":569.05,"avg":6845.9}]},{"id":"songwe","name":"Songwe Secondary School","sn":"Songwe","district":"Mbeya DC","region":"Mbeya","team":"Juma","lat":-8.94999,"lng":33.24224,"avg":1386.2,"rank":64,"hy":{"2025":1386.2},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"ilembo","name":"Ilembo Secondary School (Ilunga)","dist":30.93,"avg":3003.0,"ul":"good","necta":false},{"id":"kinyala","name":"Kinyala Secondary School","dist":33.56,"avg":6183.2,"ul":"good","necta":false},{"id":"imezu","name":"Imezu Secondary School (Malama)","dist":43.34,"avg":2435.8,"ul":"good","necta":false}],"nn":[{"id":"iyunga","name":"Iyunga Technical Secondary School","dist":18.88,"avg":1733.2},{"id":"mpuguso","name":"Mpuguso Secondary School","dist":61.29,"avg":1881.4},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":555.08,"avg":39152.1}]},{"id":"usongwe","name":"Usongwe Secondary School","sn":"Usongwe","district":"Mbeya DC","region":"Mbeya","team":"Juma","lat":-8.94006,"lng":33.34318,"avg":319.2,"rank":85,"hy":{"2025":319.2},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kinyala","name":"Kinyala Secondary School","dist":26.03,"avg":6183.2,"ul":"good","necta":false},{"id":"ilembo","name":"Ilembo Secondary School (Ilunga)","dist":29.76,"avg":3003.0,"ul":"good","necta":false},{"id":"imezu","name":"Imezu Secondary School (Malama)","dist":32.3,"avg":2435.8,"ul":"good","necta":false}],"nn":[{"id":"iyunga","name":"Iyunga Technical Secondary School","dist":7.77,"avg":1733.2},{"id":"mpuguso","name":"Mpuguso Secondary School","dist":54.32,"avg":1881.4},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":548.29,"avg":39152.1}]},{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","sn":"Nkoarusambu","district":"Meru DC","region":"Arusha","team":"James","lat":-3.3337902,"lng":36.77154,"avg":5833.6,"rank":18,"hy":{"2022":721.9,"2023":5371.8,"2024":6024.3,"2025":6104.8},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"muungano","name":"Muungano Secondary School","dist":9.9,"avg":2184.1,"ul":"good","necta":false},{"id":"themi","name":"Themi Secondary School","dist":10.15,"avg":2678.8,"ul":"good","necta":true},{"id":"kikwe","name":"Kikwe Secondary School","dist":12.2,"avg":2769.3,"ul":"good","necta":false}],"nn":[{"id":"ngiresi","name":"Ngiresi Secondary School","dist":4.1,"avg":781.0},{"id":"kimaseki","name":"Kimaseki SS","dist":7.34,"avg":1542.1},{"id":"moshono","name":"Moshono Secondary School","dist":7.76,"avg":1894.6}]},{"id":"muungano","name":"Muungano Secondary School","sn":"Muungano","district":"Meru DC","region":"Arusha","team":"James","lat":-3.366270039,"lng":36.85453855,"avg":2184.1,"rank":39,"hy":{"2021":1098.6,"2022":1963.5,"2023":1806.4,"2024":2052.0,"2025":2693.7},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kikwe","name":"Kikwe Secondary School","dist":7.23,"avg":2769.3,"ul":"good","necta":false},{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":9.9,"avg":5833.6,"ul":"good","necta":false},{"id":"mlangarini","name":"Mlangarini SS A-Level","dist":11.79,"avg":11151.9,"ul":"good","necta":true}],"nn":[{"id":"mlangarini","name":"Mlangarini SS A-Level","dist":11.79,"avg":11151.9},{"id":"ngiresi","name":"Ngiresi Secondary School","dist":13.69,"avg":781.0},{"id":"moshono","name":"Moshono Secondary School","dist":14.08,"avg":1894.6}]},{"id":"kikwe","name":"Kikwe Secondary School","sn":"Kikwe","district":"Meru DC","region":"Arusha","team":"James","lat":-3.426586,"lng":36.830218,"avg":2769.3,"rank":42,"hy":{"2022":433.6,"2023":2332.5,"2024":3454.9,"2025":2520.7},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"mlangarini","name":"Mlangarini SS A-Level","dist":5.42,"avg":11151.9,"ul":"good","necta":true},{"id":"muungano","name":"Muungano Secondary School","dist":7.23,"avg":2184.1,"ul":"good","necta":false},{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":12.2,"avg":5833.6,"ul":"good","necta":false}],"nn":[{"id":"mlangarini","name":"Mlangarini SS A-Level","dist":5.42,"avg":11151.9},{"id":"moshono","name":"Moshono Secondary School","dist":11.86,"avg":1894.6},{"id":"suye","name":"Suye SS","dist":13.1,"avg":719.9}]},{"id":"nkoanrua","name":"Nkoanrua Secondary School","sn":"Nkoanrua","district":"Meru DC","region":"Arusha","team":"James","lat":-3.3557375,"lng":36.7607344,"avg":1245.4,"rank":67,"hy":{"2022":1555.5,"2023":1653.3,"2024":976.6,"2025":1106.5},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":2.72,"avg":5833.6,"ul":"good","necta":false},{"id":"themi","name":"Themi Secondary School","dist":7.99,"avg":2678.8,"ul":"good","necta":true},{"id":"muungano","name":"Muungano Secondary School","dist":10.48,"avg":2184.1,"ul":"good","necta":false}],"nn":[{"id":"ngiresi","name":"Ngiresi Secondary School","dist":3.55,"avg":781.0},{"id":"moshono","name":"Moshono Secondary School","dist":5.11,"avg":1894.6},{"id":"kimaseki","name":"Kimaseki SS","dist":5.15,"avg":1542.1}]},{"id":"singisi","name":"Sing'isi Secondary School","sn":"Singisi","district":"Meru DC","region":"Arusha","team":"James","lat":-3.36489,"lng":36.80148,"avg":556.0,"rank":86,"hy":{"2021":4.0,"2022":1320.0,"2023":1097.3,"2024":266.1,"2025":304.7},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":4.8,"avg":5833.6,"ul":"good","necta":false},{"id":"muungano","name":"Muungano Secondary School","dist":5.89,"avg":2184.1,"ul":"good","necta":false},{"id":"kikwe","name":"Kikwe Secondary School","dist":7.57,"avg":2769.3,"ul":"good","necta":false}],"nn":[{"id":"ngiresi","name":"Ngiresi Secondary School","dist":8.02,"avg":781.0},{"id":"moshono","name":"Moshono Secondary School","dist":8.42,"avg":1894.6},{"id":"suye","name":"Suye SS","dist":9.29,"avg":719.9}]},{"id":"nkoasenga","name":"Nkoasenga Secondary School","sn":"Nkoasenga","district":"Meru DC","region":"Arusha","team":"James","lat":-3.2515572,"lng":36.9134925,"avg":814.0,"rank":91,"hy":{"2023":1052.6,"2024":1174.5,"2025":214.9},"ul":"poor","necta":true,"nectaYears":["2025_F2"],"totalSat":59,"noData":false,"ng":[{"id":"muungano","name":"Muungano Secondary School","dist":14.34,"avg":2184.1,"ul":"good","necta":false},{"id":"nuru","name":"Nuru Secondary School","dist":14.59,"avg":17429.5,"ul":"good","necta":false},{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":18.22,"avg":5833.6,"ul":"good","necta":false}],"nn":[{"id":"ngiresi","name":"Ngiresi Secondary School","dist":22.0,"avg":781.0},{"id":"moshono","name":"Moshono Secondary School","dist":25.53,"avg":1894.6},{"id":"kimaseki","name":"Kimaseki SS","dist":25.55,"avg":1542.1}]},{"id":"poli","name":"Poli Secondary School","sn":"Poli","district":"Meru DC","region":"Arusha","team":"James","lat":-3.362325436,"lng":36.80293277,"avg":325.0,"rank":97,"hy":{"2022":886.8,"2023":857.0,"2024":0.5,"2025":117.3},"ul":"poor","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"nkoarusambu","name":"Nkoarusambu Secondary School","dist":4.71,"avg":5833.6,"ul":"good","necta":false},{"id":"muungano","name":"Muungano Secondary School","dist":5.75,"avg":2184.1,"ul":"good","necta":false},{"id":"kikwe","name":"Kikwe Secondary School","dist":7.76,"avg":2769.3,"ul":"good","necta":false}],"nn":[{"id":"ngiresi","name":"Ngiresi Secondary School","dist":8.07,"avg":781.0},{"id":"moshono","name":"Moshono Secondary School","dist":8.67,"avg":1894.6},{"id":"suye","name":"Suye SS","dist":9.51,"avg":719.9}]},{"id":"engutoto","name":"Engutoto Secondary School","sn":"Engutoto","district":"Monduli DC","region":"Arusha","team":"Danny","lat":-3.3113607,"lng":36.4499275,"avg":3855.8,"rank":33,"hy":{"2022":1723.5,"2023":4807.6,"2024":3326.9,"2025":3432.9},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"irkisongo","name":"Irkisongo Secondary School","dist":1.47,"avg":5234.1,"ul":"good","necta":false},{"id":"einoti","name":"Einoti Secondary School","dist":12.64,"avg":27276.7,"ul":"good","necta":true},{"id":"mwandet","name":"Mwandet SS A-Level","dist":13.88,"avg":2110.7,"ul":"good","necta":true}],"nn":[{"id":"einoti","name":"Einoti Secondary School","dist":12.64,"avg":27276.7},{"id":"mwandet","name":"Mwandet SS A-Level","dist":13.88,"avg":2110.7},{"id":"mwandeta","name":"Mwandet SS A-Level","dist":13.88,"avg":279.5}]},{"id":"moita","name":"Moita Secondary School","sn":"Moita","district":"Monduli DC","region":"Arusha","team":"Janeth","lat":-3.560403,"lng":36.603365,"avg":2007.4,"rank":50,"hy":{"2023":1230.4,"2024":2807.9,"2025":1983.8},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kinana","name":"Kinana SS","dist":11.52,"avg":2380.6,"ul":"good","necta":true},{"id":"mkonoo","name":"Mkonoo Secondary School","dist":14.7,"avg":10573.3,"ul":"good","necta":false},{"id":"einoti","name":"Einoti Secondary School","dist":21.91,"avg":27276.7,"ul":"good","necta":true}],"nn":[{"id":"kinana","name":"Kinana SS","dist":11.52,"avg":2380.6},{"id":"naura","name":"Naura Secondary School ","dist":17.25,"avg":1679.1},{"id":"mateves","name":"Mateves Secondary School","dist":20.47,"avg":229.6}]},{"id":"irkisongo","name":"Irkisongo Secondary School","sn":"Irkisongo","district":"Monduli DC","region":"Arusha","team":"Janeth","lat":-3.29828,"lng":36.448268,"avg":5234.1,"rank":56,"hy":{"2022":4761.7,"2023":7918.7,"2024":5918.6,"2025":1865.0},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"engutoto","name":"Engutoto Secondary School","dist":1.47,"avg":3855.8,"ul":"good","necta":false},{"id":"mwandet","name":"Mwandet SS A-Level","dist":13.61,"avg":2110.7,"ul":"good","necta":true},{"id":"einoti","name":"Einoti Secondary School","dist":13.62,"avg":27276.7,"ul":"good","necta":true}],"nn":[{"id":"mwandet","name":"Mwandet SS A-Level","dist":13.61,"avg":2110.7},{"id":"mwandeta","name":"Mwandet SS A-Level","dist":13.61,"avg":279.5},{"id":"einoti","name":"Einoti Secondary School","dist":13.62,"avg":27276.7}]},{"id":"irkisale","name":"Irkisale Secondary School","sn":"Irkisale","district":"Monduli DC","region":"Arusha","team":"Janeth","lat":-3.764526518,"lng":36.41914064,"avg":1728.7,"rank":75,"hy":{"2023":2446.9,"2024":2061.6,"2025":677.4},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"moita","name":"Moita Secondary School","dist":30.55,"avg":2007.4,"ul":"good","necta":false},{"id":"kinana","name":"Kinana SS","dist":41.97,"avg":2380.6,"ul":"good","necta":true},{"id":"mkonoo","name":"Mkonoo Secondary School","dist":45.16,"avg":10573.3,"ul":"good","necta":false}],"nn":[{"id":"kinana","name":"Kinana SS","dist":41.97,"avg":2380.6},{"id":"einoti","name":"Einoti Secondary School","dist":45.9,"avg":27276.7},{"id":"mateves","name":"Mateves Secondary School","dist":46.56,"avg":229.6}]},{"id":"kiboriloni","name":"Kiboriloni Secondary School","sn":"Kiboriloni","district":"Moshi CC","region":"Kilimanjaro","team":"James","lat":-3.334249,"lng":37.372825,"avg":3496.0,"rank":34,"hy":{"2024":3617.4,"2025":3374.7},"ul":"good","necta":true,"nectaYears":["2025_F2"],"totalSat":14,"noData":false,"ng":[{"id":"oshara","name":"Oshara Secondary School","dist":33.1,"avg":8793.0,"ul":"good","necta":false},{"id":"sanyajuu","name":"Sanya Juu Secondary School","dist":35.36,"avg":5239.6,"ul":"good","necta":false},{"id":"nuru","name":"Nuru Secondary School","dist":38.14,"avg":17429.5,"ul":"good","necta":false}],"nn":[{"id":"nkoasenga","name":"Nkoasenga Secondary School","dist":51.81,"avg":814.0},{"id":"tingatinga","name":"Tingatinga SS","dist":63.05,"avg":8281.5},{"id":"mlangarini","name":"Mlangarini SS A-Level","dist":66.33,"avg":11151.9}]},{"id":"ifati","name":"Ifati Secondary School","sn":"Ifati","district":"Moshi DC","region":"Kilimanjaro","team":"James","lat":-3.2776958,"lng":37.4692556,"avg":1661.7,"rank":49,"hy":{"2024":1280.2,"2025":2043.2},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"kiboriloni","name":"Kiboriloni Secondary School","dist":12.42,"avg":3496.0,"ul":"good","necta":true},{"id":"oshara","name":"Oshara Secondary School","dist":41.07,"avg":8793.0,"ul":"good","necta":false},{"id":"sanyajuu","name":"Sanya Juu Secondary School","dist":43.5,"avg":5239.6,"ul":"good","necta":false}],"nn":[{"id":"kiboriloni","name":"Kiboriloni Secondary School","dist":12.42,"avg":3496.0},{"id":"nkoasenga","name":"Nkoasenga Secondary School","dist":61.77,"avg":814.0},{"id":"tingatinga","name":"Tingatinga SS","dist":68.27,"avg":8281.5}]},{"id":"lucasmalia","name":"Lucas Malia Secondary School","sn":"LucasMalia","district":"Ruangwa DC","region":"Lindi","team":"Danny","lat":-10.2585,"lng":38.9967,"avg":19401.2,"rank":2,"hy":{"2024":11933.3,"2025":26869.1},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"nkowe","name":"Nkowe Secondary School","dist":8.83,"avg":4137.8,"ul":"good","necta":true},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":13.66,"avg":3989.6,"ul":"good","necta":true},{"id":"mbekenyera","name":"Mbekenyera Secondary School","dist":30.17,"avg":4502.1,"ul":"good","necta":false}],"nn":[{"id":"nkowe","name":"Nkowe Secondary School","dist":8.83,"avg":4137.8},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":13.66,"avg":3989.6},{"id":"mtama","name":"Mtama Secondary School","dist":41.67,"avg":6725.5}]},{"id":"nkowe","name":"Nkowe Secondary School","sn":"Nkowe","district":"Ruangwa DC","region":"Lindi","team":"Danny","lat":-10.1984,"lng":38.944,"avg":4137.8,"rank":19,"hy":{"2024":2903.6,"2025":5371.9},"ul":"good","necta":true,"nectaYears":["2025_F2"],"totalSat":25,"noData":false,"ng":[{"id":"lucasmalia","name":"Lucas Malia Secondary School","dist":8.83,"avg":19401.2,"ul":"good","necta":false},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":22.33,"avg":3989.6,"ul":"good","necta":true},{"id":"mbekenyera","name":"Mbekenyera Secondary School","dist":23.22,"avg":4502.1,"ul":"good","necta":false}],"nn":[{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":22.33,"avg":3989.6},{"id":"mtama","name":"Mtama Secondary School","dist":48.44,"avg":6725.5},{"id":"mandera","name":"Mandera Girls Secondary School","dist":447.05,"avg":3147.3}]},{"id":"mbekenyera","name":"Mbekenyera Secondary School","sn":"Mbekenyera","district":"Ruangwa DC","region":"Lindi","team":"Danny","lat":-9.99,"lng":38.957,"avg":4502.1,"rank":20,"hy":{"2024":3700.1,"2025":5304.0},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"nkowe","name":"Nkowe Secondary School","dist":23.22,"avg":4137.8,"ul":"good","necta":true},{"id":"lucasmalia","name":"Lucas Malia Secondary School","dist":30.17,"avg":19401.2,"ul":"good","necta":false},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":43.32,"avg":3989.6,"ul":"good","necta":true}],"nn":[{"id":"nkowe","name":"Nkowe Secondary School","dist":23.22,"avg":4137.8},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":43.32,"avg":3989.6},{"id":"mtama","name":"Mtama Secondary School","dist":57.0,"avg":6725.5}]},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","sn":"HawaMchopa","district":"Ruangwa DC","region":"Lindi","team":"Danny","lat":-10.367786,"lng":39.053688,"avg":3989.6,"rank":23,"hy":{"2024":2890.3,"2025":5089.0},"ul":"good","necta":true,"nectaYears":["2025_F2"],"totalSat":14,"noData":false,"ng":[{"id":"lucasmalia","name":"Lucas Malia Secondary School","dist":13.66,"avg":19401.2,"ul":"good","necta":false},{"id":"nkowe","name":"Nkowe Secondary School","dist":22.33,"avg":4137.8,"ul":"good","necta":true},{"id":"mtama","name":"Mtama Secondary School","dist":36.16,"avg":6725.5,"ul":"good","necta":true}],"nn":[{"id":"nkowe","name":"Nkowe Secondary School","dist":22.33,"avg":4137.8},{"id":"mtama","name":"Mtama Secondary School","dist":36.16,"avg":6725.5},{"id":"mandera","name":"Mandera Girls Secondary School","dist":467.4,"avg":3147.3}]},{"id":"ruangwa","name":"Ruangwa Secondary School","sn":"Ruangwa","district":"Ruangwa DC","region":"Lindi","team":"Danny","lat":-10.0524,"lng":38.9399,"avg":1243.5,"rank":53,"hy":{"2024":524.9,"2025":1962.2},"ul":"moderate","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"mbekenyera","name":"Mbekenyera Secondary School","dist":7.19,"avg":4502.1,"ul":"good","necta":false},{"id":"nkowe","name":"Nkowe Secondary School","dist":16.24,"avg":4137.8,"ul":"good","necta":true},{"id":"lucasmalia","name":"Lucas Malia Secondary School","dist":23.75,"avg":19401.2,"ul":"good","necta":false}],"nn":[{"id":"nkowe","name":"Nkowe Secondary School","dist":16.24,"avg":4137.8},{"id":"hawamchopa","name":"Hawa Mchopa Secondary School","dist":37.21,"avg":3989.6},{"id":"mtama","name":"Mtama Secondary School","dist":54.78,"avg":6725.5}]},{"id":"ikuti","name":"Ikuti Secondary School","sn":"Ikuti","district":"Rungwe DC","region":"Mbeya","team":"Juma","lat":-9.313459455,"lng":33.54553821,"avg":14379.7,"rank":7,"hy":{"2025":14379.7},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"lupoto","name":"Lupoto Secondary School","dist":16.52,"avg":4409.4,"ul":"good","necta":false},{"id":"kinyala","name":"Kinyala Secondary School","dist":22.22,"avg":6183.2,"ul":"good","necta":false},{"id":"ilembo","name":"Ilembo Secondary School (Ilunga)","dist":24.62,"avg":3003.0,"ul":"good","necta":false}],"nn":[{"id":"mpuguso","name":"Mpuguso Secondary School","dist":12.67,"avg":1881.4},{"id":"iyunga","name":"Iyunga Technical Secondary School","dist":45.6,"avg":1733.2},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":573.6,"avg":39152.1}]},{"id":"kinyala","name":"Kinyala Secondary School","sn":"Kinyala","district":"Rungwe DC","region":"Mbeya","team":"Juma","lat":-9.12008,"lng":33.4947,"avg":6183.2,"rank":17,"hy":{"2025":6183.2},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"ilembo","name":"Ilembo Secondary School (Ilunga)","dist":18.78,"avg":3003.0,"ul":"good","necta":false},{"id":"lupoto","name":"Lupoto Secondary School","dist":19.7,"avg":4409.4,"ul":"good","necta":false},{"id":"ikuti","name":"Ikuti Secondary School","dist":22.22,"avg":14379.7,"ul":"good","necta":false}],"nn":[{"id":"iyunga","name":"Iyunga Technical Secondary School","dist":23.5,"avg":1733.2},{"id":"mpuguso","name":"Mpuguso Secondary School","dist":28.29,"avg":1881.4},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":557.25,"avg":39152.1}]},{"id":"lupoto","name":"Lupoto Secondary School","sn":"Lupoto","district":"Rungwe DC","region":"Mbeya","team":"Juma","lat":-9.20732,"lng":33.6509,"avg":4409.4,"rank":29,"hy":{"2025":4409.4},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"ikuti","name":"Ikuti Secondary School","dist":16.52,"avg":14379.7,"ul":"good","necta":false},{"id":"kinyala","name":"Kinyala Secondary School","dist":19.7,"avg":6183.2,"ul":"good","necta":false},{"id":"ilembo","name":"Ilembo Secondary School (Ilunga)","dist":33.2,"avg":3003.0,"ul":"good","necta":false}],"nn":[{"id":"mpuguso","name":"Mpuguso Secondary School","dist":11.97,"avg":1881.4},{"id":"iyunga","name":"Iyunga Technical Secondary School","dist":40.89,"avg":1733.2},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":557.83,"avg":39152.1}]},{"id":"mpuguso","name":"Mpuguso Secondary School","sn":"Mpuguso","district":"Rungwe DC","region":"Mbeya","team":"Juma","lat":-9.31448,"lng":33.661,"avg":1881.4,"rank":55,"hy":{"2025":1881.4},"ul":"moderate","necta":true,"nectaYears":["2025_F2","2025_F4"],"totalSat":81,"noData":false,"ng":[{"id":"lupoto","name":"Lupoto Secondary School","dist":11.97,"avg":4409.4,"ul":"good","necta":false},{"id":"ikuti","name":"Ikuti Secondary School","dist":12.67,"avg":14379.7,"ul":"good","necta":false},{"id":"kinyala","name":"Kinyala Secondary School","dist":28.29,"avg":6183.2,"ul":"good","necta":false}],"nn":[{"id":"iyunga","name":"Iyunga Technical Secondary School","dist":51.2,"avg":1733.2},{"id":"amaniabeidkarume","name":"Amani Abeid Karume Secondary School","dist":568.0,"avg":39152.1},{"id":"nkowe","name":"Nkowe Secondary School","dist":587.22,"avg":4137.8}]},{"id":"nuru","name":"Nuru Secondary School","sn":"Nuru","district":"Siha DC","region":"Kilimanjaro","team":"James","lat":-3.2353,"lng":37.0439,"avg":17429.5,"rank":4,"hy":{"2025":17429.5},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"sanyajuu","name":"Sanya Juu Secondary School","dist":6.44,"avg":5239.6,"ul":"good","necta":false},{"id":"oshara","name":"Oshara Secondary School","dist":8.33,"avg":8793.0,"ul":"good","necta":false},{"id":"namwai","name":"Namwai Secondary School","dist":20.26,"avg":6893.6,"ul":"good","necta":false}],"nn":[{"id":"nkoasenga","name":"Nkoasenga Secondary School","dist":14.59,"avg":814.0},{"id":"tingatinga","name":"Tingatinga SS","dist":31.67,"avg":8281.5},{"id":"ngiresi","name":"Ngiresi Secondary School","dist":36.14,"avg":781.0}]},{"id":"oshara","name":"Oshara Secondary School","sn":"Oshara","district":"Siha DC","region":"Kilimanjaro","team":"James","lat":-3.19684,"lng":37.1083,"avg":8793.0,"rank":10,"hy":{"2025":8793.0},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"sanyajuu","name":"Sanya Juu Secondary School","dist":2.46,"avg":5239.6,"ul":"good","necta":false},{"id":"nuru","name":"Nuru Secondary School","dist":8.33,"avg":17429.5,"ul":"good","necta":false},{"id":"namwai","name":"Namwai Secondary School","dist":17.51,"avg":6893.6,"ul":"good","necta":false}],"nn":[{"id":"nkoasenga","name":"Nkoasenga Secondary School","dist":22.47,"avg":814.0},{"id":"tingatinga","name":"Tingatinga SS","dist":31.5,"avg":8281.5},{"id":"kiboriloni","name":"Kiboriloni Secondary School","dist":33.1,"avg":3496.0}]},{"id":"namwai","name":"Namwai Secondary School","sn":"Namwai","district":"Siha DC","region":"Kilimanjaro","team":"James","lat":-3.05311,"lng":37.0439,"avg":6893.6,"rank":13,"hy":{"2025":6893.6},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"tingatinga","name":"Tingatinga SS","dist":15.0,"avg":8281.5,"ul":"good","necta":true},{"id":"sanyajuu","name":"Sanya Juu Secondary School","dist":16.53,"avg":5239.6,"ul":"good","necta":false},{"id":"oshara","name":"Oshara Secondary School","dist":17.51,"avg":8793.0,"ul":"good","necta":false}],"nn":[{"id":"tingatinga","name":"Tingatinga SS","dist":15.0,"avg":8281.5},{"id":"nkoasenga","name":"Nkoasenga Secondary School","dist":26.39,"avg":814.0},{"id":"ngiresi","name":"Ngiresi Secondary School","dist":46.64,"avg":781.0}]},{"id":"sanyajuu","name":"Sanya Juu Secondary School","sn":"SanyaJuu","district":"Siha DC","region":"Kilimanjaro","team":"James","lat":-3.19561,"lng":37.08618,"avg":5239.6,"rank":22,"hy":{"2025":5239.6},"ul":"good","necta":false,"nectaYears":[],"totalSat":0,"noData":false,"ng":[{"id":"oshara","name":"Oshara Secondary School","dist":2.46,"avg":8793.0,"ul":"good","necta":false},{"id":"nuru","name":"Nuru Secondary School","dist":6.44,"avg":17429.5,"ul":"good","necta":false},{"id":"namwai","name":"Namwai Secondary School","dist":16.53,"avg":6893.6,"ul":"good","necta":false}],"nn":[{"id":"nkoasenga","name":"Nkoasenga Secondary School","dist":20.16,"avg":814.0},{"id":"tingatinga","name":"Tingatinga SS","dist":29.97,"avg":8281.5},{"id":"kiboriloni","name":"Kiboriloni Secondary School","dist":35.36,"avg":3496.0}]}];
+const GOOD=2000, POOR=1000;
+
+const fmtH = v => v==null?'–':v>=1000?(v/1000).toFixed(1)+'k hrs':Math.round(v)+' hrs';
+const fmtHs = v => v==null?'–':v>=1000?(v/1000).toFixed(1)+'k':Math.round(v)+'';
+const ulC  = u => u==='good'?'good':u==='poor'?'poor':'mod';
+const ulL  = u => u==='good'?'Good ≥2000h':u==='poor'?'Poor <1000h':'Moderate';
+const MAX_AVG = Math.max(...S.map(s=>s.avg||0));
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+function showTab(id, btn){
+  document.querySelectorAll('.tab-content').forEach(el=>el.style.display='none');
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).style.display='';
+  btn.classList.add('active');
+  if(id==='t3') buildOverview();
+}
+
+// ── STAT STRIPS ───────────────────────────────────────────────────────────────
+function mkStat(num,lbl,sub,accent){
+  return `<div class="stat-box" style="--accent:${accent}">
+    <div class="stat-n">${num}</div>
+    <div class="stat-l">${lbl}</div>
+    <div class="stat-s">${sub}</div>
+  </div>`;
+}
+
+function buildSS1(){
+  const poor=S.filter(s=>s.ul==='poor').length;
+  const mod=S.filter(s=>s.ul==='moderate').length;
+  const good=S.filter(s=>s.ul==='good').length;
+  const nd=S.filter(s=>s.noData).length;
+  document.getElementById('ss1').innerHTML =
+    mkStat(poor,'Poor Usage','<1000 student hrs avg/yr','#dc2626')+
+    mkStat(mod,'Moderate','1000–2000 hrs avg/yr','#d97706')+
+    mkStat(good,'Good Usage','≥2000 hrs avg/yr','#059669')+
+    mkStat(nd,'No 2025 Data','System offline / no data','#94a3b8');
+  document.getElementById('nc1').textContent = poor+' poor usage';
+}
+function buildSS2(){
+  const ng=S.filter(s=>!s.necta&&s.ul==='good').length;
+  const nm=S.filter(s=>!s.necta&&s.ul==='moderate'&&s.avg>=1000).length;
+  const hn=S.filter(s=>s.necta).length;
+  const tot=S.reduce((a,s)=>a+s.totalSat,0);
+  document.getElementById('ss2').innerHTML =
+    mkStat(ng,'No NECTA + Good','High usage — ready to sit','#4f46e5')+
+    mkStat(nm,'No NECTA + Moderate','≥1000h avg — could prepare','#d97706')+
+    mkStat(hn,'Has NECTA','Benchmark ICT exam schools','#059669')+
+    mkStat(tot.toLocaleString(),'Total Students Sat','All years & forms combined','#0d9488');
+  document.getElementById('nc2').textContent = ng+' no NECTA + good';
+}
+function buildSS3(){
+  const tot=S.reduce((a,s)=>a+Object.values(s.hy).reduce((b,v)=>b+(v||0),0),0);
+  const hn=S.filter(s=>s.necta).length;
+  document.getElementById('ss3').innerHTML =
+    mkStat(S.length,'Total Schools','Across 11 regions','#0d9488')+
+    mkStat(S.filter(s=>s.ul==='poor').length,'Poor Usage','Intervention needed','#dc2626')+
+    mkStat(hn,'Sat NECTA ICT','Out of '+S.length+' schools','#059669')+
+    mkStat(Math.round(tot/1000)+'k','Total Student Hours','Across all recorded years','#4f46e5');
+}
+
+// ── USAGE BAR ─────────────────────────────────────────────────────────────────
+function uBar(avg, ul){
+  const pct = Math.min(100, Math.round((avg||0)/MAX_AVG*100));
+  const col = ul==='good'?'#059669':ul==='poor'?'#dc2626':'#d97706';
+  return `<div class="ubar-wrap">
+    <div class="ubar"><div class="ubar-fill" style="width:${pct}%;background:${col}"></div></div>
+    <span class="ubar-val" style="color:${col}">${fmtHs(avg)}</span>
+  </div>`;
+}
+
+// ── HISTORY MINI BARS ─────────────────────────────────────────────────────────
+function histBars(hy){
+  const years=['2019','2020','2021','2022','2023','2024','2025'];
+  const vals = years.map(y=>hy[y]||0);
+  const mx = Math.max(...vals,1);
+  const bars = years.map((y,i)=>{
+    const h = Math.round(vals[i]/mx*36);
+    const c = vals[i]>=GOOD?'#059669':vals[i]<=POOR&&vals[i]>0?'#dc2626':vals[i]>0?'#d97706':'#e2e8f0';
+    return `<div class="hist-bar" style="height:${Math.max(2,h)}px;background:${c}"><span>${fmtHs(vals[i])}</span></div>`;
+  });
+  const labels = years.map(y=>`<div class="hist-lbl">${y.slice(2)}</div>`);
+  return `<div class="hist-bars">${bars.join('')}</div><div class="hist-labels">${labels.join('')}</div>`;
+}
+
+// ── EXPAND ROW HTML ───────────────────────────────────────────────────────────
+function expandHTML(s, view){
+  const nearGood = s.ng.slice(0,3);
+  const nectaNeighbors = s.nn.filter(n=>S.find(x=>x.id===n.id)?.necta).slice(0,3);
+  let cards='';
+
+  // Usage history
+  cards+=`<div class="exp-card">
+    <h4>📊 Usage History (Student Hours/Year)</h4>
+    ${histBars(s.hy)}
+  </div>`;
+
+  // Nearest good-usage (for poor schools)
+  if(s.ul==='poor' && nearGood.length){
+    const rows = nearGood.map(n=>`<div class="nb-row">
+      <div><div class="nb-n">${n.name}</div><div class="nb-d">${n.dist} km away${n.necta?' · NECTA ✓':''}</div></div>
+      <span class="nb-v" style="color:#059669">${fmtHs(n.avg)}h</span>
+    </div>`).join('');
+    cards+=`<div class="exp-card">
+      <h4>🔴 Nearest High-Usage Schools</h4>
+      ${rows}
+      <div class="insight-box red" style="margin-top:.6rem">Gap to closest good-usage school: <strong>${fmtH(nearGood[0].avg - s.avg)}/yr</strong>. Cross-visit & mentorship recommended.</div>
+    </div>`;
+  }
+
+  // Nearest NECTA schools (for non-NECTA schools with high usage)
+  if(!s.necta && s.avg>=1000 && nectaNeighbors.length){
+    const rows = nectaNeighbors.map(n=>`<div class="nb-row">
+      <div><div class="nb-n">${n.name}</div><div class="nb-d">${n.dist} km away</div></div>
+      <span class="nb-v" style="color:#4f46e5">${fmtHs(n.avg)}h</span>
+    </div>`).join('');
+    cards+=`<div class="exp-card">
+      <h4>🟣 Nearest NECTA-Sitting Schools</h4>
+      ${rows}
+      <div class="insight-box indigo" style="margin-top:.6rem">With <strong>${fmtH(s.avg)}</strong> avg usage, this school has the lab capacity. NECTA registration is within reach.</div>
+    </div>`;
+  }
+
+  // Status summary
+  let sumClass='green', sumMsg='';
+  if(s.ul==='poor') { sumClass='red'; sumMsg=`Poor usage (${fmtH(s.avg)}/yr). Nearest good-usage school: <strong>${nearGood[0]?.name||'—'}</strong> (${nearGood[0]?.dist||'?'} km, ${fmtHs(nearGood[0]?.avg||0)}h). Immediate outreach recommended.`; }
+  else if(!s.necta&&s.avg>=GOOD) { sumClass='indigo'; sumMsg=`Strong lab usage (${fmtH(s.avg)}/yr) but no ICT NECTA participation. ${nectaNeighbors.length?`Closest NECTA school is <strong>${nectaNeighbors[0].name}</strong> (${nectaNeighbors[0].dist} km).`:''} Enrolment for ICT exam is strongly recommended.`; }
+  else if(s.necta) { sumClass='green'; sumMsg=`Participating in ICT NECTA (${s.nectaYears.length} sessions, ${s.totalSat} students sat). Usage: ${fmtH(s.avg)}/yr.`; }
+  else { sumClass='amber'; sumMsg=`Moderate usage (${fmtH(s.avg)}/yr). No NECTA yet. Continued mentorship and usage growth needed before sitting the exam.`; }
+  cards+=`<div class="exp-card">
+    <h4>💡 Recommendation</h4>
+    <div class="insight-box ${sumClass}">${sumMsg}</div>
+    ${s.necta?`<div style="margin-top:.5rem;font-size:.7rem;color:var(--muted)">Sessions: ${s.nectaYears.join(' · ')||'—'}</div>`:''}
+  </div>`;
+
+  return `<div class="expand-grid">${cards}</div>`;
+}
+
+// ── TABLE 1: POOR USAGE ───────────────────────────────────────────────────────
+let f1='all', s1col='avg', s1dir=1;
+let openRow1=null;
+
+function getItems1(){
+  let items=S.slice();
+  if(f1==='poor') items=items.filter(s=>s.ul==='poor');
+  else if(f1==='moderate') items=items.filter(s=>s.ul==='moderate');
+  else if(f1==='good') items=items.filter(s=>s.ul==='good');
+  else if(f1==='poor-necta') items=items.filter(s=>s.ul==='poor'&&s.necta);
+  else if(f1==='moderate-necta') items=items.filter(s=>s.ul==='moderate'&&s.necta);
+  const tm=(document.getElementById('tf1')?.value||'all');
+  if(tm!=='all') items=items.filter(s=>s.team===tm);
+  const q=(document.getElementById('sq1')?.value||'').toLowerCase();
+  if(q) items=items.filter(s=>s.name.toLowerCase().includes(q)||s.district.toLowerCase().includes(q)||s.region.toLowerCase().includes(q));
+  items.sort((a,b)=>{
+    let av,bv;
+    if(s1col==='name'){av=a.name;bv=b.name;}
+    else if(s1col==='district'){av=a.district;bv=b.district;}
+    else if(s1col==='region'){av=a.region;bv=b.region;}
+    else if(s1col==='avg'){av=a.avg||0;bv=b.avg||0;}
+    else if(s1col==='rank'){av=a.rank===999?9999:a.rank;bv=b.rank===999?9999:b.rank;}
+    else if(s1col==='nearestGood'){av=a.ng[0]?.dist??9999;bv=b.ng[0]?.dist??9999;}
+    else {av=0;bv=0;}
+    return typeof av==='string'?av.localeCompare(bv)*s1dir:(av-bv)*s1dir;
+  });
+  return items;
+}
+
+function sort1(col){
+  if(s1col===col) s1dir*=-1; else{s1col=col;s1dir=1;}
+  document.querySelectorAll('[id^="si1-"]').forEach(el=>{el.textContent='↕';el.parentElement.classList.remove('sorted');});
+  const el=document.getElementById('si1-'+col);
+  if(el){el.textContent=s1dir===1?'↑':'↓';el.parentElement.classList.add('sorted');}
+  render1();
+}
+
+function applyF1(val,btn){
+  f1=val;
+  document.querySelectorAll('#t1 .fbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  openRow1=null;
+  render1();
+}
+
+function render1(){
+  const items=getItems1();
+  const tbody=document.getElementById('tb1');
+  const em=document.getElementById('em1');
+  document.getElementById('tc1').textContent=items.length+' school'+(items.length!==1?'s':'');
+  if(!items.length){tbody.innerHTML='';em.style.display='';return;}
+  em.style.display='none';
+  tbody.innerHTML=items.map((s,i)=>{
+    const ng=s.ng[0];
+    const clas=ulC(s.ul);
+    return `<tr onclick="toggleRow1('${s.id}')" id="tr1-${s.id}">
+      <td style="text-align:center;font-family:'Lato',sans-serif;font-weight:700;font-size:.75rem;color:var(--muted);width:36px">${i+1}</td>
+      <td>
+        <div class="td-name">${s.name}</div>
+        <div class="td-sub">${s.district} · ${s.region}</div>
+      </td>
+      <td class="hide-sm"><div style="font-size:.78rem">${s.district}</div></td>
+      <td class="hide-sm"><div style="font-size:.78rem">${s.region}</div></td>
+      <td>${uBar(s.avg,s.ul)}</td>
+      <td><span class="badge badge-${clas}">${ulL(s.ul)}</span>${s.noData?'<br><span class="badge badge-none" style="margin-top:2px">No 2025</span>':''}</td>
+      <td class="hide-sm">${s.necta?'<span class="badge badge-necta">NECTA ✓</span>':'<span class="badge badge-none">No exam</span>'}</td>
+      <td class="hide-sm">${ng?`<div style="font-size:.76rem;font-weight:600;color:#059669">${ng.name.length>22?ng.name.slice(0,22)+'…':ng.name}</div><div style="font-size:.67rem;color:var(--muted)">${ng.dist} km · ${fmtHs(ng.avg)}h</div>`:'<span style="color:var(--muted);font-size:.75rem">—</span>'}</td>
+      <td class="hide-sm"><span style="font-size:.75rem;color:var(--muted)">${s.team}</span></td>
+    </tr>
+    <tr class="expand-row" id="er1-${s.id}"><td colspan="10"><div class="expand-inner" id="ei1-${s.id}">
+      <span class="expand-close" onclick="event.stopPropagation();closeRow1('${s.id}')">✕ Close</span>
+      ${expandHTML(s,1)}
+    </div></td></tr>`;
+  }).join('');
+}
+
+function toggleRow1(id){
+  if(openRow1===id){closeRow1(id);return;}
+  if(openRow1) closeRow1(openRow1);
+  openRow1=id;
+  document.getElementById('ei1-'+id)?.classList.add('open');
+  document.getElementById('tr1-'+id)?.classList.add('expanded');
+  setTimeout(()=>document.getElementById('er1-'+id)?.scrollIntoView({block:'nearest',behavior:'smooth'}),50);
+}
+function closeRow1(id){
+  document.getElementById('ei1-'+id)?.classList.remove('open');
+  document.getElementById('tr1-'+id)?.classList.remove('expanded');
+  if(openRow1===id) openRow1=null;
+}
+
+// ── TABLE 2: NO NECTA ─────────────────────────────────────────────────────────
+let f2='all', s2col='avg', s2dir=-1;
+let openRow2=null;
+
+function readiness(s){
+  if(s.avg>=GOOD) return {cls:'badge-necta',txt:'Ready'};
+  if(s.avg>=1000) return {cls:'badge-mod',txt:'Preparing'};
+  return {cls:'badge-none',txt:'Early'};
+}
+
+function getItems2(){
+  let items=S.slice();
+  if(f2==='no-good') items=items.filter(s=>!s.necta&&s.ul==='good');
+  else if(f2==='no-mod') items=items.filter(s=>!s.necta&&s.ul==='moderate'&&s.avg>=1000);
+  else if(f2==='has') items=items.filter(s=>s.necta);
+  const tm=(document.getElementById('tf2')?.value||'all');
+  if(tm!=='all') items=items.filter(s=>s.team===tm);
+  const q=(document.getElementById('sq2')?.value||'').toLowerCase();
+  if(q) items=items.filter(s=>s.name.toLowerCase().includes(q)||s.district.toLowerCase().includes(q)||s.region.toLowerCase().includes(q));
+  items.sort((a,b)=>{
+    let av,bv;
+    if(s2col==='name'){av=a.name;bv=b.name;}
+    else if(s2col==='district'){av=a.district;bv=b.district;}
+    else if(s2col==='region'){av=a.region;bv=b.region;}
+    else if(s2col==='avg'){av=a.avg||0;bv=b.avg||0;}
+    else if(s2col==='sessions'){av=a.nectaYears.length;bv=b.nectaYears.length;}
+    else if(s2col==='nearestNecta'){
+      const an=a.nn.find(n=>S.find(x=>x.id===n.id)?.necta);
+      const bn=b.nn.find(n=>S.find(x=>x.id===n.id)?.necta);
+      av=an?.dist??9999; bv=bn?.dist??9999;
+    }
+    else{av=0;bv=0;}
+    return typeof av==='string'?av.localeCompare(bv)*s2dir:(av-bv)*s2dir;
+  });
+  return items;
+}
+
+function sort2(col){
+  if(s2col===col) s2dir*=-1; else{s2col=col;s2dir=-1;}
+  document.querySelectorAll('[id^="si2-"]').forEach(el=>{el.textContent='↕';el.parentElement.classList.remove('sorted');});
+  const el=document.getElementById('si2-'+col);
+  if(el){el.textContent=s2dir===1?'↑':'↓';el.parentElement.classList.add('sorted');}
+  render2();
+}
+
+function applyF2(val,btn){
+  f2=val;
+  document.querySelectorAll('#t2 .fbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  openRow2=null;
+  render2();
+}
+
+function render2(){
+  const items=getItems2();
+  const tbody=document.getElementById('tb2');
+  const em=document.getElementById('em2');
+  document.getElementById('tc2').textContent=items.length+' school'+(items.length!==1?'s':'');
+  if(!items.length){tbody.innerHTML='';em.style.display='';return;}
+  em.style.display='none';
+  tbody.innerHTML=items.map((s,i)=>{
+    const nn=s.nn.find(n=>S.find(x=>x.id===n.id)?.necta);
+    const r=readiness(s);
+    return `<tr onclick="toggleRow2('${s.id}')" id="tr2-${s.id}">
+      <td style="text-align:center;font-family:'Lato',sans-serif;font-weight:700;font-size:.75rem;color:var(--muted);width:36px">${i+1}</td>
+      <td>
+        <div class="td-name">${s.name}</div>
+        <div class="td-sub">${s.district} · ${s.region}</div>
+      </td>
+      <td class="hide-sm"><div style="font-size:.78rem">${s.district}</div></td>
+      <td class="hide-sm"><div style="font-size:.78rem">${s.region}</div></td>
+      <td>${uBar(s.avg,s.ul)}</td>
+      <td>${s.necta?`<span class="badge badge-good">✓ NECTA</span><div style="font-size:.65rem;color:var(--muted);margin-top:2px">${s.nectaYears.length} session(s)</div>`:`<span class="badge badge-necta">✗ No NECTA</span>`}</td>
+      <td class="hide-sm">${nn?`<div style="font-size:.76rem;font-weight:600;color:#4f46e5">${nn.name.length>22?nn.name.slice(0,22)+'…':nn.name}</div><div style="font-size:.67rem;color:var(--muted)">${nn.dist} km away</div>`:'<span style="color:var(--muted);font-size:.75rem">—</span>'}</td>
+      <td class="hide-sm">${s.necta?'<span class="badge badge-good">Enrolled</span>':`<span class="badge ${r.cls}">${r.txt}</span>`}</td>
+      <td class="hide-sm"><span style="font-size:.75rem;color:var(--muted)">${s.team}</span></td>
+    </tr>
+    <tr class="expand-row" id="er2-${s.id}"><td colspan="10"><div class="expand-inner" id="ei2-${s.id}">
+      <span class="expand-close" onclick="event.stopPropagation();closeRow2('${s.id}')">✕ Close</span>
+      ${expandHTML(s,2)}
+    </div></td></tr>`;
+  }).join('');
+}
+
+function toggleRow2(id){
+  if(openRow2===id){closeRow2(id);return;}
+  if(openRow2) closeRow2(openRow2);
+  openRow2=id;
+  document.getElementById('ei2-'+id)?.classList.add('open');
+  document.getElementById('tr2-'+id)?.classList.add('expanded');
+  setTimeout(()=>document.getElementById('er2-'+id)?.scrollIntoView({block:'nearest',behavior:'smooth'}),50);
+}
+function closeRow2(id){
+  document.getElementById('ei2-'+id)?.classList.remove('open');
+  document.getElementById('tr2-'+id)?.classList.remove('expanded');
+  if(openRow2===id) openRow2=null;
+}
+
+// ── OVERVIEW ──────────────────────────────────────────────────────────────────
+let ovBuilt=false, ovC={};
+function buildOverview(){
+  if(ovBuilt) return; ovBuilt=true;
+  buildSS3();
+
+  const years=['2019','2020','2021','2022','2023','2024','2025'];
+  const yrTot=years.map(y=>Math.round(S.reduce((a,s)=>a+(s.hy[y]||0),0)));
+  const yrCnt=years.map(y=>S.filter(s=>(s.hy[y]||0)>0).length);
+  const poor=S.filter(s=>s.ul==='poor').length;
+  const mod=S.filter(s=>s.ul==='moderate').length;
+  const good=S.filter(s=>s.ul==='good').length;
+
+  const regions={};
+  S.forEach(s=>{
+    if(!regions[s.region]) regions[s.region]={good:0,mod:0,poor:0};
+    if(s.ul==='moderate') regions[s.region].mod++;
+    else regions[s.region][s.ul]++;
+  });
+  const rKeys=Object.keys(regions).sort((a,b)=>
+    (regions[b].good+regions[b].mod+regions[b].poor)-(regions[a].good+regions[a].mod+regions[a].poor));
+
+  document.getElementById('cg3').innerHTML=`
+    <div class="chart-card" style="grid-column:1/-1">
+      <h3>System-Wide Usage — Year over Year</h3>
+      <p>Total student hours logged across all active Reneal schools · Schools active on secondary axis</p>
+      <div class="chart-wrap" style="height:200px"><canvas id="ov1"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Usage Level Distribution</h3>
+      <p>All ${S.length} schools by tier</p>
+      <div class="chart-wrap" style="height:180px"><canvas id="ov2"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>NECTA vs No NECTA by Usage Level</h3>
+      <p>How exam participation correlates with lab usage</p>
+      <div class="chart-wrap" style="height:180px"><canvas id="ov3"></canvas></div>
+    </div>
+    <div class="chart-card" style="grid-column:1/-1">
+      <h3>Schools by Region — Usage Breakdown</h3>
+      <p>Stacked by Good / Moderate / Poor</p>
+      <div class="chart-wrap" style="height:200px"><canvas id="ov4"></canvas></div>
+    </div>`;
+
+  const grid={color:'rgba(0,0,0,.05)'};
+  const mtick={color:'#94a3b8',font:{family:'Lato',size:10}};
+
+  ovC.y1=new Chart(document.getElementById('ov1'),{type:'line',data:{labels:years,datasets:[
+    {label:'Total Hours',data:yrTot,borderColor:'#0d9488',backgroundColor:'rgba(13,148,136,.08)',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'#0d9488',yAxisID:'y'},
+    {label:'Active Schools',data:yrCnt,borderColor:'#4f46e5',fill:false,tension:.4,pointRadius:3,pointBackgroundColor:'#4f46e5',borderDash:[4,3],yAxisID:'y2'}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{family:'Lato',size:10},boxWidth:10,color:'#475569'}}},
+    scales:{y:{grid,ticks:{...mtick,callback:v=>Math.round(v/1000)+'k'},title:{display:true,text:'Hours',color:'#94a3b8',font:{size:10}}},
+      y2:{position:'right',grid:{display:false},ticks:{...mtick,color:'#4f46e5'},title:{display:true,text:'Schools',color:'#4f46e5',font:{size:10}}},
+      x:{grid:{display:false},ticks:mtick}}}});
+
+  ovC.y2=new Chart(document.getElementById('ov2'),{type:'doughnut',data:{
+    labels:['Good ≥2000h','Moderate','Poor <1000h'],
+    datasets:[{data:[good,mod,poor],backgroundColor:['#ecfdf5','#fffbeb','#fff1f2'],borderColor:['#059669','#d97706','#dc2626'],borderWidth:2}]
+  },options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+    plugins:{legend:{position:'bottom',labels:{font:{family:'Lato',size:10},boxWidth:10,color:'#475569',padding:10}},
+    tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw} schools (${Math.round(ctx.raw/S.length*100)}%)`}}}}});
+
+  ovC.y3=new Chart(document.getElementById('ov3'),{type:'bar',data:{
+    labels:['Good','Moderate','Poor'],
+    datasets:[
+      {label:'Has NECTA',data:['good','moderate','poor'].map(u=>S.filter(s=>s.necta&&s.ul===u).length),backgroundColor:'#ecfdf5',borderColor:'#059669',borderWidth:1.5,borderRadius:4},
+      {label:'No NECTA',data:['good','moderate','poor'].map(u=>S.filter(s=>!s.necta&&s.ul===u).length),backgroundColor:'#eef2ff',borderColor:'#4f46e5',borderWidth:1.5,borderRadius:4}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{font:{family:'Lato',size:10},boxWidth:10,color:'#475569'}}},
+    scales:{y:{grid,ticks:mtick,beginAtZero:true},x:{grid:{display:false},ticks:mtick}}}});
+
+  ovC.y4=new Chart(document.getElementById('ov4'),{type:'bar',data:{
+    labels:rKeys,
+    datasets:[
+      {label:'Good',data:rKeys.map(r=>regions[r].good),backgroundColor:'#ecfdf5',borderColor:'#059669',borderWidth:1.5,borderRadius:3},
+      {label:'Moderate',data:rKeys.map(r=>regions[r].mod),backgroundColor:'#fffbeb',borderColor:'#d97706',borderWidth:1.5},
+      {label:'Poor',data:rKeys.map(r=>regions[r].poor),backgroundColor:'#fff1f2',borderColor:'#dc2626',borderWidth:1.5}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{font:{family:'Lato',size:10},boxWidth:10,color:'#475569'}}},
+    scales:{x:{stacked:true,grid:{display:false},ticks:mtick},y:{stacked:true,grid,ticks:mtick,beginAtZero:true}}}});
+
+  // Top 20 table
+  const top20=[...S].sort((a,b)=>b.avg-a.avg).slice(0,20);
+  document.getElementById('tb3').innerHTML=top20.map((s,i)=>`<tr>
+    <td><span class="font-data" style="font-weight:900;font-size:.85rem;color:${i<3?'#0d9488':'var(--muted)'}">${i+1}</span></td>
+    <td><div class="td-name">${s.name}</div><div class="td-sub">${s.district}</div></td>
+    <td class="hide-sm" style="font-size:.78rem">${s.district}</td>
+    <td class="hide-sm" style="font-size:.78rem">${s.region}</td>
+    <td>${uBar(s.avg,s.ul)}</td>
+    <td class="hide-sm">${s.necta?'<span class="badge badge-good">NECTA ✓</span>':'<span class="badge badge-none">No exam</span>'}</td>
+    <td class="hide-sm" style="font-size:.75rem;color:var(--muted)">${s.team}</td>
+  </tr>`).join('');
+}
+
+// ── PDF DOWNLOAD ──────────────────────────────────────────────────────────────
+const PDF_SVG = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>';
+
+function downloadPDF(tableNum, filename, allSchools){
+  allSchools = !!allSchools;
+  const btnId = allSchools ? 'pdf'+tableNum+'all' : 'pdf'+tableNum;
+  const btn = document.getElementById(btnId);
+  const origHTML = btn ? btn.innerHTML : '';
+  if(btn){ btn.classList.add('loading'); btn.innerHTML = PDF_SVG + ' Saving...'; }
+
+  function restoreBtn(){
+    if(btn){
+      btn.classList.remove('loading');
+      btn.innerHTML = origHTML;
+    }
+  }
+
+  setTimeout(function(){
+    try {
+      if(!window.jspdf || !window.jspdf.jsPDF){
+        alert('PDF library not loaded yet. Please wait a moment and try again.');
+        restoreBtn(); return;
+      }
+      const jsPDF = window.jspdf.jsPDF;
+      const doc = new jsPDF({ orientation:'landscape', unit:'mm', format:'a4' });
+      const PW = doc.internal.pageSize.width;
+      const PH = doc.internal.pageSize.height;
+      const ts = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+
+      function drawFooter(){
+        const pg  = doc.internal.getCurrentPageInfo().pageNumber;
+        const tot = doc.internal.getNumberOfPages();
+        doc.setFontSize(7); doc.setFont('helvetica','normal');
+        doc.setTextColor(180,180,180);
+        doc.text('Page ' + pg + ' of ' + tot + '   |   Reneal Tanzania School Tracking', 14, PH - 5);
+        doc.text(ts, PW - 14, PH - 5, {align:'right'});
+      }
+
+      if(tableNum === 1){
+        const items = allSchools ? S.slice().sort((a,b)=>a.avg - b.avg) : getItems1();
+        const flabel = allSchools ? 'All ' + S.length + ' schools'
+          : (f1==='poor'?'Filter: Poor (<1000h)': f1==='moderate'?'Filter: Moderate': f1==='good'?'Filter: Good (>=2000h)': f1==='poor-necta'?'Filter: Poor + Has NECTA': f1==='moderate-necta'?'Filter: Moderate + Has NECTA':'Filter: All schools');
+
+        doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(30,41,59);
+        doc.text('Reneal Tanzania - Lab Usage Report', 14, 15);
+        doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(100,116,139);
+        doc.text(flabel + '   |   ' + items.length + ' schools   |   Generated: ' + ts, 14, 21);
+
+        // Colour key — no emoji, plain coloured squares
+        const ky = 28;
+        [[5,150,105,'Good (>=2000h)'],[200,120,0,'Moderate (1000-2000h)'],[220,38,38,'Poor (<1000h)'],[148,163,184,'No 2025 data']].forEach((k,i)=>{
+          doc.setFillColor(k[0],k[1],k[2]);
+          doc.roundedRect(14 + i*58, ky-3.5, 4, 4, 0.8, 0.8, 'F');
+          doc.setTextColor(60,60,60); doc.setFontSize(7);
+          doc.text(k[3], 20 + i*58, ky);
+        });
+
+        const head = [['#','School','District','Region','Avg Usage (hrs)','Rank 2025','Level','NECTA','Nearest Good School','Dist km','Good Sch Hrs','Team']];
+        const body = items.map((s,i)=>{
+          const ng = s.ng[0];
+          return [
+            i+1, s.name||'', s.district||'', s.region||'',
+            s.avg>0 ? Math.round(s.avg).toLocaleString() : '-',
+            s.rank===999 ? '-' : '#'+s.rank,
+            s.ul==='good' ? 'Good' : s.ul==='poor' ? 'Poor' : 'Moderate',
+            s.necta ? 'Yes' : 'No',
+            ng ? ng.name : '-', ng ? ng.dist : '-',
+            ng ? Math.round(ng.avg).toLocaleString() : '-',
+            s.team||''
+          ];
+        });
+
+        doc.autoTable({
+          head, body, startY: 33,
+          styles:{ fontSize:7, cellPadding:2.2, font:'helvetica', textColor:[30,41,59], overflow:'linebreak' },
+          headStyles:{ fillColor:[30,41,59], textColor:[255,255,255], fontStyle:'bold', fontSize:7 },
+          alternateRowStyles:{ fillColor:[248,250,252] },
+          columnStyles:{
+            0:{cellWidth:8,halign:'center'}, 4:{halign:'right'},
+            5:{halign:'center'}, 6:{halign:'center'}, 7:{halign:'center'},
+            9:{halign:'center'}, 10:{halign:'right'}
+          },
+          didParseCell(data){
+            if(data.section !== 'body') return;
+            if(data.column.index === 6){
+              const v = data.cell.raw;
+              data.cell.styles.textColor = v==='Good'?[5,150,105]:v==='Poor'?[220,38,38]:[180,100,0];
+              data.cell.styles.fontStyle = 'bold';
+            }
+            if(data.column.index === 7){
+              data.cell.styles.textColor = data.cell.raw==='Yes'?[5,150,105]:[148,163,184];
+            }
+          },
+          margin:{left:14,right:14},
+          didDrawPage: drawFooter
+        });
+        doc.save('reneal-' + filename + '-' + ts.replace(/ /g,'-') + '.pdf');
+
+      } else {
+        const items = allSchools ? S.slice().sort((a,b)=>b.avg - a.avg) : getItems2();
+        const flabel = allSchools ? 'All ' + S.length + ' schools'
+          : (f2==='no-good'?'Filter: No NECTA + Good': f2==='no-mod'?'Filter: No NECTA + Moderate': f2==='has'?'Filter: Has NECTA':'Filter: All schools');
+
+        doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(30,41,59);
+        doc.text('Reneal Tanzania - NECTA ICT Exam Participation', 14, 15);
+        doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(100,116,139);
+        doc.text(flabel + '   |   ' + items.length + ' schools   |   Generated: ' + ts, 14, 21);
+
+        const ky = 28;
+        [[5,150,105,'Has NECTA (sat ICT exam)'],[79,70,229,'No NECTA (never sat)'],[5,150,105,'Ready >=2000h'],[180,100,0,'Preparing >=1000h'],[148,163,184,'Early <1000h']].forEach((k,i)=>{
+          doc.setFillColor(k[0],k[1],k[2]);
+          doc.roundedRect(14 + i*52, ky-3.5, 4, 4, 0.8, 0.8, 'F');
+          doc.setTextColor(60,60,60); doc.setFontSize(7);
+          doc.text(k[3], 20 + i*52, ky);
+        });
+
+        const head = [['#','School','District','Region','Avg Usage (hrs)','NECTA','Students Sat','Nearest NECTA School','Dist km','Readiness','Team']];
+        const body = items.map((s,i)=>{
+          const nn = s.nn.find(n => S.find(x=>x.id===n.id && x.necta));
+          const rdns = s.necta ? 'Enrolled' : s.avg>=GOOD ? 'Ready' : s.avg>=1000 ? 'Preparing' : 'Early';
+          return [
+            i+1, s.name||'', s.district||'', s.region||'',
+            s.avg>0 ? Math.round(s.avg).toLocaleString() : '-',
+            s.necta ? 'Yes' : 'No',
+            s.necta ? s.totalSat.toLocaleString() : '-',
+            nn ? nn.name : '-', nn ? nn.dist : '-',
+            rdns, s.team||''
+          ];
+        });
+
+        doc.autoTable({
+          head, body, startY: 33,
+          styles:{ fontSize:7, cellPadding:2.2, font:'helvetica', textColor:[30,41,59], overflow:'linebreak' },
+          headStyles:{ fillColor:[30,41,59], textColor:[255,255,255], fontStyle:'bold', fontSize:7 },
+          alternateRowStyles:{ fillColor:[248,250,252] },
+          columnStyles:{
+            0:{cellWidth:8,halign:'center'}, 4:{halign:'right'},
+            5:{halign:'center'}, 6:{halign:'right'},
+            8:{halign:'center'}, 9:{halign:'center'}
+          },
+          didParseCell(data){
+            if(data.section !== 'body') return;
+            if(data.column.index === 5){
+              data.cell.styles.textColor = data.cell.raw==='Yes'?[5,150,105]:[79,70,229];
+              data.cell.styles.fontStyle = 'bold';
+            }
+            if(data.column.index === 9){
+              const v = data.cell.raw;
+              data.cell.styles.textColor = (v==='Enrolled'||v==='Ready')?[5,150,105]:v==='Preparing'?[180,100,0]:[148,163,184];
+            }
+          },
+          margin:{left:14,right:14},
+          didDrawPage: drawFooter
+        });
+        doc.save('reneal-' + filename + '-' + ts.replace(/ /g,'-') + '.pdf');
+      }
+
+    } catch(err){
+      console.error('PDF error:', err);
+      alert('PDF generation failed: ' + err.message);
+    } finally {
+      restoreBtn();
+    }
+  }, 150);
+}
+
+// ── BOOT ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  buildSS1(); render1();
+  buildSS2(); render2();
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){
+      if(openRow1) closeRow1(openRow1);
+      if(openRow2) closeRow2(openRow2);
+    }
+  });
+});
+</script>
+</body>
+</html>
