@@ -208,6 +208,9 @@
     <button class="nav-tab" onclick="showTab('t3',this)">
       <span class="ndot" style="background:#0d9488"></span> Overview
     </button>
+    <button class="nav-tab" onclick="showTab('t4',this)">
+      <span class="ndot" style="background:#7c3aed"></span> Year-by-Year
+    </button>
     <a href="/prod/analytics"><button class="nav-tab" onclick="showTab('t3',this)">
       <span class="ndot" style="background:purple"></span> Back 
     </button></a>
@@ -366,6 +369,66 @@
   </div>
 </div>
 
+<!-- TAB 4: YEAR-BY-YEAR -->
+<div id="t4" class="tab-content" style="display:none">
+  <div class="page">
+    <div class="stat-strip" id="ss4"></div>
+
+    <!-- Team selector + metric toggles -->
+    <div class="toolbar" style="margin-bottom:1.25rem">
+      <span class="tl">Team:</span>
+      <button class="fbtn on"  id="ybt-all"       onclick="ybyTeam('all',this)">All Teams</button>
+      <button class="fbtn"     id="ybt-Abubakar"  onclick="ybyTeam('Abubakar',this)">Abubakar</button>
+      <button class="fbtn"     id="ybt-Ashura"    onclick="ybyTeam('Ashura',this)">Ashura</button>
+      <button class="fbtn"     id="ybt-Danny"     onclick="ybyTeam('Danny',this)">Danny</button>
+      <button class="fbtn"     id="ybt-Erick"     onclick="ybyTeam('Erick',this)">Erick</button>
+      <button class="fbtn"     id="ybt-James"     onclick="ybyTeam('James',this)">James</button>
+      <button class="fbtn"     id="ybt-Janeth"    onclick="ybyTeam('Janeth',this)">Janeth</button>
+      <button class="fbtn"     id="ybt-Jastin"    onclick="ybyTeam('Jastin',this)">Jastin</button>
+      <button class="fbtn"     id="ybt-Juma"      onclick="ybyTeam('Juma',this)">Juma</button>
+      <div class="pdf-sep" style="margin:0 .25rem"></div>
+      <span class="tl">Metric:</span>
+      <button class="fbtn on"  id="ybm-total"     onclick="ybyMetric('total',this)">Total Hours</button>
+      <button class="fbtn"     id="ybm-avg"        onclick="ybyMetric('avg',this)">Avg / School</button>
+      <button class="fbtn"     id="ybm-active"     onclick="ybyMetric('active',this)">Active Schools</button>
+    </div>
+
+    <!-- Main trend chart -->
+    <div class="chart-card" style="margin-bottom:1.25rem">
+      <h3 id="yby-chart-title">Year-over-Year Usage — All Teams</h3>
+      <p id="yby-chart-sub">Total student hours logged per year · hover for details</p>
+      <div class="chart-wrap" style="height:240px"><canvas id="ybyMain"></canvas></div>
+    </div>
+
+    <!-- Team comparison chart (shown only for All Teams) -->
+    <div class="chart-card" id="yby-cmp-card" style="margin-bottom:1.25rem">
+      <h3>Team Comparison — All Years</h3>
+      <p>Total student hours per team, stacked by year — see who grew</p>
+      <div class="chart-wrap" style="height:260px"><canvas id="ybyCmp"></canvas></div>
+    </div>
+
+    <!-- Per-team sparkline grid (shown for individual team) -->
+    <div id="yby-school-grid" style="display:none;margin-bottom:1.25rem"></div>
+
+    <!-- Detail table -->
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <div>
+          <h3 id="yby-tbl-title">Year-by-Year Summary — All Teams</h3>
+          <p>Schools active, total hours, and per-school average for each year</p>
+        </div>
+        <span class="tbl-count" id="yby-tc"></span>
+      </div>
+      <div class="tbl-scroll">
+        <table id="yby-tbl">
+          <thead id="yby-thead"></thead>
+          <tbody id="yby-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- TAB 3: OVERVIEW -->
 <div id="t3" class="tab-content" style="display:none">
   <div class="page">
@@ -407,6 +470,7 @@ function showTab(id, btn){
   document.getElementById(id).style.display='';
   btn.classList.add('active');
   if(id==='t3') buildOverview();
+  if(id==='t4') buildYBY();
 }
 
 // ── STAT STRIPS ───────────────────────────────────────────────────────────────
@@ -977,6 +1041,253 @@ function downloadPDF(tableNum, filename, allSchools){
       restoreBtn();
     }
   }, 150);
+}
+
+// ── YEAR-BY-YEAR ─────────────────────────────────────────────────────────────
+const YBY_YEARS   = ['2019','2020','2021','2022','2023','2024','2025'];
+const YBY_TEAMS   = ['Abubakar','Ashura','Danny','Erick','James','Janeth','Jastin','Juma'];
+const YBY_COLORS  = {
+  Abubakar:'#0ea5e9', Ashura:'#f59e0b', Danny:'#10b981',
+  Erick:'#ef4444',   James:'#8b5cf6',  Janeth:'#ec4899',
+  Jastin:'#f97316',  Juma:'#06b6d4'
+};
+
+let ybyTeamSel   = 'all';
+let ybyMetricSel = 'total';
+let ybyBuilt     = false;
+let ybyCharts    = {};
+
+function ybyGetData(team){
+  // Returns {year: {total, active, avg, schools:[{name,val}]}}
+  const src = team === 'all' ? S : S.filter(s=>s.team===team);
+  const out  = {};
+  YBY_YEARS.forEach(y=>{
+    const active = src.filter(s=>s.hy[y]!=null);
+    const vals   = active.map(s=>s.hy[y]);
+    const total  = vals.reduce((a,b)=>a+b,0);
+    out[y] = {
+      total:  Math.round(total),
+      active: active.length,
+      avg:    active.length ? Math.round(total/active.length) : 0,
+      schools: active.map(s=>({name:s.sn, val:Math.round(s.hy[y]), team:s.team, ul:s.ul}))
+                     .sort((a,b)=>b.val-a.val)
+    };
+  });
+  return out;
+}
+
+function ybyTeam(val, btn){
+  ybyTeamSel = val;
+  document.querySelectorAll('#t4 [id^="ybt-"]').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderYBY();
+}
+function ybyMetric(val, btn){
+  ybyMetricSel = val;
+  document.querySelectorAll('#t4 [id^="ybm-"]').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderYBY();
+}
+
+function buildYBY(){
+  if(!ybyBuilt){ ybyBuilt=true; buildSS4(); }
+  renderYBY();
+}
+
+function buildSS4(){
+  const tot2025 = Math.round(S.reduce((a,s)=>a+(s.hy['2025']||0),0));
+  const tot2024 = Math.round(S.reduce((a,s)=>a+(s.hy['2024']||0),0));
+  const pct     = tot2024 ? Math.round((tot2025-tot2024)/tot2024*100) : 0;
+  const best    = YBY_TEAMS.map(t=>({t,v:S.filter(s=>s.team===t).reduce((a,s)=>a+(s.hy['2025']||0),0)}))
+                            .sort((a,b)=>b.v-a.v)[0];
+  const peakYr  = YBY_YEARS.reduce((py,y)=>{
+    const t=S.reduce((a,s)=>a+(s.hy[y]||0),0);
+    return t>py.v?{y,v:t}:py;
+  },{y:'',v:0});
+  document.getElementById('ss4').innerHTML =
+    mkStat(Math.round(tot2025/1000)+'k','2025 Total Hours','Student hours across all schools','#7c3aed')+
+    mkStat((pct>=0?'+':'')+pct+'%','vs 2024','Year-on-year change in total hours',pct>=0?'#059669':'#dc2626')+
+    mkStat(best.t,'Top Team 2025','Highest total student hours in 2025','#0d9488')+
+    mkStat(peakYr.y,'Peak Year','Year with highest network-wide hours','#d97706');
+}
+
+function renderYBY(){
+  const data   = ybyGetData(ybyTeamSel);
+  const isAll  = ybyTeamSel === 'all';
+  const label  = isAll ? 'All Teams' : ybyTeamSel;
+  const metric = ybyMetricSel;
+  const metricLbl = metric==='total'?'Total Hours':metric==='avg'?'Avg Hrs / School':'Active Schools';
+  const color  = isAll ? '#7c3aed' : YBY_COLORS[ybyTeamSel];
+
+  // titles
+  document.getElementById('yby-chart-title').textContent = `Year-over-Year — ${label}`;
+  document.getElementById('yby-chart-sub').textContent   = `${metricLbl} per year · ${isAll?S.length:S.filter(s=>s.team===ybyTeamSel).length} schools in portfolio`;
+  document.getElementById('yby-tbl-title').textContent   = `Year-by-Year Summary — ${label}`;
+
+  // Show/hide comparison vs school grid
+  document.getElementById('yby-cmp-card').style.display     = isAll ? '' : 'none';
+  document.getElementById('yby-school-grid').style.display  = isAll ? 'none' : '';
+
+  // ── Main chart ──
+  const mainVals = YBY_YEARS.map(y=> metric==='total'?data[y].total : metric==='avg'?data[y].avg : data[y].active);
+  const mainMax  = Math.max(...mainVals, 1);
+
+  if(ybyCharts.main) ybyCharts.main.destroy();
+  const grid={color:'rgba(0,0,0,.05)'};
+  const mtick={color:'#94a3b8',font:{family:'Lato',size:10}};
+  ybyCharts.main = new Chart(document.getElementById('ybyMain'),{
+    type:'bar',
+    data:{
+      labels: YBY_YEARS,
+      datasets:[{
+        label: metricLbl,
+        data: mainVals,
+        backgroundColor: YBY_YEARS.map((_,i)=> i===YBY_YEARS.length-1 ? color : color+'55'),
+        borderColor: color,
+        borderWidth: 1.5,
+        borderRadius: 5,
+      },{
+        type:'line',
+        label:'Trend',
+        data: mainVals,
+        borderColor: color,
+        borderWidth: 2,
+        pointRadius: 4,
+        pointBackgroundColor: color,
+        fill: false,
+        tension: 0.35,
+        yAxisID:'y'
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{labels:{font:{family:'Lato',size:10},boxWidth:10,color:'#475569',filter:item=>item.datasetIndex===1}},
+        tooltip:{callbacks:{
+          label: ctx => {
+            const v = ctx.raw;
+            if(metric==='total') return ' '+Math.round(v).toLocaleString()+' hrs';
+            if(metric==='avg')   return ' '+Math.round(v).toLocaleString()+' hrs/school';
+            return ' '+v+' schools active';
+          }
+        }}
+      },
+      scales:{
+        y:{grid,ticks:{...mtick,callback:v=> metric==='active'?v : v>=1000?Math.round(v/1000)+'k':v},beginAtZero:true},
+        x:{grid:{display:false},ticks:mtick}
+      }
+    }
+  });
+
+  // ── Team comparison stacked bar (all-teams view) ──
+  if(isAll){
+    if(ybyCharts.cmp) ybyCharts.cmp.destroy();
+    ybyCharts.cmp = new Chart(document.getElementById('ybyCmp'),{
+      type:'bar',
+      data:{
+        labels: YBY_TEAMS,
+        datasets: YBY_YEARS.map((y,i)=>({
+          label: y,
+          data: YBY_TEAMS.map(t=>{
+            const ts=S.filter(s=>s.team===t);
+            return Math.round(ts.reduce((a,s)=>a+(s.hy[y]||0),0));
+          }),
+          backgroundColor: `hsl(${200+i*22},65%,${55+i*3}%)`,
+          borderWidth:0,
+          borderRadius:3,
+          stack:'s'
+        }))
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{labels:{font:{family:'Lato',size:9},boxWidth:9,color:'#475569',padding:8}}},
+        scales:{
+          x:{stacked:true,grid:{display:false},ticks:{...mtick,font:{family:'Lato',size:10}}},
+          y:{stacked:true,grid,ticks:{...mtick,callback:v=>v>=1000?Math.round(v/1000)+'k':v},beginAtZero:true}
+        }
+      }
+    });
+  }
+
+  // ── School sparkline grid (single team view) ──
+  if(!isAll){
+    const teamSchools = S.filter(s=>s.team===ybyTeamSel).sort((a,b)=>b.avg-a.avg);
+    const grid_html = teamSchools.map(s=>{
+      const vals = YBY_YEARS.map(y=>s.hy[y]??null);
+      const max  = Math.max(...vals.filter(v=>v!=null),1);
+      const bars = YBY_YEARS.map((y,i)=>{
+        const v=vals[i];
+        if(v==null) return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="flex:1"></div><div style="font-size:.52rem;font-family:'Lato',sans-serif;color:var(--border)">—</div><div style="font-size:.52rem;font-family:'Lato',sans-serif;color:var(--muted)">${y.slice(2)}</div></div>`;
+        const pct=Math.max(4,Math.round(v/max*100));
+        const c=v>=GOOD?'#059669':v<POOR&&v>0?'#dc2626':'#d97706';
+        return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+          <div style="font-size:.5rem;font-family:'Lato',sans-serif;color:${c};font-weight:700">${v>=1000?(v/1000).toFixed(1)+'k':Math.round(v)}</div>
+          <div style="width:100%;height:${pct}%;min-height:3px;background:${c};border-radius:2px 2px 0 0;align-self:flex-end"></div>
+          <div style="font-size:.52rem;font-family:'Lato',sans-serif;color:var(--muted)">${y.slice(2)}</div>
+        </div>`;
+      }).join('');
+      const ulbadge = s.ul==='good'?'badge-good':s.ul==='poor'?'badge-poor':'badge-mod';
+      return `<div class="chart-card" style="padding:.7rem .85rem">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem">
+          <div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:.8rem;color:var(--slate)">${s.name}</div>
+            <div style="font-size:.65rem;color:var(--muted)">${s.district} · ${s.region}</div>
+          </div>
+          <span class="badge ${ulbadge}" style="font-size:.58rem">${ulL(s.ul)}</span>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:3px;height:55px;width:100%">${bars}</div>
+        <div style="margin-top:.4rem;font-size:.65rem;color:var(--slate3)">Avg <strong style="color:${color}">${fmtHs(s.avg)}h</strong> · ${s.noData?'<span style="color:#94a3b8">No 2025 data</span>':'Active 2025'}</div>
+      </div>`;
+    }).join('');
+    document.getElementById('yby-school-grid').innerHTML =
+      `<div class="chart-grid" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr))">${grid_html}</div>`;
+  }
+
+  // ── Summary table ──
+  document.getElementById('yby-tc').textContent = YBY_YEARS.filter(y=>data[y].active>0).length + ' years with data';
+
+  if(isAll){
+    // All-teams table: rows=years, cols=teams + total
+    document.getElementById('yby-thead').innerHTML =
+      `<tr><th>Year</th>${YBY_TEAMS.map(t=>`<th style="color:${YBY_COLORS[t]}">${t}</th>`).join('')}<th style="color:var(--teal)">Network Total</th><th>Active Schools</th></tr>`;
+    document.getElementById('yby-tbody').innerHTML = YBY_YEARS.map(y=>{
+      const netTotal = data[y].total;
+      const netActive = data[y].active;
+      const teamCells = YBY_TEAMS.map(t=>{
+        const ts = S.filter(s=>s.team===t);
+        const vals = ts.filter(s=>s.hy[y]!=null);
+        const tot = Math.round(vals.reduce((a,s)=>a+s.hy[y],0));
+        if(!vals.length) return `<td style="color:var(--muted);font-size:.72rem;text-align:right">—</td>`;
+        return `<td style="text-align:right;font-family:'Lato',sans-serif;font-size:.74rem;font-weight:700;color:${YBY_COLORS[t]}">${tot>=1000?(tot/1000).toFixed(1)+'k':tot.toLocaleString()}</td>`;
+      }).join('');
+      const isLatest = y === '2025';
+      return `<tr style="${isLatest?'background:#faf5ff;font-weight:700':''}">
+        <td style="font-family:'Lato',sans-serif;font-weight:900;font-size:.8rem;color:${isLatest?'#7c3aed':'var(--slate)'}">${y}${isLatest?' ★':''}</td>
+        ${teamCells}
+        <td style="text-align:right;font-family:'Lato',sans-serif;font-weight:900;font-size:.8rem;color:var(--teal)">${netTotal>=1000?(netTotal/1000).toFixed(1)+'k':netTotal.toLocaleString()}</td>
+        <td style="text-align:right;font-size:.74rem;color:var(--muted)">${netActive}</td>
+      </tr>`;
+    }).join('');
+  } else {
+    // Single-team table: rows=years, cols=Active Schools / Total / Avg / Top School
+    document.getElementById('yby-thead').innerHTML =
+      `<tr><th>Year</th><th style="text-align:right">Active Schools</th><th style="text-align:right">Total Hours</th><th style="text-align:right">Avg / School</th><th>Top School</th><th>Top Hours</th></tr>`;
+    document.getElementById('yby-tbody').innerHTML = YBY_YEARS.map(y=>{
+      const d = data[y];
+      const isLatest = y==='2025';
+      if(!d.active) return `<tr><td style="font-family:'Lato',sans-serif;font-weight:700;color:var(--muted)">${y}</td><td colspan="5" style="color:var(--muted);font-size:.72rem;text-align:center">No data for this year</td></tr>`;
+      const top = d.schools[0];
+      const topColor = top.ul==='good'?'#059669':top.ul==='poor'?'#dc2626':'#d97706';
+      return `<tr style="${isLatest?'background:#faf5ff':''}">
+        <td style="font-family:'Lato',sans-serif;font-weight:900;font-size:.8rem;color:${isLatest?'#7c3aed':'var(--slate)'}">${y}${isLatest?' ★':''}</td>
+        <td style="text-align:right;font-size:.78rem;color:var(--slate3)">${d.active}</td>
+        <td style="text-align:right;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;color:${color}">${d.total>=1000?(d.total/1000).toFixed(1)+'k':d.total.toLocaleString()}</td>
+        <td style="text-align:right;font-family:'Lato',sans-serif;font-size:.75rem;color:var(--slate3)">${d.avg>=1000?(d.avg/1000).toFixed(1)+'k':d.avg.toLocaleString()}</td>
+        <td style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.78rem;color:var(--slate)">${top.name}</td>
+        <td style="font-family:'Lato',sans-serif;font-weight:900;font-size:.78rem;color:${topColor}">${top.val>=1000?(top.val/1000).toFixed(1)+'k':top.val.toLocaleString()}</td>
+      </tr>`;
+    }).join('');
+  }
 }
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
