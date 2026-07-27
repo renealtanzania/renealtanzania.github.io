@@ -159,19 +159,25 @@
   {
     "page name": "Analytics Page",
     "url": "/prod/analytics",
-    "viewer": "admin, super-admin",
+    "viewer": "admin, super-admin, team-member",
     "type": "protected"
   },
   {
     "page name": "Labusage vs Necta",
     "url": "/prod/analytics/streams/usage-necta.html",
-    "viewer": "admin, super-admin",
+    "viewer": "admin, super-admin, team-member",
     "type": "protected"
   },
   {
     "page name": "School Lag Tracking",
     "url": "/prod/analytics/streams/school-lag-tracking.html",
-    "viewer": "admin, super-admin",
+    "viewer": "admin, super-admin, team-member",
+    "type": "protected"
+  },
+  {
+    "page name": "School Intervention Priority",
+    "url": "/prod/analytics/streams/school-intervention-priority-app.html",
+    "viewer": "admin, super-admin, team-member",
     "type": "protected"
   }
 ]
