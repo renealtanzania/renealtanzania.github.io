@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ICT Exam Access Density (EAD)</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Nunito:wght@400;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
+<script src="/js/middleware.js"></script>
+
+<script src="/public/css/script/tailwindcss3417.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --reneal-navy: #0f2a4a;
+    --reneal-blue: #1a4f8a;
+    --reneal-sky: #2d82c8;
+    --reneal-teal: #0d9488;
+    --accent-gold: #f59e0b;
+    --accent-red: #dc2626;
+    --accent-green: #16a34a;
+    --accent-orange: #ea580c;
+    --bg-main: #f0f4f8;
+    --bg-card: #ffffff;
+    --text-primary: #0f2a4a;
+    --text-secondary: #4a6080;
+    --border-color: #dce8f5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--bg-main);
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
+  .font-nunito { font-family: 'Nunito', sans-serif; }
+  .font-opensans { font-family: 'Open Sans', sans-serif; }
+
+  /* Header */
+  .app-header {
+    background: linear-gradient(135deg, var(--reneal-navy) 0%, var(--reneal-blue) 60%, var(--reneal-sky) 100%);
+    padding: 0;
+  }
+  .header-inner {
+    max-width: 1400px; margin: 0 auto;
+    padding: 18px 28px 0;
+  }
+  .header-top {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    padding-bottom: 16px;
+  }
+  .logo-block { display: flex; flex-direction: column; }
+  .logo-eyebrow {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 10px; font-weight: 600; letter-spacing: 2.5px;
+    color: rgba(255,255,255,0.55); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .logo-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 22px; font-weight: 800; color: #fff; line-height: 1.1;
+  }
+  .logo-sub {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.6);
+    margin-top: 3px;
+  }
+  .header-stats {
+    display: flex; gap: 20px; align-items: flex-start;
+  }
+  .hstat {
+    text-align: center;
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; padding: 8px 16px;
+  }
+  .hstat-val {
+    font-family: 'Nunito', sans-serif;
+    font-size: 22px; font-weight: 800; color: #fff; display: block;
+  }
+  .hstat-lbl {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 10px; color: rgba(255,255,255,0.55); letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  /* Tabs */
+  .tab-bar {
+    display: flex; gap: 0; border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .tab-btn {
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px; font-weight: 700;
+    color: rgba(255,255,255,0.6);
+    padding: 12px 26px; border: none; background: transparent;
+    cursor: pointer; border-bottom: 3px solid transparent;
+    letter-spacing: 0.3px; transition: all 0.2s; white-space: nowrap;
+  }
+  .tab-btn:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.06); }
+  .tab-btn.active {
+    color: #fff; border-bottom: 3px solid var(--accent-gold);
+    background: rgba(255,255,255,0.08);
+  }
+  .tab-icon { margin-right: 6px; }
+
+  /* Content */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .main-wrap { max-width: 1400px; margin: 0 auto; padding: 24px 28px; }
+
+  /* Filter Bar */
+  .filter-bar {
+    background: #fff; border: 1px solid var(--border-color);
+    border-radius: 10px; padding: 14px 20px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .filter-label {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 11px; font-weight: 600; color: var(--text-secondary);
+    letter-spacing: 1px; text-transform: uppercase; white-space: nowrap;
+  }
+  .filter-select {
+    font-family: 'Open Sans', sans-serif; font-size: 13px;
+    border: 1px solid #c8d8eb; border-radius: 6px;
+    padding: 6px 28px 6px 10px; color: var(--text-primary);
+    background: #f8fbff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a6080' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 9px center;
+    -webkit-appearance: none; appearance: none; cursor: pointer; min-width: 140px;
+  }
+  .filter-select:focus { outline: none; border-color: var(--reneal-sky); }
+  .filter-count {
+    margin-left: auto;
+    font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
+    color: var(--text-secondary);
+  }
+  .filter-count span { color: var(--reneal-blue); }
+
+  /* Table */
+  .table-card {
+    background: #fff; border: 1px solid var(--border-color);
+    border-radius: 10px; overflow: hidden;
+  }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr {
+    background: linear-gradient(to right, #f0f6ff, #e8f0fb);
+  }
+  thead th {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 11px; font-weight: 600; letter-spacing: 1px;
+    color: var(--text-secondary); text-transform: uppercase;
+    padding: 12px 14px; text-align: left; white-space: nowrap;
+    border-bottom: 2px solid var(--border-color); cursor: pointer;
+    user-select: none;
+  }
+  thead th:hover { color: var(--reneal-blue); }
+  thead th .sort-arrow { margin-left: 4px; opacity: 0.4; }
+  thead th.sorted .sort-arrow { opacity: 1; color: var(--reneal-sky); }
+  tbody tr { border-bottom: 1px solid #eef3fa; transition: background 0.1s; }
+  tbody tr:hover { background: #f6f9ff; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px; padding: 11px 14px; color: var(--text-primary);
+    vertical-align: middle;
+  }
+  .td-school {
+    font-family: 'Nunito', sans-serif; font-weight: 700;
+    font-size: 13px; color: var(--reneal-navy); max-width: 200px;
+  }
+  .td-team {
+    font-size: 12px; color: var(--text-secondary);
+  }
+
+  /* EAD Badge */
+  .ead-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Nunito', sans-serif; font-weight: 800;
+    font-size: 13px; padding: 4px 10px; border-radius: 20px;
+    min-width: 68px;
+  }
+  .ead-critical { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; }
+  .ead-low { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+  .ead-medium { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+  .ead-good { background: #f0fdf4; color: #166534; border: 1px solid #86efac; }
+  .ead-high { background: #eff6ff; color: #1e40af; border: 1px solid #93c5fd; }
+  .ead-na { background: #f5f5f5; color: #737373; border: 1px solid #d4d4d4; font-size: 11px; }
+
+  /* Pass Rate Bar */
+  .pass-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .pass-bar-bg {
+    flex: 1; height: 6px; background: #e5e7eb; border-radius: 3px; min-width: 60px; max-width: 100px;
+  }
+  .pass-bar-fill { height: 100%; border-radius: 3px; }
+  .pass-bar-val { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 13px; min-width: 42px; }
+
+  /* Grade badge */
+  .grade-badge {
+    font-family: 'Open Sans', sans-serif; font-size: 11px; font-weight: 600;
+    padding: 2px 8px; border-radius: 4px; white-space: nowrap;
+  }
+  .grade-A { background: #d1fae5; color: #065f46; }
+  .grade-B { background: #dbeafe; color: #1e3a8a; }
+  .grade-C { background: #e0f2fe; color: #075985; }
+  .grade-D { background: #fef9c3; color: #713f12; }
+  .grade-F { background: #fee2e2; color: #7f1d1d; }
+
+  /* Flag chips */
+  .flags-cell { display: flex; flex-wrap: wrap; gap: 4px; }
+  .flag-chip {
+    font-family: 'Open Sans', sans-serif; font-size: 10px; font-weight: 600;
+    padding: 2px 7px; border-radius: 10px; white-space: nowrap;
+  }
+  .flag-low-ead { background: #fff1f2; color: #be123c; border: 1px solid #fda4af; }
+  .flag-no-data { background: #faf5ff; color: #6d28d9; border: 1px solid #c4b5fd; }
+  .flag-fail { background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; }
+  .flag-participation { background: #f0f9ff; color: #0369a1; border: 1px solid #7dd3fc; }
+
+  /* Score distribution mini bars */
+  .grade-dist {
+    display: flex; gap: 2px; align-items: flex-end; height: 28px;
+  }
+  .grade-bar {
+    width: 10px; border-radius: 2px 2px 0 0; min-height: 3px;
+    position: relative; cursor: default;
+  }
+  .grade-bar-A { background: #059669; }
+  .grade-bar-B { background: #2563eb; }
+  .grade-bar-C { background: #0891b2; }
+  .grade-bar-D { background: #d97706; }
+  .grade-bar-F { background: #dc2626; }
+
+  /* Summary cards row */
+  .summary-row {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px; margin-bottom: 20px;
+  }
+  .sum-card {
+    background: #fff; border: 1px solid var(--border-color);
+    border-radius: 10px; padding: 16px 18px;
+  }
+  .sum-card-val {
+    font-family: 'Nunito', sans-serif;
+    font-size: 28px; font-weight: 800; color: var(--reneal-navy);
+  }
+  .sum-card-lbl {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 11px; color: var(--text-secondary); margin-top: 2px;
+    letter-spacing: 0.5px;
+  }
+  .sum-card-accent { border-left: 4px solid var(--reneal-sky); }
+  .sum-card-warn { border-left: 4px solid var(--accent-orange); }
+  .sum-card-good { border-left: 4px solid var(--accent-green); }
+  .sum-card-red { border-left: 4px solid var(--accent-red); }
+  .sum-card-gold { border-left: 4px solid var(--accent-gold); }
+
+  /* Chart containers */
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px; }
+  .chart-card {
+    background: #fff; border: 1px solid var(--border-color);
+    border-radius: 10px; padding: 18px 20px;
+  }
+  .chart-title {
+    font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+    color: var(--reneal-navy); margin-bottom: 4px;
+  }
+  .chart-sub {
+    font-family: 'Open Sans', sans-serif; font-size: 11px; color: var(--text-secondary);
+    margin-bottom: 14px;
+  }
+  .chart-wrap { position: relative; }
+
+  /* Triage tab */
+  .triage-priority {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .priority-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+  }
+  .p1 { background: #dc2626; }
+  .p2 { background: #ea580c; }
+  .p3 { background: #d97706; }
+  .p4 { background: #65a30d; }
+
+  .action-badge {
+    font-family: 'Open Sans', sans-serif; font-size: 10px; font-weight: 600;
+    padding: 2px 8px; border-radius: 4px;
+  }
+  .action-hardware { background: #fef2f2; color: #dc2626; }
+  .action-schedule { background: #fff7ed; color: #ea580c; }
+  .action-data { background: #faf5ff; color: #7c3aed; }
+  .action-exam { background: #f0fdf4; color: #16a34a; }
+
+  /* Scatter tab */
+  .full-chart-card {
+    background: #fff; border: 1px solid var(--border-color);
+    border-radius: 10px; padding: 22px 24px; margin-bottom: 18px;
+  }
+  .quadrant-legend {
+    display: flex; gap: 18px; flex-wrap: wrap; margin-top: 14px;
+  }
+  .qleg-item {
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'Open Sans', sans-serif; font-size: 12px; color: var(--text-secondary);
+  }
+  .qleg-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .tooltip-table {
+    background: rgba(15,42,74,0.96); color: #fff;
+    border-radius: 8px; padding: 10px 14px; font-size: 12px;
+    font-family: 'Open Sans', sans-serif; min-width: 200px;
+  }
+  .tooltip-table strong { font-family: 'Nunito', sans-serif; font-size: 14px; display: block; margin-bottom: 6px; }
+
+  /* Team performance table */
+  .team-perf-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #eef3fa; }
+  .team-perf-row:last-child { border-bottom: none; }
+  .team-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--reneal-blue), var(--reneal-sky));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px; color: #fff;
+    flex-shrink: 0;
+  }
+  .team-name { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 14px; }
+  .team-sub { font-family: 'Open Sans', sans-serif; font-size: 11px; color: var(--text-secondary); }
+
+  /* Hours cell */
+  .hours-val { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 13px; }
+  .hours-trend { font-family: 'Open Sans', sans-serif; font-size: 11px; }
+  .trend-up { color: #16a34a; }
+  .trend-down { color: #dc2626; }
+  .trend-flat { color: #737373; }
+
+  /* Section header */
+  .section-hdr {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800;
+    color: var(--reneal-navy);
+  }
+  .section-sub {
+    font-family: 'Open Sans', sans-serif; font-size: 12px; color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  /* Pagination */
+  .pagination {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; background: #f8fbff;
+    border-top: 1px solid var(--border-color);
+    font-family: 'Open Sans', sans-serif; font-size: 12px; color: var(--text-secondary);
+  }
+  .page-btns { display: flex; gap: 4px; }
+  .page-btn {
+    padding: 4px 10px; border-radius: 5px; border: 1px solid var(--border-color);
+    background: #fff; cursor: pointer; font-size: 12px; font-family: 'Open Sans', sans-serif;
+    color: var(--text-secondary);
+  }
+  .page-btn:hover { border-color: var(--reneal-sky); color: var(--reneal-sky); }
+  .page-btn.active { background: var(--reneal-blue); color: #fff; border-color: var(--reneal-blue); }
+
+  /* Search input */
+  .search-input {
+    font-family: 'Open Sans', sans-serif; font-size: 13px;
+    border: 1px solid #c8d8eb; border-radius: 6px;
+    padding: 6px 10px 6px 32px; color: var(--text-primary);
+    background: #f8fbff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%234a6080' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E") no-repeat 9px center;
+    min-width: 200px;
+  }
+  .search-input:focus { outline: none; border-color: var(--reneal-sky); }
+
+  /* Form level toggle */
+  .form-toggle {
+    display: flex; gap: 0; background: #e8f0fb;
+    border-radius: 8px; padding: 3px; width: fit-content;
+  }
+  .form-btn {
+    font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700;
+    padding: 5px 14px; border-radius: 6px; border: none; cursor: pointer;
+    background: transparent; color: var(--text-secondary); transition: all 0.15s;
+  }
+  .form-btn.active { background: var(--reneal-blue); color: #fff; }
+
+  /* Tab 3 quadrant annotation */
+  .quadrant-info {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px;
+  }
+  .qi-card {
+    background: #f8fbff; border: 1px solid var(--border-color);
+    border-radius: 8px; padding: 12px 14px;
+  }
+  .qi-title { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; }
+  .qi-desc { font-family: 'Open Sans', sans-serif; font-size: 11px; color: var(--text-secondary); margin-top: 3px; }
+
+  @media (max-width: 900px) {
+    .chart-grid { grid-template-columns: 1fr; }
+    .header-stats { display: none; }
+    .summary-row { grid-template-columns: repeat(2, 1fr); }
+    .quadrant-info { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .main-wrap { padding: 16px 14px; }
+    .header-inner { padding: 14px 16px 0; }
+    .tab-btn { padding: 10px 14px; font-size: 12px; }
+    .logo-title { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="logo-block">
+        <span class="logo-eyebrow">Reneal International · Tanzania</span>
+        <span class="logo-title">ICT Exam Access Density (EAD)</span>
+        <span class="logo-sub">Exam Access Density (EAD) · 2025 NECTA Cycle · 38 Matched Schools</span>
+      </div>
+      <div class="header-stats">
+        <div class="hstat">
+          <span class="hstat-val" id="h-schools">38</span>
+          <span class="hstat-lbl">Schools</span>
+        </div>
+        <div class="hstat">
+          <span class="hstat-val" id="h-candidates">—</span>
+          <span class="hstat-lbl">Candidates</span>
+        </div>
+        <div class="hstat">
+          <span class="hstat-val" id="h-avg-ead">—</span>
+          <span class="hstat-lbl">Avg EAD</span>
+        </div>
+        <div class="hstat">
+          <span class="hstat-val" id="h-avg-pass">—</span>
+          <span class="hstat-lbl">Avg Pass %</span>
+        </div>
+      </div>
+    </div>
+    <nav class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('tab1', this)">
+        <span class="tab-icon">📊</span> EAD Scorecard
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab2', this)">
+        <span class="tab-icon">⚠️</span> Bottleneck Triage
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab3', this)">
+        <span class="tab-icon">🔵</span> Load vs. Hours Correlation
+      </button>
+    </nav>
+  </div>
+</header>
+
+<!-- ==================== TAB 1: EAD SCORECARD ==================== -->
+<div id="tab1" class="tab-content active">
+  <div class="main-wrap">
+
+    <!-- Summary Cards -->
+    <div class="summary-row" id="t1-summary-cards">
+      <div class="sum-card sum-card-accent">
+        <div class="sum-card-val" id="sc-total">38</div>
+        <div class="sum-card-lbl">Total Schools (F2)</div>
+      </div>
+      <div class="sum-card sum-card-good">
+        <div class="sum-card-val" id="sc-avg-pass">—</div>
+        <div class="sum-card-lbl">Average Pass Rate</div>
+      </div>
+      <div class="sum-card sum-card-gold">
+        <div class="sum-card-val" id="sc-avg-ead">—</div>
+        <div class="sum-card-lbl">Average EAD (hrs/candidate)</div>
+      </div>
+      <div class="sum-card sum-card-warn">
+        <div class="sum-card-val" id="sc-bottleneck">—</div>
+        <div class="sum-card-lbl">Bottleneck Schools (EAD &lt; 20)</div>
+      </div>
+      <div class="sum-card sum-card-red">
+        <div class="sum-card-val" id="sc-no-data">—</div>
+        <div class="sum-card-lbl">Missing Usage Data</div>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <span class="filter-label">Filters</span>
+      <input type="text" class="search-input" id="t1-search" placeholder="Search school…" oninput="applyT1Filters()"/>
+      <select class="filter-select" id="t1-form" onchange="applyT1Filters()">
+        <option value="f2">Form 2 · 2025</option>
+        <option value="f4">Form 4 · 2025</option>
+      </select>
+      <select class="filter-select" id="t1-team" onchange="applyT1Filters()">
+        <option value="">All Teams</option>
+      </select>
+      <select class="filter-select" id="t1-region" onchange="applyT1Filters()">
+        <option value="">All Regions</option>
+      </select>
+      <select class="filter-select" id="t1-ead-filter" onchange="applyT1Filters()">
+        <option value="">All EAD Tiers</option>
+        <option value="critical">Critical (&lt; 10 hrs)</option>
+        <option value="low">Low (10–50 hrs)</option>
+        <option value="medium">Medium (50–200 hrs)</option>
+        <option value="good">Good (200–500 hrs)</option>
+        <option value="high">High (&gt; 500 hrs)</option>
+      </select>
+      <div class="filter-count">Showing <span id="t1-count">—</span> schools</div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+      <div class="table-wrap">
+        <table id="t1-table">
+          <thead>
+            <tr>
+              <th onclick="sortT1('school')">School <span class="sort-arrow">↕</span></th>
+              <th onclick="sortT1('district')">District <span class="sort-arrow">↕</span></th>
+              <th onclick="sortT1('region')">Region <span class="sort-arrow">↕</span></th>
+              <th onclick="sortT1('team')">Officer <span class="sort-arrow">↕</span></th>
+              <th onclick="sortT1('sat')">Candidates <span class="sort-arrow">↕</span></th>
+              <th onclick="sortT1('hours_2025')">Lab Hours 2025 <span class="sort-arrow">↕</span></th>
+              <th onclick="sortT1('ead')">EAD Score <span class="sort-arrow">↕</span></th>
+              <th onclick="sortT1('pass_rate')">Pass Rate <span class="sort-arrow">↕</span></th>
+              <th>Grade</th>
+              <th>Distribution</th>
+              <th>Flags</th>
+            </tr>
+          </thead>
+          <tbody id="t1-tbody"></tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <span id="t1-page-info"></span>
+        <div class="page-btns" id="t1-page-btns"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 2: BOTTLENECK TRIAGE ==================== -->
+<div id="tab2" class="tab-content">
+  <div class="main-wrap">
+
+    <div class="summary-row">
+      <div class="sum-card sum-card-red">
+        <div class="sum-card-val" id="t2-p1-count">—</div>
+        <div class="sum-card-lbl">Priority 1 · Critical (EAD &lt; 10)</div>
+      </div>
+      <div class="sum-card sum-card-warn">
+        <div class="sum-card-val" id="t2-p2-count">—</div>
+        <div class="sum-card-lbl">Priority 2 · Low EAD + High Fail</div>
+      </div>
+      <div class="sum-card sum-card-gold">
+        <div class="sum-card-val" id="t2-no-data">—</div>
+        <div class="sum-card-lbl">No Usage Data · Needs Field Audit</div>
+      </div>
+      <div class="sum-card sum-card-accent">
+        <div class="sum-card-val" id="t2-high-fail">—</div>
+        <div class="sum-card-lbl">High Fail Rate (&gt; 50% F grade)</div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">EAD Distribution by School</div>
+        <div class="chart-sub">Hours per candidate — 2025 NECTA Form 2 cohort (schools with data)</div>
+        <div class="chart-wrap" style="height:220px">
+          <canvas id="ead-bar-chart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Grade Distribution by School</div>
+        <div class="chart-sub">A–F grade counts stacked · 2025 Form 2 · sorted by pass rate</div>
+        <div class="chart-wrap" style="height:220px">
+          <canvas id="grade-stack-chart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Triage Table -->
+    <div class="section-hdr">
+      <div>
+        <div class="section-title">Intervention Priority Queue</div>
+        <div class="section-sub">Schools ranked by urgency — EAD score, fail rate, and data gaps combined</div>
+      </div>
+      <div class="filter-bar" style="padding:10px 14px; margin-bottom:0; border-radius:8px;">
+        <select class="filter-select" id="t2-team" onchange="renderT2()">
+          <option value="">All Teams</option>
+        </select>
+        <select class="filter-select" id="t2-issue" onchange="renderT2()">
+          <option value="">All Issues</option>
+          <option value="low-ead">Low EAD</option>
+          <option value="no-data">No Usage Data</option>
+          <option value="high-fail">High Fail Rate</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-wrap">
+        <table id="t2-table">
+          <thead>
+            <tr>
+              <th>Priority</th>
+              <th>School</th>
+              <th>Officer</th>
+              <th>Region</th>
+              <th>Candidates Sat</th>
+              <th>Lab Hours 2025</th>
+              <th>EAD Score</th>
+              <th>Pass Rate</th>
+              <th>Fail Count</th>
+              <th>Issues Detected</th>
+              <th>Recommended Action</th>
+            </tr>
+          </thead>
+          <tbody id="t2-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 3: LOAD vs. HOURS CORRELATION ==================== -->
+<div id="tab3" class="tab-content">
+  <div class="main-wrap">
+
+    <div class="full-chart-card">
+      <div class="section-hdr">
+        <div>
+          <div class="chart-title" style="font-size:16px;">Candidate Load vs. Lab Hours — 2025</div>
+          <div class="chart-sub">X-axis: ICT exam candidates sat · Y-axis: Actual lab usage hours · Bubble size: EAD score · Color: Pass rate tier</div>
+        </div>
+        <div class="form-toggle">
+          <button class="form-btn active" onclick="switchForm('f2', this)">Form 2</button>
+          <button class="form-btn" onclick="switchForm('f4', this)">Form 4</button>
+        </div>
+      </div>
+      <div style="height: 400px; position:relative;">
+        <canvas id="scatter-chart"></canvas>
+      </div>
+      <div class="quadrant-legend">
+        <div class="qleg-item"><div class="qleg-dot" style="background:#16a34a"></div> High pass (&gt;70%)</div>
+        <div class="qleg-item"><div class="qleg-dot" style="background:#2563eb"></div> Medium pass (40–70%)</div>
+        <div class="qleg-item"><div class="qleg-dot" style="background:#ea580c"></div> Low pass (10–40%)</div>
+        <div class="qleg-item"><div class="qleg-dot" style="background:#dc2626"></div> Critical pass (&lt;10%)</div>
+        <div class="qleg-item"><div class="qleg-dot" style="background:#9ca3af; opacity:0.5"></div> No hours data</div>
+      </div>
+    </div>
+
+    <!-- Quadrant annotations -->
+    <div class="quadrant-info">
+      <div class="qi-card" style="border-left: 4px solid #16a34a;">
+        <div class="qi-title" style="color:#16a34a;">↗ High Hours · High Candidates · Good Pass</div>
+        <div class="qi-desc">Schools maximizing lab access across a large exam cohort — benchmark and replicate their scheduling model.</div>
+      </div>
+      <div class="qi-card" style="border-left: 4px solid #ea580c;">
+        <div class="qi-title" style="color:#ea580c;">↘ Low Hours · High Candidates · Poor Pass</div>
+        <div class="qi-desc">Highest risk zone: too many students chasing too few hours. Hardware audit and scheduling restructure needed immediately.</div>
+      </div>
+      <div class="qi-card" style="border-left: 4px solid #d97706;">
+        <div class="qi-title" style="color:#d97706;">↙ Low Hours · Low Candidates · Poor Pass</div>
+        <div class="qi-desc">Small schools under-utilizing labs. Even modest hour increases could significantly improve EAD and outcomes.</div>
+      </div>
+      <div class="qi-card" style="border-left: 4px solid #2563eb;">
+        <div class="qi-title" style="color:#2563eb;">↖ High Hours · Low Candidates · Good Pass</div>
+        <div class="qi-desc">Ample access per candidate — strong EAD. Check whether non-exam students are also benefiting from the surplus hours.</div>
+      </div>
+    </div>
+
+    <!-- Correlation table summary -->
+    <div class="table-card" style="margin-top:18px;">
+      <div style="padding:16px 18px; border-bottom: 1px solid var(--border-color);">
+        <div class="section-title">School-Level Data: Candidates × Hours × Outcomes</div>
+        <div class="section-sub" style="margin-top:3px;">All 38 Form 2 schools · Sorted by EAD descending</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>School</th>
+              <th>Officer</th>
+              <th>Region</th>
+              <th>Candidates Sat</th>
+              <th>Lab Hours 2025</th>
+              <th>Lab Hours 2024</th>
+              <th>YoY Change</th>
+              <th>EAD 2025</th>
+              <th>Pass Rate</th>
+              <th>Exam Grade</th>
+            </tr>
+          </thead>
+          <tbody id="t3-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const RAW = {"f2":[{"school":"Dareda SS","district":"Babati DC","region":"Manyara","team":"Abubakar","sat":67,"total_students":297,"A":1,"B":2,"C":29,"D":21,"F":14,"grade":"Grade D (Satisfactory)","pass_rate":47.8,"hours_2025":3959.25,"hours_2024":5569.92,"hours_2023":11008.42,"ead":59.1,"flags":[]},{"school":"Komoto SS","district":"Babati TC","region":"Manyara","team":"Abubakar","sat":41,"total_students":350,"A":1,"B":0,"C":16,"D":18,"F":6,"grade":"Grade D (Satisfactory)","pass_rate":41.5,"hours_2025":1691.73,"hours_2024":3533.08,"hours_2023":2687.38,"ead":41.3,"flags":[]},{"school":"Kwaraa SS","district":"Babati TC","region":"Manyara","team":"Abubakar","sat":15,"total_students":219,"A":0,"B":1,"C":5,"D":7,"F":2,"grade":"Grade D (Satisfactory)","pass_rate":40.0,"hours_2025":340.28,"hours_2024":393.06,"hours_2023":1022.64,"ead":22.7,"flags":[]},{"school":"Nakwa SS","district":"Babati TC","region":"Manyara","team":"Abubakar","sat":31,"total_students":190,"A":3,"B":10,"C":16,"D":2,"F":0,"grade":"Grade B (Very Good)","pass_rate":93.5,"hours_2025":4544.9,"hours_2024":2923.36,"hours_2023":8746.37,"ead":146.6,"flags":[]},{"school":"Nangara SS","district":"Babati TC","region":"Manyara","team":"Abubakar","sat":25,"total_students":127,"A":0,"B":0,"C":4,"D":7,"F":14,"grade":"Grade D (Satisfactory)","pass_rate":16.0,"hours_2025":1936.51,"hours_2024":909.8,"hours_2023":1538.49,"ead":77.5,"flags":["High Fail Rate"]},{"school":"Manyara Girl's SS","district":"Babati TC","region":"Manyara","team":"Abubakar","sat":28,"total_students":362,"A":0,"B":2,"C":23,"D":3,"F":0,"grade":"Grade C (Good)","pass_rate":89.3,"hours_2025":941.89,"hours_2024":null,"hours_2023":null,"ead":33.6,"flags":[]},{"school":"Mandera Girls SS","district":"Chalinze DC","region":"Pwani","team":"Ashura","sat":37,"total_students":142,"A":0,"B":0,"C":29,"D":8,"F":0,"grade":"Grade C (Good)","pass_rate":78.4,"hours_2025":2136.87,"hours_2024":4157.66,"hours_2023":null,"ead":57.8,"flags":[]},{"school":"Mwapachu SS","district":"Kilindi DC","region":"Tanga","team":"Ashura","sat":25,"total_students":384,"A":0,"B":0,"C":0,"D":0,"F":25,"grade":"Grade F (Fail)","pass_rate":0.0,"hours_2025":189.63,"hours_2024":null,"hours_2023":null,"ead":7.6,"flags":["Low EAD","High Fail Rate"]},{"school":"Einoti SS","district":"Arusha DC","region":"Arusha","team":"Danny","sat":41,"total_students":319,"A":1,"B":4,"C":29,"D":7,"F":0,"grade":"Grade C (Good)","pass_rate":82.9,"hours_2025":21162.34,"hours_2024":28899.84,"hours_2023":31767.85,"ead":516.2,"flags":[]},{"school":"Mtama SS","district":"Lindi DC","region":"Lindi","team":"Danny","sat":10,"total_students":157,"A":0,"B":0,"C":4,"D":5,"F":1,"grade":"Grade D (Satisfactory)","pass_rate":40.0,"hours_2025":2693.94,"hours_2024":6990.05,"hours_2023":10492.43,"ead":269.4,"flags":[]},{"school":"Nyengedi SS","district":"Lindi DC","region":"Lindi","team":"Danny","sat":13,"total_students":88,"A":0,"B":0,"C":1,"D":5,"F":7,"grade":"Grade D (Satisfactory)","pass_rate":7.7,"hours_2025":1236.11,"hours_2024":3640.49,"hours_2023":3202.2,"ead":95.1,"flags":["High Fail Rate"]},{"school":"Hawa Mchopa SS","district":"Ruangwa DC","region":"Lindi","team":"Danny","sat":14,"total_students":63,"A":0,"B":0,"C":3,"D":8,"F":3,"grade":"Grade D (Satisfactory)","pass_rate":21.4,"hours_2025":5088.99,"hours_2024":2890.3,"hours_2023":null,"ead":363.5,"flags":[]},{"school":"Nkowe SS","district":"Ruangwa DC","region":"Lindi","team":"Danny","sat":25,"total_students":88,"A":0,"B":0,"C":0,"D":3,"F":22,"grade":"Grade F (Fail)","pass_rate":0.0,"hours_2025":5371.9,"hours_2024":2903.62,"hours_2023":null,"ead":214.9,"flags":["High Fail Rate"]},{"school":"Kiabakari SS","district":"Butiama DC","region":"Mara","team":"Danny","sat":82,"total_students":332,"A":0,"B":0,"C":13,"D":18,"F":51,"grade":"Grade D (Satisfactory)","pass_rate":15.9,"hours_2025":6575.11,"hours_2024":988.72,"hours_2023":null,"ead":80.2,"flags":["High Fail Rate"]},{"school":"Kiranyi SS","district":"Arusha DC","region":"Arusha","team":"Erick","sat":44,"total_students":489,"A":0,"B":6,"C":27,"D":9,"F":2,"grade":"Grade C (Good)","pass_rate":75.0,"hours_2025":3554.91,"hours_2024":1846.91,"hours_2023":646.08,"ead":80.8,"flags":[]},{"school":"Osiligi","district":"Arusha DC","region":"Arusha","team":"Erick","sat":15,"total_students":192,"A":0,"B":0,"C":12,"D":3,"F":0,"grade":"Grade C (Good)","pass_rate":80.0,"hours_2025":439.74,"hours_2024":2446.03,"hours_2023":1622.94,"ead":29.3,"flags":[]},{"school":"Enyoito SS","district":"Arusha DC","region":"Arusha","team":"Erick","sat":28,"total_students":189,"A":0,"B":15,"C":12,"D":1,"F":0,"grade":"Grade C (Good)","pass_rate":96.4,"hours_2025":null,"hours_2024":526.93,"hours_2023":2621.0,"ead":null,"flags":["No Usage Data"]},{"school":"Mlangarini SS","district":"Arusha DC","region":"Arusha","team":"Erick","sat":37,"total_students":371,"A":0,"B":3,"C":11,"D":18,"F":5,"grade":"Grade D (Satisfactory)","pass_rate":37.8,"hours_2025":null,"hours_2024":13803.42,"hours_2023":8500.34,"ead":null,"flags":["No Usage Data"]},{"school":"Mwandet SS / Mwandet A-Level","district":"Arusha DC","region":"Arusha","team":"Erick","sat":22,"total_students":478,"A":0,"B":3,"C":18,"D":1,"F":0,"grade":"Grade C (Good)","pass_rate":95.5,"hours_2025":1026.98,"hours_2024":882.0,"hours_2023":4423.2,"ead":46.7,"flags":["Low Exam Participation"]},{"school":"Engarenaibor SS","district":"Longido DC","region":"Arusha","team":"Erick","sat":21,"total_students":327,"A":0,"B":3,"C":17,"D":1,"F":0,"grade":"Grade C (Good)","pass_rate":95.2,"hours_2025":0.35,"hours_2024":115.42,"hours_2023":1957.94,"ead":0.0,"flags":["Low EAD"]},{"school":"Longido A-Level SS","district":"Longido DC","region":"Arusha","team":"Erick","sat":45,"total_students":715,"A":9,"B":19,"C":14,"D":3,"F":0,"grade":"Grade B (Very Good)","pass_rate":93.3,"hours_2025":null,"hours_2024":3762.61,"hours_2023":5005.44,"ead":null,"flags":["No Usage Data"]},{"school":"Namanga SS","district":"Longido DC","region":"Arusha","team":"Erick","sat":32,"total_students":479,"A":0,"B":6,"C":21,"D":5,"F":0,"grade":"Grade C (Good)","pass_rate":84.4,"hours_2025":null,"hours_2024":11072.09,"hours_2023":14916.2,"ead":null,"flags":["No Usage Data"]},{"school":"Tingatinga SS","district":"Longido DC","region":"Arusha","team":"Erick","sat":34,"total_students":500,"A":0,"B":0,"C":13,"D":13,"F":8,"grade":"Grade D (Satisfactory)","pass_rate":38.2,"hours_2025":null,"hours_2024":8233.44,"hours_2023":8329.65,"ead":null,"flags":["No Usage Data"]},{"school":"Nkoasenga SS","district":"Meru DC","region":"Arusha","team":"James","sat":59,"total_students":145,"A":0,"B":2,"C":11,"D":24,"F":22,"grade":"Grade D (Satisfactory)","pass_rate":22.0,"hours_2025":214.87,"hours_2024":1174.48,"hours_2023":1052.6,"ead":3.6,"flags":["Low EAD"]},{"school":"Kiboriloni SS","district":"Moshi CC","region":"Kilimanjaro","team":"James","sat":14,"total_students":232,"A":0,"B":0,"C":6,"D":4,"F":4,"grade":"Grade D (Satisfactory)","pass_rate":42.9,"hours_2025":3374.7,"hours_2024":3617.39,"hours_2023":null,"ead":241.0,"flags":[]},{"school":"Arusha Day Sec","district":"Arusha CC","region":"Arusha","team":"Jastin","sat":18,"total_students":266,"A":1,"B":2,"C":11,"D":4,"F":0,"grade":"Grade C (Good)","pass_rate":77.8,"hours_2025":3223.53,"hours_2024":639.7,"hours_2023":4262.12,"ead":179.1,"flags":[]},{"school":"Moshono","district":"Arusha CC","region":"Arusha","team":"Janeth","sat":10,"total_students":150,"A":0,"B":2,"C":8,"D":0,"F":0,"grade":"Grade C (Good)","pass_rate":100.0,"hours_2025":796.3,"hours_2024":1621.38,"hours_2023":3266.23,"ead":79.6,"flags":[]},{"school":"Elerai SS","district":"Arusha CC","region":"Arusha","team":"Jastin","sat":22,"total_students":436,"A":0,"B":0,"C":11,"D":9,"F":2,"grade":"Grade C (Good)","pass_rate":50.0,"hours_2025":null,"hours_2024":0.0,"hours_2023":2421.84,"ead":null,"flags":["No Usage Data"]},{"school":"Kimaseki SS","district":"Arusha CC","region":"Arusha","team":"Jastin","sat":129,"total_students":442,"A":0,"B":7,"C":78,"D":42,"F":2,"grade":"Grade C (Good)","pass_rate":65.9,"hours_2025":2193.3,"hours_2024":337.58,"hours_2023":2095.35,"ead":17.0,"flags":["Low EAD"]},{"school":"Kinana SS","district":"Arusha CC","region":"Arusha","team":"Jastin","sat":18,"total_students":213,"A":0,"B":1,"C":2,"D":12,"F":3,"grade":"Grade D (Satisfactory)","pass_rate":16.7,"hours_2025":2210.17,"hours_2024":2031.19,"hours_2023":2900.33,"ead":122.8,"flags":[]},{"school":"Themi SS","district":"Arusha CC","region":"Arusha","team":"Jastin","sat":100,"total_students":398,"A":0,"B":4,"C":21,"D":49,"F":26,"grade":"Grade D (Satisfactory)","pass_rate":25.0,"hours_2025":2474.79,"hours_2024":2551.75,"hours_2023":3009.94,"ead":24.7,"flags":[]},{"school":"Naura SS","district":"Arusha CC","region":"Arusha","team":"Jastin","sat":25,"total_students":358,"A":0,"B":0,"C":2,"D":9,"F":14,"grade":"Grade D (Satisfactory)","pass_rate":8.0,"hours_2025":1962.76,"hours_2024":1797.78,"hours_2023":1276.71,"ead":78.5,"flags":["High Fail Rate"]},{"school":"Ngiresi SS","district":"Arusha DC","region":"Arusha","team":"Jastin","sat":9,"total_students":79,"A":0,"B":0,"C":0,"D":4,"F":5,"grade":"Grade D (Satisfactory)","pass_rate":0.0,"hours_2025":null,"hours_2024":487.36,"hours_2023":1074.62,"ead":null,"flags":["No Usage Data","High Fail Rate"]},{"school":"Banjika SS","district":"Karatu DC","region":"Arusha","team":"Jastin","sat":17,"total_students":122,"A":0,"B":0,"C":3,"D":5,"F":9,"grade":"Grade D (Satisfactory)","pass_rate":17.6,"hours_2025":1619.3,"hours_2024":6714.54,"hours_2023":null,"ead":95.3,"flags":["High Fail Rate"]},{"school":"Amani Abeid Karume SS","district":"Kondoa DC","region":"Dodoma","team":"Juma","sat":10,"total_students":167,"A":0,"B":0,"C":0,"D":1,"F":9,"grade":"Grade F (Fail)","pass_rate":0.0,"hours_2025":47932.8,"hours_2024":37428.25,"hours_2023":32095.14,"ead":4793.3,"flags":["High Fail Rate"]},{"school":"Iyunga Technical SS","district":"Mbeya DC","region":"Mbeya","team":"Juma","sat":170,"total_students":170,"A":28,"B":45,"C":65,"D":22,"F":10,"grade":"Grade C (Good)","pass_rate":81.2,"hours_2025":1733.15,"hours_2024":null,"hours_2023":null,"ead":10.2,"flags":["Low EAD"]},{"school":"Mpuguso SS","district":"Rungwe DC","region":"Mbeya","team":"Juma","sat":49,"total_students":277,"A":0,"B":2,"C":19,"D":20,"F":8,"grade":"Grade D (Satisfactory)","pass_rate":42.9,"hours_2025":1881.37,"hours_2024":null,"hours_2023":null,"ead":38.4,"flags":[]},{"school":"Lengijave SS","district":"Arusha DC","region":"Arusha","team":"Janeth","sat":22,"total_students":197,"A":0,"B":1,"C":15,"D":5,"F":1,"grade":"Grade C (Good)","pass_rate":72.7,"hours_2025":300.45,"hours_2024":2680.7,"hours_2023":3570.93,"ead":13.7,"flags":["Low EAD"]}],"f4":[{"school":"Engarenaibor SS","district":"Longido DC","region":"Arusha","team":"Erick","sat":10,"A":6,"B":3,"C":1,"D":0,"F":0,"grade":"Grade A (Excellent)","pass_rate":100.0,"hours_2025":0.35,"ead":0.0},{"school":"Namanga SS","district":"Longido DC","region":"Arusha","team":"Erick","sat":15,"A":2,"B":11,"C":2,"D":0,"F":0,"grade":"Grade B (Very Good)","pass_rate":100.0,"hours_2025":null,"ead":null},{"school":"Mwandet SS","district":"Arusha DC","region":"Arusha","team":"Erick","sat":23,"A":4,"B":15,"C":4,"D":0,"F":0,"grade":"Grade B (Very Good)","pass_rate":100.0,"hours_2025":1026.98,"ead":44.7},{"school":"Mandera Girls SS","district":"Chalinze DC","region":"Pwani","team":"Ashura","sat":15,"A":3,"B":7,"C":5,"D":0,"F":0,"grade":"Grade B (Very Good)","pass_rate":100.0,"hours_2025":2136.87,"ead":142.5},{"school":"Longido SS","district":"Longido DC","region":"Arusha","team":"Erick","sat":22,"A":2,"B":11,"C":9,"D":0,"F":0,"grade":"Grade B (Very Good)","pass_rate":100.0,"hours_2025":null,"ead":null},{"school":"Einoti SS","district":"Arusha DC","region":"Arusha","team":"Danny","sat":20,"A":5,"B":5,"C":8,"D":2,"F":0,"grade":"Grade B (Very Good)","pass_rate":90.0,"hours_2025":21162.34,"ead":1058.1},{"school":"Kimaseki SS","district":"Arusha CC","region":"Arusha","team":"Jastin","sat":29,"A":4,"B":11,"C":14,"D":0,"F":0,"grade":"Grade B (Very Good)","pass_rate":100.0,"hours_2025":2193.3,"ead":75.6},{"school":"Arusha Day SS","district":"Arusha CC","region":"Arusha","team":"Jastin","sat":11,"A":2,"B":5,"C":4,"D":0,"F":0,"grade":"Grade B (Very Good)","pass_rate":100.0,"hours_2025":3223.53,"ead":293.0},{"school":"Moshono SS","district":"Arusha CC","region":"Arusha","team":"Janeth","sat":9,"A":0,"B":4,"C":5,"D":0,"F":0,"grade":"Grade B (Very Good)","pass_rate":100.0,"hours_2025":796.3,"ead":88.5},{"school":"Tingatinga SS","district":"Longido DC","region":"Arusha","team":"Erick","sat":23,"A":2,"B":3,"C":14,"D":4,"F":0,"grade":"Grade C (Good)","pass_rate":82.6,"hours_2025":null,"ead":null},{"school":"Mlangarini SS","district":"Arusha DC","region":"Arusha","team":"Erick","sat":22,"A":0,"B":5,"C":9,"D":4,"F":3,"grade":"Grade C (Good)","pass_rate":63.6,"hours_2025":null,"ead":null},{"school":"Mpuguso SS","district":"Rungwe DC","region":"Mbeya","team":"Juma","sat":32,"A":0,"B":0,"C":17,"D":14,"F":1,"grade":"Grade C (Good)","pass_rate":53.1,"hours_2025":1881.37,"ead":58.8},{"school":"Lengijave SS","district":"Arusha DC","region":"Arusha","team":"Janeth","sat":18,"A":0,"B":0,"C":15,"D":1,"F":0,"grade":"Grade C (Good)","pass_rate":83.3,"hours_2025":300.45,"ead":16.7},{"school":"Suye SS","district":"Arusha CC","region":"Arusha","team":"Jastin","sat":13,"A":0,"B":0,"C":12,"D":1,"F":0,"grade":"Grade C (Good)","pass_rate":92.3,"hours_2025":35.81,"ead":2.8},{"school":"Elerai SS","district":"Arusha CC","region":"Arusha","team":"Jastin","sat":14,"A":0,"B":0,"C":12,"D":2,"F":0,"grade":"Grade C (Good)","pass_rate":85.7,"hours_2025":null,"ead":null},{"school":"Ngiresi SS","district":"Arusha DC","region":"Arusha","team":"Jastin","sat":5,"A":1,"B":0,"C":4,"D":0,"F":0,"grade":"Grade C (Good)","pass_rate":100.0,"hours_2025":null,"ead":null},{"school":"Kinana SS","district":"Arusha CC","region":"Arusha","team":"Jastin","sat":14,"A":0,"B":2,"C":9,"D":3,"F":0,"grade":"Grade C (Good)","pass_rate":78.6,"hours_2025":2210.17,"ead":157.9},{"school":"Banjika SS","district":"Karatu DC","region":"Arusha","team":"Jastin","sat":14,"A":0,"B":0,"C":8,"D":5,"F":1,"grade":"Grade C (Good)","pass_rate":57.1,"hours_2025":1619.3,"ead":115.7},{"school":"Semkiwa SS","district":"Kilindi DC","region":"Tanga","team":"Ashura","sat":17,"A":1,"B":13,"C":3,"D":0,"F":0,"grade":"Grade C (Good)","pass_rate":100.0,"hours_2025":165.81,"ead":9.8},{"school":"Kwaraa SS","district":"Babati TC","region":"Manyara","team":"Abubakar","sat":8,"A":0,"B":1,"C":4,"D":3,"F":0,"grade":"Grade C (Good)","pass_rate":62.5,"hours_2025":340.28,"ead":42.5},{"school":"Dareda SS","district":"Babati DC","region":"Manyara","team":"Abubakar","sat":19,"A":1,"B":3,"C":13,"D":2,"F":0,"grade":"Grade C (Good)","pass_rate":89.5,"hours_2025":3959.25,"ead":208.4},{"school":"Amani Abeid Karume SS","district":"N/A","region":"N/A","team":"N/A","sat":5,"A":0,"B":0,"C":3,"D":1,"F":1,"grade":"Grade C (Good)","pass_rate":60.0,"hours_2025":null,"ead":null},{"school":"Mwapachu SS","district":"Kilindi DC","region":"Tanga","team":"Ashura","sat":13,"A":0,"B":0,"C":1,"D":1,"F":11,"grade":"Grade F (Fail)","pass_rate":7.7,"hours_2025":189.63,"ead":14.6}]};
+
+// ===== STATE =====
+let t1Form = 'f2';
+let t1Sort = { col: 'ead', dir: 'desc' };
+let t1Page = 1;
+const T1_PER_PAGE = 15;
+let scatterForm = 'f2';
+let scatterChart = null, eadBarChart = null, gradeStackChart = null;
+
+// ===== HELPERS =====
+function fmt(v, dec=1) {
+  if (v === null || v === undefined) return '—';
+  if (typeof v === 'number') return v.toLocaleString('en', {minimumFractionDigits: dec, maximumFractionDigits: dec});
+  return v;
+}
+function fmtH(v) {
+  if (v === null || v === undefined) return '—';
+  return Number(v).toLocaleString('en', {maximumFractionDigits: 0}) + ' hrs';
+}
+function eadTier(v) {
+  if (v === null) return 'na';
+  if (v < 10) return 'critical';
+  if (v < 50) return 'low';
+  if (v < 200) return 'medium';
+  if (v < 500) return 'good';
+  return 'high';
+}
+function eadLabel(v) {
+  if (v === null) return 'No Data';
+  return fmt(v) + ' h/c';
+}
+function gradeClass(g) {
+  if (!g) return '';
+  if (g.includes('A (')) return 'grade-A';
+  if (g.includes('B (')) return 'grade-B';
+  if (g.includes('C (')) return 'grade-C';
+  if (g.includes('D (')) return 'grade-D';
+  if (g.includes('F (')) return 'grade-F';
+  return '';
+}
+function passColor(r) {
+  if (r >= 70) return '#16a34a';
+  if (r >= 40) return '#2563eb';
+  if (r >= 10) return '#ea580c';
+  return '#dc2626';
+}
+function trendHTML(cur, prev) {
+  if (!cur || !prev) return '<span class="trend-flat">—</span>';
+  const pct = ((cur - prev) / prev * 100).toFixed(0);
+  if (cur > prev) return `<span class="trend-up">▲ ${Math.abs(pct)}%</span>`;
+  if (cur < prev) return `<span class="trend-down">▼ ${Math.abs(pct)}%</span>`;
+  return '<span class="trend-flat">→ 0%</span>';
+}
+function getActive(form) { return RAW[form]; }
+
+// ===== INIT SELECTS =====
+function initSelects() {
+  const d = RAW.f2;
+  const teams = [...new Set(d.map(r => r.team))].sort();
+  const regions = [...new Set(d.map(r => r.region))].sort();
+  ['t1-team', 't2-team'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const existing = el.value;
+    el.innerHTML = `<option value="">All Teams</option>` + teams.map(t => `<option value="${t}">${t}</option>`).join('');
+    el.value = existing;
+  });
+  ['t1-region'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = `<option value="">All Regions</option>` + regions.map(r => `<option value="${r}">${r}</option>`).join('');
+  });
+}
+
+// ===== HEADER STATS =====
+function updateHeaderStats(data) {
+  const totalCandidates = data.reduce((s, r) => s + r.sat, 0);
+  const eadArr = data.filter(r => r.ead !== null).map(r => r.ead);
+  const avgEad = eadArr.length ? eadArr.reduce((a,b)=>a+b,0)/eadArr.length : 0;
+  const avgPass = data.reduce((s,r)=>s+r.pass_rate,0)/data.length;
+  document.getElementById('h-candidates').textContent = totalCandidates.toLocaleString();
+  document.getElementById('h-avg-ead').textContent = avgEad > 999 ? fmt(avgEad/1000,1)+'k' : fmt(avgEad);
+  document.getElementById('h-avg-pass').textContent = fmt(avgPass) + '%';
+}
+
+// ===== TAB 1 =====
+function applyT1Filters() {
+  t1Page = 1;
+  renderT1();
+}
+
+function getT1Data() {
+  t1Form = document.getElementById('t1-form').value;
+  let data = [...getActive(t1Form)];
+  const search = document.getElementById('t1-search').value.toLowerCase();
+  const team = document.getElementById('t1-team').value;
+  const region = document.getElementById('t1-region').value;
+  const eadF = document.getElementById('t1-ead-filter').value;
+  if (search) data = data.filter(r => r.school.toLowerCase().includes(search));
+  if (team) data = data.filter(r => r.team === team);
+  if (region) data = data.filter(r => r.region === region);
+  if (eadF) data = data.filter(r => eadTier(r.ead) === eadF);
+  // sort
+  data.sort((a, b) => {
+    let av = a[t1Sort.col], bv = b[t1Sort.col];
+    if (av === null) av = t1Sort.dir === 'asc' ? Infinity : -Infinity;
+    if (bv === null) bv = t1Sort.dir === 'asc' ? Infinity : -Infinity;
+    if (typeof av === 'string') return t1Sort.dir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+    return t1Sort.dir === 'asc' ? av - bv : bv - av;
+  });
+  return data;
+}
+
+function sortT1(col) {
+  if (t1Sort.col === col) t1Sort.dir = t1Sort.dir === 'asc' ? 'desc' : 'asc';
+  else { t1Sort.col = col; t1Sort.dir = 'desc'; }
+  t1Page = 1;
+  renderT1();
+}
+
+function renderT1() {
+  const data = getT1Data();
+  const total = data.length;
+  const totalPages = Math.max(1, Math.ceil(total / T1_PER_PAGE));
+  if (t1Page > totalPages) t1Page = totalPages;
+  const slice = data.slice((t1Page-1)*T1_PER_PAGE, t1Page*T1_PER_PAGE);
+  document.getElementById('t1-count').textContent = total;
+
+  // summary cards
+  const form = document.getElementById('t1-form').value;
+  const allData = getActive(form);
+  updateHeaderStats(allData);
+  document.getElementById('sc-total').textContent = allData.length;
+  const avgPass = allData.reduce((s,r)=>s+r.pass_rate,0)/allData.length;
+  document.getElementById('sc-avg-pass').textContent = fmt(avgPass) + '%';
+  const eadVals = allData.filter(r=>r.ead!==null).map(r=>r.ead);
+  document.getElementById('sc-avg-ead').textContent = eadVals.length ? fmt(eadVals.reduce((a,b)=>a+b,0)/eadVals.length) : '—';
+  document.getElementById('sc-bottleneck').textContent = allData.filter(r=>r.ead!==null && r.ead < 20).length;
+  document.getElementById('sc-no-data').textContent = allData.filter(r=>r.hours_2025===null).length;
+
+  const tbody = document.getElementById('t1-tbody');
+  tbody.innerHTML = slice.map(r => {
+    const tier = eadTier(r.ead);
+    const maxGrade = Math.max(r.A, r.B, r.C, r.D, r.F) || 1;
+    const bars = ['A','B','C','D','F'].map(g => {
+      const h = Math.round((r[g]/maxGrade)*26) + 2;
+      return `<div class="grade-bar grade-bar-${g}" style="height:${h}px;" title="${g}: ${r[g]}"></div>`;
+    }).join('');
+    const flagChips = (r.flags||[]).map(f => {
+      let cls = '';
+      if (f === 'Low EAD') cls = 'flag-low-ead';
+      else if (f === 'No Usage Data') cls = 'flag-no-data';
+      else if (f === 'High Fail Rate') cls = 'flag-fail';
+      else cls = 'flag-participation';
+      return `<span class="flag-chip ${cls}">${f}</span>`;
+    }).join('');
+    return `<tr>
+      <td class="td-school">${r.school}</td>
+      <td class="font-opensans" style="font-size:12px;color:var(--text-secondary)">${r.district}</td>
+      <td class="font-opensans" style="font-size:12px;">${r.region}</td>
+      <td class="td-team">${r.team}</td>
+      <td style="font-family:'Nunito',sans-serif;font-weight:700">${r.sat}</td>
+      <td><span class="hours-val">${r.hours_2025 !== null ? Number(r.hours_2025).toLocaleString('en',{maximumFractionDigits:0}) : '—'}</span></td>
+      <td><span class="ead-badge ead-${tier}">${eadLabel(r.ead)}</span></td>
+      <td>
+        <div class="pass-bar-wrap">
+          <div class="pass-bar-bg"><div class="pass-bar-fill" style="width:${r.pass_rate}%;background:${passColor(r.pass_rate)}"></div></div>
+          <span class="pass-bar-val" style="color:${passColor(r.pass_rate)}">${fmt(r.pass_rate)}%</span>
+        </div>
+      </td>
+      <td><span class="grade-badge ${gradeClass(r.grade)}">${r.grade.replace('Grade ','').split(' ')[0]}</span></td>
+      <td><div class="grade-dist">${bars}</div></td>
+      <td><div class="flags-cell">${flagChips || '<span style="color:#ccc;font-size:11px">—</span>'}</div></td>
+    </tr>`;
+  }).join('');
+
+  // pagination
+  document.getElementById('t1-page-info').textContent = `Rows ${(t1Page-1)*T1_PER_PAGE+1}–${Math.min(t1Page*T1_PER_PAGE, total)} of ${total}`;
+  const pbEl = document.getElementById('t1-page-btns');
+  let pgHTML = `<button class="page-btn" onclick="gotoT1Page(${t1Page-1})" ${t1Page===1?'disabled':''}>‹</button>`;
+  for (let p = 1; p <= totalPages; p++) {
+    pgHTML += `<button class="page-btn ${p===t1Page?'active':''}" onclick="gotoT1Page(${p})">${p}</button>`;
+  }
+  pgHTML += `<button class="page-btn" onclick="gotoT1Page(${t1Page+1})" ${t1Page===totalPages?'disabled':''}>›</button>`;
+  pbEl.innerHTML = pgHTML;
+}
+function gotoT1Page(p) {
+  const data = getT1Data();
+  const totalPages = Math.ceil(data.length / T1_PER_PAGE);
+  if (p < 1 || p > totalPages) return;
+  t1Page = p; renderT1();
+}
+
+// ===== TAB 2 =====
+function renderT2() {
+  const team = document.getElementById('t2-team').value;
+  const issue = document.getElementById('t2-issue').value;
+  let data = [...RAW.f2];
+
+  // Priority scoring
+  data = data.map(r => {
+    let priority = 4;
+    let reasons = [...(r.flags||[])];
+    if (r.ead !== null && r.ead < 10) priority = 1;
+    else if ((r.ead !== null && r.ead < 20) && r.pass_rate < 30) priority = 1;
+    else if (r.flags && r.flags.includes('High Fail Rate') && r.pass_rate < 10) priority = 1;
+    else if ((r.ead !== null && r.ead < 20) || (r.flags && r.flags.includes('High Fail Rate'))) priority = 2;
+    else if (r.flags && r.flags.includes('No Usage Data')) priority = 3;
+    else if (r.pass_rate < 40) priority = 3;
+    return {...r, priority, reasons};
+  }).sort((a,b) => a.priority - b.priority || b.F - a.F);
+
+  if (team) data = data.filter(r => r.team === team);
+  if (issue === 'low-ead') data = data.filter(r => r.ead !== null && r.ead < 20);
+  else if (issue === 'no-data') data = data.filter(r => r.hours_2025 === null);
+  else if (issue === 'high-fail') data = data.filter(r => r.F > r.sat * 0.3);
+
+  // summary counts from full data (unfiltered)
+  const full = RAW.f2;
+  document.getElementById('t2-p1-count').textContent = full.filter(r => r.ead !== null && r.ead < 10).length + full.filter(r=>r.pass_rate < 10 && r.flags.includes('High Fail Rate')).length;
+  document.getElementById('t2-no-data').textContent = full.filter(r => r.hours_2025 === null).length;
+  document.getElementById('t2-high-fail').textContent = full.filter(r => r.F > r.sat * 0.5).length;
+  const p2count = full.filter(r => {
+    const hasLowEad = r.ead !== null && r.ead < 20;
+    const hasHighFail = r.flags && r.flags.includes('High Fail Rate');
+    return (hasLowEad || hasHighFail) && !(r.ead !== null && r.ead < 10);
+  }).length;
+  document.getElementById('t2-p2-count').textContent = p2count;
+
+  const tbody = document.getElementById('t2-tbody');
+  const pColors = ['','#dc2626','#ea580c','#d97706','#65a30d'];
+  const pLabels = ['','P1 · Critical','P2 · High Risk','P3 · Watch','P4 · Monitor'];
+
+  tbody.innerHTML = data.map((r, i) => {
+    // Recommend action
+    let actions = [];
+    if (r.ead !== null && r.ead < 10) actions.push('<span class="action-badge action-hardware">Hardware Audit</span>');
+    if (r.hours_2025 === null) actions.push('<span class="action-badge action-data">Usage Data Gap</span>');
+    if (r.pass_rate < 20) actions.push('<span class="action-badge action-schedule">Schedule Review</span>');
+    if (r.pass_rate >= 70 && r.ead !== null && r.ead < 50) actions.push('<span class="action-badge action-exam">Exam Prep Push</span>');
+    if (!actions.length) actions.push('<span class="action-badge action-exam">Routine Check</span>');
+    const flagChips = (r.reasons||[]).map(f => {
+      let cls = f === 'Low EAD' ? 'flag-low-ead' : f === 'No Usage Data' ? 'flag-no-data' : f === 'High Fail Rate' ? 'flag-fail' : 'flag-participation';
+      return `<span class="flag-chip ${cls}">${f}</span>`;
+    }).join(' ');
+    return `<tr>
+      <td>
+        <div class="triage-priority">
+          <div class="priority-dot p${r.priority}"></div>
+          <span style="font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;color:${pColors[r.priority]}">${pLabels[r.priority]}</span>
+        </div>
+      </td>
+      <td class="td-school">${r.school}</td>
+      <td class="td-team">${r.team}</td>
+      <td style="font-size:12px">${r.region}</td>
+      <td style="font-family:'Nunito',sans-serif;font-weight:700">${r.sat}</td>
+      <td><span class="hours-val">${r.hours_2025 !== null ? Number(r.hours_2025).toLocaleString('en',{maximumFractionDigits:0}) : '<span style="color:#9ca3af">No data</span>'}</span></td>
+      <td><span class="ead-badge ead-${eadTier(r.ead)}">${eadLabel(r.ead)}</span></td>
+      <td>
+        <div class="pass-bar-wrap">
+          <div class="pass-bar-bg"><div class="pass-bar-fill" style="width:${r.pass_rate}%;background:${passColor(r.pass_rate)}"></div></div>
+          <span class="pass-bar-val" style="color:${passColor(r.pass_rate)}">${fmt(r.pass_rate)}%</span>
+        </div>
+      </td>
+      <td style="font-family:'Nunito',sans-serif;font-weight:700;color:#dc2626">${r.F}</td>
+      <td><div class="flags-cell">${flagChips || '<span style="color:#ccc;font-size:11px">—</span>'}</div></td>
+      <td><div style="display:flex;gap:4px;flex-wrap:wrap">${actions.join('')}</div></td>
+    </tr>`;
+  }).join('');
+}
+
+function initT2Charts() {
+  const data = RAW.f2.filter(r => r.ead !== null && r.ead < 2000).sort((a,b)=>a.ead-b.ead);
+  const labels = data.map(r => r.school.replace(' SS','').substring(0,14));
+  const eads = data.map(r => r.ead);
+  const bgColors = eads.map(e => {
+    if (e < 10) return '#fca5a5';
+    if (e < 50) return '#fed7aa';
+    if (e < 200) return '#fde68a';
+    if (e < 500) return '#86efac';
+    return '#93c5fd';
+  });
+  const ctx1 = document.getElementById('ead-bar-chart').getContext('2d');
+  eadBarChart = new Chart(ctx1, {
+    type: 'bar',
+    data: { labels, datasets: [{ data: eads, backgroundColor: bgColors, borderRadius: 3, borderSkipped: false }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: {
+        callbacks: { label: ctx => ` EAD: ${fmt(ctx.parsed.y)} hrs/candidate` }
+      }},
+      scales: {
+        x: { ticks: { font: { size: 9, family: 'Open Sans' }, maxRotation: 45 }, grid: { display: false } },
+        y: { ticks: { font: { size: 10, family: 'Open Sans' } }, grid: { color: '#f0f0f0' }, title: { display: true, text: 'Hrs/Candidate', font: { size: 10 } } }
+      }
+    }
+  });
+
+  // Grade stacked chart
+  const sortedByPass = [...RAW.f2].sort((a,b)=>b.pass_rate-a.pass_rate);
+  const ctx2 = document.getElementById('grade-stack-chart').getContext('2d');
+  gradeStackChart = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: sortedByPass.map(r => r.school.replace(' SS','').substring(0,12)),
+      datasets: [
+        { label:'A', data: sortedByPass.map(r=>r.A), backgroundColor:'#059669', stack:'s' },
+        { label:'B', data: sortedByPass.map(r=>r.B), backgroundColor:'#2563eb', stack:'s' },
+        { label:'C', data: sortedByPass.map(r=>r.C), backgroundColor:'#0891b2', stack:'s' },
+        { label:'D', data: sortedByPass.map(r=>r.D), backgroundColor:'#d97706', stack:'s' },
+        { label:'F', data: sortedByPass.map(r=>r.F), backgroundColor:'#dc2626', stack:'s' },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top', labels: { font: { size: 10, family: 'Open Sans' }, boxWidth: 10, padding: 8 } } },
+      scales: {
+        x: { stacked: true, ticks: { font: { size: 8, family: 'Open Sans' }, maxRotation: 45 }, grid: { display: false } },
+        y: { stacked: true, ticks: { font: { size: 10 } }, grid: { color: '#f0f0f0' } }
+      }
+    }
+  });
+}
+
+// ===== TAB 3 =====
+function switchForm(form, btn) {
+  scatterForm = form;
+  document.querySelectorAll('.form-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderScatter();
+  renderT3Table();
+}
+
+function renderScatter() {
+  const data = RAW[scatterForm];
+  const hasHours = data.filter(r => r.hours_2025 !== null);
+  const noHours = data.filter(r => r.hours_2025 === null);
+
+  const makePoint = r => ({
+    x: r.sat,
+    y: r.hours_2025,
+    r: Math.max(5, Math.min(18, r.ead ? Math.sqrt(r.ead) * 1.5 : 5)),
+    school: r.school,
+    team: r.team,
+    ead: r.ead,
+    pass_rate: r.pass_rate,
+    grade: r.grade,
+  });
+
+  const high = hasHours.filter(r => r.pass_rate >= 70).map(makePoint);
+  const med = hasHours.filter(r => r.pass_rate >= 40 && r.pass_rate < 70).map(makePoint);
+  const low = hasHours.filter(r => r.pass_rate >= 10 && r.pass_rate < 40).map(makePoint);
+  const crit = hasHours.filter(r => r.pass_rate < 10).map(makePoint);
+  const noD = noHours.map(r => ({x: r.sat, y: 100, r: 6, school: r.school, team: r.team, pass_rate: r.pass_rate, grade: r.grade, ead: null}));
+
+  const ctx = document.getElementById('scatter-chart').getContext('2d');
+  if (scatterChart) { scatterChart.destroy(); }
+  scatterChart = new Chart(ctx, {
+    type: 'bubble',
+    data: {
+      datasets: [
+        { label: 'High Pass (≥70%)', data: high, backgroundColor: 'rgba(22,163,74,0.7)', borderColor: '#16a34a', borderWidth: 1 },
+        { label: 'Medium Pass (40–70%)', data: med, backgroundColor: 'rgba(37,99,235,0.7)', borderColor: '#2563eb', borderWidth: 1 },
+        { label: 'Low Pass (10–40%)', data: low, backgroundColor: 'rgba(234,88,12,0.7)', borderColor: '#ea580c', borderWidth: 1 },
+        { label: 'Critical Pass (<10%)', data: crit, backgroundColor: 'rgba(220,38,38,0.8)', borderColor: '#dc2626', borderWidth: 1 },
+        { label: 'No Hours Data', data: noD, backgroundColor: 'rgba(156,163,175,0.3)', borderColor: '#9ca3af', borderWidth: 1 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { font: { size: 11, family: 'Open Sans' }, boxWidth: 10, padding: 14 } },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const p = ctx.raw;
+              return [
+                ` ${p.school}`,
+                ` Officer: ${p.team}`,
+                ` Candidates: ${p.x}`,
+                p.y > 200 ? ` Hours: ${Number(p.y).toLocaleString('en',{maximumFractionDigits:0})}` : ` Hours: ${p.y || 'N/A'}`,
+                ` EAD: ${p.ead !== null ? fmt(p.ead) + ' h/c' : 'N/A'}`,
+                ` Pass Rate: ${fmt(p.pass_rate)}%`,
+                ` Grade: ${p.grade}`,
+              ];
+            }
+          },
+          backgroundColor: 'rgba(15,42,74,0.95)', titleFont: { family: 'Nunito', size: 0 },
+          bodyFont: { family: 'Open Sans', size: 12 }, padding: 12, cornerRadius: 8,
+        }
+      },
+      scales: {
+        x: {
+          title: { display: true, text: 'ICT Exam Candidates (Sat)', font: { size: 12, family: 'Nunito', weight: 'bold' } },
+          ticks: { font: { size: 11, family: 'Open Sans' } }, grid: { color: '#f0f0f0' }
+        },
+        y: {
+          title: { display: true, text: 'Lab Usage Hours 2025', font: { size: 12, family: 'Nunito', weight: 'bold' } },
+          ticks: { font: { size: 11, family: 'Open Sans' }, callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v },
+          grid: { color: '#f0f0f0' }
+        }
+      }
+    }
+  });
+}
+
+function renderT3Table() {
+  const data = [...RAW.f2].sort((a,b) => (b.ead||0) - (a.ead||0));
+  const tbody = document.getElementById('t3-tbody');
+  tbody.innerHTML = data.map(r => `<tr>
+    <td class="td-school">${r.school}</td>
+    <td class="td-team">${r.team}</td>
+    <td style="font-size:12px">${r.region}</td>
+    <td style="font-family:'Nunito',sans-serif;font-weight:700">${r.sat}</td>
+    <td><span class="hours-val">${r.hours_2025 !== null ? Number(r.hours_2025).toLocaleString('en',{maximumFractionDigits:0}) : '<span style="color:#9ca3af">—</span>'}</span></td>
+    <td><span class="hours-val">${r.hours_2024 !== null && r.hours_2024 !== undefined ? Number(r.hours_2024).toLocaleString('en',{maximumFractionDigits:0}) : '—'}</span></td>
+    <td>${trendHTML(r.hours_2025, r.hours_2024)}</td>
+    <td><span class="ead-badge ead-${eadTier(r.ead)}">${eadLabel(r.ead)}</span></td>
+    <td>
+      <div class="pass-bar-wrap">
+        <div class="pass-bar-bg"><div class="pass-bar-fill" style="width:${r.pass_rate}%;background:${passColor(r.pass_rate)}"></div></div>
+        <span class="pass-bar-val" style="color:${passColor(r.pass_rate)}">${fmt(r.pass_rate)}%</span>
+      </div>
+    </td>
+    <td><span class="grade-badge ${gradeClass(r.grade)}">${r.grade.replace('Grade ','').replace('(','').replace(')','').trim()}</span></td>
+  </tr>`).join('');
+}
+
+// ===== TAB SWITCH =====
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'tab3' && !scatterChart) {
+    renderScatter();
+    renderT3Table();
+  }
+}
+
+// ===== BOOT =====
+document.addEventListener('DOMContentLoaded', () => {
+  initSelects();
+  renderT1();
+  renderT2();
+  initT2Charts();
+});
+</script>
+</body>
+</html>
