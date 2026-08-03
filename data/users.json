@@ -78,5 +78,29 @@
     "password": "daniel@team",
     "position": "technician",
     "role": "team-member"
+  },
+  {
+    "name": "Jane Langoi",
+    "email": "jane@anm.com",
+    "status": "Active",
+    "password": "jane-anm@team",
+    "position": "director",
+    "role": "admin"
+  },
+  {
+    "name": "Erick Mosha",
+    "email": "erick@amn.com",
+    "status": "Active",
+    "password": "erick-anm@team",
+    "position": "technician",
+    "role": "team-member"
+  },
+  {
+    "name": "Jenny Benedict",
+    "email": "jenny-anm@anm.com",
+    "status": "Active",
+    "password": "jenny-anm@team",
+    "position": "technician",
+    "role": "team-member"
   }
 ]
