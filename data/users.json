@@ -93,7 +93,7 @@
     "status": "Active",
     "password": "erick-anm@team",
     "position": "technician",
-    "role": "team-member"
+    "role": "team-anm"
   },
   {
     "name": "Jenny Benedict",
@@ -101,6 +101,6 @@
     "status": "Active",
     "password": "jenny-anm@team",
     "position": "technician",
-    "role": "team-member"
+    "role": "team-anm"
   }
 ]
