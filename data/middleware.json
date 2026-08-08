@@ -7,6 +7,7 @@
   {
     "page name": "Dashboard",
     "url": "/box/dashboard.html",
+    "viewer": "admin, super-admin, team-anm, team-member",
     "type": "protected"
   },
   {
@@ -159,7 +160,7 @@
   {
     "page name": "Analytics Page",
     "url": "/prod/analytics",
-    "viewer": "admin, super-admin, team-member",
+    "viewer": "admin, super-admin, team-member, team-anm", 
     "type": "protected"
   },
   {

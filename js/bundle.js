@@ -432,7 +432,7 @@ const Gate = {
       'view-team': () => ['admin', 'super-admin', 'team-member'].includes(user.role),
       'view-projects': () => ['admin', 'super-admin'].includes(user.role),
       'view-users': () => ['admin', 'super-admin', 'team-member'].includes(user.role),
-      'view-anm': () => ['admin', 'team-anm'].includes(user.role),
+      'view-anm': () => ['admin', 'team-anm', 'super-admin'].includes(user.role),
       'view-auth-structure': () => user.role === 'super-admin',
       'manage-users': () => ['admin', 'super-admin'].includes(user.role),
       'delete-users': () => user.role === 'super-admin',

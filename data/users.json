@@ -85,11 +85,11 @@
     "status": "Active",
     "password": "jane-anm@team",
     "position": "director",
-    "role": "admin"
+    "role": "team-anm"
   },
   {
     "name": "Erick Mosha",
-    "email": "erick@amn.com",
+    "email": "erick@anm.com",
     "status": "Active",
     "password": "erick-anm@team",
     "position": "technician",
@@ -97,7 +97,7 @@
   },
   {
     "name": "Jenny Benedict",
-    "email": "jenny-anm@anm.com",
+    "email": "jenny@anm.com",
     "status": "Active",
     "password": "jenny-anm@team",
     "position": "technician",
