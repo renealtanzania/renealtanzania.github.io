@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reneal — Analytics Suite</title>
+  <title>Reneal — Statistics Suite</title>
   <link rel="shortcut icon" type="image/x-icon" href="/public/imgs/ren.ico">
   <script src="/js/middleware.js"></script>
 
@@ -108,7 +108,7 @@
         </div>
         <div>
           <p class="text-[12px] text-gray-400 leading-none mb-0.5 font-medium">Reneal Tanzania</p>
-          <h1 class="font-display font-bold text-gray-900 text-[15px] leading-none">Analytics Suite</h1>
+          <h1 class="font-display font-bold text-gray-900 text-[15px] leading-none">Statistics Suite</h1>
         </div>
       </div>
       <div class="flex items-center gap-3">
@@ -181,15 +181,46 @@
         </thead>
         <tbody id="analyticsBody" class="block md:table-row-group">
 
-          <!-- 1. Schools Lab Expected Performance (01/08/2026 - newest) -->
+          <!-- 1. Candidate Client Access Gap (05/09/2026 - newest) -->
+          <tr class="data-row row-anim r1 align-top flex flex-col md:table-row p-5 md:p-0 gap-2 md:gap-0"
+              data-title="Candidate Client Access Gap"
+              data-description="How is each school's lab behaving in terms of utilization, tracking usage trends and exam outcomes over time?"
+              data-category="Candidate Client Access Gap"
+              data-date="2026-09-05">
+            <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
+              <svg class="md:hidden" width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 9h16M4 15h16M10 4L8 20M16 4l-2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              1
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
+              <svg class="md:hidden" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              05/09/2026
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-4 md:order-none md:text-center">
+              <a href="/prod/analytics/docs/ict-exam-ead-doc.pdf" target="_blank" class="more-link">More info</a>
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-1 md:order-none md:text-center">
+              <a href="/prod/analytics/streams/ict-exam-ead-app.html" class="access-link font-display text-base font-bold text-gray-900 hover:text-blue-600 md:justify-center">
+                Candidate Client Access Gap (CCAG) 
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-3 md:order-none text-[13.5px] text-gray-600 leading-relaxed md:text-center">
+              How large is the preparation gap given how many ICT exam candidates each school has, and given how many lab hours that school actually logged in.
+            </td>
+            <td class="px-0 md:px-6 py-0 md:py-5 order-4 md:order-none md:text-center">
+              <span class="category-pill cat-correlation">Expected Measure</span>
+            </td>
+          </tr>
+
+          <!-- 2. Schools Lab Expected Performance (01/08/2026 - available) -->
           <tr class="data-row row-anim r1 align-top flex flex-col md:table-row p-5 md:p-0 gap-2 md:gap-0"
               data-title="Schools Lab Expected Performance"
               data-description="How is each school's lab behaving in terms of utilization, tracking usage trends and exam outcomes over time?"
               data-category="Expected Performance"
-              data-date="2026-07-07">
+              data-date="2026-08-01">
             <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
               <svg class="md:hidden" width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 9h16M4 15h16M10 4L8 20M16 4l-2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              1
+              2
             </td>
             <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
               <svg class="md:hidden" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -214,7 +245,7 @@
             </td>
           </tr>
 
-          <!-- 2. Schools Lab Expected Performance (07/07/2026 - newest) -->
+          <!-- 3. Schools Lab Expected Performance (07/07/2026 - available) -->
           <tr class="data-row row-anim r1 align-top flex flex-col md:table-row p-5 md:p-0 gap-2 md:gap-0"
               data-title="Schools Lab Expected Performance"
               data-description="How is each school's lab behaving in terms of utilization, tracking usage trends and exam outcomes over time?"
@@ -222,7 +253,7 @@
               data-date="2026-07-07">
             <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
               <svg class="md:hidden" width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 9h16M4 15h16M10 4L8 20M16 4l-2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              2
+              3
             </td>
             <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
               <svg class="md:hidden" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -247,7 +278,7 @@
             </td>
           </tr>
 
-          <!-- 3. Schools Lab Lag (04/06/2026 - newest) -->
+          <!-- 4. Schools Lab Lag (04/06/2026 - available) -->
           <tr class="data-row row-anim r1 align-top flex flex-col md:table-row p-5 md:p-0 gap-2 md:gap-0"
               data-title="Schools Lab Lag"
               data-description="How is each school's lab behaving in terms of utilization, tracking usage trends and exam outcomes over time?"
@@ -255,7 +286,7 @@
               data-date="2026-06-04">
             <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
               <svg class="md:hidden" width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 9h16M4 15h16M10 4L8 20M16 4l-2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              3
+              4
             </td>
             <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
               <svg class="md:hidden" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -272,14 +303,14 @@
             </td>
             <td class="px-0 md:px-6 py-0 md:py-5 order-3 md:order-none text-[13.5px] text-gray-600 leading-relaxed md:text-center">
               How is each school's lab behaving in terms of utilization, tracking usage trends and exam outcomes over time?
-              Also does the size of a school's student population shape how it performs on the NECTA ICT exam?
+              Also the schools that performed ICT Exams in relation to their number of hours.
             </td>
             <td class="px-0 md:px-6 py-0 md:py-5 order-4 md:order-none md:text-center">
               <span class="category-pill cat-tracking">Lag Tracking</span>
             </td>
           </tr>
 
-          <!-- 3-1. Schools Lab Lag (20/07/2026 - correction) -->
+          <!-- 4-1. Schools Lab Lag (20/07/2026 - correction) -->
           <tr class="data-row row-anim r1 align-top flex flex-col md:table-row p-5 md:p-0 gap-2 md:gap-0"
               data-title="Schools Lab Lag"
               data-description="How is each school's lab behaving in terms of utilization, tracking usage trends and exam outcomes over time?"
@@ -287,7 +318,7 @@
               data-date="2026-06-04">
             <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
               <svg class="md:hidden" width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 9h16M4 15h16M10 4L8 20M16 4l-2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              3-1
+              4-1
             </td>
             <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
               <svg class="md:hidden" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -311,7 +342,7 @@
             </td>
           </tr>
 
-          <!-- 4. ICT NECTA vs Usage (02/05/2026) -->
+          <!-- 5. ICT NECTA vs Usage (02/05/2026) -->
           <tr class="data-row row-anim r2 align-top flex flex-col md:table-row p-5 md:p-0 gap-2 md:gap-0"
               data-title="ICT NECTA vs Computer Lab Usage"
               data-description="Does the amount of time students spend using the Reneal computer lab system have a measurable relationship with how well they perform in the national ICT examination?"
@@ -319,7 +350,7 @@
               data-date="2026-05-02">
             <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
               <svg class="md:hidden" width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 9h16M4 15h16M10 4L8 20M16 4l-2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              4
+              5
             </td>
             <td class="px-0 md:px-6 py-0 md:py-5 order-2 md:order-none text-[13px] text-gray-500 flex items-center md:flex md:items-center md:justify-center gap-1.5 md:table-cell md:text-center">
               <svg class="md:hidden" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
